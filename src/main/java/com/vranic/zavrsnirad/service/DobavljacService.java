@@ -26,4 +26,8 @@ public class DobavljacService {
     public void deleteById(Long idDobavljaca){
         dobavljacRepository.deleteById(idDobavljaca);
     }
+
+    public List<Dobavljac> findDobavljacByName(String nazivDobavljaca){
+        return dobavljacRepository.findByNazivDobavljaca(nazivDobavljaca);
+    }
 }

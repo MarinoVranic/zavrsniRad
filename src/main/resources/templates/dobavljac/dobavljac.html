@@ -58,11 +58,21 @@
     background-color: #25ff1e;
     color: #090909;
   }
+  .alert{
+    color: red;
+  }
   tr:hover {background-color: DodgerBlue;}
 </style>
 <body>
 <h1>Dobavljači</h1>
 <a th:href="@{/dobavljac/addnew}" class="button button4">Novi dobavljač</a>
+<form th:action="@{/dobavljac/find}" method="get">
+  <label for="nazivDobavljaca">Search by name:</label>
+  <input type="text" id="nazivDobavljaca" name="nazivDobavljaca" required>
+  <button type="submit">Search</button>
+  <p class="alert alert-primary" role="alert" th:text="${success}" th:if="${success}"></p>
+  <label class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>
+</form>
 <table>
   <thead>
   <tr>
