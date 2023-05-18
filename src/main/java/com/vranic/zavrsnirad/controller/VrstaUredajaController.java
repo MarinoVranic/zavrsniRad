@@ -16,6 +16,8 @@ public class VrstaUredajaController {
     @GetMapping("/all")
     public String getAllVrstaUredaja(Model model){
         model.addAttribute("vrstauredaja", vrstaUredajaService.getAllVrstaUredaja());
+        VrstaUredaja vrstaUredaja = new VrstaUredaja();
+        model.addAttribute("novaVrsta", vrstaUredaja);
         return "vrstaUredaja/vrstaUredaja";
     }
 
@@ -31,12 +33,12 @@ public class VrstaUredajaController {
         return "vrstaUredaja/updateVrstaUredaja";
     }
 
-    @GetMapping("/addNew")
-    public String addNewVrstaUredaja(Model model){
-        VrstaUredaja vrstaUredaja = new VrstaUredaja();
-        model.addAttribute("vrstauredaja", vrstaUredaja);
-        return "vrstaUredaja/newVrstaUredaja";
-    }
+//    @GetMapping("/addNew")
+//    public String addNewVrstaUredaja(Model model){
+//        VrstaUredaja vrstaUredaja = new VrstaUredaja();
+//        model.addAttribute("vrstauredaja", vrstaUredaja);
+//        return "vrstaUredaja/newVrstaUredaja";
+//    }
 
     @PostMapping("/save")
     public String saveVrstaUredaja(@ModelAttribute("vrstauredaja") VrstaUredaja vrstaUredaja){

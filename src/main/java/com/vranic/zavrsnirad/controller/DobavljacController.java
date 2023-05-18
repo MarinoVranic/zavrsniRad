@@ -18,6 +18,8 @@ public class DobavljacController {
     @GetMapping("/all")
     public String getAllDobavljaci(Model model){
         model.addAttribute("dobavljaci",dobavljacService.getAllDobavljaci());
+        Dobavljac dobavljac = new Dobavljac();
+        model.addAttribute("dobavljac", dobavljac);
         return "dobavljac/dobavljac";
     }
 
@@ -33,12 +35,12 @@ public class DobavljacController {
         return "dobavljac/updateDobavljac";
     }
 
-    @GetMapping("/addnew")
-    public String addNewDobavljac (Model model){
-        Dobavljac dobavljac = new Dobavljac();
-        model.addAttribute("dobavljac", dobavljac);
-        return "dobavljac/newDobavljac";
-    }
+//    @GetMapping("/addnew")
+//    public String addNewDobavljac (Model model){
+//        Dobavljac dobavljac = new Dobavljac();
+//        model.addAttribute("dobavljac", dobavljac);
+//        return "dobavljac/newDobavljac";
+//    }
 
     @PostMapping("/save")
     public String saveDobavljac(@ModelAttribute("dobavljac") Dobavljac dobavljac){

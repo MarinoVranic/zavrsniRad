@@ -16,6 +16,8 @@ public class LokacijaController {
     @GetMapping("/all")
     public String getAllLokacija(Model model){
         model.addAttribute("lokacija",lokacijaService.getAllLokacija());
+        Lokacija lokacija = new Lokacija();
+        model.addAttribute("novaLokacija", lokacija);
         return "lokacija/lokacija";
     }
 
@@ -31,12 +33,12 @@ public class LokacijaController {
         return "lokacija/updateLokacija";
     }
 
-    @GetMapping("/addNew")
-    public String addNewLokacija(Model model){
-        Lokacija lokacija = new Lokacija();
-        model.addAttribute("lokacija", lokacija);
-        return "lokacija/newLokacija";
-    }
+//    @GetMapping("/addNew")
+//    public String addNewLokacija(Model model){
+//        Lokacija lokacija = new Lokacija();
+//        model.addAttribute("lokacija", lokacija);
+//        return "lokacija/newLokacija";
+//    }
 
     @PostMapping("/save")
     public String saveLokacija(@ModelAttribute("lokacija") Lokacija lokacija){
