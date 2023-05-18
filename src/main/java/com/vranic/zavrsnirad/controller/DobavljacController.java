@@ -18,6 +18,8 @@ public class DobavljacController {
     @GetMapping("/all")
     public String getAllDobavljaci(Model model){
         model.addAttribute("dobavljaci",dobavljacService.getAllDobavljaci());
+        Dobavljac dobavljac = new Dobavljac();
+        model.addAttribute("dobavljac", dobavljac);
         return "dobavljac/dobavljac";
     }
 
@@ -26,18 +28,11 @@ public class DobavljacController {
         return dobavljacService.getDobavljacById(id);
     }
 
-    @GetMapping("/update/{id}")
-    public String updateForm(@PathVariable(value = "id") Long id, Model model){
-        Dobavljac dobavljac = dobavljacService.getDobavljacById(id);
+    @PostMapping("/update")
+    public String updateForm(Dobavljac dobavljac, Model model){
+        dobavljacService.save(dobavljac);
         model.addAttribute("dobavljac", dobavljac);
-        return "dobavljac/updateDobavljac";
-    }
-
-    @GetMapping("/addnew")
-    public String addNewDobavljac (Model model){
-        Dobavljac dobavljac = new Dobavljac();
-        model.addAttribute("dobavljac", dobavljac);
-        return "dobavljac/newDobavljac";
+        return "redirect:/dobavljac/all";
     }
 
     @PostMapping("/save")

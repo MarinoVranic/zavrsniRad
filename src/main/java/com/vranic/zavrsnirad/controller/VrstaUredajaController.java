@@ -15,27 +15,20 @@ public class VrstaUredajaController {
 
     @GetMapping("/all")
     public String getAllVrstaUredaja(Model model){
-        model.addAttribute("vrstauredaja", vrstaUredajaService.getAllVrstaUredaja());
+        model.addAttribute("sveVrsteUredaja", vrstaUredajaService.getAllVrstaUredaja());
+        VrstaUredaja vrstaUredaja = new VrstaUredaja();
+        model.addAttribute("vrstauredaja", vrstaUredaja);
         return "vrstaUredaja/vrstaUredaja";
     }
-
     @GetMapping("/{id}")
     public VrstaUredaja getVrstaUredajaById(@PathVariable Long id){
         return vrstaUredajaService.getVrstaUredajaById(id);
     }
-
-    @GetMapping("/update/{id}")
-    public String updateVrstaUredaja(@PathVariable(value = "id") Long id, Model model){
-        VrstaUredaja vrstaUredaja = vrstaUredajaService.getVrstaUredajaById(id);
+    @PostMapping("/update")
+    public String updateVrstaUredaja(VrstaUredaja vrstaUredaja, Model model){
+        vrstaUredajaService.save(vrstaUredaja);
         model.addAttribute("vrstauredaja",vrstaUredaja);
-        return "vrstaUredaja/updateVrstaUredaja";
-    }
-
-    @GetMapping("/addNew")
-    public String addNewVrstaUredaja(Model model){
-        VrstaUredaja vrstaUredaja = new VrstaUredaja();
-        model.addAttribute("vrstauredaja", vrstaUredaja);
-        return "vrstaUredaja/newVrstaUredaja";
+        return "redirect:/vrstaUredaja/all";
     }
 
     @PostMapping("/save")

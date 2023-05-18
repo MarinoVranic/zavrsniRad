@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<script type="text/javascript" src="../static/javascript/openUpdateModals.js" th:src="@{/javascript/openUpdateModals.js}"></script>
 <head>
   <meta charset="UTF-8">
   <title>Locations</title>
@@ -58,11 +59,38 @@
     background-color: #25ff1e;
     color: #090909;
   }
+
+  .w3-button{
+    max-width: 100%;
+  }
+
   tr:hover {background-color: DodgerBlue;}
 </style>
 <body>
-<h1>Locations</h1>
-<a th:href="@{/lokacija/addnew}" class="button button4">Add new Lokacija</a>
+<h1>Lokacije</h1>
+<div class="w3-container">
+  <button onclick="document.getElementById('id01').style.display='block'" class="w3-button w3-gray w3-large w3-hover-green">Dodaj lokaciju</button>
+
+  <div id="id01" class="w3-modal">
+    <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
+
+      <div class="w3-center"><br>
+        <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>
+      </div>
+
+      <form class="w3-container" action="#" th:action="@{/lokacija/save}" th:object="${lokacija}"
+            method="POST">
+        <div class="w3-section">
+
+          <input type="hidden" th:field="*{idLokacije}" />
+          <label for="lname">Naziv lokacije</label>
+          <input class="w3-input w3-border w3-margin-bottom" type="text" id="lname" th:field="*{nazivLokacije}" name="lokacijanaziv" required>
+          <button class="w3-button w3-block w3-green w3-section w3-padding" type="submit">Dodaj</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 <table>
   <thead>
   <tr>
@@ -73,13 +101,57 @@
   </tr>
   </thead>
   <tbody>
-  <tr th:each="lokacija:${lokacija}">
-    <td th:text="${lokacija.idLokacije}"></td>
-    <td th:text="${lokacija.nazivLokacije}"></td>
-    <td> <a th:href="@{/lokacija/update/{id}(id=${lokacija.idLokacije})}" class="button button2">Update</a></td>
-    <td> <a th:href="@{/lokacija/delete/{id}(id=${lokacija.idLokacije})}" class="button button3">Delete</a></td>
+  <tr th:each="lokacija:${sveLokacije}">
+    <td style="font-size:1vw;" th:text="${lokacija.idLokacije}"></td>
+    <td style="font-size:1vw;" th:text="${lokacija.nazivLokacije}"></td>
+    <td class="w3-container"><button onclick="openUpdateModal(this)" th:data-id="${lokacija.idLokacije}" th:data-naziv="${lokacija.nazivLokacije}" class="w3-button w3-gray w3-xlarge w3-hover-orange">Update</button></td>
+    <div id="updateModal" class="w3-modal">
+      <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
+        <div class="w3-center"><br>
+          <span onclick="document.getElementById('updateModal').style.display='none'" class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>
+        </div>
+        <form id="updateForm" class="w3-container" action="#" th:action="@{/lokacija/update}" th:object="${lokacija}"
+              method="POST">
+          <div class="w3-section" style="padding: 0.5em">
+
+            <input type="hidden" id="updateId" th:field="*{idLokacije}" />
+            <label for="nameEdit">Naziv lokacije</label>
+            <input class="w3-input w3-border w3-margin-bottom" type="text" id="nameEdit" th:field="*{nazivLokacije}" name="lokacijanaziv" required>
+            <button class="w3-button w3-block w3-green w3-section w3-padding" type="submit">Ažuriraj</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <td> <a th:href="@{/lokacija/delete/{id}(id=${lokacija.idLokacije})}" class="w3-button w3-gray w3-xlarge w3-hover-red">Delete</a></td>
   </tr>
   </tbody>
 </table>
+<script>
+  // Get all modal elements
+  var modals = document.getElementsByClassName('w3-modal');
+
+  // When the user clicks anywhere outside of a modal, close it
+  window.onclick = function (event) {
+    for (var i = 0; i < modals.length; i++) {
+      if (event.target == modals[i]) {
+        modals[i].style.display = "none";
+        break;
+      }
+    }
+  }
+
+  function openUpdateModal(button) {
+    var id = button.getAttribute("data-id");
+    var naziv = button.getAttribute("data-naziv");
+    console.log(id);
+    console.log(naziv);
+    // Set the ID value in the modal form
+    document.getElementById("updateId").value = id;
+    document.getElementById("nameEdit").value = naziv;
+
+    // Open the modal
+    document.getElementById('updateModal').style.display = 'block';
+  }
+</script>
 </body>
 </html>

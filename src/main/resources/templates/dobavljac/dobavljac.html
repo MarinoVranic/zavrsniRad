@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<script type="text/javascript" src="../static/javascript/openUpdateModals.js" th:src="@{/javascript/openUpdateModals.js}"></script>
 <head>
   <meta charset="UTF-8">
   <title>Dobavljači</title>
@@ -65,7 +66,29 @@
 </style>
 <body>
 <h1>Dobavljači</h1>
-<a th:href="@{/dobavljac/addnew}" class="button button4">Novi dobavljač</a>
+<div class="w3-container">
+  <button onclick="document.getElementById('id01').style.display='block'" class="w3-button w3-gray w3-large w3-hover-green">Dodaj dobavljača</button>
+
+  <div id="id01" class="w3-modal">
+    <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
+
+      <div class="w3-center"><br>
+        <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>
+      </div>
+
+      <form class="w3-container" action="#" th:action="@{/dobavljac/save}" th:object="${dobavljac}"
+            method="POST">
+        <div class="w3-section">
+
+          <input type="hidden" th:field="*{idDobavljaca}" />
+          <label for="dname">Naziv dobavljača</label>
+          <input class="w3-input w3-border w3-margin-bottom" type="text" id="dname" th:field="*{nazivDobavljaca}" name="dobavljacnaziv" required>
+          <button class="w3-button w3-block w3-green w3-section w3-padding" type="submit">Dodaj</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 <form th:action="@{/dobavljac/find}" method="get">
   <label for="nazivDobavljaca">Search by name:</label>
   <input type="text" id="nazivDobavljaca" name="nazivDobavljaca" required>
@@ -86,10 +109,40 @@
   <tr th:each="dobavljac:${dobavljaci}">
     <td th:text="${dobavljac.idDobavljaca}"></td>
     <td th:text="${dobavljac.nazivDobavljaca}"></td>
-    <td> <a th:href="@{/dobavljac/update/{id}(id=${dobavljac.idDobavljaca})}" class="button button2">Update</a></td>
-    <td> <a th:href="@{/dobavljac/delete/{id}(id=${dobavljac.idDobavljaca})}" class="button button3">Delete</a></td>
+    <td><button onclick="openUpdateModal(this)" th:data-id="${dobavljac.idDobavljaca}" th:data-naziv="${dobavljac.nazivDobavljaca}" class="w3-button w3-gray w3-xlarge w3-hover-orange">Update</button></td>
+    <div id="updateModal" class="w3-modal">
+      <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
+        <div class="w3-center"><br>
+          <span onclick="document.getElementById('updateModal').style.display='none'" class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>
+        </div>
+        <form id="updateForm" class="w3-container" action="#" th:action="@{/dobavljac/update}" th:object="${dobavljac}"
+              method="POST">
+          <div class="w3-section">
+            <input type="hidden" id="updateId" th:field="*{idDobavljaca}" />
+            <label for="nameEdit">Naziv dobavljača</label>
+            <input class="w3-input w3-border w3-margin-bottom" type="text" id="nameEdit" th:field="*{nazivDobavljaca}" name="dobavljacnaziv" required>
+            <button class="w3-button w3-block w3-green w3-section w3-padding" type="submit">Ažuriraj</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <td> <a th:href="@{/dobavljac/delete/{id}(id=${dobavljac.idDobavljaca})}" class="w3-button w3-gray w3-xlarge w3-hover-red">Delete</a></td>
   </tr>
   </tbody>
 </table>
+<script>
+  // Get all modal elements
+  var modals = document.getElementsByClassName('w3-modal');
+
+  // When the user clicks anywhere outside of a modal, close it
+  window.onclick = function (event) {
+    for (var i = 0; i < modals.length; i++) {
+      if (event.target == modals[i]) {
+        modals[i].style.display = "none";
+        break;
+      }
+    }
+  }
+</script>
 </body>
 </html>

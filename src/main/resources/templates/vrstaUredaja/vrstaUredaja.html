@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<script type="text/javascript" src="../static/javascript/openUpdateModals.js" th:src="@{/javascript/openUpdateModals.js}"></script>
 <head>
     <meta charset="UTF-8">
     <title>Vrste uređaja</title>
@@ -58,11 +59,35 @@
         background-color: #25ff1e;
         color: #090909;
     }
+
+
     tr:hover {background-color: DodgerBlue;}
 </style>
 <body>
 <h1>Vrste uređaja</h1>
-<a th:href="@{/vrstaUredaja/addNew}" class="button button4">Nova vrsta uređaja</a>
+<div class="w3-container">
+    <button onclick="document.getElementById('id01').style.display='block'" class="w3-button w3-gray w3-large w3-hover-green">Dodaj vrstu uređaja</button>
+
+    <div id="id01" class="w3-modal">
+        <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
+
+            <div class="w3-center"><br>
+                <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>
+            </div>
+
+            <form class="w3-container" action="#" th:action="@{/vrstaUredaja/save}" th:object="${vrstauredaja}"
+                  method="POST">
+                <div class="w3-section">
+
+                    <input type="hidden" th:field="*{idVrsteUredaja}" />
+                    <label for="vname">Naziv vrste uređaja</label>
+                    <input class="w3-input w3-border w3-margin-bottom" type="text" id="vname" th:field="*{nazivVrsteUredaja}" name="vrstanaziv" required>
+                    <button class="w3-button w3-block w3-green w3-section w3-padding" type="submit">Dodaj</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <table>
     <thead>
     <tr>
@@ -73,13 +98,44 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="vrsteUredaja:${vrstauredaja}">
+    <tr th:each="vrsteUredaja:${sveVrsteUredaja}">
         <td th:text="${vrsteUredaja.idVrsteUredaja}"></td>
         <td th:text="${vrsteUredaja.nazivVrsteUredaja}"></td>
-        <td> <a th:href="@{/vrstaUredaja/update/{id}(id=${vrsteUredaja.idVrsteUredaja})}" class="button button2">Update</a></td>
-        <td> <a th:href="@{/vrstaUredaja/delete/{id}(id=${vrsteUredaja.idVrsteUredaja})}" class="button button3">Delete</a></td>
+        <td class="w3-container"><button onclick="openUpdateModal(this)" th:data-id="${vrsteUredaja.idVrsteUredaja}" th:data-naziv="${vrsteUredaja.nazivVrsteUredaja}" class="w3-button w3-gray w3-xlarge w3-hover-orange">Update</button></td>
+        <div id="updateModal" class="w3-modal">
+            <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
+                <div class="w3-center"><br>
+                    <span onclick="document.getElementById('updateModal').style.display='none'" class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>
+                </div>
+                <form id="updateForm" class="w3-container" action="#" th:action="@{/vrstaUredaja/update}" th:object="${vrstauredaja}"
+                      method="POST">
+                    <div class="w3-section" style="padding: 0.5em">
+
+                        <input type="hidden" id="updateId" th:field="*{idVrsteUredaja}" />
+                        <label for="nameEdit">Naziv vrste uređaja</label>
+                        <input class="w3-input w3-border w3-margin-bottom" type="text" id="nameEdit" th:field="*{nazivVrsteUredaja}" name="vrstanaziv" required>
+                        <button class="w3-button w3-block w3-green w3-section w3-padding" type="submit">Ažuriraj</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <td> <a th:href="@{/vrstaUredaja/delete/{id}(id=${vrsteUredaja.idVrsteUredaja})}" class="w3-button w3-gray w3-xlarge w3-hover-red">Delete</a></td>
     </tr>
     </tbody>
 </table>
+<script>
+    // Get all modal elements
+    var modals = document.getElementsByClassName('w3-modal');
+
+    // When the user clicks anywhere outside of a modal, close it
+    window.onclick = function (event) {
+        for (var i = 0; i < modals.length; i++) {
+            if (event.target == modals[i]) {
+                modals[i].style.display = "none";
+                break;
+            }
+        }
+    }
+</script>
 </body>
 </html>
