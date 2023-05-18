@@ -28,18 +28,10 @@ public class LokacijaController {
 
     @PostMapping("/update")
     public String updateLokacija(Lokacija lokacija, Model model){
-//        Lokacija lokacija = lokacijaService.getLokacijaById(id);
         lokacijaService.save(lokacija);
         model.addAttribute("lokacija", lokacija);
         return "redirect:/lokacija/all";
     }
-
-//    @GetMapping("/addNew")
-//    public String addNewLokacija(Model model){
-//        Lokacija lokacija = new Lokacija();
-//        model.addAttribute("lokacija", lokacija);
-//        return "lokacija/newLokacija";
-//    }
 
     @PostMapping("/save")
     public String saveLokacija(@ModelAttribute("lokacija") Lokacija lokacija){

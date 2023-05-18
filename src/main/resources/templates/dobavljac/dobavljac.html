@@ -66,7 +66,6 @@
 </style>
 <body>
 <h1>Dobavljači</h1>
-<!--<a th:href="@{/dobavljac/addnew}" class="button button4">Novi dobavljač</a>-->
 <div class="w3-container">
   <button onclick="document.getElementById('id01').style.display='block'" class="w3-button w3-gray w3-large w3-hover-green">Dodaj dobavljača</button>
 
@@ -110,7 +109,6 @@
   <tr th:each="dobavljac:${dobavljaci}">
     <td th:text="${dobavljac.idDobavljaca}"></td>
     <td th:text="${dobavljac.nazivDobavljaca}"></td>
-<!--    <td> <a th:href="@{/dobavljac/update/{id}(id=${dobavljac.idDobavljaca})}" class="w3-button w3-gray w3-xlarge w3-hover-orange">Update</a></td>-->
     <td><button onclick="openUpdateModal(this)" th:data-id="${dobavljac.idDobavljaca}" th:data-naziv="${dobavljac.nazivDobavljaca}" class="w3-button w3-gray w3-xlarge w3-hover-orange">Update</button></td>
     <div id="updateModal" class="w3-modal">
       <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">

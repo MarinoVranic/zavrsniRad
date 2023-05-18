@@ -30,18 +30,10 @@ public class DobavljacController {
 
     @PostMapping("/update")
     public String updateForm(Dobavljac dobavljac, Model model){
-//        Dobavljac dobavljac = dobavljacService.getDobavljacById(id);
         dobavljacService.save(dobavljac);
         model.addAttribute("dobavljac", dobavljac);
         return "redirect:/dobavljac/all";
     }
-
-//    @GetMapping("/addnew")
-//    public String addNewDobavljac (Model model){
-//        Dobavljac dobavljac = new Dobavljac();
-//        model.addAttribute("dobavljac", dobavljac);
-//        return "dobavljac/newDobavljac";
-//    }
 
     @PostMapping("/save")
     public String saveDobavljac(@ModelAttribute("dobavljac") Dobavljac dobavljac){

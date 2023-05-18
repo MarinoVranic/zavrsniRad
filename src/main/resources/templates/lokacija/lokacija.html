@@ -68,7 +68,6 @@
 </style>
 <body>
 <h1>Lokacije</h1>
-<!--<a th:href="@{/lokacija/addnew}" class="button button4">Add new Lokacija</a>-->
 <div class="w3-container">
   <button onclick="document.getElementById('id01').style.display='block'" class="w3-button w3-gray w3-large w3-hover-green">Dodaj lokaciju</button>
 
@@ -105,7 +104,6 @@
   <tr th:each="lokacija:${sveLokacije}">
     <td style="font-size:1vw;" th:text="${lokacija.idLokacije}"></td>
     <td style="font-size:1vw;" th:text="${lokacija.nazivLokacije}"></td>
-<!--    <td> <a th:href="@{/lokacija/update/{id}(id=${lokacija.idLokacije})}" class="w3-button w3-gray w3-xlarge w3-hover-orange">Update</a></td>-->
     <td class="w3-container"><button onclick="openUpdateModal(this)" th:data-id="${lokacija.idLokacije}" th:data-naziv="${lokacija.nazivLokacije}" class="w3-button w3-gray w3-xlarge w3-hover-orange">Update</button></td>
     <div id="updateModal" class="w3-modal">
       <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">

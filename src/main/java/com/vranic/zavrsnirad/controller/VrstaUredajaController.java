@@ -26,18 +26,10 @@ public class VrstaUredajaController {
     }
     @PostMapping("/update")
     public String updateVrstaUredaja(VrstaUredaja vrstaUredaja, Model model){
-//        VrstaUredaja vrstaUredaja = vrstaUredajaService.getVrstaUredajaById(id);
         vrstaUredajaService.save(vrstaUredaja);
         model.addAttribute("vrstauredaja",vrstaUredaja);
         return "redirect:/vrstaUredaja/all";
     }
-
-//    @GetMapping("/addNew")
-//    public String addNewVrstaUredaja(Model model){
-//        VrstaUredaja vrstaUredaja = new VrstaUredaja();
-//        model.addAttribute("vrstauredaja", vrstaUredaja);
-//        return "vrstaUredaja/newVrstaUredaja";
-//    }
 
     @PostMapping("/save")
     public String saveVrstaUredaja(@ModelAttribute("vrstauredaja") VrstaUredaja vrstaUredaja){
