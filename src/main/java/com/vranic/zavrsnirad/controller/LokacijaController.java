@@ -15,9 +15,9 @@ public class LokacijaController {
 
     @GetMapping("/all")
     public String getAllLokacija(Model model){
-        model.addAttribute("lokacija",lokacijaService.getAllLokacija());
+        model.addAttribute("sveLokacije",lokacijaService.getAllLokacija());
         Lokacija lokacija = new Lokacija();
-        model.addAttribute("novaLokacija", lokacija);
+        model.addAttribute("lokacija", lokacija);
         return "lokacija/lokacija";
     }
 
@@ -26,11 +26,12 @@ public class LokacijaController {
         return lokacijaService.getLokacijaById(id);
     }
 
-    @GetMapping("/update/{id}")
-    public String updateLokacija(@PathVariable(value = "id") Long id, Model model){
-        Lokacija lokacija = lokacijaService.getLokacijaById(id);
+    @PostMapping("/update")
+    public String updateLokacija(Lokacija lokacija, Model model){
+//        Lokacija lokacija = lokacijaService.getLokacijaById(id);
+        lokacijaService.save(lokacija);
         model.addAttribute("lokacija", lokacija);
-        return "lokacija/updateLokacija";
+        return "redirect:/lokacija/all";
     }
 
 //    @GetMapping("/addNew")
@@ -46,7 +47,7 @@ public class LokacijaController {
         return "redirect:/lokacija/all";
     }
 
-    @GetMapping("/delete/{id}")
+    @GetMapping("delete/{id}")
     public String deleteById(@PathVariable(value = "id") Long id){
         lokacijaService.deleteById(id);
         return "redirect:/lokacija/all";

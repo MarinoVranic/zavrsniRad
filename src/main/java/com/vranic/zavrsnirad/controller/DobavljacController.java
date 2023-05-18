@@ -28,11 +28,12 @@ public class DobavljacController {
         return dobavljacService.getDobavljacById(id);
     }
 
-    @GetMapping("/update/{id}")
-    public String updateForm(@PathVariable(value = "id") Long id, Model model){
-        Dobavljac dobavljac = dobavljacService.getDobavljacById(id);
+    @PostMapping("/update")
+    public String updateForm(Dobavljac dobavljac, Model model){
+//        Dobavljac dobavljac = dobavljacService.getDobavljacById(id);
+        dobavljacService.save(dobavljac);
         model.addAttribute("dobavljac", dobavljac);
-        return "dobavljac/updateDobavljac";
+        return "redirect:/dobavljac/all";
     }
 
 //    @GetMapping("/addnew")
