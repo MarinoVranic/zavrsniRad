@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -51,11 +52,15 @@ public class DobavljacController {
     public String findDobavljacByName(@RequestParam("nazivDobavljaca") String nazivDobavljaca, Model model){
         List<Dobavljac> dobavljacList = dobavljacService.findDobavljacByName(nazivDobavljaca);
         if(dobavljacList.isEmpty()){
-            model.addAttribute("error", "The error XYZ occurred.");
+            model.addAttribute("error", "Dobavljač tog naziva ne postoji u sustavu!");
             model.addAttribute("dobavljaci",dobavljacService.getAllDobavljaci());
+            Dobavljac dobavljac = new Dobavljac();
+            model.addAttribute("dobavljac", dobavljac);
         }
         else{
         model.addAttribute("dobavljaci",dobavljacList);
+        Dobavljac dobavljac = new Dobavljac();
+        model.addAttribute("dobavljac", dobavljac);
         System.out.println(dobavljacList.get(0));
         }
         return "dobavljac/dobavljac";
