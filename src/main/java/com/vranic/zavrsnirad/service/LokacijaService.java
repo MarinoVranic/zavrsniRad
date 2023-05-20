@@ -28,4 +28,8 @@ public class LokacijaService {
     public void deleteById(Long idLokacije){
         lokacijaRepository.deleteById(idLokacije);
     }
+
+    public List<Lokacija> findLokacijaByName(String nazivLokacije){
+        return lokacijaRepository.findByNazivLokacije(nazivLokacije);
+    }
 }

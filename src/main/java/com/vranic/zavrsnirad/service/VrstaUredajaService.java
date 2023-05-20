@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 @Service
 public class VrstaUredajaService {
@@ -26,5 +27,9 @@ public class VrstaUredajaService {
 
     public void deleteById(Long idVrsteUredaja){
         vrstaUredajaRepository.deleteById(idVrsteUredaja);
+    }
+
+    public List<VrstaUredaja> findVrstaUredajaByName(String nazivVrsteUredaja){
+        return vrstaUredajaRepository.findByNazivVrsteUredaja(nazivVrsteUredaja);
     }
 }

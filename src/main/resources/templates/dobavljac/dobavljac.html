@@ -89,13 +89,15 @@
     </div>
   </div>
 </div>
-<form th:action="@{/dobavljac/find}" method="get">
+<form class="w3-container" th:action="@{/dobavljac/find}" method="get">
   <label for="nazivDobavljaca">Search by name:</label>
   <input type="text" id="nazivDobavljaca" name="nazivDobavljaca" required>
-  <button type="submit">Search</button>
+  <button onclick="hidediv()" type="submit">Search</button>
+  <button type="button" onclick="window.location.href='/dobavljac/all'">Show All</button>
   <p class="alert alert-primary" role="alert" th:text="${success}" th:if="${success}"></p>
-  <label class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>
+  <label id="error-message" class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>
 </form>
+
 <table>
   <thead>
   <tr>
@@ -106,10 +108,10 @@
   </tr>
   </thead>
   <tbody>
-  <tr th:each="dobavljac:${dobavljaci}">
-    <td th:text="${dobavljac.idDobavljaca}"></td>
-    <td th:text="${dobavljac.nazivDobavljaca}"></td>
-    <td><button onclick="openUpdateModal(this)" th:data-id="${dobavljac.idDobavljaca}" th:data-naziv="${dobavljac.nazivDobavljaca}" class="w3-button w3-gray w3-xlarge w3-hover-orange">Update</button></td>
+  <tr th:each="svidobavljac:${dobavljaci}">
+    <td th:text="${svidobavljac.idDobavljaca}"></td>
+    <td th:text="${svidobavljac.nazivDobavljaca}"></td>
+    <td><button onclick="openUpdateModal(this)" th:data-id="${svidobavljac.idDobavljaca}" th:data-naziv="${svidobavljac.nazivDobavljaca}" class="w3-button w3-gray w3-xlarge w3-hover-orange">Update</button></td>
     <div id="updateModal" class="w3-modal">
       <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
         <div class="w3-center"><br>
@@ -143,6 +145,12 @@
       }
     }
   }
+</script>
+<script>
+function hidediv(){
+  document.getElementById("error-message").style.visibility="hidden";
+}
+setTimeout("hidediv()",5000);
 </script>
 </body>
 </html>
