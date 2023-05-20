@@ -61,6 +61,10 @@
     }
 
 
+    .alert{
+        color: red;
+    }
+
     tr:hover {background-color: DodgerBlue;}
 </style>
 <body>
@@ -88,6 +92,13 @@
         </div>
     </div>
 </div>
+<form class="w3-container" th:action="@{/vrstaUredaja/find}" method="get">
+    <label for="nazivVrsteUredaja">Search by name:</label>
+    <input type="text" id="nazivVrsteUredaja" name="nazivVrsteUredaja" required>
+    <button onclick="hidediv()" type="submit">Search</button>
+    <button type="button" onclick="window.location.href='/vrstaUredaja/all'">Show All</button>
+    <label id="error-message" class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>
+</form>
 <table>
     <thead>
     <tr>
@@ -136,6 +147,12 @@
             }
         }
     }
+</script>
+<script>
+    function hidediv(){
+        document.getElementById("error-message").style.visibility="hidden";
+    }
+    setTimeout("hidediv()",5000);
 </script>
 </body>
 </html>

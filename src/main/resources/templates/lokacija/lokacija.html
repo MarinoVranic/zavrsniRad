@@ -4,7 +4,7 @@
 <script type="text/javascript" src="../static/javascript/openUpdateModals.js" th:src="@{/javascript/openUpdateModals.js}"></script>
 <head>
   <meta charset="UTF-8">
-  <title>Locations</title>
+  <title>Lokacije</title>
 </head>
 <style>
   table {
@@ -64,6 +64,10 @@
     max-width: 100%;
   }
 
+  .alert{
+    color: red;
+  }
+
   tr:hover {background-color: DodgerBlue;}
 </style>
 <body>
@@ -91,6 +95,13 @@
     </div>
   </div>
 </div>
+<form class="w3-container" th:action="@{/lokacija/find}" method="get">
+  <label for="nazivLokacije">Search by name:</label>
+  <input type="text" id="nazivLokacije" name="nazivLokacije" required>
+  <button onclick="hidediv()" type="submit">Search</button>
+  <button type="button" onclick="window.location.href='/lokacija/all'">Show All</button>
+  <label id="error-message" class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>
+</form>
 <table>
   <thead>
   <tr>
@@ -139,19 +150,12 @@
       }
     }
   }
-
-  function openUpdateModal(button) {
-    var id = button.getAttribute("data-id");
-    var naziv = button.getAttribute("data-naziv");
-    console.log(id);
-    console.log(naziv);
-    // Set the ID value in the modal form
-    document.getElementById("updateId").value = id;
-    document.getElementById("nameEdit").value = naziv;
-
-    // Open the modal
-    document.getElementById('updateModal').style.display = 'block';
+</script>
+<script>
+  function hidediv(){
+    document.getElementById("error-message").style.visibility="hidden";
   }
+  setTimeout("hidediv()",5000);
 </script>
 </body>
 </html>

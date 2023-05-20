@@ -1,11 +1,14 @@
 package com.vranic.zavrsnirad.controller;
 
+import com.vranic.zavrsnirad.model.Dobavljac;
 import com.vranic.zavrsnirad.model.Lokacija;
 import com.vranic.zavrsnirad.service.LokacijaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/lokacija")
@@ -14,34 +17,51 @@ public class LokacijaController {
     private LokacijaService lokacijaService;
 
     @GetMapping("/all")
-    public String getAllLokacija(Model model){
-        model.addAttribute("sveLokacije",lokacijaService.getAllLokacija());
+    public String getAllLokacija(Model model) {
+        model.addAttribute("sveLokacije", lokacijaService.getAllLokacija());
         Lokacija lokacija = new Lokacija();
         model.addAttribute("lokacija", lokacija);
         return "lokacija/lokacija";
     }
 
     @GetMapping("/{id}")
-    public Lokacija getLokacijaById(@PathVariable Long id){
+    public Lokacija getLokacijaById(@PathVariable Long id) {
         return lokacijaService.getLokacijaById(id);
     }
 
     @PostMapping("/update")
-    public String updateLokacija(Lokacija lokacija, Model model){
+    public String updateLokacija(Lokacija lokacija, Model model) {
         lokacijaService.save(lokacija);
         model.addAttribute("lokacija", lokacija);
         return "redirect:/lokacija/all";
     }
 
     @PostMapping("/save")
-    public String saveLokacija(@ModelAttribute("lokacija") Lokacija lokacija){
+    public String saveLokacija(@ModelAttribute("lokacija") Lokacija lokacija) {
         lokacijaService.save(lokacija);
         return "redirect:/lokacija/all";
     }
 
     @GetMapping("delete/{id}")
-    public String deleteById(@PathVariable(value = "id") Long id){
+    public String deleteById(@PathVariable(value = "id") Long id) {
         lokacijaService.deleteById(id);
         return "redirect:/lokacija/all";
+    }
+
+    @GetMapping("/find")
+    public String findDobavljacByName(@RequestParam("nazivLokacije") String nazivLokacije, Model model) {
+        List<Lokacija> lokacijaList = lokacijaService.findLokacijaByName(nazivLokacije);
+        if (lokacijaList.isEmpty()) {
+            model.addAttribute("error", "Lokacija tog naziva ne postoji u sustavu!");
+            model.addAttribute("sveLokacije", lokacijaService.getAllLokacija());
+            Lokacija lokacija = new Lokacija();
+            model.addAttribute("lokacija", lokacija);
+        } else {
+            model.addAttribute("sveLokacije", lokacijaList);
+            Lokacija lokacija = new Lokacija();
+            model.addAttribute("lokacija", lokacija);
+//            System.out.println(lokacijaList.get(0));
+        }
+        return "lokacija/lokacija";
     }
 }

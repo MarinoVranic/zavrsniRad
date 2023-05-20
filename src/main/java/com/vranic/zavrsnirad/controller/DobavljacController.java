@@ -61,7 +61,7 @@ public class DobavljacController {
         model.addAttribute("dobavljaci",dobavljacList);
         Dobavljac dobavljac = new Dobavljac();
         model.addAttribute("dobavljac", dobavljac);
-        System.out.println(dobavljacList.get(0));
+//        System.out.println(dobavljacList.get(0));
         }
         return "dobavljac/dobavljac";
     }
