@@ -52,20 +52,22 @@ public class RacunController {
         return "redirect:/racun/all";
     }
 
-//    @GetMapping("/find")
-//    public String findRacunByName(@RequestParam("nazivLokacije") String nazivLokacije, Model model) {
-//        List<Lokacija> lokacijaList = lokacijaService.findLokacijaByName(nazivLokacije);
-//        if (lokacijaList.isEmpty()) {
-//            model.addAttribute("error", "Lokacija tog naziva ne postoji u sustavu!");
-//            model.addAttribute("sveLokacije", lokacijaService.getAllLokacija());
-//            Lokacija lokacija = new Lokacija();
-//            model.addAttribute("lokacija", lokacija);
-//        } else {
-//            model.addAttribute("sveLokacije", lokacijaList);
-//            Lokacija lokacija = new Lokacija();
-//            model.addAttribute("lokacija", lokacija);
-////            System.out.println(lokacijaList.get(0));
-//        }
-//        return "lokacija/lokacija";
-//    }
+    @GetMapping("/find")
+    public String findRacunByName(@RequestParam("brojRacuna") String brojRacuna, Model model) {
+//        System.out.println(brojRacuna);
+        List<Racun> racunList = racunService.findRacunByBrojRacuna(brojRacuna);
+//        System.out.println(racunList);
+        if (racunList.isEmpty()) {
+            model.addAttribute("error", "Račun pod tim brojem ne postoji u sustavu!");
+            model.addAttribute("sviRacuni", racunService.getAllRacun());
+            Racun racun = new Racun();
+            model.addAttribute("racun", racun);
+        } else {
+            model.addAttribute("sviRacuni", racunList);
+            Racun racun = new Racun();
+            model.addAttribute("racun", racun);
+//            System.out.println(lokacijaList.get(0));
+        }
+        return "racun/racun";
+    }
 }

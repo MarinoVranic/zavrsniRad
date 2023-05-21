@@ -33,4 +33,8 @@ public class RacunService {
     public void deleteById(String brojRacuna){
         racunRepository.deleteById(brojRacuna);
     }
+
+    public List<Racun> findRacunByBrojRacuna(String brojRacuna){
+        return racunRepository.findByBrojRacuna(brojRacuna);
+    }
 }
