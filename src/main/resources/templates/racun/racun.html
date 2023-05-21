@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<script type="text/javascript" src="../static/javascript/openUpdateModals.js" th:src="@{/javascript/openUpdateModals.js}"></script>
+<script type="text/javascript" src="../static/javascript/openDeleteModals.js" th:src="@{/javascript/openDeleteModals.js}"></script>
+<head>
+  <meta charset="UTF-8">
+  <title>Računi</title>
+</head>
+<style>
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  .button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+  }
+  .button2 {
+    background-color: white;
+    color: black;
+    border: 2px solid #008CBA;
+  }
+
+  .button2:hover {
+    background-color: DodgerBlue;
+    color: white;
+  }
+  .button3 {
+    background-color: white;
+    color: black;
+    border: 2px solid #008CBA;
+  }
+
+  .button3:hover {
+    background-color: #ff1e1e;
+    color: #090909;
+  }
+  .button4 {
+    background-color: white;
+    color: black;
+    border: 2px solid #008CBA;
+  }
+
+  .button4:hover {
+    background-color: #25ff1e;
+    color: #090909;
+  }
+
+  .w3-button{
+    max-width: 100%;
+  }
+
+  .alert{
+    color: red;
+  }
+
+  tr:hover {background-color: DodgerBlue;}
+</style>
+<body>
+<h1>Računi</h1>
+<div class="w3-container">
+  <button onclick="document.getElementById('id01').style.display='block'" class="w3-button w3-gray w3-large w3-hover-green">Dodaj račun</button>
+
+  <div id="id01" class="w3-modal">
+    <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
+
+      <div class="w3-center"><br>
+        <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>
+      </div>
+
+      <form class="w3-container" action="#" th:action="@{/racun/save}" th:object="${racun}"
+            method="POST">
+        <div class="w3-section">
+          <label for="bracuna">Broj računa</label>
+          <input class="w3-input w3-border w3-margin-bottom" type="text" id="bracuna" th:field="*{brojRacuna}" required>
+          <label for="dracuna">Datum računa</label>
+          <input class="w3-input w3-border w3-margin-bottom" type="date" id="dracuna" th:field="*{datumRacuna}" name="datumracuna" required>
+          <button class="w3-button w3-block w3-green w3-section w3-padding" type="submit">Dodaj</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!--<form class="w3-container" th:action="@{/racun/find}" method="get">-->
+<!--  <label for="nazivLokacije">Search by name:</label>-->
+<!--  <input type="text" id="nazivLokacije" name="nazivLokacije" required>-->
+<!--  <button onclick="hidediv()" type="submit">Search</button>-->
+<!--  <button type="button" onclick="window.location.href='/lokacija/all'">Show All</button>-->
+<!--  <label id="error-message" class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>-->
+<!--</form>-->
+<table>
+  <thead>
+  <tr>
+    <th>Broj računa</th>
+    <th>Datum računa</th>
+    <th></th>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="racuni:${sviRacuni}">
+    <td style="font-size:1vw;" th:text="${racuni.brojRacuna}"></td>
+    <td style="font-size:1vw;" th:text="${racuni.datumRacuna}"></td>
+    <td class="w3-container"><button onclick="openUpdateModal(this)" th:data-id="${racuni.brojRacuna}" th:data-naziv="${racuni.datumRacuna}" class="w3-button w3-gray w3-xlarge w3-hover-orange">Update</button></td>
+    <div id="updateModal" class="w3-modal">
+      <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
+        <div class="w3-center"><br>
+          <span onclick="document.getElementById('updateModal').style.display='none'" class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>
+        </div>
+        <form id="updateForm" class="w3-container" action="#" th:action="@{/racun/update}" th:object="${racun}"
+              method="POST">
+          <div class="w3-section" style="padding: 0.5em">
+            <label for="updateId">Broj računa</label>
+            <input class="w3-input w3-border w3-margin-bottom" type="text" id="updateId" th:field="*{brojRacuna}" />
+            <label for="nameEdit">Datum računa</label>
+            <input class="w3-input w3-border w3-margin-bottom" type="date" id="nameEdit" th:field="*{datumRacuna}" name="datumracuna" required>
+            <button class="w3-button w3-block w3-green w3-section w3-padding" type="submit">Ažuriraj</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <td class="w3-container"><button onclick="openDeleteModal(this)" th:data-id="${racuni.brojRacuna}" th:data-naziv="${racuni.datumRacuna}" class="w3-button w3-gray w3-xlarge w3-hover-red">Izbriši</button></td>
+    <div id="deleteModal" class="w3-modal">
+      <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
+        <div class="w3-center"><br>
+          <span onclick="document.getElementById('updateModal').style.display='none'" class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>
+        </div>
+        <form id="deleteForm" class="w3-container" action="#" th:action="@{/racun/delete}" th:object="${racun}"
+              method="GET">
+          <div class="w3-section" style="padding: 0.5em">
+            <label for="deleteId">Želite izbrisati broj računa:</label>
+            <input readonly class="w3-input w3-border w3-margin-bottom" type="text" id="deleteId" th:field="*{brojRacuna}"/>
+            <button class="w3-button w3-block w3-green w3-section w3-padding" type="submit">Izbriši</button>
+          </div>
+        </form>
+      </div>
+    </div>
+<!--        <td> <a th:href="@{/racun/delete/brojRacuna(brojRacuna=${racuni.brojRacuna})}" class="w3-button w3-gray w3-xlarge w3-hover-red">Delete</a></td>-->
+  </tr>
+  </tbody>
+</table>
+<script>
+  // Get all modal elements
+  var modals = document.getElementsByClassName('w3-modal');
+
+  // When the user clicks anywhere outside of a modal, close it
+  window.onclick = function (event) {
+    for (var i = 0; i < modals.length; i++) {
+      if (event.target == modals[i]) {
+        modals[i].style.display = "none";
+        break;
+      }
+    }
+  }
+</script>
+<script>
+  function hidediv(){
+    document.getElementById("error-message").style.visibility="hidden";
+  }
+  setTimeout("hidediv()",5000);
+</script>
+</body>
+</html>
