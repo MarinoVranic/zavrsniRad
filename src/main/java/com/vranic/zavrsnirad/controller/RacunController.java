@@ -28,10 +28,10 @@ public class RacunController {
     }
 
 
-    @GetMapping("/{id}")
-    public Racun getRacunById(@PathVariable String brojRacuna) {
-        return racunService.getRacunById(brojRacuna);
-    }
+//    @GetMapping("/{id}")
+//    public Racun getRacunById(@PathVariable String brojRacuna) {
+//        return racunService.getRacunById(brojRacuna);
+//    }
 
     @PostMapping("/update")
     public String updateRacun(Racun racun, Model model) {

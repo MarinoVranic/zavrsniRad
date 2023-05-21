@@ -72,6 +72,14 @@
   tr:hover {background-color: DodgerBlue;}
 </style>
 <body>
+<div class="w3-sidebar w3-bar-block w3-border-right" style="display:none" id="mySidebar">
+  <button onclick="w3_close()" class="w3-bar-item w3-large">Zatvori &times;</button>
+  <a th:href="@{/index}" class="w3-bar-item w3-button">Glavni izbornik</a>
+  <a th:href="@{/lokacija/all}" class="w3-bar-item w3-button">Lokacije</a>
+  <a th:href="@{/dobavljac/all}" class="w3-bar-item w3-button">Dobavljači</a>
+  <a th:href="@{/vrstaUredaja/all}" class="w3-bar-item w3-button">Vrste uređaja</a>
+</div>
+<button id="openNav" class="w3-button w3-xlarge" onclick="w3_open()">&#9776;</button>
 <h1>Računi</h1>
 <div class="w3-container">
   <button onclick="document.getElementById('id01').style.display='block'" class="w3-button w3-gray w3-large w3-hover-green">Dodaj račun</button>
@@ -167,12 +175,40 @@
       }
     }
   }
+
 </script>
 <script>
   function hidediv(){
     document.getElementById("error-message").style.visibility="hidden";
   }
   setTimeout("hidediv()",5000);
+</script>
+<!--<script>-->
+<!--  function w3_open() {-->
+<!--    document.getElementById("mySidebar").style.display = "block";-->
+<!--  }-->
+
+<!--  function w3_close() {-->
+<!--    document.getElementById("mySidebar").style.display = "none";-->
+<!--  }-->
+<!--</script>-->
+<script>
+  function w3_open() {
+    document.getElementById("mySidebar").style.display = "block";
+    document.addEventListener("click", closeSidebarOutside);
+  }
+
+  function w3_close() {
+    document.getElementById("mySidebar").style.display = "none";
+    document.removeEventListener("click", closeSidebarOutside);
+  }
+
+  function closeSidebarOutside(event) {
+    var sidebar = document.getElementById("mySidebar");
+    if (!sidebar.contains(event.target) && event.target !== document.getElementById("openNav")) {
+      w3_close();
+    }
+  }
 </script>
 </body>
 </html>
