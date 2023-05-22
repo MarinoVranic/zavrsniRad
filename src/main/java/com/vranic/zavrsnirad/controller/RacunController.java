@@ -1,6 +1,6 @@
 package com.vranic.zavrsnirad.controller;
 
-import com.vranic.zavrsnirad.model.Lokacija;
+
 import com.vranic.zavrsnirad.model.Racun;
 import com.vranic.zavrsnirad.service.RacunService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,9 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+
 import java.util.List;
 
 @Controller
@@ -26,12 +24,6 @@ public class RacunController {
         model.addAttribute("racun", racun);
         return "racun/racun";
     }
-
-
-//    @GetMapping("/{id}")
-//    public Racun getRacunById(@PathVariable String brojRacuna) {
-//        return racunService.getRacunById(brojRacuna);
-//    }
 
     @PostMapping("/update")
     public String updateRacun(Racun racun, Model model) {
@@ -54,9 +46,7 @@ public class RacunController {
 
     @GetMapping("/find")
     public String findRacunByName(@RequestParam("brojRacuna") String brojRacuna, Model model) {
-//        System.out.println(brojRacuna);
         List<Racun> racunList = racunService.findRacunByBrojRacuna(brojRacuna);
-//        System.out.println(racunList);
         if (racunList.isEmpty()) {
             model.addAttribute("error", "Račun pod tim brojem ne postoji u sustavu!");
             model.addAttribute("sviRacuni", racunService.getAllRacun());
@@ -66,7 +56,6 @@ public class RacunController {
             model.addAttribute("sviRacuni", racunList);
             Racun racun = new Racun();
             model.addAttribute("racun", racun);
-//            System.out.println(lokacijaList.get(0));
         }
         return "racun/racun";
     }

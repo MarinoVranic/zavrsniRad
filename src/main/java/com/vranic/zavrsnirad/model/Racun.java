@@ -8,7 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
-//import java.sql.Date;
+
 import java.time.LocalDate;
 @Entity
 @Table(name = "racun")
