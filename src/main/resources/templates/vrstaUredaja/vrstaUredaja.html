@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <script type="text/javascript" src="../static/javascript/openUpdateModals.js" th:src="@{/javascript/openUpdateModals.js}"></script>
+<script type="text/javascript" src="../static/javascript/sidebar.js" th:src="@{/javascript/sidebar.js}"></script>
 <head>
     <meta charset="UTF-8">
     <title>Vrste uređaja</title>
@@ -68,6 +69,14 @@
     tr:hover {background-color: DodgerBlue;}
 </style>
 <body>
+<div class="w3-sidebar w3-bar-block w3-border-right" style="display:none" id="mySidebar">
+    <button onclick="w3_close()" class="w3-bar-item w3-large">Zatvori &times;</button>
+    <a th:href="@{/index}" class="w3-bar-item w3-button">Glavni izbornik</a>
+    <a th:href="@{/lokacija/all}" class="w3-bar-item w3-button">Lokacije</a>
+    <a th:href="@{/dobavljac/all}" class="w3-bar-item w3-button">Dobavljači</a>
+    <a th:href="@{/racun/all}" class="w3-bar-item w3-button">Računi</a>
+</div>
+<button id="openNav" class="w3-button w3-xlarge" onclick="w3_open()">&#9776;</button>
 <h1>Vrste uređaja</h1>
 <div class="w3-container">
     <button onclick="document.getElementById('id01').style.display='block'" class="w3-button w3-gray w3-large w3-hover-green">Dodaj vrstu uređaja</button>

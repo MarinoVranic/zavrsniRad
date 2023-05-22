@@ -3,6 +3,7 @@
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <script type="text/javascript" src="../static/javascript/openUpdateModals.js" th:src="@{/javascript/openUpdateModals.js}"></script>
 <script type="text/javascript" src="../static/javascript/openDeleteModals.js" th:src="@{/javascript/openDeleteModals.js}"></script>
+<script type="text/javascript" src="../static/javascript/sidebar.js" th:src="@{/javascript/sidebar.js}"></script>
 <head>
   <meta charset="UTF-8">
   <title>Računi</title>
@@ -182,23 +183,23 @@
   }
   setTimeout("hidediv()",5000);
 </script>
-<script>
-  function w3_open() {
-    document.getElementById("mySidebar").style.display = "block";
-    document.addEventListener("click", closeSidebarOutside);
-  }
+<!--<script>-->
+<!--  function w3_open() {-->
+<!--    document.getElementById("mySidebar").style.display = "block";-->
+<!--    document.addEventListener("click", closeSidebarOutside);-->
+<!--  }-->
 
-  function w3_close() {
-    document.getElementById("mySidebar").style.display = "none";
-    document.removeEventListener("click", closeSidebarOutside);
-  }
+<!--  function w3_close() {-->
+<!--    document.getElementById("mySidebar").style.display = "none";-->
+<!--    document.removeEventListener("click", closeSidebarOutside);-->
+<!--  }-->
 
-  function closeSidebarOutside(event) {
-    var sidebar = document.getElementById("mySidebar");
-    if (!sidebar.contains(event.target) && event.target !== document.getElementById("openNav")) {
-      w3_close();
-    }
-  }
-</script>
+<!--  function closeSidebarOutside(event) {-->
+<!--    var sidebar = document.getElementById("mySidebar");-->
+<!--    if (!sidebar.contains(event.target) && event.target !== document.getElementById("openNav")) {-->
+<!--      w3_close();-->
+<!--    }-->
+<!--  }-->
+<!--</script>-->
 </body>
 </html>
