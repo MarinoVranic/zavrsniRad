@@ -26,7 +26,7 @@ public class KorisnikController {
         return korisnikService.getKorisnikById(username);
     }
 
-    @PostMapping("/udpate")
+    @PostMapping("/update")
     public String updateKorisnik(@ModelAttribute("korisnik") Korisnik korisnik){
         korisnikService.save(korisnik);
         return "redirect:/korisnik/all";
