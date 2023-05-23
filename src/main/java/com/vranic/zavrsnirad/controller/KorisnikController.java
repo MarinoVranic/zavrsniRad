@@ -26,10 +26,11 @@ public class KorisnikController {
         return korisnikService.getKorisnikById(username);
     }
 
-    @PostMapping("/update")
-    public String updateKorisnik(@ModelAttribute("korisnik") Korisnik korisnik){
-        korisnikService.save(korisnik);
-        return "redirect:/korisnik/all";
+    @GetMapping("/update/{username}")
+    public String updateKorisnik(@PathVariable(value = "username") String username, Model model){
+        Korisnik korisnik = korisnikService.getKorisnikById(username);
+        model.addAttribute("korisnik", korisnik);
+        return "korisnik/updateKorisnik";
     }
 
     @GetMapping("delete/{username}")

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<!--<script type="text/javascript" src="../static/javascript/openUpdateModals.js" th:src="@{/javascript/openUpdateModals.js}"></script>-->
+<script type="text/javascript" src="../static/javascript/sidebar.js" th:src="@{/javascript/sidebar.js}"></script>
+<head>
+  <meta charset="UTF-8">
+  <title>Ažuriranje korisnika</title>
+</head>
+<style>
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  .button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+  }
+  .button2 {
+    background-color: white;
+    color: black;
+    border: 2px solid #008CBA;
+  }
+
+  .button2:hover {
+    background-color: DodgerBlue;
+    color: white;
+  }
+  .button3 {
+    background-color: white;
+    color: black;
+    border: 2px solid #008CBA;
+  }
+
+  .button3:hover {
+    background-color: #ff1e1e;
+    color: #090909;
+  }
+  .button4 {
+    background-color: white;
+    color: black;
+    border: 2px solid #008CBA;
+  }
+
+  .button4:hover {
+    background-color: #25ff1e;
+    color: #090909;
+  }
+
+  .w3-button{
+    max-width: 100%;
+  }
+
+  .alert{
+    color: red;
+  }
+
+  tr:hover {background-color: DodgerBlue;}
+</style>
+<body>
+<div class="w3-card-4">
+  <div class="w3-container w3-gray">
+    <h2 class="w3-text-light-grey"><b>Forma za ažuriranje korisnika</b></h2>
+  </div>
+  <form class="w3-container w3-light-grey" action="#" th:action="@{/korisnik/save}" th:object="${korisnik}" method="POST">
+    <div class="w3-row-padding">
+    <p>
+      <label class="w3-text-dark-grey"><b>Username</b></label>
+      <input class="w3-input w3-border w3-round" name="username" type="text"></p>
+    <p class="w3-half">
+      <label class="w3-text-dark-grey"><b>Ime</b></label>
+      <input class="w3-input w3-border w3-round" name="firstName" type="text"></p>
+    <p class="w3-half">
+      <label class="w3-text-dark-grey"><b>Prezime</b></label>
+      <input class="w3-input w3-border w3-round" name="lastName" type="text"></p>
+    <p>
+      <p class="w3-half">
+        <label class="w3-text-dark-grey"><b>Status</b></label>
+        <input class="w3-input w3-border w3-round" name="status" type="text"></p>
+      <p>
+      <p class="w3-half">
+        <label class="w3-text-dark-grey"><b>Vrsta korisnika</b></label>
+        <input class="w3-input w3-border w3-round" name="accountType" type="text"></p>
+      <p>
+      <p class="w3-half">
+        <label class="w3-text-dark-grey"><b>Poslodavac</b></label>
+        <input class="w3-input w3-border w3-round" name="subcontractor" type="text"></p>
+      <p>
+      <p class="w3-half">
+        <label class="w3-text-dark-grey"><b>Godina zaposlenja</b></label>
+        <input class="w3-input w3-border w3-round" name="godina" type="text"></p>
+      <p>
+      <p class="w3-half">
+        <label class="w3-text-dark-grey"><b>E-mail</b></label>
+        <input class="w3-input w3-border w3-round" name="email" type="text"></p>
+      <p>
+      <p class="w3-half">
+        <label class="w3-text-dark-grey"><b>Inicijalna lozinka</b></label>
+        <input class="w3-input w3-border w3-round" name="initialPassword" type="text"></p>
+      <p>
+      <p class="w3-half">
+        <label class="w3-text-dark-grey"><b>Korisnik aktiviran</b></label>
+        <input class="w3-input w3-border w3-round" name="userCreated" type="date"></p>
+      <p>
+      <p class="w3-half">
+        <label class="w3-text-dark-grey"><b>Korisnik deaktiviran</b></label>
+        <input class="w3-input w3-border w3-round" name="userDisabled" type="date"></p>
+      <p>
+      <p class="w3-half">
+        <label class="w3-text-dark-grey"><b>E-mail aktiviran</b></label>
+        <input class="w3-input w3-border w3-round" name="emailCreated" type="date"></p>
+      <p>
+      <p class="w3-half">
+        <label class="w3-text-dark-grey"><b>E-mail deaktiviran</b></label>
+        <input class="w3-input w3-border w3-round" name="emailDisabled" type="date"></p>
+      <p>
+      <p class="w3-half">
+        <label class="w3-text-dark-grey"><b>Komentar</b></label>
+        <input class="w3-input w3-border w3-round" name="komentar" type="text"></p>
+      <p>
+    </div>
+      <button class="w3-btn w3-grey"><b>Ažuriraj korisnika</b></button></p>
+  </form>
+</div>
+</body>
+</html>
