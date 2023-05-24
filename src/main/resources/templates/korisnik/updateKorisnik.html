@@ -72,65 +72,65 @@
   tr:hover {background-color: DodgerBlue;}
 </style>
 <body>
-<div class="w3-card-4">
+<div class="w3-card-4 w3-center w3-display-middle" style="width: 50%">
   <div class="w3-container w3-gray">
     <h2 class="w3-text-light-grey"><b>Forma za ažuriranje korisnika</b></h2>
   </div>
   <form class="w3-container w3-light-grey" action="#" th:action="@{/korisnik/save}" th:object="${korisnik}" method="POST">
     <div class="w3-row-padding">
-    <p>
-      <label class="w3-text-dark-grey"><b>Username</b></label>
-      <input class="w3-input w3-border w3-round" name="username" type="text"></p>
+    <p class="w3-center">
+      <label class="w3-text-dark-grey" for="username"><b>Username</b></label>
+      <input readonly class="w3-input w3-border w3-round w3-center" id="username" name="username" type="text" th:field="*{username}"></p>
     <p class="w3-half">
-      <label class="w3-text-dark-grey"><b>Ime</b></label>
-      <input class="w3-input w3-border w3-round" name="firstName" type="text"></p>
+      <label class="w3-text-dark-grey" for="firstName"><b>Ime</b></label>
+      <input class="w3-input w3-border w3-round w3-center" id="firstName" name="firstName" type="text" th:field="*{firstName}"></p>
     <p class="w3-half">
-      <label class="w3-text-dark-grey"><b>Prezime</b></label>
-      <input class="w3-input w3-border w3-round" name="lastName" type="text"></p>
+      <label class="w3-text-dark-grey" for="lastName"><b>Prezime</b></label>
+      <input class="w3-input w3-border w3-round w3-center" id="lastName" name="lastName" type="text" th:field="*{lastName}"></p>
     <p>
       <p class="w3-half">
-        <label class="w3-text-dark-grey"><b>Status</b></label>
-        <input class="w3-input w3-border w3-round" name="status" type="text"></p>
+        <label class="w3-text-dark-grey" for="status"><b>Status</b></label>
+        <input class="w3-input w3-border w3-round w3-center" id="status" name="status" type="text" th:field="*{status}"></p>
       <p>
       <p class="w3-half">
-        <label class="w3-text-dark-grey"><b>Vrsta korisnika</b></label>
-        <input class="w3-input w3-border w3-round" name="accountType" type="text"></p>
+        <label class="w3-text-dark-grey" for="accountType"><b>Vrsta korisnika</b></label>
+        <input class="w3-input w3-border w3-round w3-center" id="accountType" name="accountType" type="text" th:field="*{accountType}"></p>
       <p>
       <p class="w3-half">
-        <label class="w3-text-dark-grey"><b>Poslodavac</b></label>
-        <input class="w3-input w3-border w3-round" name="subcontractor" type="text"></p>
+        <label class="w3-text-dark-grey" for="subcontractor"><b>Poslodavac</b></label>
+        <input class="w3-input w3-border w3-round w3-center" id="subcontractor" name="subcontractor" type="text" th:field="*{subcontractor}"></p>
       <p>
       <p class="w3-half">
-        <label class="w3-text-dark-grey"><b>Godina zaposlenja</b></label>
-        <input class="w3-input w3-border w3-round" name="godina" type="text"></p>
+        <label class="w3-text-dark-grey" for="godina"><b>Godina zaposlenja</b></label>
+        <input class="w3-input w3-border w3-round w3-center" id="godina" name="godina" type="text" th:field="*{godina}"></p>
       <p>
       <p class="w3-half">
-        <label class="w3-text-dark-grey"><b>E-mail</b></label>
-        <input class="w3-input w3-border w3-round" name="email" type="text"></p>
+        <label class="w3-text-dark-grey" for="email"><b>E-mail</b></label>
+        <input class="w3-input w3-border w3-round w3-center" id="email" name="email" type="text" th:field="*{email}"></p>
       <p>
       <p class="w3-half">
-        <label class="w3-text-dark-grey"><b>Inicijalna lozinka</b></label>
-        <input class="w3-input w3-border w3-round" name="initialPassword" type="text"></p>
+        <label class="w3-text-dark-grey" for="initialPassword"><b>Inicijalna lozinka</b></label>
+        <input class="w3-input w3-border w3-round w3-center" id="initialPassword" name="initialPassword" type="text" th:field="*{initialPassword}"></p>
       <p>
       <p class="w3-half">
-        <label class="w3-text-dark-grey"><b>Korisnik aktiviran</b></label>
-        <input class="w3-input w3-border w3-round" name="userCreated" type="date"></p>
+        <label class="w3-text-dark-grey" for="userCreated"><b>Korisnik aktiviran</b></label>
+        <input class="w3-input w3-border w3-round w3-center" id="userCreated" name="userCreated" type="date" th:field="*{userCreated}"></p>
       <p>
       <p class="w3-half">
-        <label class="w3-text-dark-grey"><b>Korisnik deaktiviran</b></label>
-        <input class="w3-input w3-border w3-round" name="userDisabled" type="date"></p>
+        <label class="w3-text-dark-grey" for="userDisabled"><b>Korisnik deaktiviran</b></label>
+        <input class="w3-input w3-border w3-round w3-center" id="userDisabled" name="userDisabled" type="date" th:field="*{userDisabled}"></p>
       <p>
       <p class="w3-half">
-        <label class="w3-text-dark-grey"><b>E-mail aktiviran</b></label>
-        <input class="w3-input w3-border w3-round" name="emailCreated" type="date"></p>
+        <label class="w3-text-dark-grey" for="emailCreated"><b>E-mail aktiviran</b></label>
+        <input class="w3-input w3-border w3-round w3-center" id="emailCreated" name="emailCreated" type="date" th:field="*{emailCreated}"></p>
       <p>
       <p class="w3-half">
-        <label class="w3-text-dark-grey"><b>E-mail deaktiviran</b></label>
-        <input class="w3-input w3-border w3-round" name="emailDisabled" type="date"></p>
+        <label class="w3-text-dark-grey" for="emailDisabled"><b>E-mail deaktiviran</b></label>
+        <input class="w3-input w3-border w3-round w3-center" id="emailDisabled" name="emailDisabled" type="date" th:field="*{emailDisabled}"></p>
       <p>
-      <p class="w3-half">
-        <label class="w3-text-dark-grey"><b>Komentar</b></label>
-        <input class="w3-input w3-border w3-round" name="komentar" type="text"></p>
+      <p class="w3-center">
+        <label class="w3-text-dark-grey" for="komentar"><b>Komentar</b></label>
+        <input class="w3-input w3-border w3-round w3-center w3-padding-48" id="komentar" name="komentar" type="text" th:field="*{komentar}"></p>
       <p>
     </div>
       <button class="w3-btn w3-grey"><b>Ažuriraj korisnika</b></button></p>

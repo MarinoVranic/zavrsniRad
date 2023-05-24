@@ -3,6 +3,7 @@ package com.vranic.zavrsnirad.service;
 import com.vranic.zavrsnirad.model.Korisnik;
 import com.vranic.zavrsnirad.repository.KorisnikRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,5 +27,13 @@ public class KorisnikService {
 
     public void deleteById(String username){
         korisnikRepository.deleteById(username);
+    }
+
+    public List<Korisnik> findKorisnikByLastName(String lastName){
+        return korisnikRepository.findKorisnikByLastName(lastName);
+    }
+
+    public Long checkIfUsernameIsFree(String username){
+        return korisnikRepository.checkUsernameIsFree(username);
     }
 }
