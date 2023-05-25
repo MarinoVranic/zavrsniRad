@@ -9,8 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.SQLDataException;
-import java.sql.SQLException;
+
 import java.util.List;
 
 @Controller
@@ -22,8 +21,6 @@ public class KorisnikController {
     @GetMapping("/all")
     public String getAllKorisnik(Model model){
         model.addAttribute("sviKorisnici", korisnikService.getAllKorisnik());
-//        Korisnik korisnik = new Korisnik();
-//        model.addAttribute("korisnik", korisnik);
         return "korisnik/korisnik";
     }
 
@@ -76,59 +73,14 @@ public class KorisnikController {
         return "redirect:/korisnik/all";
     }
 
-//    @PostMapping("/addNew")
-//    public String saveKorisnik(@ModelAttribute("korisnik") @Valid Korisnik korisnik, BindingResult bindingResult){
-//        if(bindingResult.hasErrors()){
-//            System.out.println(bindingResult);
-//            return "korisnik/newKorisnik";
-//        }
-//        korisnikService.save(korisnik);
-//        return "redirect:/korisnik/all";
-//    }
-
-//    @PostMapping("/save")
-//    public String saveKorisnik(@Valid Korisnik korisnik, BindingResult bindingResult){
-//        if(bindingResult.hasErrors()){
-//            System.out.println(bindingResult);
-//            return "korisnik/newKorisnik";
-//        }
-//        korisnikService.save(korisnik);
-//        return "redirect:/korisnik/all";
-//    }
-
-
-//    @GetMapping("/find")
-//    public String findKorisnikByLastName(@PathVariable(value = "lastName") String lastName, Model model) {
-//        System.out.println(lastName);
-//        List<Korisnik> korisnikList = korisnikService.findKorisnikByLastName(lastName);
-//        if (korisnikList.isEmpty()) {
-//            model.addAttribute("error", "Lokacija tog naziva ne postoji u sustavu!");
-//            model.addAttribute("sviKorisnici", korisnikService.getAllKorisnik());
-////            Korisnik korisnik = new Korisnik();
-////            model.addAttribute("korisnik", korisnik);
-//        } else {
-//            model.addAttribute("sveLokacije", korisnikList);
-////            Korisnik korisnik = new Korisnik();
-////            model.addAttribute("korisnik", korisnik);
-////            System.out.println(lokacijaList.get(0));
-//        }
-//        return "korisnik/korisnik";
-//    }
-
     @GetMapping("/find")
     public String findKorisnikByLastName(@RequestParam("lastName") String lastName, Model model) {
-//        System.out.println(lastName);
         List<Korisnik> korisnikList = korisnikService.findKorisnikByLastName(lastName);
         if (korisnikList.isEmpty()) {
             model.addAttribute("error", "Korisnik/ici tog prezimena nisu pronađeni!");
             model.addAttribute("sviKorisnici", korisnikService.getAllKorisnik());
-//            Korisnik korisnik = new Korisnik();
-//            model.addAttribute("korisnik", korisnik);
         } else {
             model.addAttribute("sviKorisnici", korisnikList);
-//            Korisnik korisnik = new Korisnik();
-//            model.addAttribute("korisnik", korisnik);
-//            System.out.println(lokacijaList.get(0));
         }
         return "korisnik/korisnik";
     }

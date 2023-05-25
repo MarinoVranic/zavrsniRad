@@ -2,7 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link th:href="@{/CSS/customStyle.css}" rel="stylesheet" />
-<!--<script type="text/javascript" src="../static/javascript/openUpdateModals.js" th:src="@{/javascript/openUpdateModals.js}"></script>-->
 <script type="text/javascript" src="../static/javascript/sidebar.js" th:src="@{/javascript/sidebar.js}"></script>
 <head>
   <meta charset="UTF-8">
@@ -41,11 +40,6 @@
          <option th:value="'neaktivan'" th:text="Neaktivan"></option>
         </select>
       </p>
-<!--      <p class="w3-half">-->
-<!--        <label class="w3-text-dark-grey" for="status"><b>Status</b></label>-->
-<!--        <input class="w3-input w3-border w3-round w3-center" id="status" name="status" type="text" th:field="*{status}" required-->
-<!--               onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Ispunite polje za status!')"></p>-->
-<!--      <p>-->
       <p class="w3-half">
         <label class="w3-text-dark-grey" for="status"><b>Status</b></label>
         <select id="accountType" class="w3-input w3-border w3-round w3-center" th:field="*{accountType}" required
@@ -56,11 +50,6 @@
           <option th:value="'praktikant'" th:text="Praktikant"></option>
         </select>
       </p>
-<!--      <p class="w3-half">-->
-<!--        <label class="w3-text-dark-grey" for="accountType"><b>Vrsta korisnika</b></label>-->
-<!--        <input class="w3-input w3-border w3-round w3-center" id="accountType" name="accountType" type="text" th:field="*{accountType}" required-->
-<!--               onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Ispunite polje za vrstu korisnika!')"></p>-->
-<!--      <p>-->
       <p class="w3-half">
         <label class="w3-text-dark-grey" for="subcontractor"><b>Poslodavac</b></label>
         <input class="w3-input w3-border w3-round w3-center" id="subcontractor" name="subcontractor" type="text" th:field="*{subcontractor}" required
