@@ -28,7 +28,7 @@ public class LokacijaController {
         return lokacijaService.getLokacijaById(id);
     }
 
-    @PostMapping("/update/{id}")
+    @GetMapping("/update/{id}")
     public String updateLokacija(@PathVariable(value = "id") Long id, Model model) {
         Lokacija lokacija = lokacijaService.getLokacijaById(id);
         model.addAttribute("lokacija", lokacija);

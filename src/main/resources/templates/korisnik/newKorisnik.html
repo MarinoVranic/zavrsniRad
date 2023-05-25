@@ -16,13 +16,6 @@
 <div class="w3-card-4 w3-center w3-display-middle w3-light-grey" style="width: 50%; position: absolute">
   <div class="w3-container w3-gray">
     <h2 class="w3-text-light-grey"><b>Forma za dodavanje novog korisnika</b><button class="button-30 w3-right" onclick="window.location.href='/korisnik/all'"><b>Odustani</b></button></h2>
-
-
-<!--    <div class="w3-row-padding">-->
-<!--      <p class="w3-right">-->
-<!--        <button class="button-30" onclick="window.location.href='/korisnik/all'"><b>Odustani</b></button>-->
-<!--      </p>-->
-<!--    </div>-->
   </div>
   <form class="w3-container w3-light-grey" action="#" th:action="@{/korisnik/addNew}" th:object="${korisnik}" method="POST">
     <div class="w3-row-padding">
@@ -105,7 +98,7 @@
       <p>
     <div>
       <div>
-        <button class="button-30"><b>Dodaj lokaciju</b></button>
+        <button class="button-30"><b>Dodaj korisnika</b></button>
       </div>
     </div>
     </div>
