@@ -21,6 +21,52 @@
   .error {
     color: red;
   }
+
+  .button-30 {
+    align-items: center;
+    appearance: none;
+    background-color: #FCFCFD;
+    border-radius: 4px;
+    border-width: 0;
+    box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,rgba(45, 35, 66, 0.3) 0 7px 13px -3px,#D6D6E7 0 -3px 0 inset;
+    box-sizing: border-box;
+    color: #36395A;
+    cursor: pointer;
+    display: inline-flex;
+    font-family: "JetBrains Mono",monospace;
+    height: 48px;
+    justify-content: center;
+    line-height: 1;
+    list-style: none;
+    overflow: hidden;
+    padding-left: 16px;
+    padding-right: 16px;
+    position: relative;
+    text-align: left;
+    text-decoration: none;
+    transition: box-shadow .15s,transform .15s;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    white-space: nowrap;
+    will-change: box-shadow,transform;
+    font-size: 18px;
+  }
+
+  .button-30:focus {
+    box-shadow: #D6D6E7 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+  }
+
+  .button-30:hover {
+    box-shadow: rgba(45, 35, 66, 0.4) 0 4px 8px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+    transform: translateY(-2px);
+  }
+
+  .button-30:active {
+    box-shadow: #D6D6E7 0 3px 7px inset;
+    transform: translateY(2px);
+  }
+
   .button {
     background-color: #4CAF50;
     border: none;
@@ -79,7 +125,7 @@
   <div class="w3-container w3-gray">
     <h2 class="w3-text-light-grey"><b>Forma za dodavanje novog korisnika</b></h2>
   </div>
-  <form class="w3-container w3-light-grey" action="#" th:action="@{/korisnik/save}" th:object="${korisnik}" method="POST">
+  <form class="w3-container w3-light-grey" action="#" th:action="@{/korisnik/addNew}" th:object="${korisnik}" method="POST">
     <div class="w3-row-padding">
     <p class="w3-center">
       <label class="w3-text-dark-grey" for="username"><b>Username</b><br></label>
@@ -99,14 +145,31 @@
     <p>
       <p class="w3-half">
         <label class="w3-text-dark-grey" for="status"><b>Status</b></label>
-        <input class="w3-input w3-border w3-round w3-center" id="status" name="status" type="text" th:field="*{status}" required
-               onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Ispunite polje za status!')"></p>
-      <p>
+        <select id="status" class="w3-input w3-border w3-round w3-center" th:field="*{status}">
+          <option th:value="'aktivan'" th:text="Aktivan"></option>
+         <option th:value="'neaktivan'" th:text="Neaktivan"></option>
+        </select>
+      </p>
+<!--      <p class="w3-half">-->
+<!--        <label class="w3-text-dark-grey" for="status"><b>Status</b></label>-->
+<!--        <input class="w3-input w3-border w3-round w3-center" id="status" name="status" type="text" th:field="*{status}" required-->
+<!--               onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Ispunite polje za status!')"></p>-->
+<!--      <p>-->
       <p class="w3-half">
-        <label class="w3-text-dark-grey" for="accountType"><b>Vrsta korisnika</b></label>
-        <input class="w3-input w3-border w3-round w3-center" id="accountType" name="accountType" type="text" th:field="*{accountType}" required
-               onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Ispunite polje za vrstu korisnika!')"></p>
-      <p>
+        <label class="w3-text-dark-grey" for="status"><b>Status</b></label>
+        <select id="accountType" class="w3-input w3-border w3-round w3-center" th:field="*{accountType}" required
+                onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Odaberite vrstu korisnika!')">
+          <option th:value="'zaposlenik'" th:text="Zaposlenik"></option>
+          <option th:value="'kooperant'" th:text="Kooperant"></option>
+          <option th:value="'student'" th:text="Student"></option>
+          <option th:value="'praktikant'" th:text="Praktikant"></option>
+        </select>
+      </p>
+<!--      <p class="w3-half">-->
+<!--        <label class="w3-text-dark-grey" for="accountType"><b>Vrsta korisnika</b></label>-->
+<!--        <input class="w3-input w3-border w3-round w3-center" id="accountType" name="accountType" type="text" th:field="*{accountType}" required-->
+<!--               onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Ispunite polje za vrstu korisnika!')"></p>-->
+<!--      <p>-->
       <p class="w3-half">
         <label class="w3-text-dark-grey" for="subcontractor"><b>Poslodavac</b></label>
         <input class="w3-input w3-border w3-round w3-center" id="subcontractor" name="subcontractor" type="text" th:field="*{subcontractor}" required
@@ -152,7 +215,12 @@
         <input class="w3-input w3-border w3-round w3-center w3-padding-48" id="komentar" name="komentar" type="text" th:field="*{komentar}"></p>
       <p>
     </div>
-      <button class="w3-btn w3-grey"><b>Ažuriraj korisnika</b></button></p>
+    <div class="w3-show-inline-block">
+      <div class="w3-bar">
+        <button class="button-30"><b>Dodaj korisnika</b></button>
+        <button class="button-30" onclick="window.location.href='/korisnik/all'"><b>Odustani</b></button>
+      </div>
+    </div>
   </form>
 </div>
 </body>
@@ -164,5 +232,38 @@
     }
   }
   setTimeout("hidediv()",5000);
+</script>
+<script>
+  function concatAndConvert(str, str2) {
+    const specialChars = {
+      'ć': 'c',
+      'č': 'c',
+      'š': 's',
+      'ž': 'z',
+      'đ': 'd'
+    };
+
+    const firstLetter = str.charAt(0).toLowerCase();
+    // const remainingString = str.slice(1);
+    const convertedString = str2.replace(/[ćčšžđ]/g, char => specialChars[char]).toLowerCase();
+    const result = firstLetter + convertedString;
+
+    return result;
+  }
+
+  const nameInput = document.getElementById('firstName');
+  const lastnameInput = document.getElementById('lastName');
+  const outputInput = document.getElementById('username');
+
+  nameInput.addEventListener('input', updateOutput);
+  lastnameInput.addEventListener('input', updateOutput);
+
+  function updateOutput() {
+    const name = nameInput.value;
+    const lastname = lastnameInput.value;
+    const concatenatedName = concatAndConvert(name, lastname);
+    // const concatenatedLastname = concatAndConvert(lastname);
+    outputInput.value = concatenatedName;
+  }
 </script>
 </html>

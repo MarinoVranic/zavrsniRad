@@ -1,3 +1,150 @@
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org" lang="">-->
+<!--<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">-->
+<!--&lt;!&ndash;<script type="text/javascript" src="../static/javascript/openUpdateModals.js" th:src="@{/javascript/openUpdateModals.js}"></script>&ndash;&gt;-->
+<!--<script type="text/javascript" src="../static/javascript/sidebar.js" th:src="@{/javascript/sidebar.js}"></script>-->
+<!--<head>-->
+<!--  <meta charset="UTF-8">-->
+<!--  <title>Ažuriranje korisnika</title>-->
+<!--</head>-->
+<!--<style>-->
+<!--  table {-->
+<!--    border-collapse: collapse;-->
+<!--    width: 100%;-->
+<!--  }-->
+
+<!--  th, td {-->
+<!--    padding: 8px;-->
+<!--    text-align: left;-->
+<!--    border-bottom: 1px solid #ddd;-->
+<!--  }-->
+<!--  .button {-->
+<!--    background-color: #4CAF50;-->
+<!--    border: none;-->
+<!--    color: white;-->
+<!--    padding: 15px 32px;-->
+<!--    text-align: center;-->
+<!--    text-decoration: none;-->
+<!--    display: inline-block;-->
+<!--    font-size: 16px;-->
+<!--    margin: 4px 2px;-->
+<!--    cursor: pointer;-->
+<!--  }-->
+<!--  .button2 {-->
+<!--    background-color: white;-->
+<!--    color: black;-->
+<!--    border: 2px solid #008CBA;-->
+<!--  }-->
+
+<!--  .button2:hover {-->
+<!--    background-color: DodgerBlue;-->
+<!--    color: white;-->
+<!--  }-->
+<!--  .button3 {-->
+<!--    background-color: white;-->
+<!--    color: black;-->
+<!--    border: 2px solid #008CBA;-->
+<!--  }-->
+
+<!--  .button3:hover {-->
+<!--    background-color: #ff1e1e;-->
+<!--    color: #090909;-->
+<!--  }-->
+<!--  .button4 {-->
+<!--    background-color: white;-->
+<!--    color: black;-->
+<!--    border: 2px solid #008CBA;-->
+<!--  }-->
+
+<!--  .button4:hover {-->
+<!--    background-color: #25ff1e;-->
+<!--    color: #090909;-->
+<!--  }-->
+
+<!--  .w3-button{-->
+<!--    max-width: 100%;-->
+<!--  }-->
+
+<!--  .alert{-->
+<!--    color: red;-->
+<!--  }-->
+
+<!--  tr:hover {background-color: DodgerBlue;}-->
+<!--</style>-->
+<!--<body>-->
+<!--<div class="w3-card-4 w3-center w3-display-middle" style="width: 50%">-->
+<!--  <div class="w3-container w3-gray">-->
+<!--    <h2 class="w3-text-light-grey"><b>Forma za ažuriranje korisnika</b></h2>-->
+<!--  </div>-->
+<!--  <form class="w3-container w3-light-grey" action="#" th:action="@{/korisnik/save}" th:object="${korisnik}" method="POST">-->
+<!--    <div class="w3-row-padding">-->
+<!--    <p class="w3-center">-->
+<!--      <label class="w3-text-dark-grey" for="username"><b>Username</b></label>-->
+<!--      <input readonly class="w3-input w3-border w3-round w3-center" id="username" name="username" type="text" th:field="*{username}"></p>-->
+<!--    <p class="w3-half">-->
+<!--      <label class="w3-text-dark-grey" for="firstName"><b>Ime</b></label>-->
+<!--      <input class="w3-input w3-border w3-round w3-center" id="firstName" name="firstName" type="text" th:field="*{firstName}"></p>-->
+<!--    <p class="w3-half">-->
+<!--      <label class="w3-text-dark-grey" for="lastName"><b>Prezime</b></label>-->
+<!--      <input class="w3-input w3-border w3-round w3-center" id="lastName" name="lastName" type="text" th:field="*{lastName}"></p>-->
+<!--    <p>-->
+<!--      <p class="w3-half">-->
+<!--        <label class="w3-text-dark-grey" for="status"><b>Status</b></label>-->
+<!--        <select id="status" class="w3-input w3-border w3-round w3-center" th:field="*{status}">-->
+<!--          <option th:value="'aktivan'" th:text="Aktivan"></option>-->
+<!--          <option th:value="'neaktivan'" th:text="Neaktivan"></option>-->
+<!--        </select>-->
+<!--      </p>-->
+<!--&lt;!&ndash;      <p class="w3-half">&ndash;&gt;-->
+<!--&lt;!&ndash;        <label class="w3-text-dark-grey" for="status"><b>Status</b></label>&ndash;&gt;-->
+<!--&lt;!&ndash;        <input class="w3-input w3-border w3-round w3-center" id="status" name="status" type="text" th:field="*{status}"></p>&ndash;&gt;-->
+<!--&lt;!&ndash;      <p>&ndash;&gt;-->
+<!--      <p class="w3-half">-->
+<!--        <label class="w3-text-dark-grey" for="accountType"><b>Vrsta korisnika</b></label>-->
+<!--        <input class="w3-input w3-border w3-round w3-center" id="accountType" name="accountType" type="text" th:field="*{accountType}"></p>-->
+<!--      <p>-->
+<!--      <p class="w3-half">-->
+<!--        <label class="w3-text-dark-grey" for="subcontractor"><b>Poslodavac</b></label>-->
+<!--        <input class="w3-input w3-border w3-round w3-center" id="subcontractor" name="subcontractor" type="text" th:field="*{subcontractor}"></p>-->
+<!--      <p>-->
+<!--      <p class="w3-half">-->
+<!--        <label class="w3-text-dark-grey" for="godina"><b>Godina zaposlenja</b></label>-->
+<!--        <input class="w3-input w3-border w3-round w3-center" id="godina" name="godina" type="text" th:field="*{godina}"></p>-->
+<!--      <p>-->
+<!--      <p class="w3-half">-->
+<!--        <label class="w3-text-dark-grey" for="email"><b>E-mail</b></label>-->
+<!--        <input class="w3-input w3-border w3-round w3-center" id="email" name="email" type="text" th:field="*{email}"></p>-->
+<!--      <p>-->
+<!--      <p class="w3-half">-->
+<!--        <label class="w3-text-dark-grey" for="initialPassword"><b>Inicijalna lozinka</b></label>-->
+<!--        <input class="w3-input w3-border w3-round w3-center" id="initialPassword" name="initialPassword" type="text" th:field="*{initialPassword}"></p>-->
+<!--      <p>-->
+<!--      <p class="w3-half">-->
+<!--        <label class="w3-text-dark-grey" for="userCreated"><b>Korisnik aktiviran</b></label>-->
+<!--        <input class="w3-input w3-border w3-round w3-center" id="userCreated" name="userCreated" type="date" th:field="*{userCreated}"></p>-->
+<!--      <p>-->
+<!--      <p class="w3-half">-->
+<!--        <label class="w3-text-dark-grey" for="userDisabled"><b>Korisnik deaktiviran</b></label>-->
+<!--        <input class="w3-input w3-border w3-round w3-center" id="userDisabled" name="userDisabled" type="date" th:field="*{userDisabled}"></p>-->
+<!--      <p>-->
+<!--      <p class="w3-half">-->
+<!--        <label class="w3-text-dark-grey" for="emailCreated"><b>E-mail aktiviran</b></label>-->
+<!--        <input class="w3-input w3-border w3-round w3-center" id="emailCreated" name="emailCreated" type="date" th:field="*{emailCreated}"></p>-->
+<!--      <p>-->
+<!--      <p class="w3-half">-->
+<!--        <label class="w3-text-dark-grey" for="emailDisabled"><b>E-mail deaktiviran</b></label>-->
+<!--        <input class="w3-input w3-border w3-round w3-center" id="emailDisabled" name="emailDisabled" type="date" th:field="*{emailDisabled}"></p>-->
+<!--      <p>-->
+<!--      <p class="w3-center">-->
+<!--        <label class="w3-text-dark-grey" for="komentar"><b>Komentar</b></label>-->
+<!--        <input class="w3-input w3-border w3-round w3-center w3-padding-48" id="komentar" name="komentar" type="text" th:field="*{komentar}"></p>-->
+<!--      <p>-->
+<!--    </div>-->
+<!--      <button class="w3-btn w3-grey"><b>Ažuriraj korisnika</b></button></p>-->
+<!--  </form>-->
+<!--</div>-->
+<!--</body>-->
+<!--</html>-->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -5,9 +152,14 @@
 <script type="text/javascript" src="../static/javascript/sidebar.js" th:src="@{/javascript/sidebar.js}"></script>
 <head>
   <meta charset="UTF-8">
-  <title>Ažuriranje korisnika</title>
+  <title>Dodavanje korisnika</title>
 </head>
 <style>
+
+  h2{
+    font-family: "Arial Black";
+  }
+
   table {
     border-collapse: collapse;
     width: 100%;
@@ -18,6 +170,56 @@
     text-align: left;
     border-bottom: 1px solid #ddd;
   }
+  .error {
+    color: red;
+  }
+
+
+  .button-30 {
+    align-items: center;
+    appearance: none;
+    background-color: #FCFCFD;
+    border-radius: 4px;
+    border-width: 0;
+    box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,rgba(45, 35, 66, 0.3) 0 7px 13px -3px,#D6D6E7 0 -3px 0 inset;
+    box-sizing: border-box;
+    color: #36395A;
+    cursor: pointer;
+    display: inline-flex;
+    font-family: "JetBrains Mono",monospace;
+    height: 48px;
+    justify-content: center;
+    line-height: 1;
+    list-style: none;
+    overflow: hidden;
+    padding-left: 16px;
+    padding-right: 16px;
+    position: relative;
+    text-align: left;
+    text-decoration: none;
+    transition: box-shadow .15s,transform .15s;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    white-space: nowrap;
+    will-change: box-shadow,transform;
+    font-size: 18px;
+  }
+
+  .button-30:focus {
+    box-shadow: #D6D6E7 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+  }
+
+  .button-30:hover {
+    box-shadow: rgba(45, 35, 66, 0.4) 0 4px 8px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+    transform: translateY(-2px);
+  }
+
+  .button-30:active {
+    box-shadow: #D6D6E7 0 3px 7px inset;
+    transform: translateY(2px);
+  }
+
   .button {
     background-color: #4CAF50;
     border: none;
@@ -74,47 +276,67 @@
 <body>
 <div class="w3-card-4 w3-center w3-display-middle" style="width: 50%">
   <div class="w3-container w3-gray">
-    <h2 class="w3-text-light-grey"><b>Forma za ažuriranje korisnika</b></h2>
+    <h2 class="w3-text-light-grey" th:object="${korisnik}" th:text="'Korisnik '+*{firstName}+' '+*{lastName}"><b>Forma za ažuriranje korisnika</b></h2>
   </div>
   <form class="w3-container w3-light-grey" action="#" th:action="@{/korisnik/save}" th:object="${korisnik}" method="POST">
     <div class="w3-row-padding">
-    <p class="w3-center">
-      <label class="w3-text-dark-grey" for="username"><b>Username</b></label>
-      <input readonly class="w3-input w3-border w3-round w3-center" id="username" name="username" type="text" th:field="*{username}"></p>
-    <p class="w3-half">
-      <label class="w3-text-dark-grey" for="firstName"><b>Ime</b></label>
-      <input class="w3-input w3-border w3-round w3-center" id="firstName" name="firstName" type="text" th:field="*{firstName}"></p>
-    <p class="w3-half">
-      <label class="w3-text-dark-grey" for="lastName"><b>Prezime</b></label>
-      <input class="w3-input w3-border w3-round w3-center" id="lastName" name="lastName" type="text" th:field="*{lastName}"></p>
-    <p>
+      <p class="w3-center">
+        <label class="w3-text-dark-grey" for="username"><b>Username</b><br></label>
+        <input style="font-size: x-large" class="w3-input w3-border w3-round w3-center" id="username" name="username" type="text" th:field="*{username}" required
+               onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Ispunite polje za username!')"></p>
       <p class="w3-half">
-        <label class="w3-text-dark-grey" for="status"><b>Status</b></label>
-        <input class="w3-input w3-border w3-round w3-center" id="status" name="status" type="text" th:field="*{status}"></p>
+        <label class="w3-text-dark-grey" for="firstName"><b>Ime</b><br></label>
+        <span class="error" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">Ime error</span>
+        <input class="w3-input w3-border w3-round w3-center" id="firstName" name="firstName" type="text" th:field="*{firstName}" required
+               onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Ispunite polje za ime!')"></p>
+      <p class="w3-half">
+        <label class="w3-text-dark-grey" for="lastName"><b>Prezime</b><br></label>
+        <span class="error" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Prezime error</span>
+        <input class="w3-input w3-border w3-round w3-center" id="lastName" name="lastName" type="text" th:field="*{lastName}" required
+               onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Ispunite polje za prezime!')"></p>
       <p>
       <p class="w3-half">
+        <label class="w3-text-dark-grey" for="status"><b>Status</b></label>
+        <select id="status" class="w3-input w3-border w3-round w3-center" th:field="*{status}">
+          <option th:value="'aktivan'" th:text="Aktivan"></option>
+          <option th:value="'neaktivan'" th:text="Neaktivan"></option>
+        </select>
+      </p>
+      <!--      <p class="w3-half">-->
+      <!--        <label class="w3-text-dark-grey" for="status"><b>Status</b></label>-->
+      <!--        <input class="w3-input w3-border w3-round w3-center" id="status" name="status" type="text" th:field="*{status}" required-->
+      <!--               onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Ispunite polje za status!')"></p>-->
+      <!--      <p>-->
+      <p class="w3-half">
         <label class="w3-text-dark-grey" for="accountType"><b>Vrsta korisnika</b></label>
-        <input class="w3-input w3-border w3-round w3-center" id="accountType" name="accountType" type="text" th:field="*{accountType}"></p>
+        <input class="w3-input w3-border w3-round w3-center" id="accountType" name="accountType" type="text" th:field="*{accountType}" required
+               onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Ispunite polje za vrstu korisnika!')"></p>
       <p>
       <p class="w3-half">
         <label class="w3-text-dark-grey" for="subcontractor"><b>Poslodavac</b></label>
-        <input class="w3-input w3-border w3-round w3-center" id="subcontractor" name="subcontractor" type="text" th:field="*{subcontractor}"></p>
+        <input class="w3-input w3-border w3-round w3-center" id="subcontractor" name="subcontractor" type="text" th:field="*{subcontractor}" required
+               onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Ispunite polje za poslodavca!')"></p>
       <p>
       <p class="w3-half">
         <label class="w3-text-dark-grey" for="godina"><b>Godina zaposlenja</b></label>
-        <input class="w3-input w3-border w3-round w3-center" id="godina" name="godina" type="text" th:field="*{godina}"></p>
+        <input class="w3-input w3-border w3-round w3-center" id="godina" name="godina" type="text" th:field="*{godina}" required
+               onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Ispunite polje za godinu zaposlenja!')"></p>
       <p>
       <p class="w3-half">
         <label class="w3-text-dark-grey" for="email"><b>E-mail</b></label>
-        <input class="w3-input w3-border w3-round w3-center" id="email" name="email" type="text" th:field="*{email}"></p>
+        <input class="w3-input w3-border w3-round w3-center" id="email" name="email" type="email" th:field="*{email}" required
+               onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Ispunite polje za e-mail!')"></p>
       <p>
       <p class="w3-half">
         <label class="w3-text-dark-grey" for="initialPassword"><b>Inicijalna lozinka</b></label>
-        <input class="w3-input w3-border w3-round w3-center" id="initialPassword" name="initialPassword" type="text" th:field="*{initialPassword}"></p>
+        <input class="w3-input w3-border w3-round w3-center" id="initialPassword" name="initialPassword" type="text" th:field="*{initialPassword}" required
+               onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Ispunite polje za inicijalnu lozinku!')"></p>
       <p>
       <p class="w3-half">
-        <label class="w3-text-dark-grey" for="userCreated"><b>Korisnik aktiviran</b></label>
-        <input class="w3-input w3-border w3-round w3-center" id="userCreated" name="userCreated" type="date" th:field="*{userCreated}"></p>
+        <label class="w3-text-dark-grey" for="userCreated"><b>Korisnik aktiviran</b><br></label>
+        <span class="error" th:if="${#fields.hasErrors('userCreated')}" th:errors="*{userCreated}">E-mail aktiviran error</span>
+        <input class="w3-input w3-border w3-round w3-center" id="userCreated" name="userCreated" type="date" th:field="*{userCreated}" required
+               onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Ispunite polje kada je korisnik aktiviran!')"></p>
       <p>
       <p class="w3-half">
         <label class="w3-text-dark-grey" for="userDisabled"><b>Korisnik deaktiviran</b></label>
@@ -122,7 +344,9 @@
       <p>
       <p class="w3-half">
         <label class="w3-text-dark-grey" for="emailCreated"><b>E-mail aktiviran</b></label>
-        <input class="w3-input w3-border w3-round w3-center" id="emailCreated" name="emailCreated" type="date" th:field="*{emailCreated}"></p>
+        <span class="error" th:if="${#fields.hasErrors('emailCreated')}" th:errors="*{emailCreated}">E-mail aktiviran error</span>
+        <input class="w3-input w3-border w3-round w3-center" id="emailCreated" name="emailCreated" type="date" th:field="*{emailCreated}" required
+               onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Ispunite polje kada je e-mail aktiviran!')"></p>
       <p>
       <p class="w3-half">
         <label class="w3-text-dark-grey" for="emailDisabled"><b>E-mail deaktiviran</b></label>
@@ -133,8 +357,23 @@
         <input class="w3-input w3-border w3-round w3-center w3-padding-48" id="komentar" name="komentar" type="text" th:field="*{komentar}"></p>
       <p>
     </div>
-      <button class="w3-btn w3-grey"><b>Ažuriraj korisnika</b></button></p>
+    <div class="w3-show-inline-block">
+      <div class="w3-bar">
+        <button class="button-30"><b>Ažuriraj korisnika</b></button>
+        <button class="button-30" onclick="window.location.href='/korisnik/all'"><b>Odustani</b></button>
+      </div>
+    </div>
+<!--    <div class="w3-half"><button class=" w3-btn w3-grey" style="width: 100%"><b>Ažuriraj korisnika</b></button><p/><p class="w3-half"><button class="w3-half w3-btn w3-grey" style="width: 50%" role="button" onclick="window.location.href='/korisnik/all'"><b>Odustani</b></button></p>-->
   </form>
 </div>
 </body>
+<script>
+  function hidediv(){
+    var errMessages = document.getElementsByClassName('error');
+    for (var i = 0; i < errMessages.length; i++) {
+      errMessages[i].style.display="none";
+    }
+  }
+  setTimeout("hidediv()",5000);
+</script>
 </html>

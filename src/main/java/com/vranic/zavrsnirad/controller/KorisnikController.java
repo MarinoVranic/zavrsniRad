@@ -53,8 +53,8 @@ public class KorisnikController {
     }
 
 
-    @PostMapping("/save")
-    public String saveKorisnik(@ModelAttribute("korisnik") @Valid Korisnik korisnik, BindingResult bindingResult, Model model){
+    @PostMapping("/addNew")
+    public String addKorisnik(@ModelAttribute("korisnik") @Valid Korisnik korisnik, BindingResult bindingResult, Model model){
         if(bindingResult.hasErrors()){
             System.out.println(bindingResult);
             return "korisnik/newKorisnik";
@@ -64,6 +64,16 @@ public class KorisnikController {
         }else
             korisnikService.save(korisnik);
             return "redirect:/korisnik/all";
+    }
+
+    @PostMapping("/save")
+    public String saveKorisnik(@ModelAttribute("korisnik") @Valid Korisnik korisnik, BindingResult bindingResult, Model model){
+        if(bindingResult.hasErrors()){
+            System.out.println(bindingResult);
+            return "korisnik/updateKorisnik";
+        }
+            korisnikService.save(korisnik);
+        return "redirect:/korisnik/all";
     }
 
 //    @PostMapping("/addNew")

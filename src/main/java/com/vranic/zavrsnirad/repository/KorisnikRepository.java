@@ -13,7 +13,7 @@ public interface KorisnikRepository extends JpaRepository<Korisnik, String> {
     @Query(value="SELECT * FROM korisnik k WHERE k.Last_name = :lastName ORDER BY k.First_name", nativeQuery = true)
     List<Korisnik> findKorisnikByLastName(String lastName);
 
-    @Query(value = "SELECT * FROM korisnik k ORDER BY k.Last_name DESC", nativeQuery = true)
+    @Query(value = "SELECT * FROM korisnik k ORDER BY k.Last_name ASC", nativeQuery = true)
     List<Korisnik> findAll();
 
     @Query(value = "SELECT COUNT(k.Username) FROM korisnik k WHERE k.Username = :username", nativeQuery = true)
