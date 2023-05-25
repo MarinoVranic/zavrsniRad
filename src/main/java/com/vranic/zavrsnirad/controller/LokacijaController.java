@@ -1,7 +1,5 @@
 package com.vranic.zavrsnirad.controller;
 
-import com.vranic.zavrsnirad.model.Dobavljac;
-import com.vranic.zavrsnirad.model.Korisnik;
 import com.vranic.zavrsnirad.model.Lokacija;
 import com.vranic.zavrsnirad.service.LokacijaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,8 +45,9 @@ public class LokacijaController {
         if(lokacijaService.checkIfNazivLokacijeIsAvailable(lokacija.getNazivLokacije())!=0){
             model.addAttribute("error", "Naziv lokacije već postoji!");
             return "lokacija/newLokacija";
-        }else
-        lokacijaService.save(lokacija);
+        }else {
+            lokacijaService.save(lokacija);
+        }
         return "redirect:/lokacija/all";
     }
 
@@ -76,7 +75,6 @@ public class LokacijaController {
             model.addAttribute("sveLokacije", lokacijaList);
             Lokacija lokacija = new Lokacija();
             model.addAttribute("lokacija", lokacija);
-//            System.out.println(lokacijaList.get(0));
         }
         return "lokacija/lokacija";
     }
