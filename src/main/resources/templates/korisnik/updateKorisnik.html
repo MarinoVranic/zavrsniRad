@@ -2,14 +2,14 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link th:href="@{/CSS/customStyle.css}" rel="stylesheet" />
-<script type="text/javascript" src="../static/javascript/sidebar.js" th:src="@{/javascript/sidebar.js}"></script>
 <head>
   <meta charset="UTF-8">
   <title>Dodavanje korisnika</title>
 </head>
 <body>
-<div class="w3-card-4 w3-center w3-display-middle" style="width: 50%">
+<div class="w3-card-4 w3-center w3-display-middle" style="width: 50%; position: fixed">
   <div class="w3-container w3-gray">
+    <button class="w3-right button-30" onclick="window.location.href='/korisnik/all'"><b>Odustani</b></button>
     <h2 class="w3-text-light-grey" th:object="${korisnik}" th:text="'Korisnik '+*{firstName}+' '+*{lastName}"><b>Forma za ažuriranje korisnika</b></h2>
   </div>
   <form class="w3-container w3-light-grey" action="#" th:action="@{/korisnik/save}" th:object="${korisnik}" method="POST">
@@ -89,7 +89,6 @@
     <div class="w3-show-inline-block">
       <div class="w3-bar">
         <button class="button-30"><b>Ažuriraj korisnika</b></button>
-        <button class="button-30" onclick="window.location.href='/korisnik/all'"><b>Odustani</b></button>
       </div>
     </div>
   </form>

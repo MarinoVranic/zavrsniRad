@@ -32,4 +32,8 @@ public class LokacijaService {
     public List<Lokacija> findLokacijaByName(String nazivLokacije){
         return lokacijaRepository.findByNazivLokacije(nazivLokacije);
     }
+
+    public Long checkIfNazivLokacijeIsAvailable(String nazivLokacije){
+        return lokacijaRepository.checkNazivLokacijeIsFree(nazivLokacije);
+    }
 }

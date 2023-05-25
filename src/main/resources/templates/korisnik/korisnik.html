@@ -44,8 +44,8 @@
   <label for="lastName"></label>
   <input type="text" id="lastName" name="lastName" placeholder="Pretraži po prezimenu" required
          onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Popunite polje za pretraživanje!')">
-  <button onclick="hidediv()" type="submit"><i class='fas fa-search'></i> Search</button>
-  <button type="button" onclick="window.location.href='/korisnik/all'">Show All</button>
+  <button onclick="hidediv()" type="submit"><i class='fas fa-search'></i> Pretraži</button>
+  <button type="button" onclick="window.location.href='/korisnik/all'">Prikaži sve</button>
   <label id="error-message" class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>
 </form>
 <div style="overflow-x:auto;">
