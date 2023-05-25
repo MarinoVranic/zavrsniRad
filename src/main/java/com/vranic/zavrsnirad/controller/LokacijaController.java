@@ -1,6 +1,7 @@
 package com.vranic.zavrsnirad.controller;
 
 import com.vranic.zavrsnirad.model.Dobavljac;
+import com.vranic.zavrsnirad.model.Korisnik;
 import com.vranic.zavrsnirad.model.Lokacija;
 import com.vranic.zavrsnirad.service.LokacijaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,6 @@ public class LokacijaController {
     @GetMapping("/all")
     public String getAllLokacija(Model model) {
         model.addAttribute("sveLokacije", lokacijaService.getAllLokacija());
-        Lokacija lokacija = new Lokacija();
-        model.addAttribute("lokacija", lokacija);
         return "lokacija/lokacija";
     }
 
@@ -29,10 +28,27 @@ public class LokacijaController {
         return lokacijaService.getLokacijaById(id);
     }
 
-    @PostMapping("/update")
-    public String updateLokacija(Lokacija lokacija, Model model) {
-        lokacijaService.save(lokacija);
+    @PostMapping("/update/{id}")
+    public String updateLokacija(@PathVariable(value = "id") Long id, Model model) {
+        Lokacija lokacija = lokacijaService.getLokacijaById(id);
         model.addAttribute("lokacija", lokacija);
+        return "lokacija/updateLokacija";
+    }
+
+    @GetMapping("/addNew")
+    public String addNewLokacija(Model model){
+        Lokacija lokacija = new Lokacija();
+        model.addAttribute("lokacija", lokacija);
+        return "lokacija/newLokacija";
+    }
+
+    @PostMapping("/addNew")
+    public String addLokacija(@ModelAttribute("lokacija") Lokacija lokacija, Model model) {
+        if(lokacijaService.checkIfNazivLokacijeIsAvailable(lokacija.getNazivLokacije())!=0){
+            model.addAttribute("error", "Naziv lokacije već postoji!");
+            return "lokacija/newLokacija";
+        }else
+        lokacijaService.save(lokacija);
         return "redirect:/lokacija/all";
     }
 

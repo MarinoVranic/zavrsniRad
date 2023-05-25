@@ -15,4 +15,7 @@ public interface LokacijaRepository extends JpaRepository<Lokacija, Long> {
 
     @Query(value = "SELECT * FROM lokacija l ORDER BY l.ID_lokacije ASC", nativeQuery = true)
     List<Lokacija> findAll();
+
+    @Query(value = "SELECT COUNT(l.Naziv_lokacije) FROM lokacija l WHERE l.Naziv_lokacije = :nazivLokacije", nativeQuery = true)
+    Long checkNazivLokacijeIsFree(String nazivLokacije);
 }
