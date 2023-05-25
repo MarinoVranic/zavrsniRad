@@ -1,70 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link th:href="@{/CSS/customStyle.css}" rel="stylesheet" />
 <script type="text/javascript" src="../static/javascript/openUpdateModals.js" th:src="@{/javascript/openUpdateModals.js}"></script>
 <script type="text/javascript" src="../static/javascript/sidebar.js" th:src="@{/javascript/sidebar.js}"></script>
 <head>
   <meta charset="UTF-8">
   <title>Dobavljači</title>
 </head>
-<style>
-  table {
-    border-collapse: collapse;
-    width: 100%;
-  }
-
-  th, td {
-    padding: 8px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-  }
-  .button {
-    background-color: #4CAF50;
-    border: none;
-    color: white;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-  }
-  .button2 {
-    background-color: white;
-    color: black;
-    border: 2px solid #008CBA;
-  }
-
-  .button2:hover {
-    background-color: DodgerBlue;
-    color: white;
-  }
-  .button3 {
-    background-color: white;
-    color: black;
-    border: 2px solid #008CBA;
-  }
-
-  .button3:hover {
-    background-color: #ff1e1e;
-    color: #090909;
-  }
-  .button4 {
-    background-color: white;
-    color: black;
-    border: 2px solid #008CBA;
-  }
-
-  .button4:hover {
-    background-color: #25ff1e;
-    color: #090909;
-  }
-  .alert{
-    color: red;
-  }
-  tr:hover {background-color: DodgerBlue;}
-</style>
 <body>
 <div class="w3-sidebar w3-bar-block w3-border-right" style="display:none" id="mySidebar">
   <button onclick="w3_close()" class="w3-bar-item w3-large">Zatvori &times;</button>
