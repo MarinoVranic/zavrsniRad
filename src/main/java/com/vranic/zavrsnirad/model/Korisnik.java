@@ -3,9 +3,12 @@ package com.vranic.zavrsnirad.model;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -17,7 +20,9 @@ import java.time.LocalDate;
 public class Korisnik {
     @Id
     private String username;
+    @Pattern(regexp = "^[a-zA-ZčćžšđČĆŽŠĐ]+$", message = "Ime ne smije sadržavati broj!")
     private String firstName;
+    @Pattern(regexp = "^[a-zA-ZčćžšđČĆŽŠĐ]+$", message = "Prezime ne smije sadržavati broj!")
     private String lastName;
     private String status;
     private String accountType;
@@ -25,9 +30,14 @@ public class Korisnik {
     private Integer godina;
     private String email;
     private String initialPassword;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @NotNull(message = "Datum kreiranja korisnika ne smije biti prazan!")
     private LocalDate userCreated;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate userDisabled;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate emailCreated;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate emailDisabled;
     private String komentar;
 }

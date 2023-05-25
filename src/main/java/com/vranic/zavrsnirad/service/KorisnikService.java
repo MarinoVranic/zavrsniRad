@@ -27,4 +27,12 @@ public class KorisnikService {
     public void deleteById(String username){
         korisnikRepository.deleteById(username);
     }
+
+    public List<Korisnik> findKorisnikByLastName(String lastName){
+        return korisnikRepository.findKorisnikByLastName(lastName);
+    }
+
+    public Long checkIfUsernameIsFree(String username){
+        return korisnikRepository.checkUsernameIsFree(username);
+    }
 }

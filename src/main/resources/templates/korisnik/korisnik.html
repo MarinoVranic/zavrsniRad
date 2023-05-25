@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link th:href="@{/CSS/customStyle.css}" rel="stylesheet" />
+<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+<script type="text/javascript" src="../static/javascript/sidebar.js" th:src="@{/javascript/sidebar.js}"></script>
+<head>
+  <meta charset="UTF-8">
+  <title>Korisnici</title>
+</head>
+<style>
+  html{
+    background-color: lightgray;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  th, td {
+    padding: 8px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+  }
+</style>
+<body>
+<div class="w3-sidebar w3-bar-block w3-border-right" style="display:none" id="mySidebar">
+  <button onclick="w3_close()" class="w3-bar-item w3-large">Zatvori &times;</button>
+  <a th:href="@{/index}" class="w3-bar-item w3-button">Glavni izbornik</a>
+  <a th:href="@{/racun/all}" class="w3-bar-item w3-button">Računi</a>
+  <a th:href="@{/dobavljac/all}" class="w3-bar-item w3-button">Dobavljači</a>
+  <a th:href="@{/vrstaUredaja/all}" class="w3-bar-item w3-button">Vrste uređaja</a>
+  <a th:href="@{/lokacija/all}" class="w3-bar-item w3-button">Lokacije</a>
+</div>
+<div><button id="openNav" class="w3-button w3-xlarge" onclick="w3_open()">&#9776;</button>
+  <h1 class="w3-padding w3-center w3-opacity w3-xxxlarge" style="text-shadow:1px 1px 0 #444"><b>Korisnici</b></h1>
+</div>
+<div class="w3-padding">
+  <a th:href="@{/korisnik/addNew}" class="w3-button w3-gray w3-large w3-hover-green w3-cell-middle"><i class="material-icons">add_circle</i> Novi korisnik</a>
+</div>
+<form class="w3-container w3-padding" th:action="@{/korisnik/find}" method="get">
+  <label for="lastName"></label>
+  <input type="text" id="lastName" name="lastName" placeholder="Pretraži po prezimenu" required
+         onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Popunite polje za pretraživanje!')">
+  <button onclick="hidediv()" type="submit"><i class='fas fa-search'></i> Search</button>
+  <button type="button" onclick="window.location.href='/korisnik/all'">Show All</button>
+  <label id="error-message" class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>
+</form>
+<div style="overflow-x:auto;">
+<table style="table-layout:auto;width:100%" class="w3-table-all w3-hoverable w3-centered w3-card-4">
+  <thead>
+  <tr>
+    <th class="w3-dark-grey">Username</th>
+    <th class="w3-dark-grey">Ime</th>
+    <th class="w3-dark-grey">Prezime</th>
+    <th class="w3-dark-grey">Status</th>
+    <th class="w3-dark-grey">Vrsta korisnika</th>
+    <th class="w3-dark-grey">Poslodavac</th>
+    <th class="w3-dark-grey">Godina zaposlenja</th>
+    <th class="w3-dark-grey">E-mail adresa</th>
+    <th class="w3-dark-grey">Inicijalna lozinka</th>
+    <th class="w3-dark-grey">Korisnik aktiviran</th>
+    <th class="w3-dark-grey">Korisnik deaktiviran</th>
+    <th class="w3-dark-grey">E-mail aktiviran</th>
+    <th class="w3-dark-grey">E-mail deaktiviran</th>
+    <th class="w3-dark-grey">Komentar</th>
+    <th class="w3-dark-grey"></th>
+    <th class="w3-dark-grey"></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="korisnik:${sviKorisnici}">
+    <td  th:text="${korisnik.username}"></td>
+    <td  th:text="${korisnik.firstName}"></td>
+    <td  th:text="${korisnik.lastName}"></td>
+    <td  th:text="${korisnik.status}"></td>
+    <td  th:text="${korisnik.accountType}"></td>
+    <td  th:text="${korisnik.subcontractor}"></td>
+    <td  th:text="${korisnik.godina}"></td>
+    <td  th:text="${korisnik.email}"></td>
+    <td  th:text="${korisnik.initialPassword}"></td>
+    <td  th:text="${korisnik.userCreated}"></td>
+    <td  th:text="${korisnik.userDisabled}"></td>
+    <td  th:text="${korisnik.emailCreated}"></td>
+    <td  th:text="${korisnik.emailDisabled}"></td>
+    <td  th:text="${korisnik.komentar}"></td>
+    <td> <a th:href="@{/korisnik/update/{username}(username=${korisnik.username})}" type="button" class="w3-button w3-gray w3-xlarge w3-hover-orange"><i class='fas fa-edit'></i></a></td>
+    <td> <a style="font-size:128px" th:href="@{/korisnik/delete/{username}(username=${korisnik.username})}" class="w3-button w3-gray w3-xlarge w3-hover-red"><i class="material-icons">remove_circle</i></a></td>
+  </tr>
+  </tbody>
+</table>
+</div>
+<script>
+  function hidediv(){
+    document.getElementById("error-message").style.visibility="hidden";
+  }
+  setTimeout("hidediv()",5000);
+</script>
+</body>
+</html>
