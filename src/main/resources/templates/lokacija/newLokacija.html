@@ -19,8 +19,7 @@
     <div class="w3-row-padding">
     <p class="w3-center">
       <label class="w3-text-dark-grey" for="idLokacije"><b>ID lokacije</b><br></label>
-      <input class="w3-input w3-border w3-round w3-center" id="idLokacije" name="idLokacije" type="text" th:field="*{idLokacije}" placeholder="Nepotreban unos, sustav sam upisuje!" readonly
-             onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Ispunite polje za lokaciju!')"></p>
+      <input class="w3-input w3-border w3-round w3-center" id="idLokacije" name="idLokacije" type="text" th:field="*{idLokacije}" placeholder="Nepotreban unos, sustav sam upisuje!" readonly></p>
     <p class="w3-center">
       <label class="w3-text-dark-grey" for="nazivLokacije"><b>Ime</b><br></label>
       <label id="error-message" class="error alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>

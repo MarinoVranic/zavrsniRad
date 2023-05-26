@@ -11,4 +11,10 @@ import java.util.List;
 public interface DobavljacRepository extends JpaRepository<Dobavljac, Long> {
     @Query(value = "SELECT * FROM dobavljac d WHERE d.Naziv_dobavljaca = :nazivDobavljaca", nativeQuery = true)
     List<Dobavljac> findByNazivDobavljaca(String nazivDobavljaca);
+
+    @Query(value = "SELECT * FROM dobavljac d ORDER BY d.ID_dobavljaca ASC", nativeQuery = true)
+    List<Dobavljac> findAll();
+
+    @Query(value = "SELECT COUNT(d.Naziv_dobavljaca) FROM dobavljac d WHERE d.Naziv_dobavljaca = :nazivDobavljaca", nativeQuery = true)
+    Long checkNazivDobavljacaIsFree(String nazivDobavljaca);
 }

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link th:href="@{/CSS/customStyle.css}" rel="stylesheet" />
+<script type="text/javascript" src="../static/javascript/sidebar.js" th:src="@{/javascript/sidebar.js}"></script>
+<head>
+  <meta charset="UTF-8">
+  <title>Ažuriranje dobavljača</title>
+</head>
+<style>
+
+</style>
+<body>
+<div class="w3-card-4 w3-center w3-display-middle w3-light-grey" style="width: 50%; position: fixed">
+  <div class="w3-container w3-gray">
+    <h2 class="w3-text-light-grey"><b>Ažuriranje dobavljača</b><button class="w3-right button-30" onclick="window.location.href='/dobavljac/all'"><b>Odustani</b></button></h2>
+  </div>
+  <form class="w3-container w3-light-grey" action="#" th:action="@{/dobavljac/save}" th:object="${dobavljac}" method="POST">
+    <div class="w3-row-padding">
+    <p class="w3-center">
+      <label class="w3-text-dark-grey" for="idDobavljaca"><b>ID dobavljača</b><br></label>
+      <input class="w3-input w3-border w3-round w3-center" id="idDobavljaca" name="idDobavljaca" type="text" th:field="*{idDobavljaca}" placeholder="Nepotreban unos, sustav sam upisuje!" readonly></p>
+    <p class="w3-center">
+      <label class="w3-text-dark-grey" for="nazivDobavljaca"><b>Naziv dobavljača</b><br></label>
+      <label id="error-message" class="error alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>
+      <input class="w3-input w3-border w3-round w3-center" id="nazivDobavljaca" name="nazivDobavljaca" type="text" th:field="*{nazivDobavljaca}" required
+             onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Ispunite polje za naziv dobavljača!')"></p>
+    <div>
+      <div>
+        <button class="button-30"><b>Ažuriraj lokaciju</b></button>
+      </div>
+    </div>
+    </div>
+  </form>
+</div>
+</body>
+<script>
+  function hidediv(){
+    var errMessages = document.getElementsByClassName('error');
+    for (var i = 0; i < errMessages.length; i++) {
+      errMessages[i].style.display="none";
+    }
+  }
+  setTimeout("hidediv()",5000);
+</script>
+</html>
