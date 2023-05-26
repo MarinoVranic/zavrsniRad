@@ -30,4 +30,8 @@ public class DobavljacService {
     public List<Dobavljac> findDobavljacByName(String nazivDobavljaca){
         return dobavljacRepository.findByNazivDobavljaca(nazivDobavljaca);
     }
+
+    public Long checkIfNazivDobavljacaIsAvailable(String nazivDobavljaca){
+        return dobavljacRepository.checkNazivDobavljacaIsFree(nazivDobavljaca);
+    }
 }
