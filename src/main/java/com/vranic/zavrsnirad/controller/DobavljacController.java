@@ -31,7 +31,7 @@ public class DobavljacController {
     @GetMapping("/update/{id}")
     public String updateDobavljac(@PathVariable(value = "id") Long id, Model model) {
         Dobavljac dobavljac = dobavljacService.getDobavljacById(id);
-        model.addAttribute("lokacija", dobavljac);
+        model.addAttribute("dobavljac", dobavljac);
         return "dobavljac/updateDobavljac";
     }
 
@@ -54,7 +54,12 @@ public class DobavljacController {
     }
 
     @PostMapping("/save")
-    public String saveDobavljac(@ModelAttribute("dobavljac") Dobavljac dobavljac) {
+    public String saveDobavljac(@ModelAttribute("dobavljac") Dobavljac dobavljac, Model model) {
+        if(dobavljacService.checkIfNazivDobavljacaIsAvailable(dobavljac.getNazivDobavljaca())!=0)
+        {
+            model.addAttribute("error", "Dobavljač tog naziva već postoji!");
+            return "/dobavljac/updateDobavljac";
+        }
         dobavljacService.save(dobavljac);
         return "redirect:/dobavljac/all";
     }
