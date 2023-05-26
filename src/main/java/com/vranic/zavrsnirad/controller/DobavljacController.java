@@ -58,7 +58,7 @@ public class DobavljacController {
         if(dobavljacService.checkIfNazivDobavljacaIsAvailable(dobavljac.getNazivDobavljaca())!=0)
         {
             model.addAttribute("error", "Dobavljač tog naziva već postoji!");
-            return "/dobavljac/updateDobavljac";
+            return "dobavljac/updateDobavljac";
         }
         dobavljacService.save(dobavljac);
         return "redirect:/dobavljac/all";
