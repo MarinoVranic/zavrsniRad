@@ -35,12 +35,11 @@
   <a th:href="@{/korisnik/all}" class="w3-bar-item w3-button">Korisnici</a>
 </div>
 <button id="openNav" class="w3-button w3-xlarge" onclick="w3_open()">&#9776;</button>
-<h1 class="w3-padding w3-center w3-opacity w3-xxxlarge" style="text-shadow:1px 1px 0 #444"><b>Lokacije</b></h1>
+<h1 class="w3-padding w3-center w3-opacity w3-xxxlarge" style="text-shadow:1px 1px 0 #444"><b>Dobavljači</b></h1>
 <div class="w3-padding">
   <a th:href="@{/dobavljac/addNew}" class="w3-button w3-gray w3-large w3-hover-green w3-cell-middle"><i class="material-icons">add_circle</i> Novi dobavljač</a>
 </div>
 <form class="w3-container" th:action="@{/dobavljac/find}" method="get">
-<!--  <label for="nazivDobavljaca">Search by name:</label>-->
   <input type="text" id="nazivDobavljaca" name="nazivDobavljaca" placeholder="Pretraži po nazivu" required
          onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Popunite polje za pretraživanje!')">
   <button onclick="hidediv()" type="submit">Pretraži</button>

@@ -1,7 +1,5 @@
 package com.vranic.zavrsnirad.controller;
 
-import com.vranic.zavrsnirad.model.Dobavljac;
-import com.vranic.zavrsnirad.model.Lokacija;
 import com.vranic.zavrsnirad.model.VrstaUredaja;
 import com.vranic.zavrsnirad.service.VrstaUredajaService;
 import org.springframework.beans.factory.annotation.Autowired;
