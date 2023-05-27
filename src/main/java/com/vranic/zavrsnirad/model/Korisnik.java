@@ -20,9 +20,9 @@ import java.time.LocalDate;
 public class Korisnik {
     @Id
     private String username;
-    @Pattern(regexp = "^[a-zA-ZčćžšđČĆŽŠĐ]+$", message = "Ime ne smije sadržavati broj!")
+    @Pattern(regexp = "^[a-zA-ZčćžšđČĆŽŠĐ -]+$", message = "Ime ne smije sadržavati broj!")
     private String firstName;
-    @Pattern(regexp = "^[a-zA-ZčćžšđČĆŽŠĐ]+$", message = "Prezime ne smije sadržavati broj!")
+    @Pattern(regexp = "^[a-zA-ZčćžšđČĆŽŠĐ -]+$", message = "Prezime ne smije sadržavati broj!")
     private String lastName;
     private String status;
     private String accountType;
