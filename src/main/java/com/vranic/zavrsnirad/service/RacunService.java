@@ -17,6 +17,10 @@ public class RacunService {
         return racunRepository.findAll();
     }
 
+    public Racun getRacunById (String brojRacuna){
+        return racunRepository.findById(brojRacuna).orElse(null);
+    }
+
     public void save(Racun racun)  {
         racunRepository.save(racun);
     }
@@ -27,5 +31,9 @@ public class RacunService {
 
     public List<Racun> findRacunByBrojRacuna(String brojRacuna){
         return racunRepository.findByBrojRacuna(brojRacuna);
+    }
+
+    public Long checkIfBrojRacunaIsAvailable(String brojRacuna){
+        return racunRepository.checkBrojRacunaIsFree(brojRacuna);
     }
 }
