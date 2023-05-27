@@ -2,6 +2,7 @@ package com.vranic.zavrsnirad.controller;
 
 import com.vranic.zavrsnirad.model.Korisnik;
 import com.vranic.zavrsnirad.service.KorisnikService;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -21,6 +23,18 @@ public class KorisnikController {
     @GetMapping("/all")
     public String getAllKorisnik(Model model){
         model.addAttribute("sviKorisnici", korisnikService.getAllKorisnik());
+        return "korisnik/korisnik";
+    }
+
+    @GetMapping("/active")
+    public String getAllActiveKorisnik(Model model){
+        model.addAttribute("sviKorisnici", korisnikService.getAllActiveKorisnik());
+        return "korisnik/korisnik";
+    }
+
+    @GetMapping("/inactive")
+    public String getAllInactiveKorisnik(Model model){
+        model.addAttribute("sviKorisnici", korisnikService.getAllInactiveKorisnik());
         return "korisnik/korisnik";
     }
 
@@ -70,6 +84,18 @@ public class KorisnikController {
             return "korisnik/updateKorisnik";
         }
             korisnikService.save(korisnik);
+        return "redirect:/korisnik/all";
+    }
+
+    @GetMapping("deactivate/{username}")
+    @Transactional
+    public String deactivateKorisnik(@PathVariable(value = "username")String username){
+        Korisnik korisnik = korisnikService.getKorisnikById(username);
+        LocalDate today = LocalDate.now();
+        korisnikService.deactivateKorisnik(today, today, username);
+        System.out.println(korisnik.getUserDisabled());
+        System.out.println(korisnik.getEmailDisabled());
+        System.out.println(username);
         return "redirect:/korisnik/all";
     }
 
