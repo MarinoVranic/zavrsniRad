@@ -62,7 +62,7 @@
       <td th:text="${dobavljac.idDobavljaca}"></td>
       <td th:text="${dobavljac.nazivDobavljaca}"></td>
       <td> <a th:href="@{/dobavljac/update/{id}(id=${dobavljac.idDobavljaca})}" type="button" class="w3-button w3-gray w3-xlarge w3-hover-orange"><i class='fas fa-edit'></i></a></td>
-      <td> <a style="font-size:128px" th:href="@{/dobavljac/delete/{id}(id=${dobavljac.nazivDobavljaca})}" class="w3-button w3-gray w3-xlarge w3-hover-red"><i class="material-icons">remove_circle</i></a></td>
+      <td> <a style="font-size:128px" th:href="@{/dobavljac/delete/{id}(id=${dobavljac.idDobavljaca})}" class="w3-button w3-gray w3-xlarge w3-hover-red"><i class="material-icons">remove_circle</i></a></td>
     </tr>
     </tbody>
   </table>
