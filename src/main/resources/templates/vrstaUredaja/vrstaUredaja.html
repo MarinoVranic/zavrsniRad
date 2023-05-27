@@ -3,101 +3,69 @@
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link th:href="@{/CSS/customStyle.css}" rel="stylesheet" />
-<script type="text/javascript" src="../static/javascript/openUpdateModals.js" th:src="@{/javascript/openUpdateModals.js}"></script>
+<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 <script type="text/javascript" src="../static/javascript/sidebar.js" th:src="@{/javascript/sidebar.js}"></script>
 <head>
     <meta charset="UTF-8">
     <title>Vrste uređaja</title>
 </head>
+<style>
+    html{
+        background-color: lightgray;
+    }
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th, td {
+        padding: 8px;
+        text-align: center;
+        border-bottom: 1px solid #ddd;
+        border-left: 1px solid #ddd;
+    }
+</style>
 <body>
 <div class="w3-sidebar w3-bar-block w3-border-right" style="display:none" id="mySidebar">
     <button onclick="w3_close()" class="w3-bar-item w3-large">Zatvori &times;</button>
     <a th:href="@{/index}" class="w3-bar-item w3-button">Glavni izbornik</a>
+    <a th:href="@{/racun/all}" class="w3-bar-item w3-button">Računi</a>
     <a th:href="@{/lokacija/all}" class="w3-bar-item w3-button">Lokacije</a>
     <a th:href="@{/dobavljac/all}" class="w3-bar-item w3-button">Dobavljači</a>
-    <a th:href="@{/racun/all}" class="w3-bar-item w3-button">Računi</a>
+    <a th:href="@{/korisnik/all}" class="w3-bar-item w3-button">Korisnici</a>
 </div>
 <button id="openNav" class="w3-button w3-xlarge" onclick="w3_open()">&#9776;</button>
-<h1>Vrste uređaja</h1>
-<div class="w3-container">
-    <button onclick="document.getElementById('id01').style.display='block'" class="w3-button w3-gray w3-large w3-hover-green">Dodaj vrstu uređaja</button>
-
-    <div id="id01" class="w3-modal">
-        <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
-
-            <div class="w3-center"><br>
-                <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>
-            </div>
-
-            <form class="w3-container" action="#" th:action="@{/vrstaUredaja/save}" th:object="${vrstauredaja}"
-                  method="POST">
-                <div class="w3-section">
-
-                    <input type="hidden" th:field="*{idVrsteUredaja}" />
-                    <label for="vname">Naziv vrste uređaja</label>
-                    <input class="w3-input w3-border w3-margin-bottom" type="text" id="vname" th:field="*{nazivVrsteUredaja}" name="vrstanaziv" required>
-                    <button class="w3-button w3-block w3-green w3-section w3-padding" type="submit">Dodaj</button>
-                </div>
-            </form>
-        </div>
-    </div>
+<h1 class="w3-padding w3-center w3-opacity w3-xxxlarge" style="text-shadow:1px 1px 0 #444"><b>Vrste uređaja</b></h1>
+<div class="w3-padding">
+    <a th:href="@{/vrstaUredaja/addNew}" class="w3-button w3-gray w3-large w3-hover-green w3-cell-middle"><i class="material-icons">add_circle</i> Nova vrsta uređaja</a>
 </div>
 <form class="w3-container" th:action="@{/vrstaUredaja/find}" method="get">
-    <label for="nazivVrsteUredaja">Search by name:</label>
-    <input type="text" id="nazivVrsteUredaja" name="nazivVrsteUredaja" required>
-    <button onclick="hidediv()" type="submit">Search</button>
-    <button type="button" onclick="window.location.href='/vrstaUredaja/all'">Show All</button>
+    <input type="text" id="nazivVrsteUredaja" name="nazivVrsteUredaja" placeholder="Pretraži po nazivu" required
+           onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Popunite polje za pretraživanje!')">
+    <button onclick="hidediv()" type="submit">Pretraži</button>
+    <button type="button" onclick="window.location.href='/vrstaUredaja/all'">Prikaži sve</button>
     <label id="error-message" class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>
 </form>
-<table>
-    <thead>
-    <tr>
-        <th>ID vrste uređaja</th>
-        <th>Naziv vrste uređaja</th>
-        <th></th>
-        <th></th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="vrsteUredaja:${sveVrsteUredaja}">
-        <td th:text="${vrsteUredaja.idVrsteUredaja}"></td>
-        <td th:text="${vrsteUredaja.nazivVrsteUredaja}"></td>
-        <td class="w3-container"><button onclick="openUpdateModal(this)" th:data-id="${vrsteUredaja.idVrsteUredaja}" th:data-naziv="${vrsteUredaja.nazivVrsteUredaja}" class="w3-button w3-gray w3-xlarge w3-hover-orange">Update</button></td>
-        <div id="updateModal" class="w3-modal">
-            <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
-                <div class="w3-center"><br>
-                    <span onclick="document.getElementById('updateModal').style.display='none'" class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>
-                </div>
-                <form id="updateForm" class="w3-container" action="#" th:action="@{/vrstaUredaja/update}" th:object="${vrstauredaja}"
-                      method="POST">
-                    <div class="w3-section" style="padding: 0.5em">
-
-                        <input type="hidden" id="updateId" th:field="*{idVrsteUredaja}" />
-                        <label for="nameEdit">Naziv vrste uređaja</label>
-                        <input class="w3-input w3-border w3-margin-bottom" type="text" id="nameEdit" th:field="*{nazivVrsteUredaja}" name="vrstanaziv" required>
-                        <button class="w3-button w3-block w3-green w3-section w3-padding" type="submit">Ažuriraj</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <td> <a th:href="@{/vrstaUredaja/delete/{id}(id=${vrsteUredaja.idVrsteUredaja})}" class="w3-button w3-gray w3-xlarge w3-hover-red">Delete</a></td>
-    </tr>
-    </tbody>
-</table>
-<script>
-    // Get all modal elements
-    var modals = document.getElementsByClassName('w3-modal');
-
-    // When the user clicks anywhere outside of a modal, close it
-    window.onclick = function (event) {
-        for (var i = 0; i < modals.length; i++) {
-            if (event.target == modals[i]) {
-                modals[i].style.display = "none";
-                break;
-            }
-        }
-    }
-</script>
+<div style="overflow-x:auto;">
+    <table style="table-layout:auto;width:100%" class="w3-table-all w3-hoverable w3-centered w3-card-4">
+        <thead>
+        <tr>
+            <th class="w3-dark-grey">ID</th>
+            <th class="w3-dark-grey">Naziv vrste uređaja</th>
+            <th class="w3-dark-grey"></th>
+            <th class="w3-dark-grey"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="vrstaUredaja:${sveVrsteUredaja}">
+            <td th:text="${vrstaUredaja.idVrsteUredaja}"></td>
+            <td th:text="${vrstaUredaja.nazivVrsteUredaja}"></td>
+            <td> <a th:href="@{/vrstaUredaja/update/{id}(id=${vrstaUredaja.idVrsteUredaja})}" type="button" class="w3-button w3-gray w3-xlarge w3-hover-orange"><i class='fas fa-edit'></i></a></td>
+            <td> <a style="font-size:128px" th:href="@{/vrstaUredaja/delete/{id}(id=${vrstaUredaja.idVrsteUredaja})}" class="w3-button w3-gray w3-xlarge w3-hover-red"><i class="material-icons">remove_circle</i></a></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 <script>
     function hidediv(){
         document.getElementById("error-message").style.visibility="hidden";

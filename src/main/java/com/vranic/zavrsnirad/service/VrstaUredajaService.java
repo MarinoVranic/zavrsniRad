@@ -32,4 +32,8 @@ public class VrstaUredajaService {
     public List<VrstaUredaja> findVrstaUredajaByName(String nazivVrsteUredaja){
         return vrstaUredajaRepository.findByNazivVrsteUredaja(nazivVrsteUredaja);
     }
+
+    public Long checkIfNazivVrsteUredajaIsAvailable(String nazivVrsteUredaja){
+        return vrstaUredajaRepository.checkNazivVrsteUredajaIsFree(nazivVrsteUredaja);
+    }
 }
