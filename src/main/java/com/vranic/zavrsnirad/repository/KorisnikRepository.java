@@ -18,4 +18,10 @@ public interface KorisnikRepository extends JpaRepository<Korisnik, String> {
 
     @Query(value = "SELECT COUNT(k.Username) FROM korisnik k WHERE k.Username = :username", nativeQuery = true)
     Long checkUsernameIsFree(String username);
+
+    @Query(value = "SELECT * FROM korisnik k WHERE k.Status = 'aktivan'", nativeQuery = true)
+    List<Korisnik> showAllActive();
+
+    @Query(value = "SELECT * FROM korisnik k WHERE k.Status = 'neaktivan'", nativeQuery = true)
+    List<Korisnik> showAllInactive();
 }

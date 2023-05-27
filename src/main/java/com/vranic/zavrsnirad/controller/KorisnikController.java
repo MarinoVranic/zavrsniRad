@@ -24,6 +24,18 @@ public class KorisnikController {
         return "korisnik/korisnik";
     }
 
+    @GetMapping("/active")
+    public String getAllActiveKorisnik(Model model){
+        model.addAttribute("sviKorisnici", korisnikService.getAllActiveKorisnik());
+        return "korisnik/korisnik";
+    }
+
+    @GetMapping("/inactive")
+    public String getAllInactiveKorisnik(Model model){
+        model.addAttribute("sviKorisnici", korisnikService.getAllInactiveKorisnik());
+        return "korisnik/korisnik";
+    }
+
     @GetMapping("/{username}")
     public Korisnik getKorisnikById(@PathVariable String username){
         return korisnikService.getKorisnikById(username);

@@ -35,4 +35,12 @@ public class KorisnikService {
     public Long checkIfUsernameIsFree(String username){
         return korisnikRepository.checkUsernameIsFree(username);
     }
+
+    public List<Korisnik> getAllActiveKorisnik(){
+        return korisnikRepository.showAllActive();
+    }
+
+    public List<Korisnik> getAllInactiveKorisnik(){
+        return korisnikRepository.showAllInactive();
+    }
 }

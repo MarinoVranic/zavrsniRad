@@ -24,6 +24,18 @@
     border-bottom: 1px solid #ddd;
     border-left: 1px solid #ddd;
   }
+  #scrollToTopBtn {
+    display: none;
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    z-index: 99;
+    padding: 5px;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+  }
 </style>
 <body>
 <div class="w3-sidebar w3-bar-block w3-border-right" style="display:none" id="mySidebar">
@@ -55,7 +67,7 @@
     <th class="w3-dark-grey">Username</th>
     <th class="w3-dark-grey">Ime</th>
     <th class="w3-dark-grey">Prezime</th>
-    <th class="w3-dark-grey">Status</th>
+    <th class="w3-dark-grey">Status<br><button style="font-weight: normal" type="button" onclick="window.location.href='/korisnik/active'">Aktivni</button><button style="font-weight: normal" type="button" onclick="window.location.href='/korisnik/inactive'">Neaktivni</button></th>
     <th class="w3-dark-grey">Vrsta korisnika</th>
     <th class="w3-dark-grey">Poslodavac</th>
     <th class="w3-dark-grey">Godina zaposlenja</th>
@@ -91,7 +103,27 @@
   </tr>
   </tbody>
 </table>
+  <button id="scrollToTopBtn" title="Go to top">Natrag na početak</button>
 </div>
+
+<script>
+  var scrollToTopBtn = document.getElementById("scrollToTopBtn");
+
+  // Show the button when user scrolls down 20px from the top of the document
+  window.onscroll = function() {
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+      scrollToTopBtn.style.display = "block";
+    } else {
+      scrollToTopBtn.style.display = "none";
+    }
+  };
+
+  // Scroll to the top of the document when the button is clicked
+  scrollToTopBtn.onclick = function() {
+    document.body.scrollTop = 0; // For Safari
+    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE, and Opera
+  };
+</script>
 <script>
   function hidediv(){
     document.getElementById("error-message").style.visibility="hidden";
