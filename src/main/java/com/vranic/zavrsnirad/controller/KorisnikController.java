@@ -67,7 +67,6 @@ public class KorisnikController {
     @PostMapping("/addNew")
     public String addKorisnik(@ModelAttribute("korisnik") @Valid Korisnik korisnik, BindingResult bindingResult, Model model){
         if(bindingResult.hasErrors()){
-            System.out.println(bindingResult);
             return "korisnik/newKorisnik";
         } else if (korisnikService.checkIfUsernameIsFree(korisnik.getUsername())!=0) {
             model.addAttribute("error", "Korisničko ime već postoji!");
@@ -78,7 +77,7 @@ public class KorisnikController {
     }
 
     @PostMapping("/save")
-    public String saveKorisnik(@ModelAttribute("korisnik") @Valid Korisnik korisnik, BindingResult bindingResult, Model model){
+    public String saveKorisnik(@ModelAttribute("korisnik") @Valid Korisnik korisnik, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             System.out.println(bindingResult);
             return "korisnik/updateKorisnik";
