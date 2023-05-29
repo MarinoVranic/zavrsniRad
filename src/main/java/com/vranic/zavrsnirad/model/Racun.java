@@ -17,6 +17,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class Racun {
     @Id
+    private Long idRacuna;
     private String brojRacuna;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate datumRacuna;
