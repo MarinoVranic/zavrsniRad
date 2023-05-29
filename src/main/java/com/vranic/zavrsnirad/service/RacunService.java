@@ -17,16 +17,16 @@ public class RacunService {
         return racunRepository.findAll();
     }
 
-    public Racun getRacunById (String brojRacuna){
-        return racunRepository.findById(brojRacuna).orElse(null);
+    public Racun getRacunById (Long idRacuna){
+        return racunRepository.findById(idRacuna).orElse(null);
     }
 
     public void save(Racun racun)  {
         racunRepository.save(racun);
     }
 
-    public void deleteById(String brojRacuna){
-        racunRepository.deleteById(brojRacuna);
+    public void deleteById(Long idRacuna){
+        racunRepository.deleteById(idRacuna);
     }
 
     public List<Racun> findRacunByBrojRacuna(String brojRacuna){
