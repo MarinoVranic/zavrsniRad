@@ -1,8 +1,6 @@
 package com.vranic.zavrsnirad.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,19 +18,40 @@ public class Inventar {
     private String inventarniBroj;
     private String nazivUredaja;
     private String serijskiBroj;
-    private Long idVrsteUredaja;
+
+    @ManyToOne
+    @JoinColumn(name = "id_vrste_uredaja")
+    private VrstaUredaja vrstaUredaja;
+
     private String hostname;
-    private Long idLokacije;
-    private String username;
+
+    @ManyToOne
+    @JoinColumn(name = "id_lokacije")
+    private Lokacija lokacija;
+
+    @ManyToOne
+    @JoinColumn(name = "username")
+    private Korisnik korisnik;
+
     private String lanMac;
     private String wifiMac;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate datumZaduzenja;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate datumRazduzenja;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate warrantyEnding;
-    private String brojRacuna;
-    private Long idDobavljaca;
+
+    @ManyToOne
+    @JoinColumn(name = "id_racuna")
+    private Racun racun;
+
+    @ManyToOne
+    @JoinColumn(name = "id_dobavljaca")
+    private Dobavljac dobavljac;
+
     private String napomena;
 }

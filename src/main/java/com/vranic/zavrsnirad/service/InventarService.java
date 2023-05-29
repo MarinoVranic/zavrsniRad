@@ -1,6 +1,7 @@
 package com.vranic.zavrsnirad.service;
 
 import com.vranic.zavrsnirad.model.Inventar;
+import com.vranic.zavrsnirad.model.Lokacija;
 import com.vranic.zavrsnirad.repository.InventarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,5 +27,13 @@ public class InventarService {
 
     public void deleteById(String inventarniBroj){
         inventarRepository.deleteById(inventarniBroj);
+    }
+
+    public Long checkIfInvBrojIsAvailable(String inventarniBroj){
+        return inventarRepository.checkInvBrojIsFree(inventarniBroj);
+    }
+
+    public List<Inventar> findInventarByInvBroj(String inventarniBroj){
+        return inventarRepository.findByInventarniBroj(inventarniBroj);
     }
 }
