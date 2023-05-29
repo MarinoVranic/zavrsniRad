@@ -3,6 +3,7 @@
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link th:href="@{/CSS/customStyle.css}" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 <script type="text/javascript" src="../static/javascript/sidebar.js" th:src="@{/javascript/sidebar.js}"></script>
 <head>
@@ -37,13 +38,13 @@
 <button id="openNav" class="w3-button w3-xlarge" onclick="w3_open()">&#9776;</button>
 <h1 class="w3-padding w3-center w3-opacity w3-xxxlarge" style="text-shadow:1px 1px 0 #444"><b>Računi</b></h1>
 <div class="w3-padding">
-  <a th:href="@{/racun/addNew}" class="w3-button w3-gray w3-large w3-hover-green w3-cell-middle"><i class="material-icons">add_circle</i> Novi račun</a>
+  <a th:href="@{/racun/addNew}" class="button-add"><i class="material-icons">add_circle</i> Novi račun</a>
 </div>
 <form class="w3-container" th:action="@{/racun/find}" method="get">
-<!--  <label for="brojRacuna">Search by name:</label>-->
+  <label for="brojRacuna">Search by name:</label>
   <input type="text" id="brojRacuna" name="brojRacuna" placeholder="Pretraži račun po broju" required
          onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Popunite polje za pretraživanje!')">
-  <button onclick="hidediv()" type="submit">Pretraži</button>
+  <button onclick="hidediv()" type="submit"><i class="fa fa-search" style="font-size:20px"></i>Pretraži</button>
   <button type="button" onclick="window.location.href='/racun/all'">Prikaži sve</button>
   <label id="error-message" class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>
 </form>
@@ -52,17 +53,19 @@
     <thead>
     <tr>
       <th class="w3-dark-grey">ID</th>
-      <th class="w3-dark-grey">Name</th>
+      <th class="w3-dark-grey">Broj računa</th>
+      <th class="w3-dark-grey">Datum računa</th>
       <th class="w3-dark-grey"></th>
       <th class="w3-dark-grey"></th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="racun:${sviRacuni}">
+      <td th:text="${racun.idRacuna}"></td>
       <td th:text="${racun.brojRacuna}"></td>
       <td th:text="${racun.datumRacuna}"></td>
-      <td> <a id="brRacForUpdate" th:value="${racun.brojRacuna}" th:href="@{/racun/update/{brojRacuna}(brojRacuna=${racun.brojRacuna})}" type="button" class="w3-button w3-gray w3-xlarge w3-hover-orange"><i class='fas fa-edit'></i></a></td>
-      <td> <a style="font-size:128px" th:href="@{/racun/delete/{brojRacuna}(brojRacuna=${racun.brojRacuna})}" class="w3-button w3-gray w3-xlarge w3-hover-red"><i class="material-icons">remove_circle</i></a></td>
+      <td> <a th:href="@{/racun/update/{id}(id=${racun.idRacuna})}" type="button" class="button-edit"><i class="fa fa-edit" style="font-size:36px"></i></a></td>
+      <td> <a style="font-size:128px" th:href="@{/racun/delete/{id}(id=${racun.idRacuna})}" class="button-delete"><i class="material-icons">remove_circle</i></a></td>
     </tr>
     </tbody>
   </table>
@@ -73,18 +76,5 @@
   }
   setTimeout("hidediv()",5000);
 </script>
-<!--<script>-->
-<!--  // Get the "broj racuna" value from your data source (e.g., server-side rendering, database, etc.)-->
-<!--  var brojRacuna = $("#brRacForUpdate").val();-->
-
-<!--  // Encode the "broj racuna" value-->
-<!--  var encodedBrojRacuna = encodeURIComponent(brojRacuna);-->
-
-<!--  // Construct the update URL with the encoded value-->
-<!--  var updateUrl = '/racun/update/' + encodedBrojRacuna;-->
-
-<!--  // Set the update URL as the href attribute of the update button-->
-<!--  document.querySelector('.w3-button.w3-hover-orange').href = updateUrl;-->
-<!--</script>-->
 </body>
 </html>

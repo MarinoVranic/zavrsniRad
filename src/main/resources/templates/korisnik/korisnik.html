@@ -3,8 +3,9 @@
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link th:href="@{/CSS/customStyle.css}" rel="stylesheet" />
-<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script type="text/javascript" src="../static/javascript/sidebar.js" th:src="@{/javascript/sidebar.js}"></script>
+<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 <head>
   <meta charset="UTF-8">
   <title>Korisnici</title>
@@ -56,7 +57,7 @@
   <label for="lastName"></label>
   <input type="text" id="lastName" name="lastName" placeholder="Pretraži po prezimenu" required
          onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Popunite polje za pretraživanje!')">
-  <button onclick="hidediv()" type="submit"><i class='fas fa-search'></i> Pretraži</button>
+  <button onclick="hidediv()" type="submit"><i class="fa fa-search" style="font-size:20px"></i> Pretraži</button>
   <button type="button" onclick="window.location.href='/korisnik/all'">Prikaži sve</button>
   <label id="error-message" class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>
 </form>
@@ -99,8 +100,8 @@
     <td style="width: 120px" th:text="${korisnik.emailCreated}"></td>
     <td  th:text="${korisnik.emailDisabled}"></td>
     <td  th:text="${korisnik.komentar}"></td>
-    <td> <a style="font-size:15px" th:href="@{/korisnik/deactivate/{username}(username=${korisnik.username})}" type="button" class="button-deactivate"><i class='fas fa-user-alt-slash' style='font-size:24px'></i></a></td>
-    <td> <a th:href="@{/korisnik/update/{username}(username=${korisnik.username})}" type="button" class="button-edit"><i class='fas fa-edit'></i></a></td>
+    <td> <a style="font-size:15px" th:href="@{/korisnik/deactivate/{username}(username=${korisnik.username})}" type="button" class="button-deactivate"><i class="fa fa-user-times" style="font-size:36px"></i></a></td>
+    <td> <a th:href="@{/korisnik/update/{username}(username=${korisnik.username})}" type="button" class="button-edit"><i class="fa fa-edit" style="font-size:24px"></i></a></td>
     <td> <a style="font-size:128px" th:href="@{/korisnik/delete/{username}(username=${korisnik.username})}" class="button-delete"><i class="material-icons">remove_circle</i></a></td>
   </tr>
   </tbody>
