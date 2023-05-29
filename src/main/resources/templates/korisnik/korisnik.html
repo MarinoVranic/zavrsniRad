@@ -3,8 +3,9 @@
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link th:href="@{/CSS/customStyle.css}" rel="stylesheet" />
-<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script type="text/javascript" src="../static/javascript/sidebar.js" th:src="@{/javascript/sidebar.js}"></script>
+<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 <head>
   <meta charset="UTF-8">
   <title>Korisnici</title>
@@ -24,6 +25,18 @@
     border-bottom: 1px solid #ddd;
     border-left: 1px solid #ddd;
   }
+  #scrollToTopBtn {
+    display: none;
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    z-index: 99;
+    padding: 5px;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+  }
 </style>
 <body>
 <div class="w3-sidebar w3-bar-block w3-border-right" style="display:none" id="mySidebar">
@@ -38,13 +51,13 @@
   <h1 class="w3-padding w3-center w3-opacity w3-xxxlarge" style="text-shadow:1px 1px 0 #444"><b>Korisnici</b></h1>
 </div>
 <div class="w3-padding">
-  <a th:href="@{/korisnik/addNew}" class="w3-button w3-gray w3-large w3-hover-green w3-cell-middle"><i class="material-icons">add_circle</i> Novi korisnik</a>
+  <a th:href="@{/korisnik/addNew}" class="button-add"><i class="material-icons">add_circle</i> Novi korisnik</a>
 </div>
 <form class="w3-container w3-padding" th:action="@{/korisnik/find}" method="get">
   <label for="lastName"></label>
   <input type="text" id="lastName" name="lastName" placeholder="Pretraži po prezimenu" required
          onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Popunite polje za pretraživanje!')">
-  <button onclick="hidediv()" type="submit"><i class='fas fa-search'></i> Pretraži</button>
+  <button onclick="hidediv()" type="submit"><i class="fa fa-search" style="font-size:20px"></i> Pretraži</button>
   <button type="button" onclick="window.location.href='/korisnik/all'">Prikaži sve</button>
   <label id="error-message" class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>
 </form>
@@ -55,17 +68,18 @@
     <th class="w3-dark-grey">Username</th>
     <th class="w3-dark-grey">Ime</th>
     <th class="w3-dark-grey">Prezime</th>
-    <th class="w3-dark-grey">Status</th>
+    <th class="w3-dark-grey">Status<br><button style="font-weight: normal" type="button" onclick="window.location.href='/korisnik/active'">Aktivni</button><button style="font-weight: normal" type="button" onclick="window.location.href='/korisnik/inactive'">Neaktivni</button></th>
     <th class="w3-dark-grey">Vrsta korisnika</th>
     <th class="w3-dark-grey">Poslodavac</th>
     <th class="w3-dark-grey">Godina zaposlenja</th>
-    <th class="w3-dark-grey">E-mail adresa</th>
+    <th style="width: 150px" class="w3-dark-grey">E-mail adresa</th>
     <th class="w3-dark-grey">Inicijalna lozinka</th>
-    <th class="w3-dark-grey">Korisnik aktiviran</th>
+    <th style="width: 120px" class="w3-dark-grey">Korisnik aktiviran</th>
     <th class="w3-dark-grey">Korisnik deaktiviran</th>
-    <th class="w3-dark-grey">E-mail aktiviran</th>
+    <th style="width: 120px" class="w3-dark-grey">E-mail aktiviran</th>
     <th class="w3-dark-grey">E-mail deaktiviran</th>
     <th class="w3-dark-grey">Komentar</th>
+    <th class="w3-dark-grey"></th>
     <th class="w3-dark-grey"></th>
     <th class="w3-dark-grey"></th>
   </tr>
@@ -79,19 +93,40 @@
     <td  th:text="${korisnik.accountType}"></td>
     <td  th:text="${korisnik.subcontractor}"></td>
     <td  th:text="${korisnik.godina}"></td>
-    <td  th:text="${korisnik.email}"></td>
+    <td style="width: 150px" th:text="${korisnik.email}"></td>
     <td  th:text="${korisnik.initialPassword}"></td>
-    <td  th:text="${korisnik.userCreated}"></td>
+    <td style="width: 120px" th:text="${korisnik.userCreated}"></td>
     <td  th:text="${korisnik.userDisabled}"></td>
-    <td  th:text="${korisnik.emailCreated}"></td>
+    <td style="width: 120px" th:text="${korisnik.emailCreated}"></td>
     <td  th:text="${korisnik.emailDisabled}"></td>
     <td  th:text="${korisnik.komentar}"></td>
-    <td> <a th:href="@{/korisnik/update/{username}(username=${korisnik.username})}" type="button" class="w3-button w3-gray w3-xlarge w3-hover-orange"><i class='fas fa-edit'></i></a></td>
-    <td> <a style="font-size:128px" th:href="@{/korisnik/delete/{username}(username=${korisnik.username})}" class="w3-button w3-gray w3-xlarge w3-hover-red"><i class="material-icons">remove_circle</i></a></td>
+    <td> <a style="font-size:15px" th:href="@{/korisnik/deactivate/{username}(username=${korisnik.username})}" type="button" class="button-deactivate"><i class="fa fa-user-times" style="font-size:36px"></i></a></td>
+    <td> <a th:href="@{/korisnik/update/{username}(username=${korisnik.username})}" type="button" class="button-edit"><i class="fa fa-edit" style="font-size:24px"></i></a></td>
+    <td> <a style="font-size:128px" th:href="@{/korisnik/delete/{username}(username=${korisnik.username})}" class="button-delete"><i class="material-icons">remove_circle</i></a></td>
   </tr>
   </tbody>
 </table>
+  <button id="scrollToTopBtn" title="Go to top" class="button-toTop">Na početak</button>
 </div>
+
+<script>
+  var scrollToTopBtn = document.getElementById("scrollToTopBtn");
+
+  // Show the button when user scrolls down 20px from the top of the document
+  window.onscroll = function() {
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+      scrollToTopBtn.style.display = "block";
+    } else {
+      scrollToTopBtn.style.display = "none";
+    }
+  };
+
+  // Scroll to the top of the document when the button is clicked
+  scrollToTopBtn.onclick = function() {
+    document.body.scrollTop = 0; // For Safari
+    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE, and Opera
+  };
+</script>
 <script>
   function hidediv(){
     document.getElementById("error-message").style.visibility="hidden";

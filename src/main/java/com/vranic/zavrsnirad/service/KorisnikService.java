@@ -5,6 +5,7 @@ import com.vranic.zavrsnirad.repository.KorisnikRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -34,5 +35,17 @@ public class KorisnikService {
 
     public Long checkIfUsernameIsFree(String username){
         return korisnikRepository.checkUsernameIsFree(username);
+    }
+
+    public List<Korisnik> getAllActiveKorisnik(){
+        return korisnikRepository.showAllActive();
+    }
+
+    public List<Korisnik> getAllInactiveKorisnik(){
+        return korisnikRepository.showAllInactive();
+    }
+
+    public void deactivateKorisnik(LocalDate userDisabled, LocalDate emailDisabled, String username){
+        korisnikRepository.deactivateKorisnik(userDisabled, emailDisabled, username);
     }
 }

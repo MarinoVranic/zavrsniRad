@@ -1,8 +1,6 @@
 package com.vranic.zavrsnirad.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,6 +15,8 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class Racun {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long idRacuna;
     private String brojRacuna;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate datumRacuna;
