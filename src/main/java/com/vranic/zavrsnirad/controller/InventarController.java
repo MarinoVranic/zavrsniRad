@@ -179,4 +179,13 @@ public class InventarController {
                 today, inventar.getInventarniBroj());
         return "redirect:/inventar/all";
     }
+
+    @GetMapping("razduzi/{inventarniBroj}")
+    @Transactional
+    public String razduziInventar(@PathVariable(value = "inventarniBroj") String inventarniBroj){
+        Inventar inventar = inventarService.getInventarById(inventarniBroj);
+        LocalDate today = LocalDate.now();
+        inventarService.razduziInventar(today, inventarniBroj);
+        return "redirect:/inventar/all";
+    }
 }

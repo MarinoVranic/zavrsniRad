@@ -28,4 +28,9 @@ public interface InventarRepository extends JpaRepository<Inventar, String> {
             "i.Datum_razduzenja = null WHERE i.Inventarni_broj = :inventarniBroj", nativeQuery = true)
     void zaduziInventar(@Param("hostname") String hostname, @Param("idLokacije") Long idLokacije, @Param("username") String username, @Param("datumZaduzenja") LocalDate datumZaduzenja,
                         @Param("inventarniBroj") String inventarniBroj);
+
+    @Modifying
+    @Query(value = "UPDATE inventar i SET i.Hostname = null, i.ID_lokacije = 5, i.Username = null, i.Datum_zaduzenja = null," +
+            "i.Datum_razduzenja = :datumRazduzenja WHERE i.Inventarni_broj = :inventarniBroj", nativeQuery = true)
+    void razduziInventar(@Param("datumRazduzenja") LocalDate datumRazduzenja, @Param("inventarniBroj") String inventarniBroj);
 }

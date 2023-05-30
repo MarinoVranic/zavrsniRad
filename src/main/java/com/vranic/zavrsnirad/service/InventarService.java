@@ -42,4 +42,8 @@ public class InventarService {
     public void zaduziInventar(String hostname, Long idLokacije, String username, LocalDate datumZaduzenja, String inventarniBroj){
         inventarRepository.zaduziInventar(hostname, idLokacije, username, datumZaduzenja, inventarniBroj);
     }
+
+    public void razduziInventar(LocalDate datumRazduzenja, String inventarniBroj){
+        inventarRepository.razduziInventar(datumRazduzenja, inventarniBroj);
+    }
 }
