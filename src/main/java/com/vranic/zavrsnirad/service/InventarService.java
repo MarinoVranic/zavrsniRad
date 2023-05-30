@@ -39,10 +39,7 @@ public class InventarService {
         return inventarRepository.findByInventarniBroj(inventarniBroj);
     }
 
-//    public void addNewInventarWithoutUsername(String nazivUredaja, String serijskiBroj, Long idVrsteUredaja, String hostname, Long idLokacije,
-//                                             String lanMac, String wifiMac, LocalDate warrantyEnding, Long idRacuna, Long idDobavljaca,
-//                                              Long napomena, String inventarniBroj){
-//        inventarRepository.editNewWithoutUsername(nazivUredaja, serijskiBroj, idVrsteUredaja, hostname, idLokacije,
-//                lanMac, wifiMac, warrantyEnding, idRacuna, idDobavljaca, napomena, inventarniBroj);
-//    }
+    public void zaduziInventar(String hostname, Long idLokacije, String username, LocalDate datumZaduzenja, String inventarniBroj){
+        inventarRepository.zaduziInventar(hostname, idLokacije, username, datumZaduzenja, inventarniBroj);
+    }
 }

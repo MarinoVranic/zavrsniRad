@@ -3,11 +3,13 @@ package com.vranic.zavrsnirad.controller;
 import com.vranic.zavrsnirad.model.*;
 import com.vranic.zavrsnirad.service.*;
 import io.micrometer.common.util.StringUtils;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -34,7 +36,6 @@ public class InventarController {
     @GetMapping("/all")
     public String getAllInventar(Model model) {
         model.addAttribute("savInventar", inventarService.getAllInventar());
-        System.out.println(inventarService.getAllInventar());
         return "inventar/inventar";
     }
 
@@ -140,5 +141,42 @@ public class InventarController {
             model.addAttribute("inventar", inventar);
         }
         return "inventar/inventar";
+    }
+
+    @GetMapping("zaduzi/{inventarniBroj}")
+    public String zaduziInventar(@PathVariable(value = "inventarniBroj") String inventarniBroj, Model model) {
+        Inventar inventar = inventarService.getInventarById(inventarniBroj);
+        VrstaUredaja selectedVrstaUredaja = inventar.getVrstaUredaja();
+        List<VrstaUredaja> allVrstaUredaja = vrstaUredajaService.getAllVrstaUredaja();
+        Lokacija selectedLokacija = inventar.getLokacija();
+        List<Lokacija> allLokacija = lokacijaService.getAllLokacija();
+        Korisnik selectedKorisnik = inventar.getKorisnik();
+        List<Korisnik> allKorisnik = korisnikService.getAllKorisnik();
+        Dobavljac selectedDobavljac = inventar.getDobavljac();
+        List<Dobavljac> allDobavljac = dobavljacService.getAllDobavljaci();
+        Racun selectedRacun = inventar.getRacun();
+        List<Racun> allRacun = racunService.getAllRacun();
+
+        model.addAttribute("inventar", inventar);
+        model.addAttribute("selectedVrstaUredaja", selectedVrstaUredaja);
+        model.addAttribute("allVrstaUredaja", allVrstaUredaja);
+        model.addAttribute("selectedLokacija", selectedLokacija);
+        model.addAttribute("allLokacija", allLokacija);
+        model.addAttribute("selectedKorisnik", selectedKorisnik);
+        model.addAttribute("allKorisnik", allKorisnik);
+        model.addAttribute("selectedDobavljac", selectedDobavljac);
+        model.addAttribute("allDobavljac", allDobavljac);
+        model.addAttribute("selectedRacun", selectedRacun);
+        model.addAttribute("allRacun", allRacun);
+        return "inventar/zaduziInventar";
+    }
+
+    @PostMapping("/saveZaduzenje")
+    @Transactional
+    public String zaduzenjeInventara(@ModelAttribute("inventar") Inventar inventar) {
+        LocalDate today = LocalDate.now();
+        inventarService.zaduziInventar(inventar.getHostname(), inventar.getLokacija().getIdLokacije(), inventar.getKorisnik().getUsername(),
+                today, inventar.getInventarniBroj());
+        return "redirect:/inventar/all";
     }
 }
