@@ -29,7 +29,7 @@ public class Inventar {
     @JoinColumn(name = "id_lokacije")
     private Lokacija lokacija;
 
-    @ManyToOne
+    @ManyToOne(optional = true)
     @JoinColumn(name = "username")
     private Korisnik korisnik;
 

@@ -1,7 +1,8 @@
 package com.vranic.zavrsnirad.controller;
 
-import com.vranic.zavrsnirad.model.Inventar;
-import com.vranic.zavrsnirad.service.InventarService;
+import com.vranic.zavrsnirad.model.*;
+import com.vranic.zavrsnirad.service.*;
+import io.micrometer.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +15,21 @@ import java.util.List;
 public class InventarController {
     @Autowired
     private InventarService inventarService;
+
+    @Autowired
+    private VrstaUredajaService vrstaUredajaService;
+
+    @Autowired
+    private LokacijaService lokacijaService;
+
+    @Autowired
+    private KorisnikService korisnikService;
+
+    @Autowired
+    private DobavljacService dobavljacService;
+
+    @Autowired
+    private RacunService racunService;
 
     @GetMapping("/all")
     public String getAllInventar(Model model) {
@@ -30,7 +46,28 @@ public class InventarController {
     @GetMapping("/update/{inventarniBroj}")
     public String updateInventar(@PathVariable(value = "inventarniBroj") String inventarniBroj, Model model) {
         Inventar inventar = inventarService.getInventarById(inventarniBroj);
+        VrstaUredaja selectedVrstaUredaja = inventar.getVrstaUredaja();
+        List<VrstaUredaja> allVrstaUredaja = vrstaUredajaService.getAllVrstaUredaja();
+        Lokacija selectedLokacija = inventar.getLokacija();
+        List<Lokacija> allLokacija = lokacijaService.getAllLokacija();
+        Korisnik selectedKorisnik = inventar.getKorisnik();
+        List<Korisnik> allKorisnik = korisnikService.getAllKorisnik();
+        Dobavljac selectedDobavljac = inventar.getDobavljac();
+        List<Dobavljac> allDobavljac = dobavljacService.getAllDobavljaci();
+        Racun selectedRacun = inventar.getRacun();
+        List<Racun> allRacun = racunService.getAllRacun();
+
         model.addAttribute("inventar", inventar);
+        model.addAttribute("selectedVrstaUredaja", selectedVrstaUredaja);
+        model.addAttribute("allVrstaUredaja", allVrstaUredaja);
+        model.addAttribute("selectedLokacija", selectedLokacija);
+        model.addAttribute("allLokacija", allLokacija);
+        model.addAttribute("selectedKorisnik", selectedKorisnik);
+        model.addAttribute("allKorisnik", allKorisnik);
+        model.addAttribute("selectedDobavljac", selectedDobavljac);
+        model.addAttribute("allDobavljac", allDobavljac);
+        model.addAttribute("selectedRacun", selectedRacun);
+        model.addAttribute("allRacun", allRacun);
         return "inventar/updateInventar";
     }
 
@@ -38,28 +75,48 @@ public class InventarController {
     public String addNewInventar(Model model){
         Inventar inventar = new Inventar();
         model.addAttribute("inventar", inventar);
+        List<VrstaUredaja> allVrstaUredaja = vrstaUredajaService.getAllVrstaUredaja();
+        model.addAttribute("allVrstaUredaja", allVrstaUredaja);
+        List<Lokacija> allLokacija = lokacijaService.getAllLokacija();
+        model.addAttribute("allLokacija", allLokacija);
+        List<Racun> allRacun = racunService.getAllRacun();
+        model.addAttribute("allRacun", allRacun);
+        List<Dobavljac> allDobavljac = dobavljacService.getAllDobavljaci();
+        model.addAttribute("allDobavljac", allDobavljac);
         return "inventar/newInventar";
     }
 
     @PostMapping("/addNew")
     public String addInventar(@ModelAttribute("inventar") Inventar inventar, Model model) {
-        if(inventarService.checkIfInvBrojIsAvailable(inventar.getInventarniBroj())!=0){
+        if (inventarService.checkIfInvBrojIsAvailable(inventar.getInventarniBroj()) != 0) {
             model.addAttribute("error", "Inventarni broj već postoji!");
             return "inventar/newInventar";
-        }else {
+        } else {
+            // Set the username to null if it is blank
+            if (StringUtils.isBlank(inventar.getKorisnik().getUsername())) {
+                inventar.setKorisnik(null);
+            }
+
             inventarService.save(inventar);
         }
+
         return "redirect:/inventar/all";
     }
 
     @PostMapping("/save")
     public String saveInventar(@ModelAttribute("inventar") Inventar inventar, Model model) {
-        if(inventarService.checkIfInvBrojIsAvailable(inventar.getInventarniBroj())!=0)
-        {
-            model.addAttribute("error", "Inventarni broj već postoji!");
-            return "inventar/updateInventar";
-        }
-        inventarService.save(inventar);
+//        if (inventarService.checkIfInvBrojIsAvailable(inventar.getInventarniBroj()) != 0) {
+//            model.addAttribute("error", "Inventarni broj već postoji!");
+//            return "inventar/newInventar";
+//        } else {
+            // Set the username to null if it is blank
+            if (StringUtils.isBlank(inventar.getKorisnik().getUsername())) {
+                inventar.setKorisnik(null);
+            }
+
+            inventarService.save(inventar);
+//        }
+
         return "redirect:/inventar/all";
     }
 
