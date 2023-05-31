@@ -46,4 +46,12 @@ public class InventarService {
     public void razduziInventar(LocalDate datumRazduzenja, String inventarniBroj){
         inventarRepository.razduziInventar(datumRazduzenja, inventarniBroj);
     }
+
+    public List<Inventar> getInventarByVrstaUredaja(Long idVrsteUredaja){
+        return inventarRepository.findAllByVrstaUredaja(idVrsteUredaja);
+    }
+
+    public List<Inventar> getInventarByLokacija(Long idLokacije){
+        return inventarRepository.findAllByLokacija(idLokacije);
+    }
 }
