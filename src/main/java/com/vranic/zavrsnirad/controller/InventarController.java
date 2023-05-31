@@ -101,27 +101,18 @@ public class InventarController {
             if (StringUtils.isBlank(inventar.getKorisnik().getUsername())) {
                 inventar.setKorisnik(null);
             }
-
             inventarService.save(inventar);
         }
-
         return "redirect:/inventar/all";
     }
 
     @PostMapping("/save")
-    public String saveInventar(@ModelAttribute("inventar") Inventar inventar, Model model) {
-//        if (inventarService.checkIfInvBrojIsAvailable(inventar.getInventarniBroj()) != 0) {
-//            model.addAttribute("error", "Inventarni broj već postoji!");
-//            return "inventar/newInventar";
-//        } else {
+    public String saveInventar(@ModelAttribute("inventar") Inventar inventar) {
             // Set the username to null if it is blank
             if (StringUtils.isBlank(inventar.getKorisnik().getUsername())) {
                 inventar.setKorisnik(null);
             }
-
             inventarService.save(inventar);
-//        }
-
         return "redirect:/inventar/all";
     }
 
@@ -198,7 +189,6 @@ public class InventarController {
     @GetMapping("razduzi/{inventarniBroj}")
     @Transactional
     public String razduziInventar(@PathVariable(value = "inventarniBroj") String inventarniBroj){
-//        Inventar inventar = inventarService.getInventarById(inventarniBroj);
         LocalDate today = LocalDate.now();
         inventarService.razduziInventar(today, inventarniBroj);
         return "redirect:/inventar/all";
@@ -208,7 +198,6 @@ public class InventarController {
     public String showInventarByVrstaUredaja(@RequestParam("idVrsteUredaja") Long idVrsteUredaja, Model model) {
         List<VrstaUredaja> allVrstaUredaja = vrstaUredajaService.getAllVrstaUredaja();
         List<Inventar> inventarList = inventarService.getInventarByVrstaUredaja(idVrsteUredaja);
-//        System.out.println(idVrsteUredaja);
         model.addAttribute("allVrstaUredaja", allVrstaUredaja);
         model.addAttribute("savInventar", inventarList);
         Inventar inventar = new Inventar();
@@ -220,7 +209,6 @@ public class InventarController {
     public String showInventarByLokacija(@RequestParam("idLokacije") Long idLokacije, Model model) {
         List<Lokacija> allLokacija = lokacijaService.getAllLokacija();
         List<Inventar> inventarList = inventarService.getInventarByLokacija(idLokacije);
-//        System.out.println(idLokacije);
         model.addAttribute("allLokacija", allLokacija);
         model.addAttribute("savInventar", inventarList);
         Inventar inventar = new Inventar();

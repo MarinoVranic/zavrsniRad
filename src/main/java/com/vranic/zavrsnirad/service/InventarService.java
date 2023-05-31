@@ -1,10 +1,8 @@
 package com.vranic.zavrsnirad.service;
 
 import com.vranic.zavrsnirad.model.Inventar;
-import com.vranic.zavrsnirad.model.Lokacija;
 import com.vranic.zavrsnirad.repository.InventarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
