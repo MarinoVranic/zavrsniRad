@@ -381,6 +381,13 @@ th, td {
     cursor: pointer;
 }
 
+.forms-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
 .button {
     background-color: #4CAF50;
     border: none;

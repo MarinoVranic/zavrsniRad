@@ -16,7 +16,7 @@
   }
   table {
     border-collapse: collapse;
-    width: 100%;
+    width: auto;
   }
 
   th, td {
@@ -37,6 +37,18 @@
     border: none;
     cursor: pointer;
   }
+
+  .forms-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin-bottom: 10px;
+  }
+
+  .form {
+    margin-right: 0px;
+    margin-bottom: 10px;
+  }
 </style>
 <body>
 <div class="w3-sidebar w3-bar-block w3-border-right" style="display:none" id="mySidebar">
@@ -54,7 +66,8 @@
 <div class="w3-padding">
   <a th:href="@{/inventar/addNew}" class="button-add"><i class="material-icons">add_circle</i> Novi inventar</a>
 </div>
-<form class="w3-container w3-padding" th:action="@{/inventar/find}" method="get">
+<div class="forms-container" style="display: flex;">
+<form id="form1" class="w3-container w3-padding form" th:action="@{/inventar/find}" method="get">
   <label for="inventarniBroj"></label>
   <input type="text" id="inventarniBroj" name="inventarniBroj" placeholder="Pretraži po inv. broju" required
          onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Popunite polje za pretraživanje!')">
@@ -62,8 +75,19 @@
   <button type="button" onclick="window.location.href='/inventar/all'">Prikaži sve</button>
   <label id="error-message" class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>
 </form>
+<form id="form2" class="w3-container w3-padding form" th:action="@{/inventar/findBy}" method="get" th:object="${allVrstaUredaja}">
+  <div class="w3-dropdown-click">
+  <select class=" w3-border w3-round w3-center" id="idVrsteUredaja" name="idVrsteUredaja"
+          onchange="this.setCustomValidity('');updateRequiredFields()" oninvalid="this.setCustomValidity('Odaberite vrstu uređaja!')">
+    <option value="">Odaberite vrstu uređaja</option>
+    <option th:each="vrstaUredaja : ${allVrstaUredaja}" th:value="${vrstaUredaja.idVrsteUredaja}" th:text="${vrstaUredaja.nazivVrsteUredaja}"></option>
+  </select>
+  <button onclick="hidediv()" type="submit"><i class="fa fa-search" style="font-size:20px"></i> Pretraži po vrsti</button>
+  </div>
+</form>
+</div>
 <div style="overflow-x:auto;">
-<table style="table-layout:auto;width:100%" class="w3-table-all w3-hoverable w3-centered w3-card-4">
+<table style="table-layout:auto;width:auto" class="w3-table-all w3-hoverable w3-centered w3-card-4">
   <thead>
   <tr>
     <th class="w3-dark-grey">Inventarni broj</th>

@@ -33,4 +33,8 @@ public interface InventarRepository extends JpaRepository<Inventar, String> {
     @Query(value = "UPDATE inventar i SET i.Hostname = null, i.ID_lokacije = 5, i.Username = null, i.Datum_zaduzenja = null," +
             "i.Datum_razduzenja = :datumRazduzenja WHERE i.Inventarni_broj = :inventarniBroj", nativeQuery = true)
     void razduziInventar(@Param("datumRazduzenja") LocalDate datumRazduzenja, @Param("inventarniBroj") String inventarniBroj);
+
+    @Query(value = "SELECT inventar FROM Inventar inventar LEFT JOIN FETCH inventar.vrstaUredaja vu LEFT JOIN FETCH inventar.lokacija" +
+            " LEFT JOIN FETCH inventar.racun LEFT JOIN FETCH inventar.dobavljac LEFT JOIN inventar.korisnik korisnik WHERE vu.idVrsteUredaja = :idVrstaUredaja ORDER BY inventar.inventarniBroj ASC")
+    List<Inventar> findAllByVrstaUredaja(@Param("idVrstaUredaja") Long idVrstaUredaja);
 }

@@ -36,6 +36,8 @@ public class InventarController {
     @GetMapping("/all")
     public String getAllInventar(Model model) {
         model.addAttribute("savInventar", inventarService.getAllInventar());
+        List<VrstaUredaja> allVrstaUredaja = vrstaUredajaService.getAllVrstaUredaja();
+        model.addAttribute("allVrstaUredaja", allVrstaUredaja);
         return "inventar/inventar";
     }
 
@@ -199,4 +201,26 @@ public class InventarController {
         inventarService.razduziInventar(today, inventarniBroj);
         return "redirect:/inventar/all";
     }
+
+//    @GetMapping("/findBy")
+//    public String showInventarByVrstaUredaja(@RequestParam("idVrsteUredaja") Long idVrsteUredaja, Model model) {
+//        List <VrstaUredaja> allVrstaUredaja = vrstaUredajaService.getAllVrstaUredaja();
+//        List<Inventar> inventarList = inventarService.getInventarByVrstaUredaja(idVrsteUredaja);
+//        VrstaUredaja vrstaUredaja = new VrstaUredaja();
+//        model.addAttribute("allVrstaUredaja", allVrstaUredaja);
+//        model.addAttribute("vrstaUredaja", vrstaUredaja);
+//        model.addAttribute("savInventar", inventarList);
+//        return "inventar/inventar";
+//    }
+@GetMapping("/findBy")
+public String showInventarByVrstaUredaja(@RequestParam("idVrsteUredaja") Long idVrsteUredaja, Model model) {
+    List<VrstaUredaja> allVrstaUredaja = vrstaUredajaService.getAllVrstaUredaja();
+    List<Inventar> inventarList = inventarService.getInventarByVrstaUredaja(idVrsteUredaja);
+    System.out.println(idVrsteUredaja);
+    model.addAttribute("allVrstaUredaja", allVrstaUredaja);
+    model.addAttribute("savInventar", inventarList);
+    Inventar inventar = new Inventar();
+    model.addAttribute("inventar", inventar);
+    return "inventar/inventar";
+}
 }
