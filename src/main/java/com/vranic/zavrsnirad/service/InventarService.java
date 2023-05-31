@@ -5,6 +5,7 @@ import com.vranic.zavrsnirad.repository.InventarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -26,5 +27,29 @@ public class InventarService {
 
     public void deleteById(String inventarniBroj){
         inventarRepository.deleteById(inventarniBroj);
+    }
+
+    public Long checkIfInvBrojIsAvailable(String inventarniBroj){
+        return inventarRepository.checkInvBrojIsFree(inventarniBroj);
+    }
+
+    public List<Inventar> findInventarByInvBroj(String inventarniBroj){
+        return inventarRepository.findByInventarniBroj(inventarniBroj);
+    }
+
+    public void zaduziInventar(String hostname, Long idLokacije, String username, LocalDate datumZaduzenja, String inventarniBroj){
+        inventarRepository.zaduziInventar(hostname, idLokacije, username, datumZaduzenja, inventarniBroj);
+    }
+
+    public void razduziInventar(LocalDate datumRazduzenja, String inventarniBroj){
+        inventarRepository.razduziInventar(datumRazduzenja, inventarniBroj);
+    }
+
+    public List<Inventar> getInventarByVrstaUredaja(Long idVrsteUredaja){
+        return inventarRepository.findAllByVrstaUredaja(idVrsteUredaja);
+    }
+
+    public List<Inventar> getInventarByLokacija(Long idLokacije){
+        return inventarRepository.findAllByLokacija(idLokacije);
     }
 }

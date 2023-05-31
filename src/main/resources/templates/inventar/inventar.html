@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link th:href="@{/CSS/customStyle.css}" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script type="text/javascript" src="../static/javascript/sidebar.js" th:src="@{/javascript/sidebar.js}"></script>
+<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+<head>
+  <meta charset="UTF-8">
+  <title>IT oprema</title>
+</head>
+<style>
+  html{
+    background-color: lightgray;
+  }
+  table {
+    border-collapse: collapse;
+    width: auto;
+  }
+
+  th, td {
+    padding: 8px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+  }
+  #scrollToTopBtn {
+    display: none;
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    z-index: 99;
+    padding: 5px;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+  }
+
+  .forms-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin-bottom: 10px;
+  }
+
+  .form {
+    margin-right: 0px;
+    margin-bottom: 10px;
+  }
+</style>
+<body>
+<div class="w3-sidebar w3-bar-block w3-border-right" style="display:none" id="mySidebar">
+  <button onclick="w3_close()" class="w3-bar-item w3-large">Zatvori &times;</button>
+  <a th:href="@{/index}" class="w3-bar-item w3-button">Glavni izbornik</a>
+  <a th:href="@{/racun/all}" class="w3-bar-item w3-button">Računi</a>
+  <a th:href="@{/dobavljac/all}" class="w3-bar-item w3-button">Dobavljači</a>
+  <a th:href="@{/vrstaUredaja/all}" class="w3-bar-item w3-button">Vrste uređaja</a>
+  <a th:href="@{/lokacija/all}" class="w3-bar-item w3-button">Lokacije</a>
+  <a th:href="@{/korisnik/all}" class="w3-bar-item w3-button">Korisnici</a>
+</div>
+<div><button id="openNav" class="w3-button w3-xlarge" onclick="w3_open()">&#9776;</button>
+  <h1 class="w3-padding w3-center w3-opacity w3-xxxlarge" style="text-shadow:1px 1px 0 #444"><b>IT oprema</b></h1>
+</div>
+<div class="w3-padding">
+  <a th:href="@{/inventar/addNew}" class="button-add"><i class="material-icons">add_circle</i> Novi inventar</a>
+</div>
+<div class="forms-container" style="display: flex;">
+<form id="form1" class="w3-container w3-padding form" th:action="@{/inventar/find}" method="get">
+  <label for="inventarniBroj"></label>
+  <input type="text" id="inventarniBroj" name="inventarniBroj" placeholder="Pretraži po inv. broju" required
+         onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Popunite polje za pretraživanje!')">
+  <button onclick="hidediv()" type="submit"><i class="fa fa-search" style="font-size:20px"></i> Pretraži</button>
+  <button type="button" onclick="window.location.href='/inventar/all'">Prikaži sve</button>
+  <label id="error-message" class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>
+</form>
+<form id="form2" class="w3-container w3-padding form" th:action="@{/inventar/findByVrsta}" method="get" th:object="${allVrstaUredaja}">
+  <select class=" w3-border w3-round w3-center" id="idVrsteUredaja" name="idVrsteUredaja" required
+          onchange="this.setCustomValidity('');updateRequiredFields()" oninvalid="this.setCustomValidity('Odaberite vrstu uređaja!')">
+    <option value="">Odaberite vrstu uređaja</option>
+    <option th:each="vrstaUredaja : ${allVrstaUredaja}" th:value="${vrstaUredaja.idVrsteUredaja}" th:text="${vrstaUredaja.nazivVrsteUredaja}"></option>
+  </select>
+  <button onclick="hidediv()" type="submit"><i class="fa fa-search" style="font-size:20px"></i> Pretraži po vrsti</button>
+</form>
+  <form id="form3" class="w3-container w3-padding form" th:action="@{/inventar/findByLokacija}" method="get" th:object="${allLokacija}">
+    <select class=" w3-border w3-round w3-center" id="idLokacije" name="idLokacije" required
+            onchange="this.setCustomValidity('');updateRequiredFields()" oninvalid="this.setCustomValidity('Odaberite lokaciju!')">
+      <option value="">Odaberite lokaciju</option>
+      <option th:each="lokacija : ${allLokacija}" th:value="${lokacija.idLokacije}" th:text="${lokacija.nazivLokacije}"></option>
+    </select>
+    <button onclick="hidediv()" type="submit"><i class="fa fa-search" style="font-size:20px"></i> Pretraži po lokaciji</button>
+  </form>
+</div>
+<div style="overflow-x:auto;">
+<table style="table-layout:auto;width:auto" class="w3-table-all w3-hoverable w3-centered w3-card-4">
+  <thead>
+  <tr>
+    <th class="w3-dark-grey">Inventarni broj</th>
+    <th class="w3-dark-grey">Naziv uređaja</th>
+    <th class="w3-dark-grey">Serijski broj</th>
+    <th class="w3-dark-grey">Vrsta uređaja<br></th>
+    <th class="w3-dark-grey">Hostname</th>
+    <th class="w3-dark-grey">Lokacija</th>
+    <th class="w3-dark-grey">Username</th>
+    <th style="width: 150px" class="w3-dark-grey">LAN MAC</th>
+    <th class="w3-dark-grey">Wi-Fi MAC</th>
+    <th style="width: 120px" class="w3-dark-grey">Datum zaduženja</th>
+    <th class="w3-dark-grey">Datum razduženja</th>
+    <th style="width: 120px" class="w3-dark-grey">Istek garancije</th>
+    <th class="w3-dark-grey">Račun</th>
+    <th class="w3-dark-grey">Dobavljač</th>
+    <th class="w3-dark-grey">Napomena</th>
+    <th class="w3-dark-grey"></th>
+    <th class="w3-dark-grey"></th>
+    <th class="w3-dark-grey"></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="inventar:${savInventar}">
+    <td  th:text="${inventar.inventarniBroj}"></td>
+    <td  th:text="${inventar.nazivUredaja}"></td>
+    <td  th:text="${inventar.serijskiBroj}"></td>
+    <td  th:text="${inventar.vrstaUredaja.nazivVrsteUredaja}"></td>
+    <td  th:text="${inventar.hostname}"></td>
+    <td  th:text="${inventar.lokacija.nazivLokacije}"></td>
+    <td><p th:if="${inventar.korisnik != null && inventar.korisnik.username != null}">
+      <span th:text="${inventar.korisnik.username}"></span>
+    </p>
+      <p th:unless="${inventar.korisnik != null && inventar.korisnik.username != null}">
+      </p></td>
+    <td style="width: 150px" th:text="${inventar.lanMac}"></td>
+
+    <td  th:text="${inventar.wifiMac}"></td>
+    <td style="width: 120px" th:text="${inventar.datumZaduzenja}"></td>
+    <td  th:text="${inventar.datumRazduzenja}"></td>
+    <td style="width: 120px" th:text="${inventar.warrantyEnding}"></td>
+    <td  th:text="${inventar.racun.brojRacuna}"></td>
+    <td  th:text="${inventar.dobavljac.nazivDobavljaca}"></td>
+    <td  th:text="${inventar.napomena}"></td>
+    <td>
+      <a th:if="${inventar.korisnik == null || inventar.korisnik.username == null}"
+         style="font-size:15px"
+         th:href="@{/inventar/zaduzi/{inventarniBroj}(inventarniBroj=${inventar.inventarniBroj})}"
+         type="button" class="button-zaduzi">Zaduži</a>
+
+      <a th:if="${inventar.korisnik != null && inventar.korisnik.username != null}"
+         style="font-size:15px"
+         th:href="@{/inventar/razduzi/{inventarniBroj}(inventarniBroj=${inventar.inventarniBroj})}"
+         type="button" class="button-zaduzi">Razduži</a>
+    </td>
+    <td> <a th:href="@{/inventar/update/{inventarniBroj}(inventarniBroj=${inventar.inventarniBroj})}" type="button" class="button-edit"><i class="fa fa-edit" style="font-size:24px"></i></a></td>
+    <td> <a style="font-size:128px" th:href="@{/inventar/delete/{inventarniBroj}(inventarniBroj=${inventar.inventarniBroj})}" class="button-delete"><i class="material-icons">remove_circle</i></a></td>
+  </tr>
+  </tbody>
+</table>
+  <button id="scrollToTopBtn" title="Go to top" class="button-toTop">Na početak</button>
+</div>
+
+<script>
+  var scrollToTopBtn = document.getElementById("scrollToTopBtn");
+
+  // Show the button when user scrolls down 20px from the top of the document
+  window.onscroll = function() {
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+      scrollToTopBtn.style.display = "block";
+    } else {
+      scrollToTopBtn.style.display = "none";
+    }
+  };
+
+  // Scroll to the top of the document when the button is clicked
+  scrollToTopBtn.onclick = function() {
+    document.body.scrollTop = 0; // For Safari
+    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE, and Opera
+  };
+</script>
+<script>
+  function hidediv(){
+    document.getElementById("error-message").style.visibility="hidden";
+  }
+  setTimeout("hidediv()",5000);
+</script>
+</body>
+</html>
