@@ -126,37 +126,4 @@
   }
   setTimeout("hidediv()",5000);
 </script>
-<script>
-  function concatAndConvert(str, str2) {
-    const specialChars = {
-      'ć': 'c',
-      'č': 'c',
-      'š': 's',
-      'ž': 'z',
-      'đ': 'd'
-    };
-
-    const firstLetter = str.charAt(0).toLowerCase();
-    // const remainingString = str.slice(1);
-    const convertedString = str2.replace(/[ćčšžđ]/g, char => specialChars[char]).toLowerCase();
-    const result = firstLetter + convertedString;
-
-    return result;
-  }
-
-  const nameInput = document.getElementById('firstName');
-  const lastnameInput = document.getElementById('lastName');
-  const outputInput = document.getElementById('username');
-
-  nameInput.addEventListener('input', updateOutput);
-  lastnameInput.addEventListener('input', updateOutput);
-
-  function updateOutput() {
-    const name = nameInput.value;
-    const lastname = lastnameInput.value;
-    const concatenatedName = concatAndConvert(name, lastname);
-    // const concatenatedLastname = concatAndConvert(lastname);
-    outputInput.value = concatenatedName;
-  }
-</script>
 </html>

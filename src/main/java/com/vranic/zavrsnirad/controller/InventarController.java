@@ -175,8 +175,19 @@ public class InventarController {
     @Transactional
     public String zaduzenjeInventara(@ModelAttribute("inventar") Inventar inventar) {
         LocalDate today = LocalDate.now();
-        inventarService.zaduziInventar(inventar.getHostname(), inventar.getLokacija().getIdLokacije(), inventar.getKorisnik().getUsername(),
-                today, inventar.getInventarniBroj());
+        Integer idVrste = inventar.getVrstaUredaja().getIdVrsteUredaja().intValue();
+        if(idVrste.equals(1)||idVrste.equals(6)){
+            //split string nazivUredaja by one or more spaces and -
+            String [] nazivUredaja = inventar.getNazivUredaja().split("\\s+|-");
+            String firstPartOfHostname = nazivUredaja[0];
+            String secondPartOfHostname = inventar.getKorisnik().getUsername();
+            String hostname = firstPartOfHostname+"-"+secondPartOfHostname;
+            inventarService.zaduziInventar(hostname, inventar.getLokacija().getIdLokacije(), inventar.getKorisnik().getUsername(),
+                    today, inventar.getInventarniBroj());
+        }else {
+            inventarService.zaduziInventar(inventar.getHostname(), inventar.getLokacija().getIdLokacije(), inventar.getKorisnik().getUsername(),
+                    today, inventar.getInventarniBroj());
+        }
         return "redirect:/inventar/all";
     }
 
