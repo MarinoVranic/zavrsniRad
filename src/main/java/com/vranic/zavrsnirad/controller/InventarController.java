@@ -38,6 +38,8 @@ public class InventarController {
         model.addAttribute("savInventar", inventarService.getAllInventar());
         List<VrstaUredaja> allVrstaUredaja = vrstaUredajaService.getAllVrstaUredaja();
         model.addAttribute("allVrstaUredaja", allVrstaUredaja);
+        List<Lokacija> allLokacija = lokacijaService.getAllLokacija();
+        model.addAttribute("allLokacija", allLokacija);
         return "inventar/inventar";
     }
 
@@ -196,31 +198,33 @@ public class InventarController {
     @GetMapping("razduzi/{inventarniBroj}")
     @Transactional
     public String razduziInventar(@PathVariable(value = "inventarniBroj") String inventarniBroj){
-        Inventar inventar = inventarService.getInventarById(inventarniBroj);
+//        Inventar inventar = inventarService.getInventarById(inventarniBroj);
         LocalDate today = LocalDate.now();
         inventarService.razduziInventar(today, inventarniBroj);
         return "redirect:/inventar/all";
     }
 
-//    @GetMapping("/findBy")
-//    public String showInventarByVrstaUredaja(@RequestParam("idVrsteUredaja") Long idVrsteUredaja, Model model) {
-//        List <VrstaUredaja> allVrstaUredaja = vrstaUredajaService.getAllVrstaUredaja();
-//        List<Inventar> inventarList = inventarService.getInventarByVrstaUredaja(idVrsteUredaja);
-//        VrstaUredaja vrstaUredaja = new VrstaUredaja();
-//        model.addAttribute("allVrstaUredaja", allVrstaUredaja);
-//        model.addAttribute("vrstaUredaja", vrstaUredaja);
-//        model.addAttribute("savInventar", inventarList);
-//        return "inventar/inventar";
-//    }
-@GetMapping("/findBy")
-public String showInventarByVrstaUredaja(@RequestParam("idVrsteUredaja") Long idVrsteUredaja, Model model) {
-    List<VrstaUredaja> allVrstaUredaja = vrstaUredajaService.getAllVrstaUredaja();
-    List<Inventar> inventarList = inventarService.getInventarByVrstaUredaja(idVrsteUredaja);
-    System.out.println(idVrsteUredaja);
-    model.addAttribute("allVrstaUredaja", allVrstaUredaja);
-    model.addAttribute("savInventar", inventarList);
-    Inventar inventar = new Inventar();
-    model.addAttribute("inventar", inventar);
-    return "inventar/inventar";
-}
+    @GetMapping("/findByVrsta")
+    public String showInventarByVrstaUredaja(@RequestParam("idVrsteUredaja") Long idVrsteUredaja, Model model) {
+        List<VrstaUredaja> allVrstaUredaja = vrstaUredajaService.getAllVrstaUredaja();
+        List<Inventar> inventarList = inventarService.getInventarByVrstaUredaja(idVrsteUredaja);
+//        System.out.println(idVrsteUredaja);
+        model.addAttribute("allVrstaUredaja", allVrstaUredaja);
+        model.addAttribute("savInventar", inventarList);
+        Inventar inventar = new Inventar();
+        model.addAttribute("inventar", inventar);
+        return "inventar/inventar";
+    }
+
+    @GetMapping("/findByLokacija")
+    public String showInventarByLokacija(@RequestParam("idLokacije") Long idLokacije, Model model) {
+        List<Lokacija> allLokacija = lokacijaService.getAllLokacija();
+        List<Inventar> inventarList = inventarService.getInventarByLokacija(idLokacije);
+//        System.out.println(idLokacije);
+        model.addAttribute("allLokacija", allLokacija);
+        model.addAttribute("savInventar", inventarList);
+        Inventar inventar = new Inventar();
+        model.addAttribute("inventar", inventar);
+        return "inventar/inventar";
+    }
 }

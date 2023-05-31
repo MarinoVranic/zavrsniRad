@@ -50,4 +50,8 @@ public class InventarService {
     public List<Inventar> getInventarByVrstaUredaja(Long idVrsteUredaja){
         return inventarRepository.findAllByVrstaUredaja(idVrsteUredaja);
     }
+
+    public List<Inventar> getInventarByLokacija(Long idLokacije){
+        return inventarRepository.findAllByLokacija(idLokacije);
+    }
 }
