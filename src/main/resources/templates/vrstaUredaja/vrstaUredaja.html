@@ -3,8 +3,9 @@
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link th:href="@{/CSS/customStyle.css}" rel="stylesheet" />
-<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script type="text/javascript" src="../static/javascript/sidebar.js" th:src="@{/javascript/sidebar.js}"></script>
+<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 <head>
     <meta charset="UTF-8">
     <title>Vrste uređaja</title>
@@ -33,11 +34,12 @@
     <a th:href="@{/lokacija/all}" class="w3-bar-item w3-button">Lokacije</a>
     <a th:href="@{/dobavljac/all}" class="w3-bar-item w3-button">Dobavljači</a>
     <a th:href="@{/korisnik/all}" class="w3-bar-item w3-button">Korisnici</a>
+    <a th:href="@{/inventar/all}" class="w3-bar-item w3-button">Inventar</a>
 </div>
 <button id="openNav" class="w3-button w3-xlarge" onclick="w3_open()">&#9776;</button>
 <h1 class="w3-padding w3-center w3-opacity w3-xxxlarge" style="text-shadow:1px 1px 0 #444"><b>Vrste uređaja</b></h1>
 <div class="w3-padding">
-    <a th:href="@{/vrstaUredaja/addNew}" class="w3-button w3-gray w3-large w3-hover-green w3-cell-middle"><i class="material-icons">add_circle</i> Nova vrsta uređaja</a>
+    <a th:href="@{/vrstaUredaja/addNew}" class="button-add"><i class="material-icons">add_circle</i> Nova vrsta uređaja</a>
 </div>
 <form class="w3-container" th:action="@{/vrstaUredaja/find}" method="get">
     <input type="text" id="nazivVrsteUredaja" name="nazivVrsteUredaja" placeholder="Pretraži po nazivu" required
@@ -60,17 +62,36 @@
         <tr th:each="vrstaUredaja:${sveVrsteUredaja}">
             <td th:text="${vrstaUredaja.idVrsteUredaja}"></td>
             <td th:text="${vrstaUredaja.nazivVrsteUredaja}"></td>
-            <td> <a th:href="@{/vrstaUredaja/update/{id}(id=${vrstaUredaja.idVrsteUredaja})}" type="button" class="w3-button w3-gray w3-xlarge w3-hover-orange"><i class='fas fa-edit'></i></a></td>
-            <td> <a style="font-size:128px" th:href="@{/vrstaUredaja/delete/{id}(id=${vrstaUredaja.idVrsteUredaja})}" class="w3-button w3-gray w3-xlarge w3-hover-red"><i class="material-icons">remove_circle</i></a></td>
+            <td> <a th:href="@{/vrstaUredaja/update/{id}(id=${vrstaUredaja.idVrsteUredaja})}" type="button" class="button-edit"><i class="fa fa-edit" style="font-size:36px"></i></a></td>
+            <td> <a style="font-size:128px" th:href="@{/vrstaUredaja/delete/{id}(id=${vrstaUredaja.idVrsteUredaja})}" class="button-delete"><i class="material-icons">remove_circle</i></a></td>
         </tr>
         </tbody>
     </table>
+    <button id="scrollToTopBtn" title="Go to top" class="button-toTop">Na početak</button>
 </div>
 <script>
     function hidediv(){
         document.getElementById("error-message").style.visibility="hidden";
     }
     setTimeout("hidediv()",5000);
+</script>
+<script>
+    var scrollToTopBtn = document.getElementById("scrollToTopBtn");
+
+    // Show the button when user scrolls down 20px from the top of the document
+    window.onscroll = function() {
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            scrollToTopBtn.style.display = "block";
+        } else {
+            scrollToTopBtn.style.display = "none";
+        }
+    };
+
+    // Scroll to the top of the document when the button is clicked
+    scrollToTopBtn.onclick = function() {
+        document.body.scrollTop = 0; // For Safari
+        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE, and Opera
+    };
 </script>
 </body>
 </html>

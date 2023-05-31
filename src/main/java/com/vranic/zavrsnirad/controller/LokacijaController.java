@@ -3,7 +3,6 @@ package com.vranic.zavrsnirad.controller;
 import com.vranic.zavrsnirad.model.Lokacija;
 import com.vranic.zavrsnirad.service.LokacijaService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
