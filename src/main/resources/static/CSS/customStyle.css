@@ -12,6 +12,15 @@ th, td {
     color: red;
 }
 
+.div-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 20px;
+}
+
 .button-30 {
     align-items: center;
     appearance: none;
