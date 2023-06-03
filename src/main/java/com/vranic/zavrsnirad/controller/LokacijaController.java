@@ -108,22 +108,37 @@ public class LokacijaController {
         // Open the document
         document.open();
 
-//        // Create the header text
-//        Phrase headerText = new Phrase("Izvještaj o lokacijama", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14));
-//
-//        // Create the header paragraph
-//        Paragraph header = new Paragraph(headerText);
-//        document.add(header);
+        // Set the font for Croatian characters
+        Font croatianFont = FontFactory.getFont("/static/fonts/arial.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+        String imagePath2 = "static/images/Aitac Logo Blue Background HiRes.jpg"; // Relative path to the image file
+        Resource resource2 = new ClassPathResource(imagePath2);
+        Image image2 = Image.getInstance(resource2.getURL());
+        float desiredWidthInCm2 = 5f;
+        float desiredHeightInCm2 = 2f;
+
+        // Convert centimeters to points
+        float desiredWidthInPoints2 = desiredWidthInCm2 * 72 / 2.54f;
+        float desiredHeightInPoints2 = desiredHeightInCm2 * 72 / 2.54f;
+
+        // Set the desired width and height of the image in points
+        float desiredWidth2 = desiredWidthInPoints2;
+        float desiredHeight2 = desiredHeightInPoints2;
+        image2.scaleToFit(desiredWidth2, desiredHeight2);
+        float pageWidth = document.getPageSize().getWidth();
+        float y2 = document.getPageSize().getHeight() - image2.getScaledHeight() - 0.5f * 72 / 2.54f; // Position from the bottom
+        image2.setAbsolutePosition(0.5f * 72 / 2.54f, y2);
+        document.add(image2);
+
         Paragraph header = new Paragraph();
-        Phrase headerPhrase = new Phrase("Izvještaj o lokacijama");
-        Font boldFont = new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD);
-        headerPhrase.setFont(boldFont);
+        Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 15, Font.BOLD);
+        Phrase headerPhrase = new Phrase("IZVJEŠTAJ O LOKACIJAMA", boldFont);
+//        Phrase headerPhrase = new Phrase("Izvještaj o lokacijama");
+//        headerPhrase.setFont(croatianFontBold);
         header.add(headerPhrase);
         header.setAlignment(Element.ALIGN_CENTER);
         header.setSpacingAfter(20); // Adjust the value as per your requirement
         document.add(header);
-        // Set the font for Croatian characters
-        Font croatianFont = FontFactory.getFont("/static/fonts/arial.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+
 
         // Create a table with 2 columns
         PdfPTable table = new PdfPTable(2);
@@ -167,15 +182,34 @@ public class LokacijaController {
         // Add the table to the document
         document.add(table);
 
-        String imagePath = "static/images/AITAC values challenges solutions (1).png"; // Relative path to the image file
+        String imagePath = "static/images/AitacLine.png"; // Relative path to the image file
         Resource resource = new ClassPathResource(imagePath);
         Image image = Image.getInstance(resource.getURL());
-        // Set the desired width and height of the image in points (1 point = 1/72 inch)
-        float desiredWidth = 200f;
-        float desiredHeight = 100f;
-        image.scaleToFit(desiredWidth, desiredHeight);
-        document.add(image);
+//        // Set the desired width and height of the image in points (1 point = 1/72 inch)
+//        float desiredWidth = 200f;
+//        float desiredHeight = 100f;
+        // Set the desired width and height of the image in centimeters
+        float desiredWidthInCm = 17f;
+        float desiredHeightInCm = 7f;
 
+        // Convert centimeters to points
+        float desiredWidthInPoints = desiredWidthInCm * 72 / 2.54f;
+        float desiredHeightInPoints = desiredHeightInCm * 72 / 2.54f;
+
+        // Set the desired width and height of the image in points
+        float desiredWidth = desiredWidthInPoints;
+        float desiredHeight = desiredHeightInPoints;
+        image.scaleToFit(desiredWidth, desiredHeight);
+        // Get the page dimensions
+//        float pageWidth = document.getPageSize().getWidth();
+        float pageHeight = document.getPageSize().getHeight();
+
+        // Calculate the coordinates to position the image at the bottom
+        float x = (pageWidth - desiredWidth) / 2; // Centered horizontally
+        float y = image.getScaledHeight() + document.bottomMargin(); // Position from the bottom
+
+        image.setAbsolutePosition(x, y);
+        document.add(image);
         // Close the document
         document.close();
     }
