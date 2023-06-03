@@ -185,7 +185,7 @@ public class LokacijaController {
         // Add the table to the document
         document.add(table);
 
-        //Adding another image and setting its size and pozition
+        //Adding another image and setting its size and position
         String imagePath = "static/images/AitacLine.png"; // Relative path to the image file
         Resource resource = new ClassPathResource(imagePath);
         Image image = Image.getInstance(resource.getURL());
