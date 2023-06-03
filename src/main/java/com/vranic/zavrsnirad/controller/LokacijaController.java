@@ -97,7 +97,7 @@ public class LokacijaController {
     public void generatePDF(HttpServletResponse response) throws IOException, DocumentException {
         // Set the content type and attachment header
         response.setContentType("application/pdf");
-        response.setHeader("Content-Disposition", "attachment; filename=\"lokacije.pdf\"");
+        response.setHeader("Content-Disposition", "attachment; filename=\"lokacije-izvjestaj.pdf\"");
 
         // Create a new PDF document
         Document document = new Document(PageSize.A4);
@@ -132,13 +132,10 @@ public class LokacijaController {
         Paragraph header = new Paragraph();
         Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 15, Font.BOLD);
         Phrase headerPhrase = new Phrase("IZVJEŠTAJ O LOKACIJAMA", boldFont);
-//        Phrase headerPhrase = new Phrase("Izvještaj o lokacijama");
-//        headerPhrase.setFont(croatianFontBold);
         header.add(headerPhrase);
         header.setAlignment(Element.ALIGN_CENTER);
         header.setSpacingAfter(20); // Adjust the value as per your requirement
         document.add(header);
-
 
         // Create a table with 2 columns
         PdfPTable table = new PdfPTable(2);
@@ -163,10 +160,6 @@ public class LokacijaController {
         table.addCell(headerCell);
         headerCell.setPhrase(new Phrase("Naziv lokacije", headerFont));
         table.addCell(headerCell);
-//        headerCell.setPhrase(new Phrase("", headerFont));
-//        table.addCell(headerCell);
-//        headerCell.setPhrase(new Phrase("", headerFont));
-//        table.addCell(headerCell);
 
         // Get the list of Lokacija objects from your service
         List<Lokacija> lokacije = lokacijaService.getAllLokacija();
@@ -185,9 +178,7 @@ public class LokacijaController {
         String imagePath = "static/images/AitacLine.png"; // Relative path to the image file
         Resource resource = new ClassPathResource(imagePath);
         Image image = Image.getInstance(resource.getURL());
-//        // Set the desired width and height of the image in points (1 point = 1/72 inch)
-//        float desiredWidth = 200f;
-//        float desiredHeight = 100f;
+
         // Set the desired width and height of the image in centimeters
         float desiredWidthInCm = 17f;
         float desiredHeightInCm = 7f;
@@ -200,9 +191,6 @@ public class LokacijaController {
         float desiredWidth = desiredWidthInPoints;
         float desiredHeight = desiredHeightInPoints;
         image.scaleToFit(desiredWidth, desiredHeight);
-        // Get the page dimensions
-//        float pageWidth = document.getPageSize().getWidth();
-        float pageHeight = document.getPageSize().getHeight();
 
         // Calculate the coordinates to position the image at the bottom
         float x = (pageWidth - desiredWidth) / 2; // Centered horizontally
@@ -213,6 +201,4 @@ public class LokacijaController {
         // Close the document
         document.close();
     }
-
-
 }
