@@ -171,7 +171,7 @@ public class LokacijaController {
         headerCell.setPhrase(new Phrase("Naziv lokacije", headerFont));
         table.addCell(headerCell);
 
-        // Get the list of Lokacija objects from your service
+        // Get the list of Lokacija objects from service
         List<Lokacija> lokacije = lokacijaService.getAllLokacija();
 
         // Add data cells to the table

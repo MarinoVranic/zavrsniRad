@@ -174,7 +174,7 @@ public class DobavljacController {
         headerCell.setPhrase(new Phrase("Naziv dobavljača", headerFont));
         table.addCell(headerCell);
 
-        // Get the list of Dobavljac objects from your service
+        // Get the list of Dobavljac objects from service
         List<Dobavljac> dobavljaci = dobavljacService.getAllDobavljaci();
 
         // Add data cells to the table

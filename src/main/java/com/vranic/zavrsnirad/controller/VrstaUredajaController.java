@@ -172,7 +172,7 @@ public class VrstaUredajaController {
         headerCell.setPhrase(new Phrase("Naziv vrste uređaja", headerFont));
         table.addCell(headerCell);
 
-        // Get the list of Vrsta uredaja objects from your service
+        // Get the list of Vrsta uredaja objects from service
         List<VrstaUredaja> vrsteUredaja = vrstaUredajaService.getAllVrstaUredaja();
 
         // Add data cells to the table
