@@ -21,6 +21,15 @@ th, td {
     padding-bottom: 20px;
 }
 
+.button-group {
+    display: flex;
+    align-items: flex-start;
+}
+
+.button-group > a {
+    margin-left: 10px;
+}
+
 .button-30 {
     align-items: center;
     appearance: none;

@@ -307,12 +307,14 @@ public class KorisnikController {
         String arialBold = "/static/fonts/arialbd.ttf";
         String arialNormal = "/static/fonts/arial.ttf";
         String arialBoldItalic = "/static/fonts/arialbi.ttf";
+        String arialItalic = "/static/fonts/ariali.ttf";
 
         // Set the font for Croatian characters
         // Create the font using BaseFont.createFont
         BaseFont arialBoldFont = BaseFont.createFont(arialBold, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
         BaseFont arialBoldItalicFont = BaseFont.createFont(arialBoldItalic, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
         Font croatianFont = FontFactory.getFont(arialNormal, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+        BaseFont arialItalicFont = BaseFont.createFont(arialItalic, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 
         // Set image and it's size
         String imagePath2 = "static/images/Aitac Logo Blue Background HiRes.jpg"; // Relative path to the image file
@@ -427,6 +429,16 @@ public class KorisnikController {
 
         // Add the table to the document
         document.add(table);
+
+        Paragraph bottomDate = new Paragraph();
+        LocalDate today = LocalDate.now();
+        String todayDate = today.toString();
+        Font dateFont = new Font(arialBoldItalicFont, 18, Font.ITALIC);
+        Phrase datePhrase = new Phrase(todayDate, dateFont);
+        bottomDate.add(datePhrase);
+        bottomDate.setAlignment(Element.ALIGN_LEFT);
+        document.add(bottomDate);
+
 
         //Adding another image and setting its size and position
         String imagePath = "static/images/AitacLine.png"; // Relative path to the image file

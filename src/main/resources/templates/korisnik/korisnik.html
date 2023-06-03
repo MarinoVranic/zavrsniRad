@@ -53,8 +53,10 @@
 </div>
 <div class="div-container">
   <a th:href="@{/korisnik/addNew}" class="button-add"><i class="material-icons">add_circle</i> Novi korisnik</a>
-  <a th:href="@{/korisnik/generatePDFaktivni}" class="button-30">Izvještaj aktivnih <i class="material-icons">picture_as_pdf</i></a>
-  <a th:href="@{/korisnik/generatePDFneaktivni}" class="button-30">Izvještaj neatkivnih <i class="material-icons">picture_as_pdf</i></a>
+  <div class="button-group">
+    <a th:href="@{/korisnik/generatePDFaktivni}" class="button-30">Izvještaj aktivnih <i class="material-icons">picture_as_pdf</i></a>
+    <a th:href="@{/korisnik/generatePDFneaktivni}" class="button-30">Izvještaj neaktivnih <i class="material-icons">picture_as_pdf</i></a>
+  </div>
 </div>
 <form class="w3-container w3-padding" th:action="@{/korisnik/find}" method="get">
   <label for="lastName"></label>
@@ -103,7 +105,10 @@
     <td style="width: 120px" th:text="${korisnik.emailCreated}"></td>
     <td  th:text="${korisnik.emailDisabled}"></td>
     <td  th:text="${korisnik.komentar}"></td>
-    <td> <a style="font-size:15px" th:href="@{/korisnik/deactivate/{username}(username=${korisnik.username})}" type="button" class="button-deactivate"><i class="fa fa-user-times" style="font-size:36px"></i></a></td>
+    <td>
+      <a th:if="${korisnik.userDisabled == null}"
+         style="font-size:15px" th:href="@{/korisnik/deactivate/{username}(username=${korisnik.username})}" type="button" class="button-deactivate"><i class="fa fa-user-times" style="font-size:36px"></i></a>
+    </td>
     <td> <a th:href="@{/korisnik/update/{username}(username=${korisnik.username})}" type="button" class="button-edit"><i class="fa fa-edit" style="font-size:24px"></i></a></td>
     <td> <a style="font-size:128px" th:href="@{/korisnik/delete/{username}(username=${korisnik.username})}" class="button-delete"><i class="material-icons">remove_circle</i></a></td>
   </tr>
