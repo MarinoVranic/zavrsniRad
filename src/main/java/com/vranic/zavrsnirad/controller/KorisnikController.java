@@ -168,7 +168,7 @@ public class KorisnikController {
 
         Paragraph header = new Paragraph();
         Font boldFont = new Font(arialBoldItalicFont, 18, Font.BOLD);
-        Phrase headerPhrase = new Phrase("IZVJEŠTAJ O KORISNICIMA", boldFont);
+        Phrase headerPhrase = new Phrase("IZVJEŠTAJ O AKTIVNIM KORISNICIMA", boldFont);
         header.add(headerPhrase);
         header.setAlignment(Element.ALIGN_CENTER);
         header.setSpacingAfter(20); // Adjust the value as per your requirement
@@ -336,7 +336,7 @@ public class KorisnikController {
 
         Paragraph header = new Paragraph();
         Font boldFont = new Font(arialBoldItalicFont, 18, Font.BOLD);
-        Phrase headerPhrase = new Phrase("IZVJEŠTAJ O KORISNICIMA", boldFont);
+        Phrase headerPhrase = new Phrase("IZVJEŠTAJ O NEAKTIVNIM KORISNICIMA", boldFont);
         header.add(headerPhrase);
         header.setAlignment(Element.ALIGN_CENTER);
         header.setSpacingAfter(20); // Adjust the value as per your requirement
