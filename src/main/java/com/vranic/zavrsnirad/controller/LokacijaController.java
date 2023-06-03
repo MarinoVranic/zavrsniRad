@@ -108,8 +108,18 @@ public class LokacijaController {
         // Open the document
         document.open();
 
+        //Paths to arial fonts
+        String arialBold = "/static/fonts/arialbd.ttf";
+        String arialNormal = "/static/fonts/arial.ttf";
+        String arialBoldItalic = "/static/fonts/arialbi.ttf";
+
         // Set the font for Croatian characters
-        Font croatianFont = FontFactory.getFont("/static/fonts/arial.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+        // Create the font using BaseFont.createFont
+        BaseFont arialBoldFont = BaseFont.createFont(arialBold, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+        BaseFont arialBoldItalicFont = BaseFont.createFont(arialBoldItalic, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+        Font croatianFont = FontFactory.getFont(arialNormal, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+
+        // Set image and it's size
         String imagePath2 = "static/images/Aitac Logo Blue Background HiRes.jpg"; // Relative path to the image file
         Resource resource2 = new ClassPathResource(imagePath2);
         Image image2 = Image.getInstance(resource2.getURL());
@@ -130,7 +140,7 @@ public class LokacijaController {
         document.add(image2);
 
         Paragraph header = new Paragraph();
-        Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 15, Font.BOLD);
+        Font boldFont = new Font(arialBoldItalicFont, 18, Font.BOLD);
         Phrase headerPhrase = new Phrase("IZVJEŠTAJ O LOKACIJAMA", boldFont);
         header.add(headerPhrase);
         header.setAlignment(Element.ALIGN_CENTER);
@@ -148,7 +158,7 @@ public class LokacijaController {
         dataCell.setHorizontalAlignment(Element.ALIGN_CENTER);
 
         // Set table header cell styles
-        Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
+        Font headerFont = new Font(arialBoldFont, 12, Font.BOLD);
         headerFont.setColor(BaseColor.WHITE);
         PdfPCell headerCell = new PdfPCell();
         headerCell.setBackgroundColor(BaseColor.DARK_GRAY);
@@ -175,6 +185,7 @@ public class LokacijaController {
         // Add the table to the document
         document.add(table);
 
+        //Adding another image and setting its size and pozition
         String imagePath = "static/images/AitacLine.png"; // Relative path to the image file
         Resource resource = new ClassPathResource(imagePath);
         Image image = Image.getInstance(resource.getURL());
