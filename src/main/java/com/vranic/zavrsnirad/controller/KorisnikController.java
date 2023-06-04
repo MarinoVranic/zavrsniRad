@@ -99,12 +99,12 @@ public class KorisnikController {
     @GetMapping("deactivate/{username}")
     @Transactional
     public String deactivateKorisnik(@PathVariable(value = "username")String username){
-        Korisnik korisnik = korisnikService.getKorisnikById(username);
+//        Korisnik korisnik = korisnikService.getKorisnikById(username);
         LocalDate today = LocalDate.now();
         korisnikService.deactivateKorisnik(today, today, username);
-        System.out.println(korisnik.getUserDisabled());
-        System.out.println(korisnik.getEmailDisabled());
-        System.out.println(username);
+//        System.out.println(korisnik.getUserDisabled());
+//        System.out.println(korisnik.getEmailDisabled());
+//        System.out.println(username);
         return "redirect:/korisnik/all";
     }
 
@@ -173,6 +173,17 @@ public class KorisnikController {
         header.setAlignment(Element.ALIGN_CENTER);
         header.setSpacingAfter(20); // Adjust the value as per your requirement
         document.add(header);
+
+        //Adding date of the report
+        Paragraph printDate = new Paragraph();
+        LocalDate today = LocalDate.now();
+        String todayDate = "Datum izvještaja: " + today;
+        Font dateFont = new Font(arialBoldItalicFont, 10, Font.ITALIC);
+        Phrase datePhrase = new Phrase(todayDate, dateFont);
+        printDate.add(datePhrase);
+        printDate.setAlignment(Element.ALIGN_LEFT);
+        printDate.setSpacingAfter(5);
+        document.add(printDate);
 
         // Create a table with 14 columns
         PdfPTable table = new PdfPTable(14);
@@ -344,6 +355,17 @@ public class KorisnikController {
         header.setSpacingAfter(20); // Adjust the value as per your requirement
         document.add(header);
 
+        //Adding date of the report
+        Paragraph printDate = new Paragraph();
+        LocalDate today = LocalDate.now();
+        String todayDate = "Datum izvještaja: " + today;
+        Font dateFont = new Font(arialBoldItalicFont, 10, Font.ITALIC);
+        Phrase datePhrase = new Phrase(todayDate, dateFont);
+        printDate.add(datePhrase);
+        printDate.setAlignment(Element.ALIGN_LEFT);
+        printDate.setSpacingAfter(5);
+        document.add(printDate);
+
         // Create a table with 14 columns
         PdfPTable table = new PdfPTable(14);
 
@@ -429,16 +451,6 @@ public class KorisnikController {
 
         // Add the table to the document
         document.add(table);
-
-        Paragraph bottomDate = new Paragraph();
-        LocalDate today = LocalDate.now();
-        String todayDate = today.toString();
-        Font dateFont = new Font(arialBoldItalicFont, 18, Font.ITALIC);
-        Phrase datePhrase = new Phrase(todayDate, dateFont);
-        bottomDate.add(datePhrase);
-        bottomDate.setAlignment(Element.ALIGN_LEFT);
-        document.add(bottomDate);
-
 
         //Adding another image and setting its size and position
         String imagePath = "static/images/AitacLine.png"; // Relative path to the image file

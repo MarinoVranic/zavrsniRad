@@ -279,6 +279,17 @@ public class InventarController {
         header.setSpacingAfter(20); // Adjust the value as per your requirement
         document.add(header);
 
+        //Adding date of the report
+        Paragraph printDate = new Paragraph();
+        LocalDate today = LocalDate.now();
+        String todayDate = "Datum izvještaja: " + today;
+        Font dateFont = new Font(arialBoldItalicFont, 10, Font.ITALIC);
+        Phrase datePhrase = new Phrase(todayDate, dateFont);
+        printDate.add(datePhrase);
+        printDate.setAlignment(Element.ALIGN_LEFT);
+        printDate.setSpacingAfter(5);
+        document.add(printDate);
+
         // Create a table with 15 columns
         PdfPTable table = new PdfPTable(15);
 
