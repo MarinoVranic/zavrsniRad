@@ -8,19 +8,25 @@
 </head>
 <body>
 <div>
-    <header class="w3-display-container w3-display-topmiddle">
-        <h1 style="text-align: center">EVIDENCIJA IT OPREME I KORISNIKA</h1>
+    <header class="w3-display-container w3-display-topmiddle" style="max-width: 100%;">
+        <div class="header-container">
+            <h1>EVIDENCIJA IT OPREME I KORISNIKA</h1>
+            <img style="width: 70%" src="../images/Aitac Logo Blue Background HiRes.jpg">
+        </div>
     </header>
     <div class="w3-container w3-display-middle">
-        <button class="button-30" role="button" onclick="window.location.href='/lokacija/all'">Lokacije</button>
-        <button class="button-30" role="button" onclick="window.location.href='/dobavljac/all'">Dobavljači</button>
-        <button class="button-30" role="button" onclick="window.location.href='/vrstaUredaja/all'">Vrste uređaja</button>
-        <button class="button-30" role="button" onclick="window.location.href='/racun/all'">Računi</button>
-        <button class="button-30" role="button" onclick="window.location.href='/korisnik/all'">Korisnici</button>
-        <button class="button-30" role="button" onclick="window.location.href='/inventar/all'">Inventar</button>
+        <div class="button-row button-container">
+            <button class="button-mainMenu" role="button" onclick="window.location.href='/korisnik/all'">Korisnici</button>
+            <button class="button-mainMenu" role="button" onclick="window.location.href='/inventar/all'">Inventar</button>
+        </div>
+        <div class="button-row button-container">
+            <button class="button-mainMenu" role="button" onclick="window.location.href='/lokacija/all'">Lokacije</button>
+            <button class="button-mainMenu" role="button" onclick="window.location.href='/dobavljac/all'">Dobavljači</button>
+            <button class="button-mainMenu" role="button" onclick="window.location.href='/vrstaUredaja/all'">Vrste uređaja</button>
+            <button class="button-mainMenu" role="button" onclick="window.location.href='/racun/all'">Računi</button>
+        </div>
     </div>
 </div>
-
 
 </body>
 </html>

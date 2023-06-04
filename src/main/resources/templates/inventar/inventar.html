@@ -51,7 +51,7 @@
   }
 </style>
 <body>
-<div class="w3-sidebar w3-bar-block w3-border-right" style="display:none" id="mySidebar">
+<div class="w3-sidebar w3-bar-block" style="display:none;z-index:5" id="mySidebar">
   <button onclick="w3_close()" class="w3-bar-item w3-large">Zatvori &times;</button>
   <a th:href="@{/index}" class="w3-bar-item w3-button">Glavni izbornik</a>
   <a th:href="@{/racun/all}" class="w3-bar-item w3-button">Računi</a>
@@ -59,8 +59,14 @@
   <a th:href="@{/vrstaUredaja/all}" class="w3-bar-item w3-button">Vrste uređaja</a>
   <a th:href="@{/lokacija/all}" class="w3-bar-item w3-button">Lokacije</a>
   <a th:href="@{/korisnik/all}" class="w3-bar-item w3-button">Korisnici</a>
+
+  <img src="../images/A.jpg" alt="Logo" style="position: absolute; bottom: 10px; left: 10px; width: 175px;height: 175px">
 </div>
-<div><button id="openNav" class="w3-button w3-xlarge" onclick="w3_open()">&#9776;</button>
+<div class="w3-overlay" onclick="w3_close()" style="cursor:pointer" id="myOverlay"></div>
+<div>
+  <button id="openNav" class="w3-button w3-xlarge" onclick="w3_open()">&#9776;</button>
+  <img src="../images/AITAC values challenges solutions (1).png" class="centered-image">
+</div>
   <h1 class="w3-padding w3-center w3-opacity w3-xxxlarge" style="text-shadow:1px 1px 0 #444"><b>IT oprema</b></h1>
 </div>
 <div class="div-container">
