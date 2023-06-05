@@ -35,6 +35,11 @@ th, td {
     color: red;
 }
 
+.centered-image {
+    display: block;
+    margin: 0 auto;
+}
+
 .div-container{
     display: flex;
     justify-content: space-between;
