@@ -22,7 +22,7 @@
     <p class="w3-center">
       <label class="w3-text-dark-grey" for="username"><b>Username</b><br></label>
       <label id="error-message" class="error alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>
-      <input class="w3-input w3-border w3-round w3-center" id="username" name="username" type="text" th:field="*{username}" required
+      <input class="w3-input w3-border w3-round w3-center" id="username" name="username" type="text" th:field="*{username}" placeholder="Username se automatski kreira upisivanjem imena i prezimena, može se prema potrebi izmjeniti." required
              onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Ispunite polje za username!')"></p>
     <p class="w3-half">
       <label class="w3-text-dark-grey" for="firstName"><b>Ime</b><br></label>
