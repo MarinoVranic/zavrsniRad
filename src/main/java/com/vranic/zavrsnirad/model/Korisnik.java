@@ -20,14 +20,15 @@ import java.time.LocalDate;
 public class Korisnik {
     @Id
     private String username;
-    @Pattern(regexp = "^[a-zA-ZčćžšđČĆŽŠĐ -]+$", message = "Ime ne smije sadržavati broj!")
+    @Pattern(regexp = "^[a-zA-ZčćžšđČĆŽŠĐ -]+$", message = "Ime ne smije sadržavati broj niti specijalne znakove!")
     private String firstName;
-    @Pattern(regexp = "^[a-zA-ZčćžšđČĆŽŠĐ -]+$", message = "Prezime ne smije sadržavati broj!")
+    @Pattern(regexp = "^[a-zA-ZčćžšđČĆŽŠĐ -]+$", message = "Prezime ne smije sadržavati broj niti specijalne znakove!")
     private String lastName;
     private String status;
     private String accountType;
     private String subcontractor;
-    private Integer godina;
+    @Pattern(regexp = "^[0-9]+$", message = "Godina zaposlenja smije sadržavati samo brojeve!")
+    private String godina;
     private String email;
     private String initialPassword;
     @DateTimeFormat(pattern = "yyyy-MM-dd")

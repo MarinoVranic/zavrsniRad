@@ -48,6 +48,7 @@
       <p>
       <p class="w3-half">
         <label class="w3-text-dark-grey" for="godina"><b>Godina zaposlenja</b></label>
+        <span class="error" th:if="${#fields.hasErrors('godina')}" th:errors="*{godina}">Godina error</span>
         <input class="w3-input w3-border w3-round w3-center" id="godina" name="godina" type="text" th:field="*{godina}" required
                onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Ispunite polje za godinu zaposlenja!')"></p>
       <p>
