@@ -6,7 +6,6 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.vranic.zavrsnirad.model.Korisnik;
-import com.vranic.zavrsnirad.model.Lokacija;
 import com.vranic.zavrsnirad.service.KorisnikService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
@@ -96,7 +95,6 @@ public class KorisnikController {
     @PostMapping("/save")
     public String saveKorisnik(@ModelAttribute("korisnik") @Valid Korisnik korisnik, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
-//            System.out.println(bindingResult);
             return "korisnik/updateKorisnik";
         }
             korisnikService.save(korisnik);
@@ -106,12 +104,7 @@ public class KorisnikController {
     @GetMapping("deactivate/{username}")
     @Transactional
     public String deactivateKorisnik(@PathVariable(value = "username")String username){
-//        Korisnik korisnik = korisnikService.getKorisnikById(username);
-
         korisnikService.deactivateKorisnik(today, today, username);
-//        System.out.println(korisnik.getUserDisabled());
-//        System.out.println(korisnik.getEmailDisabled());
-//        System.out.println(username);
         return "redirect:/korisnik/all";
     }
 

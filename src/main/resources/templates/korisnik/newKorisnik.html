@@ -43,7 +43,7 @@
         </select>
       </p>
       <p class="w3-half">
-        <label class="w3-text-dark-grey" for="status"><b>Status</b></label>
+        <label class="w3-text-dark-grey" for="status"><b>Vrsta korisnika</b></label>
         <select id="accountType" class="w3-input w3-border w3-round w3-center" th:field="*{accountType}" required
                 onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Odaberite vrstu korisnika!')">
           <option th:value="'zaposlenik'" th:text="Zaposlenik"></option>

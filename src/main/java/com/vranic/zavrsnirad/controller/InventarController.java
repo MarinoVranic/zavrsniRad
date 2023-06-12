@@ -42,6 +42,8 @@ public class InventarController {
     @Autowired
     private RacunService racunService;
 
+    public LocalDate today = LocalDate.now();
+
     @GetMapping("/all")
     public String getAllInventar(Model model) {
         model.addAttribute("savInventar", inventarService.getAllInventar());
@@ -178,7 +180,6 @@ public class InventarController {
     @PostMapping("/saveZaduzenje")
     @Transactional
     public String zaduzenjeInventara(@ModelAttribute("inventar") Inventar inventar) {
-        LocalDate today = LocalDate.now();
         Integer idVrste = inventar.getVrstaUredaja().getIdVrsteUredaja().intValue();
         if(idVrste.equals(1)||idVrste.equals(6)){
             //split string nazivUredaja by one or more spaces and -
@@ -198,7 +199,6 @@ public class InventarController {
     @GetMapping("razduzi/{inventarniBroj}")
     @Transactional
     public String razduziInventar(@PathVariable(value = "inventarniBroj") String inventarniBroj){
-        LocalDate today = LocalDate.now();
         inventarService.razduziInventar(today, inventarniBroj);
         return "redirect:/inventar/all";
     }
@@ -281,7 +281,6 @@ public class InventarController {
 
         //Adding date of the report
         Paragraph printDate = new Paragraph();
-        LocalDate today = LocalDate.now();
         String todayDate = "Datum izvještaja: " + today;
         Font dateFont = new Font(arialBoldItalicFont, 10, Font.ITALIC);
         Phrase datePhrase = new Phrase(todayDate, dateFont);
