@@ -75,9 +75,7 @@
       <p>
       <p class="w3-half">
         <label class="w3-text-dark-grey" for="userCreated"><b>Korisnik aktiviran</b><br></label>
-        <span class="error" th:if="${#fields.hasErrors('userCreated')}" th:errors="*{userCreated}">E-mail aktiviran error</span>
-        <input class="w3-input w3-border w3-round w3-center" id="userCreated" name="userCreated" type="date" th:field="*{userCreated}" required
-               onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Ispunite polje kada je korisnik aktiviran!')"></p>
+        <input class="w3-input w3-border w3-round w3-center" id="userCreated" name="userCreated" type="date" th:field="*{userCreated}"></p>
       <p>
       <p class="w3-half">
         <label class="w3-text-dark-grey" for="userDisabled"><b>Korisnik deaktiviran</b></label>
@@ -85,9 +83,7 @@
       <p>
       <p class="w3-half">
         <label class="w3-text-dark-grey" for="emailCreated"><b>E-mail aktiviran</b></label>
-      <span class="error" th:if="${#fields.hasErrors('emailCreated')}" th:errors="*{emailCreated}">E-mail aktiviran error</span>
-        <input class="w3-input w3-border w3-round w3-center" id="emailCreated" name="emailCreated" type="date" th:field="*{emailCreated}" required
-               onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Ispunite polje kada je e-mail aktiviran!')"></p>
+        <input class="w3-input w3-border w3-round w3-center" id="emailCreated" name="emailCreated" type="date" th:field="*{emailCreated}"></p>
       <p>
       <p class="w3-half">
         <label class="w3-text-dark-grey" for="emailDisabled"><b>E-mail deaktiviran</b></label>
