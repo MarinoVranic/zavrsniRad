@@ -21,7 +21,7 @@
       <label class="w3-text-dark-grey" for="idVrsteUredaja"><b>ID vrste uređaja</b><br></label>
       <input class="w3-input w3-border w3-round w3-center" id="idVrsteUredaja" name="idVrsteUredaja" type="text" th:field="*{idVrsteUredaja}" placeholder="Nepotreban unos, sustav sam upisuje!" readonly></p>
     <p class="w3-center">
-      <label class="w3-text-dark-grey" for="nazivVrsteUredaja"><b>Ime</b><br></label>
+      <label class="w3-text-dark-grey" for="nazivVrsteUredaja"><b>Naziv vrste uređaja</b><br></label>
       <label id="error-message" class="error alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>
       <input class="w3-input w3-border w3-round w3-center" id="nazivVrsteUredaja" name="nazivVrsteUredaja" type="text" th:field="*{nazivVrsteUredaja}" required
              onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Ispunite polje za naziv vrste uređaja!')"></p>
