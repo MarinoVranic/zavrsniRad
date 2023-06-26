@@ -83,6 +83,7 @@ public class KorisnikController {
             model.addAttribute("error", "Korisničko ime već postoji!");
             return "korisnik/newKorisnik";
         } else if (korisnik.getUserCreated()!=today) {
+            System.out.println(korisnik.getUserCreated());;
             korisnik.setUserCreated(today);
             korisnik.setEmailCreated(today);
             korisnikService.save(korisnik);

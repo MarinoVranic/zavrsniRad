@@ -32,7 +32,6 @@ public class Korisnik {
     private String email;
     private String initialPassword;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @NotNull(message = "Datum kreiranja korisnika ne smije biti prazan!")
     private LocalDate userCreated;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate userDisabled;
