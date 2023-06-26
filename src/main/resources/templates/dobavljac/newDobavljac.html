@@ -18,10 +18,10 @@
   <form class="w3-container w3-light-grey" action="#" th:action="@{/dobavljac/addNew}" th:object="${dobavljac}" method="POST">
     <div class="w3-row-padding">
     <p class="w3-center">
-      <label class="w3-text-dark-grey" for="idDobavljaca"><b>ID lokacije</b><br></label>
+      <label class="w3-text-dark-grey" for="idDobavljaca"><b>ID dobavljača</b><br></label>
       <input class="w3-input w3-border w3-round w3-center" id="idDobavljaca" name="idDobavljaca" type="text" th:field="*{idDobavljaca}" placeholder="Nepotreban unos, sustav sam upisuje!" readonly></p>
     <p class="w3-center">
-      <label class="w3-text-dark-grey" for="nazivDobavljaca"><b>Ime</b><br></label>
+      <label class="w3-text-dark-grey" for="nazivDobavljaca"><b>Naziv dobavljača</b><br></label>
       <label id="error-message" class="error alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>
       <input class="w3-input w3-border w3-round w3-center" id="nazivDobavljaca" name="nazivDobavljaca" type="text" th:field="*{nazivDobavljaca}" required
              onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Ispunite polje za naziv dobavljača!')"></p>
