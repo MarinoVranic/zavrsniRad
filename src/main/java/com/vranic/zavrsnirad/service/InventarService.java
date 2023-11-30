@@ -52,4 +52,8 @@ public class InventarService {
     public List<Inventar> getInventarByLokacija(Long idLokacije){
         return inventarRepository.findAllByLokacija(idLokacije);
     }
+
+    public List<Inventar> getInventarForIT(){
+        return inventarRepository.findAllIT();
+    }
 }

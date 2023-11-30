@@ -8,7 +8,7 @@
 <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 <head>
   <meta charset="UTF-8">
-  <title>Osnovna sredstva</title>
+  <title>IT oprema</title>
 </head>
 <style>
   html{
@@ -59,7 +59,7 @@
   <a th:href="@{/vrstaUredaja/all}" class="w3-bar-item w3-button">Vrste uređaja</a>
   <a th:href="@{/lokacija/all}" class="w3-bar-item w3-button">Lokacije</a>
   <a th:href="@{/korisnik/all}" class="w3-bar-item w3-button">Korisnici</a>
-  <a th:href="@{/inventar/ITall}" class="w3-bar-item w3-button">IT oprema</a>
+  <a th:href="@{/inventar/all}" class="w3-bar-item w3-button">Osnovna sredstva</a>
 
   <img src="../images/A.jpg" alt="Logo" style="position: absolute; bottom: 10px; left: 10px; width: 175px;height: 175px">
 </div>
@@ -68,7 +68,7 @@
   <button id="openNav" class="w3-button w3-xlarge" onclick="w3_open()">&#9776;</button>
   <img src="../images/AITAC values challenges solutions (1).png" class="centered-image">
 </div>
-  <h1 class="w3-padding w3-center w3-opacity w3-xxxlarge" style="text-shadow:1px 1px 0 #444"><b>Osnovna sredstva</b></h1>
+  <h1 class="w3-padding w3-center w3-opacity w3-xxxlarge" style="text-shadow:1px 1px 0 #444"><b>IT oprema</b></h1>
 </div>
 <div class="div-container">
   <a th:href="@{/inventar/addNew}" class="button-add"><i class="material-icons">add_circle</i> Novi inventar</a>
@@ -105,9 +105,9 @@
   <thead>
   <tr>
     <th style="width: 45px" class="w3-dark-grey">Inventarni broj</th>
-    <th class="w3-dark-grey">Naziv osnovnog sredstva</th>
+    <th class="w3-dark-grey">Naziv uređaja</th>
     <th class="w3-dark-grey">Serijski broj</th>
-    <th class="w3-dark-grey">Vrsta osnovnog sredstva<br></th>
+    <th class="w3-dark-grey">Vrsta uređaja<br></th>
     <th class="w3-dark-grey">Hostname</th>
     <th class="w3-dark-grey">Lokacija</th>
     <th class="w3-dark-grey">Username</th>
