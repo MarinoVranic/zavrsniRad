@@ -17,6 +17,10 @@ public class InventuraService {
         return inventuraRepository.findALl();
     }
 
+    public List<Inventura> findInventuraById (Long idInventure){
+        return inventuraRepository.findByIdInventure(idInventure);
+    }
+
     public void save(Inventura inventura){
         inventuraRepository.save(inventura);
     }
@@ -27,5 +31,9 @@ public class InventuraService {
 
     public Inventura getInventuraById(Long idInventure){
         return inventuraRepository.findById(idInventure).orElse(null);
+    }
+
+    public Long checkIfInventuraIsExisting(Long idInventure){
+        return inventuraRepository.checkIfInventuraExists(idInventure);
     }
 }
