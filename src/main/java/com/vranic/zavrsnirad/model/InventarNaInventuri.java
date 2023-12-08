@@ -15,11 +15,13 @@ import java.time.*;
 @NoArgsConstructor
 public class InventarNaInventuri {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long idSkeniranja;
+
     @ManyToOne
     @JoinColumn(name = "Inventarni_broj")
     private Inventar inventar;
 
-    @Id
     @ManyToOne
     @JoinColumn(name = "id_inventure")
     private Inventura inventura;
