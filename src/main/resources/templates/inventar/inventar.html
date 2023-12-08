@@ -110,17 +110,8 @@
     <th class="w3-dark-grey">Naziv osnovnog sredstva</th>
     <th class="w3-dark-grey">Serijski broj</th>
     <th style="width: 150px" class="w3-dark-grey">Vrsta osnovnog sredstva<br></th>
-<!--    <th class="w3-dark-grey">Hostname</th>-->
     <th class="w3-dark-grey">Lokacija</th>
     <th style="width: 200px" class="w3-dark-grey">Osnovno sredstvo zaduženo na</th>
-<!--    <th style="width: 150px" class="w3-dark-grey">LAN MAC</th>-->
-<!--    <th style="width: 150px" class="w3-dark-grey">Wi-Fi MAC</th>-->
-<!--    <th style="width: 120px" class="w3-dark-grey">Datum zaduženja</th>-->
-<!--    <th class="w3-dark-grey">Datum razduženja</th>-->
-<!--    <th style="width: 120px" class="w3-dark-grey">Istek garancije</th>-->
-<!--    <th class="w3-dark-grey">Račun</th>-->
-<!--    <th class="w3-dark-grey">Dobavljač</th>-->
-<!--    <th class="w3-dark-grey">Napomena</th>-->
     <th class="w3-dark-grey"></th>
     <th class="w3-dark-grey"></th>
     <th class="w3-dark-grey"></th>
@@ -132,7 +123,6 @@
     <td  th:text="${inventar.nazivUredaja}"></td>
     <td  th:text="${inventar.serijskiBroj}"></td>
     <td  th:text="${inventar.vrstaUredaja.nazivVrsteUredaja}"></td>
-<!--    <td  th:text="${inventar.hostname}"></td>-->
     <td  th:text="${inventar.lokacija.nazivLokacije}"></td>
     <td><p th:if="${inventar.korisnik != null && inventar.korisnik.username != null}">
       <span th:text="${inventar.korisnik.firstName}"></span>
@@ -140,25 +130,6 @@
     </p>
       <p th:unless="${inventar.korisnik != null && inventar.korisnik.username != null}">
       </p></td>
-<!--    <td style="width: 150px" th:text="${inventar.lanMac}"></td>-->
-<!--    <td  th:text="${inventar.wifiMac}"></td>-->
-<!--    <td style="width: 120px" th:text="${inventar.datumZaduzenja}"></td>-->
-<!--    <td  th:text="${inventar.datumRazduzenja}"></td>-->
-<!--    <td style="width: 120px" th:text="${inventar.warrantyEnding}"></td>-->
-<!--    <td  th:text="${inventar.racun.brojRacuna}"></td>-->
-<!--    <td  th:text="${inventar.dobavljac.nazivDobavljaca}"></td>-->
-<!--    <td  th:text="${inventar.napomena}"></td>-->
-<!--    <td>-->
-<!--      <a th:if="${inventar.korisnik == null || inventar.korisnik.username == null}"-->
-<!--         style="font-size:15px"-->
-<!--         th:href="@{/inventar/zaduzi/{inventarniBroj}(inventarniBroj=${inventar.inventarniBroj})}"-->
-<!--         type="button" class="button-zaduzi">Zaduži</a>-->
-
-<!--      <a th:if="${inventar.korisnik != null && inventar.korisnik.username != null}"-->
-<!--         style="font-size:15px"-->
-<!--         th:href="@{/inventar/razduzi/{inventarniBroj}(inventarniBroj=${inventar.inventarniBroj})}"-->
-<!--         type="button" class="button-zaduzi">Razduži</a>-->
-<!--    </td>-->
     <td> <a th:href="@{/inventar/update/{inventarniBroj}(inventarniBroj=${inventar.inventarniBroj})}" type="button" class="button-edit"><i class="fa fa-edit" style="font-size:24px"></i></a></td>
     <td> <a th:href="@{/inventar/ean13/{inventarniBroj}(inventarniBroj=${inventar.inventarniBroj})}" type="button" class="button-edit"><i class="fa fa-barcode" style="font-size:32px"></i></a></td>
     <td> <a style="font-size:128px" th:href="@{/inventar/delete/{inventarniBroj}(inventarniBroj=${inventar.inventarniBroj})}" class="button-delete"><i class="material-icons">remove_circle</i></a></td>
