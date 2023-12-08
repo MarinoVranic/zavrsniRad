@@ -70,6 +70,42 @@ public class InventarNaInventuriController {
         return "redirect:/provodenjeInventure/all";
     }
 
+    @PostMapping("/scanNew")
+    public String newScan(@RequestParam("inventarniBr") String inventarniBroj, Model model){
+        Integer currentYear = LocalDate.now().getYear();
+        String invBroj = inventarniBroj.substring(8,12);
+        int invBrSaNulama = Integer.parseInt(invBroj);
+        String invBrBezNula = String.valueOf(invBrSaNulama);
+        Inventar inventar = inventarService.getInventarById(invBrBezNula);
+        Inventura inventura = inventuraService.getInventuraById(currentYear.longValue());
+        InventarNaInventuri inventarNaInventuri = new InventarNaInventuri();
+        inventarNaInventuri.setInventar(inventar);
+        if(inventar == null){
+            model.addAttribute("error3", "Skenirani inventar nije zaveden u bazi!");
+            return "inventura/provodenjeInventure";
+        } else if (inventarNaInventuriService.checkIfInventarAlreadyScanned(inventarNaInventuri.getInventar().getInventarniBroj(), currentYear.longValue())!=0) {
+            model.addAttribute("error3", "Inventar je već skeniran!");
+            return "inventura/provodenjeInventure";
+        } else{
+            if(inventura == null) {
+                inventura = new Inventura();
+                inventura.setIdInventure(currentYear.longValue());
+                inventarNaInventuri.setInventura(inventura);
+                inventarNaInventuri.setDatumSkeniranja(LocalDateTime.now());
+                System.out.println(inventar);
+                System.out.println(currentYear.longValue());
+                System.out.println(inventura.getIdInventure());
+                inventarNaInventuriService.save(inventarNaInventuri);
+            }
+            else{
+                inventarNaInventuri.setInventura(inventura);
+                inventarNaInventuri.setDatumSkeniranja(LocalDateTime.now());
+                inventarNaInventuriService.save(inventarNaInventuri);
+            }
+        }
+        return "redirect:/provodenjeInventure/all";
+    }
+
     @GetMapping("delete/{idSkeniranja}")
     public String deleteById(@PathVariable(value = "idSkeniranja")Long idSkeniranja){
         inventarNaInventuriService.deleteById(idSkeniranja);
