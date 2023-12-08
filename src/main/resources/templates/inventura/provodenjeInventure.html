@@ -113,6 +113,8 @@
   <tr>
     <th class="w3-dark-grey">Inventura</th>
     <th class="w3-dark-grey">Skenirani inventar</th>
+    <th class="w3-dark-grey">Naziv inventara</th>
+    <th class="w3-dark-grey">Vrsta inventara</th>
     <th class="w3-dark-grey">Datum skeniranja</th>
     <th style="width: 45px" class="w3-dark-grey"></th>
   </tr>
@@ -121,6 +123,8 @@
   <tr th:each="invNaInv:${savInvNaInventuri}">
     <td  th:text="${invNaInv.inventura.idInventure}"></td>
     <td  th:text="${invNaInv.inventar.inventarniBroj}"></td>
+    <td  th:text="${invNaInv.inventar.nazivUredaja}"></td>
+    <td  th:text="${invNaInv.inventar.vrstaUredaja.nazivVrsteUredaja}"></td>
     <td  th:text="${invNaInv.datumSkeniranja}"></td>
     <td> <a style="font-size:128px" th:href="@{/provodenjeInventure/delete/{idSkeniranja}(idSkeniranja=${invNaInv.idSkeniranja})}" class="button-delete"><i class="material-icons">remove_circle</i></a></td>
   </tr>
