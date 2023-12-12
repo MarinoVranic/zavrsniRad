@@ -95,7 +95,7 @@
         <label for="invBroj"></label>
         <input type="text" id="inventarniBr" name="inventarniBr" placeholder="Skeniraj inv.broj" required
                onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Skenirajte inventarni broj!')">
-        <button onclick="hidediv3()" type="submit" class="button-add"><i class="material-icons">add_circle</i> Skeniraj
+        <button onclick="hidediv3()" id="submitBtn" type="submit" class="button-add"><i class="material-icons">add_circle</i> Skeniraj
         </button>
         <label id="error-message3" class="alert alert-danger" role="alert" th:text="${error3}"
                th:if="${error3}"></label>
@@ -208,6 +208,18 @@
                 // Automatically submit the form
                 document.getElementById('form3').submit();
             }
+        });
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Set focus on the inventarniBr input field when the page is loaded
+        document.getElementById('inventarniBr').focus();
+
+        // Add an input event listener to the inventarniBr input field
+        document.getElementById('inventarniBr').addEventListener('input', function() {
+            // Enable the button only if the input length is 13 characters
+            document.getElementById('submitBtn').disabled = this.value.length !== 13;
         });
     });
 </script>

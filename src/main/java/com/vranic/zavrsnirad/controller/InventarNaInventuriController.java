@@ -82,10 +82,10 @@ public class InventarNaInventuriController {
     private String getViewBasedOnRole(Authentication auth) {
         if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
             // User has the admin role
-            return "inventura/provodenjeInventureAdmin";
+            return "inventura/provodenjeInventure";
         } else {
             // User has user role
-            return "user/provodenjeInventureUser";
+            return "user/provodenjeInventure";
         }
     }
 
