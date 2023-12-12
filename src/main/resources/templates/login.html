@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link th:href="@{/CSS/customStyle.css}" rel="stylesheet"/>
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<style>
+    html {
+        background-color: #232f83;
+    }
+</style>
+<body>
+<div style="text-align: center">
+    <h1 style="color:#ffffff; align-items: center">EVIDENCIJA INVENTARA I KORISNIKA</h1>
+    <img style="width: 50%; align-items: center" src="../images/Aitac Logo Blue Background HiRes.jpg">
+    <form th:action="@{/login}" method="post" style="max-width: 300px; margin: 0 auto">
+        <input class="w3-input w3-border w3-round w3-center" type="text" id="username" name="username"
+               placeholder="Username" required/>
+        <br/>
+        <input class="w3-input w3-border w3-round w3-center" type="password" id="password" name="password"
+               placeholder="Password" required/>
+        <br/>
+        <button class="button-login" type="submit">Log In</button>
+        <div id="error-message" th:if="${param.error}">
+            <p style="color: red; font-size: x-large">Invalid username or password</p>
+        </div>
+    </form>
+</div>
+<script>
+    function hidediv() {
+        document.getElementById("error-message").style.visibility = "hidden";
+    }
+
+    setTimeout("hidediv()", 5000);
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Set focus on the inventarniBr input field when the page is loaded
+        document.getElementById('username').focus();
+    })
+</script>
+</body>
+</html>
