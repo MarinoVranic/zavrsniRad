@@ -8,6 +8,8 @@ import com.vranic.zavrsnirad.service.InventarNaInventuriService;
 import com.vranic.zavrsnirad.service.InventarService;
 import com.vranic.zavrsnirad.service.InventuraService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -30,28 +32,36 @@ public class InventarNaInventuriController {
     private InventarService inventarService;
 
     @GetMapping("/all")
-    public String getAllInventarNaInventuri(Model model){
+    public String getAllInventarNaInventuri(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         model.addAttribute("savInvNaInventuri", inventarNaInventuriService.getAllInventarNaInventuri());
         List<Inventura> allInventura = inventuraService.getAllInventura();
         model.addAttribute("allInventura", allInventura);
-        return "inventura/provodenjeInventure";
+        if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+            // User has the admin role
+            return "inventura/provodenjeInventure";
+        } else {
+            // User has user role
+            return "user/provodenjeInventure";
+        }
     }
 
     @PostMapping("/addNew")
-    public String addNewScan(@RequestParam("invBroj") String inventarniBroj, Model model){
+    public String addNewScan(@RequestParam("invBroj") String inventarniBroj, Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Integer currentYear = LocalDate.now().getYear();
         Inventar inventar = inventarService.getInventarById(inventarniBroj);
         Inventura inventura = inventuraService.getInventuraById(currentYear.longValue());
         InventarNaInventuri inventarNaInventuri = new InventarNaInventuri();
         inventarNaInventuri.setInventar(inventar);
-        if(inventar == null){
+        if (inventar == null) {
             model.addAttribute("error2", "Skenirani inventar nije zaveden u bazi!");
-            return "inventura/provodenjeInventure";
-        } else if (inventarNaInventuriService.checkIfInventarAlreadyScanned(inventarNaInventuri.getInventar().getInventarniBroj(), currentYear.longValue())!=0) {
+            return getViewBasedOnRole(auth);
+        } else if (inventarNaInventuriService.checkIfInventarAlreadyScanned(inventarNaInventuri.getInventar().getInventarniBroj(), currentYear.longValue()) != 0) {
             model.addAttribute("error2", "Inventar je već skeniran!");
-            return "inventura/provodenjeInventure";
-        } else{
-            if(inventura == null) {
+            return getViewBasedOnRole(auth);
+        } else {
+            if (inventura == null) {
                 inventura = new Inventura();
                 inventura.setIdInventure(currentYear.longValue());
                 inventarNaInventuri.setInventura(inventura);
@@ -60,8 +70,7 @@ public class InventarNaInventuriController {
                 System.out.println(currentYear.longValue());
                 System.out.println(inventura.getIdInventure());
                 inventarNaInventuriService.save(inventarNaInventuri);
-            }
-            else{
+            } else {
                 inventarNaInventuri.setInventura(inventura);
                 inventarNaInventuri.setDatumSkeniranja(LocalDateTime.now());
                 inventarNaInventuriService.save(inventarNaInventuri);
@@ -70,24 +79,35 @@ public class InventarNaInventuriController {
         return "redirect:/provodenjeInventure/all";
     }
 
+    private String getViewBasedOnRole(Authentication auth) {
+        if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+            // User has the admin role
+            return "inventura/provodenjeInventureAdmin";
+        } else {
+            // User has user role
+            return "user/provodenjeInventureUser";
+        }
+    }
+
     @PostMapping("/scanNew")
-    public String newScan(@RequestParam("inventarniBr") String inventarniBroj, Model model){
+    public String newScan(@RequestParam("inventarniBr") String inventarniBroj, Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Integer currentYear = LocalDate.now().getYear();
-        String invBroj = inventarniBroj.substring(8,12);
+        String invBroj = inventarniBroj.substring(8, 12);
         int invBrSaNulama = Integer.parseInt(invBroj);
         String invBrBezNula = String.valueOf(invBrSaNulama);
         Inventar inventar = inventarService.getInventarById(invBrBezNula);
         Inventura inventura = inventuraService.getInventuraById(currentYear.longValue());
         InventarNaInventuri inventarNaInventuri = new InventarNaInventuri();
         inventarNaInventuri.setInventar(inventar);
-        if(inventar == null){
+        if (inventar == null) {
             model.addAttribute("error3", "Skenirani inventar nije zaveden u bazi!");
-            return "inventura/provodenjeInventure";
-        } else if (inventarNaInventuriService.checkIfInventarAlreadyScanned(inventarNaInventuri.getInventar().getInventarniBroj(), currentYear.longValue())!=0) {
+            return getViewBasedOnRole(auth);
+        } else if (inventarNaInventuriService.checkIfInventarAlreadyScanned(inventarNaInventuri.getInventar().getInventarniBroj(), currentYear.longValue()) != 0) {
             model.addAttribute("error3", "Inventar je već skeniran!");
-            return "inventura/provodenjeInventure";
-        } else{
-            if(inventura == null) {
+            return getViewBasedOnRole(auth);
+        } else {
+            if (inventura == null) {
                 inventura = new Inventura();
                 inventura.setIdInventure(currentYear.longValue());
                 inventarNaInventuri.setInventura(inventura);
@@ -96,8 +116,7 @@ public class InventarNaInventuriController {
                 System.out.println(currentYear.longValue());
                 System.out.println(inventura.getIdInventure());
                 inventarNaInventuriService.save(inventarNaInventuri);
-            }
-            else{
+            } else {
                 inventarNaInventuri.setInventura(inventura);
                 inventarNaInventuri.setDatumSkeniranja(LocalDateTime.now());
                 inventarNaInventuriService.save(inventarNaInventuri);
@@ -107,35 +126,74 @@ public class InventarNaInventuriController {
     }
 
     @GetMapping("delete/{idSkeniranja}")
-    public String deleteById(@PathVariable(value = "idSkeniranja")Long idSkeniranja){
+    public String deleteById(@PathVariable(value = "idSkeniranja") Long idSkeniranja) {
         inventarNaInventuriService.deleteById(idSkeniranja);
         return "redirect:/provodenjeInventure/all";
     }
 
+    //    @RequestMapping("/find")
+//    public String findByInventarniBroj(@RequestParam("inventarniBroj")String inventarniBroj, Model model){
+//        List<InventarNaInventuri> inventarNaInventuriList = inventarNaInventuriService.findByInventarniBroj(inventarniBroj);
+//        if (inventarNaInventuriList.isEmpty()){
+//            model.addAttribute("error", "Inventar pod tim brojem nije skeniran!");
+//            model.addAttribute("savInvNaInventuri", inventarNaInventuriService.getAllInventarNaInventuri());
+//            InventarNaInventuri inventarNaInventuri = new InventarNaInventuri();
+//            model.addAttribute("invNaInv", inventarNaInventuri);
+//        } else {
+//            model.addAttribute("savInvNaInventuri", inventarNaInventuriList);
+//            InventarNaInventuri inventarNaInventuri = new InventarNaInventuri();
+//            model.addAttribute("invNaInv", inventarNaInventuri);
+//        }
+//        return "inventura/provodenjeInventure";
+//    }
     @RequestMapping("/find")
-    public String findByInventarniBroj(@RequestParam("inventarniBroj")String inventarniBroj, Model model){
+    public String findByInventarniBroj(@RequestParam("inventarniBroj") String inventarniBroj, Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         List<InventarNaInventuri> inventarNaInventuriList = inventarNaInventuriService.findByInventarniBroj(inventarniBroj);
-        if (inventarNaInventuriList.isEmpty()){
+
+        if (inventarNaInventuriList.isEmpty()) {
             model.addAttribute("error", "Inventar pod tim brojem nije skeniran!");
-            model.addAttribute("savInvNaInventuri", inventarNaInventuriService.getAllInventarNaInventuri());
-            InventarNaInventuri inventarNaInventuri = new InventarNaInventuri();
-            model.addAttribute("invNaInv", inventarNaInventuri);
         } else {
             model.addAttribute("savInvNaInventuri", inventarNaInventuriList);
+        }
+
+        if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+            // User has the admin role
+            return "inventura/provodenjeInventure";
+        } else {
+            // User has user role
             InventarNaInventuri inventarNaInventuri = new InventarNaInventuri();
             model.addAttribute("invNaInv", inventarNaInventuri);
+            return "user/provodenjeInventure";
         }
-        return "inventura/provodenjeInventure";
     }
 
+    //    @GetMapping("/findByGodinaInventure")
+//    public String showInventarByGodinaInventure(@RequestParam("idInventure") Long idInventure, Model model) {
+//        List<Inventura> allInventura = inventuraService.getAllInventura();
+//        List<InventarNaInventuri> inventarNaInventuriList = inventarNaInventuriService.finbByGodinaInventure(idInventure);
+//        model.addAttribute("allInventura", allInventura);
+//        model.addAttribute("savInvNaInventuri", inventarNaInventuriList);
+//        InventarNaInventuri inventarNaInventuri = new InventarNaInventuri();
+//        model.addAttribute("invNaInv", inventarNaInventuri);
+//        return "inventura/provodenjeInventure";
+//    }
     @GetMapping("/findByGodinaInventure")
     public String showInventarByGodinaInventure(@RequestParam("idInventure") Long idInventure, Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         List<Inventura> allInventura = inventuraService.getAllInventura();
         List<InventarNaInventuri> inventarNaInventuriList = inventarNaInventuriService.finbByGodinaInventure(idInventure);
         model.addAttribute("allInventura", allInventura);
         model.addAttribute("savInvNaInventuri", inventarNaInventuriList);
-        InventarNaInventuri inventarNaInventuri = new InventarNaInventuri();
-        model.addAttribute("invNaInv", inventarNaInventuri);
-        return "inventura/provodenjeInventure";
+
+        if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+            // User has the admin role
+            return "inventura/provodenjeInventure";
+        } else {
+            // User has user role
+            InventarNaInventuri inventarNaInventuri = new InventarNaInventuri();
+            model.addAttribute("invNaInv", inventarNaInventuri);
+            return "user/provodenjeInventure";
+        }
     }
 }
