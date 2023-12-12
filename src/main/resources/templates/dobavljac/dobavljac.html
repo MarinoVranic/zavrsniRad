@@ -2,106 +2,111 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<link th:href="@{/CSS/customStyle.css}" rel="stylesheet" />
+<link th:href="@{/CSS/customStyle.css}" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script type="text/javascript" src="../static/javascript/sidebar.js" th:src="@{/javascript/sidebar.js}"></script>
 <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 <head>
-  <meta charset="UTF-8">
-  <title>Dobavljači</title>
+    <meta charset="UTF-8">
+    <title>Dobavljači</title>
 </head>
 <style>
-  html{
-    background-color: lightgray;
-  }
-  table {
-    border-collapse: collapse;
-    width: 100%;
-  }
+    html {
+        background-color: lightgray;
+    }
 
-  th, td {
-    padding: 8px;
-    text-align: center;
-    border-bottom: 1px solid #ddd;
-    border-left: 1px solid #ddd;
-  }
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th, td {
+        padding: 8px;
+        text-align: center;
+        border-bottom: 1px solid #ddd;
+        border-left: 1px solid #ddd;
+    }
 </style>
 <body>
 <div class="w3-sidebar w3-bar-block" style="display:none;z-index:5" id="mySidebar">
-  <button onclick="w3_close()" class="w3-bar-item w3-large">Zatvori &times;</button>
-  <a th:href="@{/index}" class="w3-bar-item w3-button">Glavni izbornik</a>
-  <a th:href="@{/racun/all}" class="w3-bar-item w3-button">Računi</a>
-  <a th:href="@{/lokacija/all}" class="w3-bar-item w3-button">Lokacije</a>
-  <a th:href="@{/vrstaUredaja/all}" class="w3-bar-item w3-button">Vrste uređaja</a>
-  <a th:href="@{/korisnik/all}" class="w3-bar-item w3-button">Korisnici</a>
-  <a th:href="@{/inventar/all}" class="w3-bar-item w3-button">Osnovna sredstva</a>
-  <a th:href="@{/inventar/ITall}" class="w3-bar-item w3-button">IT oprema</a>
-  <a th:href="@{/inventura/all}" class="w3-bar-item w3-button">Inventure</a>
-  <a th:href="@{/provodenjeInventure/all}" class="w3-bar-item w3-button">Izvršavanje inventure</a>
+    <button onclick="w3_close()" class="w3-bar-item w3-large">Zatvori &times;</button>
+    <a th:href="@{/index}" class="w3-bar-item w3-button">Glavni izbornik</a>
+    <a th:href="@{/racun/all}" class="w3-bar-item w3-button">Računi</a>
+    <a th:href="@{/lokacija/all}" class="w3-bar-item w3-button">Lokacije</a>
+    <a th:href="@{/vrstaUredaja/all}" class="w3-bar-item w3-button">Vrste uređaja</a>
+    <a th:href="@{/korisnik/all}" class="w3-bar-item w3-button">Korisnici</a>
+    <a th:href="@{/inventar/all}" class="w3-bar-item w3-button">Osnovna sredstva</a>
+    <a th:href="@{/inventar/ITall}" class="w3-bar-item w3-button">IT oprema</a>
+    <a th:href="@{/inventura/all}" class="w3-bar-item w3-button">Inventure</a>
+    <a th:href="@{/provodenjeInventure/all}" class="w3-bar-item w3-button">Izvršavanje inventure</a>
 
-  <img src="../images/A.jpg" alt="Logo" style="position: absolute; bottom: 10px; left: 10px; width: 175px;height: 175px">
+    <img src="../images/A.jpg" alt="Logo"
+         style="position: absolute; bottom: 10px; left: 10px; width: 175px;height: 175px">
 </div>
 <div class="w3-overlay" onclick="w3_close()" style="cursor:pointer" id="myOverlay"></div>
 <div>
-  <button id="openNav" class="w3-button w3-xlarge" onclick="w3_open()">&#9776;</button>
-  <img src="../images/AITAC values challenges solutions (1).png" class="centered-image">
+    <button id="openNav" class="w3-button w3-xlarge" onclick="w3_open()">&#9776;</button>
+    <img src="../images/AITAC values challenges solutions (1).png" class="centered-image">
 </div>
 <h1 class="w3-padding w3-center w3-opacity w3-xxxlarge" style="text-shadow:1px 1px 0 #444"><b>Dobavljači</b></h1>
 <div class="div-container">
-  <a th:href="@{/dobavljac/addNew}" class="button-add"><i class="material-icons">add_circle</i> Novi dobavljač</a>
-  <a th:href="@{/dobavljac/generatePDF}" class="button-30">Izvještaj <i class="material-icons">picture_as_pdf</i></a>
+    <a th:href="@{/dobavljac/addNew}" class="button-add"><i class="material-icons">add_circle</i> Novi dobavljač</a>
+    <a th:href="@{/dobavljac/generatePDF}" class="button-30">Izvještaj <i class="material-icons">picture_as_pdf</i></a>
 </div>
 <form class="w3-container" th:action="@{/dobavljac/find}" method="get">
-  <input type="text" id="nazivDobavljaca" name="nazivDobavljaca" placeholder="Pretraži po nazivu" required
-         onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Popunite polje za pretraživanje!')">
-  <button onclick="hidediv()" type="submit">Pretraži</button>
-  <button type="button" onclick="window.location.href='/dobavljac/all'">Prikaži sve</button>
-  <label id="error-message" class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>
+    <input type="text" id="nazivDobavljaca" name="nazivDobavljaca" placeholder="Pretraži po nazivu" required
+           onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Popunite polje za pretraživanje!')">
+    <button onclick="hidediv()" type="submit">Pretraži</button>
+    <button type="button" onclick="window.location.href='/dobavljac/all'">Prikaži sve</button>
+    <label id="error-message" class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>
 </form>
 <div style="overflow-x:auto;">
-  <table style="table-layout:auto;width:100%" class="w3-table-all w3-hoverable w3-centered w3-card-4">
-    <thead>
-    <tr>
-      <th class="w3-dark-grey">ID</th>
-      <th class="w3-dark-grey">Naziv dobavljača</th>
-      <th class="w3-dark-grey"></th>
-      <th class="w3-dark-grey"></th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="dobavljac:${sviDobavljaci}">
-      <td th:text="${dobavljac.idDobavljaca}"></td>
-      <td th:text="${dobavljac.nazivDobavljaca}"></td>
-      <td> <a th:href="@{/dobavljac/update/{id}(id=${dobavljac.idDobavljaca})}" type="button" class="button-edit"><i class="fa fa-edit" style="font-size:36px"></i></a></td>
-      <td> <a style="font-size:128px" th:href="@{/dobavljac/delete/{id}(id=${dobavljac.idDobavljaca})}" class="button-delete"><i class="material-icons">remove_circle</i></a></td>
-    </tr>
-    </tbody>
-  </table>
-  <button id="scrollToTopBtn" title="Go to top" class="button-toTop">Na početak</button>
+    <table style="table-layout:auto;width:100%" class="w3-table-all w3-hoverable w3-centered w3-card-4">
+        <thead>
+        <tr>
+            <th class="w3-dark-grey">ID</th>
+            <th class="w3-dark-grey">Naziv dobavljača</th>
+            <th class="w3-dark-grey"></th>
+            <th class="w3-dark-grey"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="dobavljac:${sviDobavljaci}">
+            <td th:text="${dobavljac.idDobavljaca}"></td>
+            <td th:text="${dobavljac.nazivDobavljaca}"></td>
+            <td><a th:href="@{/dobavljac/update/{id}(id=${dobavljac.idDobavljaca})}" type="button"
+                   class="button-edit"><i class="fa fa-edit" style="font-size:36px"></i></a></td>
+            <td><a style="font-size:128px" th:href="@{/dobavljac/delete/{id}(id=${dobavljac.idDobavljaca})}"
+                   class="button-delete"><i class="material-icons">remove_circle</i></a></td>
+        </tr>
+        </tbody>
+    </table>
+    <button id="scrollToTopBtn" title="Go to top" class="button-toTop">Na početak</button>
 </div>
 <script>
-  function hidediv(){
-    document.getElementById("error-message").style.visibility="hidden";
-  }
-  setTimeout("hidediv()",5000);
+    function hidediv() {
+        document.getElementById("error-message").style.visibility = "hidden";
+    }
+
+    setTimeout("hidediv()", 5000);
 </script>
 <script>
-  var scrollToTopBtn = document.getElementById("scrollToTopBtn");
+    var scrollToTopBtn = document.getElementById("scrollToTopBtn");
 
-  // Show the button when user scrolls down 20px from the top of the document
-  window.onscroll = function() {
-    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-      scrollToTopBtn.style.display = "block";
-    } else {
-      scrollToTopBtn.style.display = "none";
-    }
-  };
+    // Show the button when user scrolls down 20px from the top of the document
+    window.onscroll = function () {
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            scrollToTopBtn.style.display = "block";
+        } else {
+            scrollToTopBtn.style.display = "none";
+        }
+    };
 
-  // Scroll to the top of the document when the button is clicked
-  scrollToTopBtn.onclick = function() {
-    document.body.scrollTop = 0; // For Safari
-    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE, and Opera
-  };
+    // Scroll to the top of the document when the button is clicked
+    scrollToTopBtn.onclick = function () {
+        document.body.scrollTop = 0; // For Safari
+        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE, and Opera
+    };
 </script>
 </body>
 </html>
