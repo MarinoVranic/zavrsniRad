@@ -4,6 +4,7 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link th:href="@{/CSS/customStyle.css}" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
 <script type="text/javascript" src="../static/javascript/sidebar.js" th:src="@{/javascript/sidebar.js}"></script>
 <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 <head>
@@ -100,8 +101,9 @@
         <label id="error-message3" class="alert alert-danger" role="alert" th:text="${error3}"
                th:if="${error3}"></label>
     </form>
-    <!--  <a th:href="@{/inventura/addNew}" class="button-add"><i class="material-icons">add_circle</i> Nova inventura</a>-->
-    <!--  <a th:href="@{/inventura/generatePDF}" class="button-30">Izvještaj <i class="material-icons">picture_as_pdf</i></a>-->
+<!--    <a href="#" class="button-30" data-toggle="modal" data-target="#pdfModal">-->
+<!--        Generate PDF <i class="material-icons">picture_as_pdf</i>-->
+<!--    </a>-->
 </div>
 <div class="forms-container" style="display: flex;">
     <form id="form1" class="w3-container w3-padding form" th:action="@{/provodenjeInventure/find}" method="get">
@@ -109,23 +111,37 @@
         <input type="text" id="inventarniBroj" name="inventarniBroj" placeholder="Pretraži po inv. broju" required
                onchange="this.setCustomValidity('')"
                oninvalid="this.setCustomValidity('Unesite inventarni broj koji tražite!')">
-        <button onclick="hidediv()" type="submit"><i class="fa fa-search" style="font-size:20px"></i> Pronađi inventar
+        <button onclick="hidediv()" class="button-30" type="submit"><i class="fa fa-search" style="font-size:20px"></i> Pronađi inventar
         </button>
-        <button type="button" onclick="window.location.href='/provodenjeInventure/all'">Prikaži sve</button>
+        <button type="button" class="button-30" onclick="window.location.href='/provodenjeInventure/all'">Prikaži sve</button>
         <label id="error-message" class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>
     </form>
+<!--    <form id="form2" class="w3-container w3-padding form" th:action="@{/provodenjeInventure/findByGodinaInventure}"-->
+<!--          method="get" th:object="${allInventura}">-->
+<!--        <select class=" w3-border w3-round w3-center" id="idInventure" name="idInventure" required-->
+<!--                onchange="this.setCustomValidity('');updateRequiredFields()"-->
+<!--                oninvalid="this.setCustomValidity('Odaberite godinu inventure!')">-->
+<!--            <option value="">Odaberite godinu inventure</option>-->
+<!--            <option th:each="inventura : ${allInventura}" th:value="${inventura.idInventure}"-->
+<!--                    th:text="${inventura.idInventure}"></option>-->
+<!--        </select>-->
+<!--        <button onclick="hidediv()" type="submit"><i class="fa fa-search" style="font-size:20px"></i> Pretraži po godini-->
+<!--        </button>-->
+<!--    </form>-->
     <form id="form2" class="w3-container w3-padding form" th:action="@{/provodenjeInventure/findByGodinaInventure}"
-          method="get" th:object="${allInventura}">
-        <select class=" w3-border w3-round w3-center" id="idInventure" name="idInventure" required
-                onchange="this.setCustomValidity('');updateRequiredFields()"
+          method="get" th:object="${allInventura}" onsubmit="return validateForm()">
+        <select class="w3-border w3-round w3-center" id="idInventure" name="idInventure" required
+                onchange="this.setCustomValidity('')"
                 oninvalid="this.setCustomValidity('Odaberite godinu inventure!')">
             <option value="">Odaberite godinu inventure</option>
             <option th:each="inventura : ${allInventura}" th:value="${inventura.idInventure}"
                     th:text="${inventura.idInventure}"></option>
         </select>
-        <button onclick="hidediv()" type="submit"><i class="fa fa-search" style="font-size:20px"></i> Pretraži po godini
-        </button>
+        <button type="submit" class="button-30"><i class="fa fa-search" style="font-size:20px"></i> Pretraži po godini</button>
+        <button type="submit" class="button-30" onclick="generateReport()">Izvještaj <i class="material-icons">picture_as_pdf</i></button>
+        <button type="submit" class="button-30" onclick="generateCSV()">Izvještaj <i class="material-symbols-outlined">csv</i></button>
     </form>
+</span>
 </div>
 <div style="overflow-x:auto;">
     <table style="table-layout:auto;width:100%" class="w3-table-all w3-hoverable w3-centered w3-card-4">
@@ -222,6 +238,39 @@
             document.getElementById('submitBtn').disabled = this.value.length !== 13;
         });
     });
+</script>
+<script>
+    function validateForm() {
+        var selectedOption = document.getElementById("idInventure").value;
+        if (selectedOption === "") {
+            alert("Odaberite godinu inventure!");
+            return false;
+        }
+        return true;
+    }
+
+    function generateReport() {
+        var selectedOption = document.getElementById("idInventure").value;
+        if (selectedOption !== "") {
+            var form = document.getElementById("form2");
+            form.action = "/provodenjeInventure/generatePDF";
+            form.submit();
+        }
+        // var form = document.getElementById("form2");
+        // form.action = "/provodenjeInventure/generatePDF";
+        // form.submit();
+        // alert("Odaberite godinu inventure!");
+
+    }
+    function generateCSV() {
+        var selectedOption = document.getElementById("idInventure").value;
+        if (selectedOption !== "") {
+            var form = document.getElementById("form2");
+            form.action = "/provodenjeInventure/generateCSV";
+            form.submit();
+        }
+    }
+
 </script>
 </body>
 </html>
