@@ -1,32 +1,55 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link th:href="@{/CSS/customStyle.css}" rel="stylesheet" />
+<link th:href="@{/CSS/customStyle.css}" rel="stylesheet"/>
 <head>
     <meta charset="UTF-8">
     <title>Glavni izbornik</title>
 </head>
+<style>
+    html {
+        background-color: #232f83;
+    }
+</style>
 <body>
-<div>
-    <header class="w3-display-container w3-display-topmiddle" style="max-width: 100%;">
-        <div class="header-container">
-            <h1>EVIDENCIJA IT OPREME I KORISNIKA</h1>
-            <img style="width: 70%" src="../images/Aitac Logo Blue Background HiRes.jpg">
+<div style="text-align: center">
+    <header style="max-width: 100%;">
+        <div>
+            <img style="width: 40%" src="../images/Aitac Logo Blue Background HiRes.jpg" alt="Aitac logo">
+            <h1 style="color: #ffffff">EVIDENCIJA INVENTARA I KORISNIKA</h1>
         </div>
     </header>
-    <div class="w3-container w3-display-middle">
-        <div class="button-row button-container">
-            <button class="button-mainMenu" role="button" onclick="window.location.href='/korisnik/all'">Korisnici</button>
-            <button class="button-mainMenu" role="button" onclick="window.location.href='/inventar/all'">Inventar</button>
+    <div class="button-container">
+        <div class="button-row">
+            <button class="button-mainMenu" role="button" onclick="window.location.href='/korisnik/all'">Korisnici
+            </button>
+            <button class="button-mainMenu" role="button" onclick="window.location.href='/inventar/all'">Osnovna
+                sredstva
+            </button>
+            <button class="button-mainMenu" role="button" onclick="window.location.href='/inventar/ITall'">IT oprema
+            </button>
         </div>
-        <div class="button-row button-container">
-            <button class="button-mainMenu" role="button" onclick="window.location.href='/lokacija/all'">Lokacije</button>
-            <button class="button-mainMenu" role="button" onclick="window.location.href='/dobavljac/all'">Dobavljači</button>
-            <button class="button-mainMenu" role="button" onclick="window.location.href='/vrstaUredaja/all'">Vrste uređaja</button>
+        <div class="button-row">
+            <button class="button-mainMenu" role="button" onclick="window.location.href='/inventura/all'">Inventure
+            </button>
+            <button class="button-mainMenu" role="button" onclick="window.location.href='/provodenjeInventure/all'">
+                Izvršavanje inventure
+            </button>
+        </div>
+        <div class="button-row">
+            <button class="button-mainMenu" role="button" onclick="window.location.href='/lokacija/all'">Lokacije
+            </button>
+            <button class="button-mainMenu" role="button" onclick="window.location.href='/dobavljac/all'">Dobavljači
+            </button>
+            <button class="button-mainMenu" role="button" onclick="window.location.href='/vrstaUredaja/all'">Vrste
+                uređaja
+            </button>
             <button class="button-mainMenu" role="button" onclick="window.location.href='/racun/all'">Računi</button>
+        </div>
+        <div class="button-row">
+            <button class="button-mainMenu" role="button" onclick="window.location.href='/logout'">Logout</button>
         </div>
     </div>
 </div>
-
 </body>
 </html>

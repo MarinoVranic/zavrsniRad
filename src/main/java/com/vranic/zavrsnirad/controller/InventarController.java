@@ -1,22 +1,33 @@
 package com.vranic.zavrsnirad.controller;
 
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
 import com.itextpdf.text.*;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.vranic.zavrsnirad.model.*;
 import com.vranic.zavrsnirad.service.*;
+import com.vranic.zavrsnirad.util.BarcodeImageUtils;
 import io.micrometer.common.util.StringUtils;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
@@ -52,6 +63,16 @@ public class InventarController {
         List<Lokacija> allLokacija = lokacijaService.getAllLokacija();
         model.addAttribute("allLokacija", allLokacija);
         return "inventar/inventar";
+    }
+
+    @GetMapping("/ITall")
+    public String getAllItInventar(Model model) {
+        model.addAttribute("savInventar", inventarService.getInventarForIT());
+        List<VrstaUredaja> allVrstaUredaja = vrstaUredajaService.getAllVrstaUredaja();
+        model.addAttribute("allVrstaUredaja", allVrstaUredaja);
+        List<Lokacija> allLokacija = lokacijaService.getAllLokacija();
+        model.addAttribute("allLokacija", allLokacija);
+        return "inventar/inventarIT";
     }
 
     @GetMapping("/{inventarniBroj}")
@@ -223,6 +244,50 @@ public class InventarController {
         Inventar inventar = new Inventar();
         model.addAttribute("inventar", inventar);
         return "inventar/inventar";
+    }
+
+    @GetMapping(value = "/ean13/{inventarniBroj}", produces = MediaType.IMAGE_PNG_VALUE)
+    public ResponseEntity<byte[]> generateAndDownloadEAN13Barcode(@PathVariable(value = "inventarniBroj") String inventarniBroj) {
+        try {
+            String originalInventarniBroj = inventarniBroj;
+            while(inventarniBroj.length() < 12){
+                inventarniBroj = "0" + inventarniBroj;
+            }
+            BitMatrix bitMatrix = BarcodeGeneratorService.generateEAN13Barcode(inventarniBroj);
+            byte[] barcodeImage = BarcodeImageUtils.convertBitMatrixToByteArray(bitMatrix);
+
+            BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(barcodeImage));
+            int combinedHeight = bufferedImage.getHeight() + 60;
+            BufferedImage combinedImage = new BufferedImage(bufferedImage.getWidth(), combinedHeight, BufferedImage.TYPE_INT_ARGB);
+
+            Graphics g = combinedImage.getGraphics();
+            g.setColor(Color.WHITE); // Set the text color to white
+            g.fillRect(0, 0, bufferedImage.getWidth(), combinedHeight); // Add a white background above the barcode
+            g.setColor(Color.BLACK); // Set the text color back to black
+            g.setFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 20)); //set font for text on barcode
+
+            // Draw "AITAC d.o.o." above the barcode
+            g.drawString("AITAC d.o.o.", 85, 25);
+
+            // Draw the barcode image
+            g.drawImage(bufferedImage, 0, 30, null);
+
+            g.setFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 30)); //set font for text on barcode
+            // Draw the EAN-13 code text below the barcode
+            g.drawString(inventarniBroj, 50, bufferedImage.getHeight() + 55);
+
+            ByteArrayOutputStream combinedOutputStream = new ByteArrayOutputStream();
+            ImageIO.write(combinedImage, "png", combinedOutputStream);
+            byte[] combinedImageByteArray = combinedOutputStream.toByteArray();
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.IMAGE_PNG);
+            headers.setContentDisposition(ContentDisposition.builder("attachment").filename("barcode"+originalInventarniBroj+".png").build());
+            return new ResponseEntity<>(combinedImageByteArray, headers, HttpStatus.OK);
+        } catch (WriterException | IOException e) {
+            System.out.println(e);;
+            return new ResponseEntity<>(new byte[0], HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/generatePDF")

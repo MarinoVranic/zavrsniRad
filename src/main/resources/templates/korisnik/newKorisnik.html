@@ -1,148 +1,176 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link th:href="@{/CSS/customStyle.css}" rel="stylesheet" />
+<link th:href="@{/CSS/customStyle.css}" rel="stylesheet"/>
 <script type="text/javascript" src="../static/javascript/sidebar.js" th:src="@{/javascript/sidebar.js}"></script>
 <head>
-  <meta charset="UTF-8">
-  <title>Dodavanje korisnika</title>
+    <meta charset="UTF-8">
+    <title>Dodavanje korisnika</title>
 </head>
 <style>
-  *{
-    box-sizing: border-box;
-  }
+    * {
+        box-sizing: border-box;
+    }
 </style>
 <body>
 <div class="w3-card-4 w3-center w3-display-middle w3-light-grey" style="width: 50%; position: absolute">
-  <div class="w3-container w3-gray">
-    <h2 class="w3-text-light-grey"><b>Forma za dodavanje novog korisnika</b><button class="button-30 w3-right" onclick="window.location.href='/korisnik/all'"><b>Odustani</b></button></h2>
-  </div>
-  <form class="w3-container w3-light-grey" action="#" th:action="@{/korisnik/addNew}" th:object="${korisnik}" method="POST">
-    <div class="w3-row-padding">
-    <p class="w3-center">
-      <label class="w3-text-dark-grey" for="username"><b>Username</b><br></label>
-      <label id="error-message" class="error alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>
-      <input class="w3-input w3-border w3-round w3-center" id="username" name="username" type="text" th:field="*{username}" placeholder="Username se automatski kreira upisivanjem imena i prezimena, može se prema potrebi izmjeniti." required
-             onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Ispunite polje za username!')"></p>
-    <p class="w3-half">
-      <label class="w3-text-dark-grey" for="firstName"><b>Ime</b><br></label>
-      <span class="error" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">Ime error</span>
-      <input class="w3-input w3-border w3-round w3-center" id="firstName" name="firstName" type="text" th:field="*{firstName}" required
-             onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Ispunite polje za ime!')"></p>
-    <p class="w3-half">
-      <label class="w3-text-dark-grey" for="lastName"><b>Prezime</b><br></label>
-      <span class="error" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Prezime error</span>
-      <input class="w3-input w3-border w3-round w3-center" id="lastName" name="lastName" type="text" th:field="*{lastName}" required
-             onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Ispunite polje za prezime!')"></p>
-    <p>
-      <p class="w3-half">
-        <label class="w3-text-dark-grey" for="status"><b>Status</b></label>
-        <select id="status" class="w3-input w3-border w3-round w3-center" th:field="*{status}">
-          <option th:value="'aktivan'" th:text="Aktivan"></option>
-         <option th:value="'neaktivan'" th:text="Neaktivan"></option>
-        </select>
-      </p>
-      <p class="w3-half">
-        <label class="w3-text-dark-grey" for="status"><b>Vrsta korisnika</b></label>
-        <select id="accountType" class="w3-input w3-border w3-round w3-center" th:field="*{accountType}" required
-                onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Odaberite vrstu korisnika!')">
-          <option th:value="'zaposlenik'" th:text="Zaposlenik"></option>
-          <option th:value="'kooperant'" th:text="Kooperant"></option>
-          <option th:value="'student'" th:text="Student"></option>
-          <option th:value="'praktikant'" th:text="Praktikant"></option>
-        </select>
-      </p>
-      <p class="w3-half">
-        <label class="w3-text-dark-grey" for="subcontractor"><b>Poslodavac</b></label>
-        <input class="w3-input w3-border w3-round w3-center" id="subcontractor" name="subcontractor" type="text" th:field="*{subcontractor}" required
-               onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Ispunite polje za poslodavca!')"></p>
-      <p>
-      <p class="w3-half">
-        <label class="w3-text-dark-grey" for="godina"><b>Godina zaposlenja</b></label>
-      <span class="error" th:if="${#fields.hasErrors('godina')}" th:errors="*{godina}">Godina error</span>
-        <input class="w3-input w3-border w3-round w3-center" id="godina" name="godina" type="text" th:field="*{godina}" required
-               onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Ispunite polje za godinu zaposlenja!')"></p>
-      <p>
-      <p class="w3-half">
-        <label class="w3-text-dark-grey" for="email"><b>E-mail</b></label>
-        <input class="w3-input w3-border w3-round w3-center" id="email" name="email" type="email" th:field="*{email}" required
-               onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Ispunite polje za e-mail!')"></p>
-      <p>
-      <p class="w3-half">
-        <label class="w3-text-dark-grey" for="initialPassword"><b>Inicijalna lozinka</b></label>
-        <input class="w3-input w3-border w3-round w3-center" id="initialPassword" name="initialPassword" type="text" th:field="*{initialPassword}" required
-               onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Ispunite polje za inicijalnu lozinku!')"></p>
-      <p>
-      <p class="w3-half">
-        <label class="w3-text-dark-grey" for="userCreated"><b>Korisnik aktiviran</b><br></label>
-        <input class="w3-input w3-border w3-round w3-center" id="userCreated" name="userCreated" type="date" th:field="*{userCreated}"></p>
-      <p>
-      <p class="w3-half">
-        <label class="w3-text-dark-grey" for="userDisabled"><b>Korisnik deaktiviran</b></label>
-        <input class="w3-input w3-border w3-round w3-center" id="userDisabled" name="userDisabled" type="date" th:field="*{userDisabled}" disabled></p>
-      <p>
-      <p class="w3-half">
-        <label class="w3-text-dark-grey" for="emailCreated"><b>E-mail aktiviran</b></label>
-        <input class="w3-input w3-border w3-round w3-center" id="emailCreated" name="emailCreated" type="date" th:field="*{emailCreated}"></p>
-      <p>
-      <p class="w3-half">
-        <label class="w3-text-dark-grey" for="emailDisabled"><b>E-mail deaktiviran</b></label>
-        <input class="w3-input w3-border w3-round w3-center" id="emailDisabled" name="emailDisabled" type="date" th:field="*{emailDisabled}" disabled></p>
-      <p>
-      <p class="w3-center">
-        <label class="w3-text-dark-grey" for="komentar"><b>Komentar</b></label>
-        <input class="w3-input w3-border w3-round w3-center w3-padding-48" id="komentar" name="komentar" type="text" th:field="*{komentar}"></p>
-      <p>
-    <div>
-      <div>
-        <button class="button-30"><b>Dodaj korisnika</b></button>
-      </div>
+    <div class="w3-container w3-gray">
+        <h2 class="w3-text-light-grey"><b>Forma za dodavanje novog korisnika</b>
+            <button class="button-30 w3-right" onclick="window.location.href='/korisnik/all'"><b>Odustani</b></button>
+        </h2>
     </div>
-    </div>
-</form>
-
+    <form class="w3-container w3-light-grey" action="#" th:action="@{/korisnik/addNew}" th:object="${korisnik}"
+          method="POST">
+        <div class="w3-row-padding">
+            <p class="w3-center">
+                <label class="w3-text-dark-grey" for="username"><b>Username</b><br></label>
+                <label id="error-message" class="error alert alert-danger" role="alert" th:text="${error}"
+                       th:if="${error}"></label>
+                <input class="w3-input w3-border w3-round w3-center" id="username" name="username" type="text"
+                       th:field="*{username}"
+                       placeholder="Username se automatski kreira upisivanjem imena i prezimena, može se prema potrebi izmjeniti."
+                       required
+                       onchange="this.setCustomValidity('')"
+                       oninvalid="this.setCustomValidity('Ispunite polje za username!')"></p>
+            <p class="w3-half">
+                <label class="w3-text-dark-grey" for="firstName"><b>Ime</b><br></label>
+                <span class="error" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">Ime error</span>
+                <input class="w3-input w3-border w3-round w3-center" id="firstName" name="firstName" type="text"
+                       th:field="*{firstName}" required
+                       onchange="this.setCustomValidity('')"
+                       oninvalid="this.setCustomValidity('Ispunite polje za ime!')"></p>
+            <p class="w3-half">
+                <label class="w3-text-dark-grey" for="lastName"><b>Prezime</b><br></label>
+                <span class="error" th:if="${#fields.hasErrors('lastName')}"
+                      th:errors="*{lastName}">Prezime error</span>
+                <input class="w3-input w3-border w3-round w3-center" id="lastName" name="lastName" type="text"
+                       th:field="*{lastName}" required
+                       onchange="this.setCustomValidity('')"
+                       oninvalid="this.setCustomValidity('Ispunite polje za prezime!')"></p>
+            <p>
+            <p class="w3-half">
+                <label class="w3-text-dark-grey" for="status"><b>Status</b></label>
+                <select id="status" class="w3-input w3-border w3-round w3-center" th:field="*{status}">
+                    <option th:value="'aktivan'" th:text="Aktivan"></option>
+                    <option th:value="'neaktivan'" th:text="Neaktivan"></option>
+                </select>
+            </p>
+            <p class="w3-half">
+                <label class="w3-text-dark-grey" for="status"><b>Vrsta korisnika</b></label>
+                <select id="accountType" class="w3-input w3-border w3-round w3-center" th:field="*{accountType}"
+                        required
+                        onchange="this.setCustomValidity('')"
+                        oninvalid="this.setCustomValidity('Odaberite vrstu korisnika!')">
+                    <option th:value="'zaposlenik'" th:text="Zaposlenik"></option>
+                    <option th:value="'kooperant'" th:text="Kooperant"></option>
+                    <option th:value="'student'" th:text="Student"></option>
+                    <option th:value="'praktikant'" th:text="Praktikant"></option>
+                </select>
+            </p>
+            <p class="w3-half">
+                <label class="w3-text-dark-grey" for="subcontractor"><b>Poslodavac</b></label>
+                <input class="w3-input w3-border w3-round w3-center" id="subcontractor" name="subcontractor" type="text"
+                       th:field="*{subcontractor}" required
+                       onchange="this.setCustomValidity('')"
+                       oninvalid="this.setCustomValidity('Ispunite polje za poslodavca!')"></p>
+            <p>
+            <p class="w3-half">
+                <label class="w3-text-dark-grey" for="godina"><b>Godina zaposlenja</b></label>
+                <span class="error" th:if="${#fields.hasErrors('godina')}" th:errors="*{godina}">Godina error</span>
+                <input class="w3-input w3-border w3-round w3-center" id="godina" name="godina" type="text"
+                       th:field="*{godina}" required
+                       onchange="this.setCustomValidity('')"
+                       oninvalid="this.setCustomValidity('Ispunite polje za godinu zaposlenja!')"></p>
+            <p>
+            <p class="w3-half">
+                <label class="w3-text-dark-grey" for="email"><b>E-mail</b></label>
+                <input class="w3-input w3-border w3-round w3-center" id="email" name="email" type="email"
+                       th:field="*{email}" required
+                       onchange="this.setCustomValidity('')"
+                       oninvalid="this.setCustomValidity('Ispunite polje za e-mail!')"></p>
+            <p>
+            <p class="w3-half">
+                <label class="w3-text-dark-grey" for="initialPassword"><b>Inicijalna lozinka</b></label>
+                <input class="w3-input w3-border w3-round w3-center" id="initialPassword" name="initialPassword"
+                       type="text" th:field="*{initialPassword}" required
+                       onchange="this.setCustomValidity('')"
+                       oninvalid="this.setCustomValidity('Ispunite polje za inicijalnu lozinku!')"></p>
+            <p>
+            <p class="w3-half">
+                <label class="w3-text-dark-grey" for="userCreated"><b>Korisnik aktiviran</b><br></label>
+                <input class="w3-input w3-border w3-round w3-center" id="userCreated" name="userCreated" type="date"
+                       th:field="*{userCreated}"></p>
+            <p>
+            <p class="w3-half">
+                <label class="w3-text-dark-grey" for="userDisabled"><b>Korisnik deaktiviran</b></label>
+                <input class="w3-input w3-border w3-round w3-center" id="userDisabled" name="userDisabled" type="date"
+                       th:field="*{userDisabled}" disabled></p>
+            <p>
+            <p class="w3-half">
+                <label class="w3-text-dark-grey" for="emailCreated"><b>E-mail aktiviran</b></label>
+                <input class="w3-input w3-border w3-round w3-center" id="emailCreated" name="emailCreated" type="date"
+                       th:field="*{emailCreated}"></p>
+            <p>
+            <p class="w3-half">
+                <label class="w3-text-dark-grey" for="emailDisabled"><b>E-mail deaktiviran</b></label>
+                <input class="w3-input w3-border w3-round w3-center" id="emailDisabled" name="emailDisabled" type="date"
+                       th:field="*{emailDisabled}" disabled></p>
+            <p>
+            <p class="w3-center">
+                <label class="w3-text-dark-grey" for="komentar"><b>Komentar</b></label>
+                <input class="w3-input w3-border w3-round w3-center w3-padding-48" id="komentar" name="komentar"
+                       type="text" th:field="*{komentar}"></p>
+            <p>
+            <div>
+                <div>
+                    <button class="button-30"><b>Dodaj korisnika</b></button>
+                </div>
+            </div>
+        </div>
+    </form>
 </div>
 </body>
 <script>
-  function hidediv(){
-    var errMessages = document.getElementsByClassName('error');
-    for (var i = 0; i < errMessages.length; i++) {
-      errMessages[i].style.display="none";
+    function hidediv() {
+        var errMessages = document.getElementsByClassName('error');
+        for (var i = 0; i < errMessages.length; i++) {
+            errMessages[i].style.display = "none";
+        }
     }
-  }
-  setTimeout("hidediv()",5000);
+
+    setTimeout("hidediv()", 5000);
 </script>
 <script>
-  function concatAndConvert(str, str2) {
-    const specialChars = {
-      'ć': 'c',
-      'č': 'c',
-      'š': 's',
-      'ž': 'z',
-      'đ': 'd'
-    };
+    function concatAndConvert(str, str2) {
+        const specialChars = {
+            'ć': 'c',
+            'č': 'c',
+            'š': 's',
+            'ž': 'z',
+            'đ': 'd'
+        };
 
-    const firstLetter = str.charAt(0).toLowerCase();
-    // const remainingString = str.slice(1);
-    const convertedString = str2.replace(/[ćčšžđ]/g, char => specialChars[char]).toLowerCase();
-    const result = firstLetter + convertedString;
+        const firstLetter = str.charAt(0).toLowerCase();
+        // const remainingString = str.slice(1);
+        const convertedString = str2.replace(/[ćčšžđ]/g, char => specialChars[char]).toLowerCase();
+        const result = firstLetter + convertedString;
 
-    return result;
-  }
+        return result;
+    }
 
-  const nameInput = document.getElementById('firstName');
-  const lastnameInput = document.getElementById('lastName');
-  const outputInput = document.getElementById('username');
+    const nameInput = document.getElementById('firstName');
+    const lastnameInput = document.getElementById('lastName');
+    const outputInput = document.getElementById('username');
 
-  nameInput.addEventListener('input', updateOutput);
-  lastnameInput.addEventListener('input', updateOutput);
+    nameInput.addEventListener('input', updateOutput);
+    lastnameInput.addEventListener('input', updateOutput);
 
-  function updateOutput() {
-    const name = nameInput.value;
-    const lastname = lastnameInput.value;
-    const concatenatedName = concatAndConvert(name, lastname);
-    // const concatenatedLastname = concatAndConvert(lastname);
-    outputInput.value = concatenatedName;
-  }
+    function updateOutput() {
+        const name = nameInput.value;
+        const lastname = lastnameInput.value;
+        const concatenatedName = concatAndConvert(name, lastname);
+        // const concatenatedLastname = concatAndConvert(lastname);
+        outputInput.value = concatenatedName;
+    }
 </script>
 </html>
