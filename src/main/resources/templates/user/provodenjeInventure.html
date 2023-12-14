@@ -5,6 +5,7 @@
 <link th:href="@{/CSS/customStyle.css}" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script type="text/javascript" src="../static/javascript/sidebar.js" th:src="@{/javascript/sidebar.js}"></script>
+<script type="text/javascript" src="../static/javascript/hidediv.js" th:src="@{/javascript/hidedivProvodenjeInventure.js}"></script>
 <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 <head>
     <meta charset="UTF-8">
@@ -69,8 +70,9 @@
 <div class="w3-overlay" onclick="w3_close()" style="cursor:pointer" id="myOverlay"></div>
 <div>
     <button id="openNav" class="w3-button w3-xlarge" onclick="w3_open()">&#9776;</button>
-    <img src="../images/AITAC values challenges solutions (1).png" class="centered-image">
+    <img src="../images/AITAC values challenges solutions (1).png" class="centered-image" alt="Aitac VCS">
 </div>
+<div>
 <h1 class="w3-padding w3-center w3-opacity w3-xxxlarge" style="text-shadow:1px 1px 0 #444"><b>Izvršavanje inventure</b>
 </h1>
 </div>
@@ -79,7 +81,7 @@
         <label for="invBroj"></label>
         <input type="text" id="invBroj" name="invBroj" placeholder="Unesi inv.broj" required
                onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Unesite inventarni broj!')">
-        <button onclick="hidediv2()" type="submit" class="button-add"><i class="material-icons">add_circle</i> Unesi
+        <button onclick="hidedivProvodenjeInventure2()" type="submit" class="button-add"><i class="material-icons">add_circle</i> Unesi
         </button>
         <label id="error-message2" class="alert alert-danger" role="alert" th:text="${error2}"
                th:if="${error2}"></label>
@@ -88,7 +90,7 @@
         <label for="invBroj"></label>
         <input type="text" id="inventarniBr" name="inventarniBr" placeholder="Skeniraj inv.broj" required
                onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Skenirajte inventarni broj!')">
-        <button onclick="hidediv3()" id="submitBtn" type="submit" class="button-add"><i class="material-icons">add_circle</i>
+        <button onclick="hidedivProvodenjeInventure3()" id="submitBtn" type="submit" class="button-add"><i class="material-icons">add_circle</i>
             Skeniraj
         </button>
         <label id="error-message3" class="alert alert-danger" role="alert" th:text="${error3}"
@@ -101,9 +103,9 @@
         <input type="text" id="inventarniBroj" name="inventarniBroj" placeholder="Pretraži po inv. broju" required
                onchange="this.setCustomValidity('')"
                oninvalid="this.setCustomValidity('Unesite inventarni broj koji tražite!')">
-        <button onclick="hidediv()" type="submit"><i class="fa fa-search" style="font-size:20px"></i> Pronađi inventar
+        <button onclick="hidedivProvodenjeInventure()" type="submit" class="button-30"><i class="fa fa-search" style="font-size:20px"></i> Pronađi inventar
         </button>
-        <button type="button" onclick="window.location.href='/provodenjeInventure/all'">Prikaži sve</button>
+        <button type="button" class="button-30" onclick="window.location.href='/provodenjeInventure/all'">Prikaži sve</button>
         <label id="error-message" class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>
     </form>
     <form id="form2" class="w3-container w3-padding form" th:action="@{/provodenjeInventure/findByGodinaInventure}"
@@ -115,7 +117,7 @@
             <option th:each="inventura : ${allInventura}" th:value="${inventura.idInventure}"
                     th:text="${inventura.idInventure}"></option>
         </select>
-        <button onclick="hidediv()" type="submit"><i class="fa fa-search" style="font-size:20px"></i> Pretraži po godini
+        <button onclick="hidediv()" type="submit" class="button-30"><i class="fa fa-search" style="font-size:20px"></i> Pretraži po godini
         </button>
     </form>
 </div>
@@ -161,29 +163,29 @@
         document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE, and Opera
     };
 </script>
-<script>
-    function hidediv() {
-        document.getElementById("error-message").style.visibility = "hidden";
-    }
+<!--<script>-->
+<!--    function hidediv() {-->
+<!--        document.getElementById("error-message").style.visibility = "hidden";-->
+<!--    }-->
 
-    setTimeout("hidediv()", 5000);
-</script>
-<script>
-    function hidediv2() {
-        document.getElementById("error-message2").style.visibility = "hidden";
-        document.location.href = '/provodenjeInventure/all';
-    }
+<!--    setTimeout("hidediv()", 5000);-->
+<!--</script>-->
+<!--<script>-->
+<!--    function hidediv2() {-->
+<!--        document.getElementById("error-message2").style.visibility = "hidden";-->
+<!--        document.location.href = '/provodenjeInventure/all';-->
+<!--    }-->
 
-    setTimeout("hidediv2()", 1200);
-</script>
-<script>
-    function hidediv3() {
-        document.getElementById("error-message3").style.visibility = "hidden";
-        document.location.href = '/provodenjeInventure/all';
-    }
+<!--    setTimeout("hidediv2()", 1200);-->
+<!--</script>-->
+<!--<script>-->
+<!--    function hidediv3() {-->
+<!--        document.getElementById("error-message3").style.visibility = "hidden";-->
+<!--        document.location.href = '/provodenjeInventure/all';-->
+<!--    }-->
 
-    setTimeout("hidediv3()", 1200);
-</script>
+<!--    setTimeout("hidediv3()", 1200);-->
+<!--</script>-->
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         // Set focus on the inventarniBr input field when the page is loaded

@@ -30,7 +30,7 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeRequests()
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // Allow access to static resources
-                .requestMatchers("/CSS/customStyle.css", "/fonts", "/images", "/javascript/sidebar.js").permitAll()
+                .requestMatchers("/CSS/customStyle.css", "/fonts", "/images", "/javascript/sidebar.js", "/javascript/hidedivProvodenjeInventure.js").permitAll()
                 .requestMatchers("/index","/","/provodenjeInventure/all", "/provodenjeInventure/addNew", "/provodenjeInventure/scanNew", "/provodenjeInventure/findByGodinaInventure", "provodenjeInventure/find").hasAnyRole("ADMIN", "USER")
                 .requestMatchers("/**").hasRole("ADMIN")
                 .anyRequest()

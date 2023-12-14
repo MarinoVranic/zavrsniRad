@@ -5,6 +5,7 @@
 <link th:href="@{/CSS/customStyle.css}" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script type="text/javascript" src="../static/javascript/sidebar.js" th:src="@{/javascript/sidebar.js}"></script>
+<script type="text/javascript" src="../static/javascript/hidedivInventar.js" th:src="@{/javascript/hidedivInventar.js}"></script>
 <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 <head>
   <meta charset="UTF-8">
@@ -88,7 +89,7 @@
 <div class="w3-overlay" onclick="w3_close()" style="cursor:pointer" id="myOverlay"></div>
 <div>
   <button id="openNav" class="w3-button w3-xlarge" onclick="w3_open()">&#9776;</button>
-  <img src="../images/AITAC values challenges solutions (1).png" class="centered-image">
+  <img src="../images/AITAC values challenges solutions (1).png" class="centered-image" alt="Aitac VCS">
 </div>
   <h1 class="w3-padding w3-center w3-opacity w3-xxxlarge" style="text-shadow:1px 1px 0 #444"><b>Osnovna sredstva</b></h1>
 </div>
@@ -101,8 +102,8 @@
   <label for="inventarniBroj"></label>
   <input type="text" id="inventarniBroj" name="inventarniBroj" placeholder="Pretraži po inv. broju" required
          onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Popunite polje za pretraživanje!')">
-  <button onclick="hidediv()" type="submit"><i class="fa fa-search" style="font-size:20px"></i> Pretraži</button>
-  <button type="button" onclick="window.location.href='/inventar/all'">Prikaži sve</button>
+  <button onclick="hidedivInventar()" type="submit" class="button-30"><i class="fa fa-search" style="font-size:20px"></i> Pretraži</button>
+  <button type="button" class="button-30" onclick="window.location.href='/inventar/all'">Prikaži sve</button>
   <label id="error-message" class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>
 </form>
 <form id="form2" class="w3-container w3-padding form" th:action="@{/inventar/findByVrsta}" method="get" th:object="${allVrstaUredaja}">
@@ -111,7 +112,7 @@
     <option value="">Odaberite vrstu uređaja</option>
     <option th:each="vrstaUredaja : ${allVrstaUredaja}" th:value="${vrstaUredaja.idVrsteUredaja}" th:text="${vrstaUredaja.nazivVrsteUredaja}"></option>
   </select>
-  <button onclick="hidediv()" type="submit"><i class="fa fa-search" style="font-size:20px"></i> Pretraži po vrsti</button>
+  <button onclick="hidedivInventar()" type="submit" class="button-30"><i class="fa fa-search" style="font-size:20px"></i> Pretraži po vrsti</button>
 </form>
   <form id="form3" class="w3-container w3-padding form" th:action="@{/inventar/findByLokacija}" method="get" th:object="${allLokacija}">
     <select class=" w3-border w3-round w3-center" id="idLokacije" name="idLokacije" required
@@ -119,7 +120,7 @@
       <option value="">Odaberite lokaciju</option>
       <option th:each="lokacija : ${allLokacija}" th:value="${lokacija.idLokacije}" th:text="${lokacija.nazivLokacije}"></option>
     </select>
-    <button onclick="hidediv()" type="submit"><i class="fa fa-search" style="font-size:20px"></i> Pretraži po lokaciji</button>
+    <button onclick="hidedivInventar()" type="submit" class="button-30"><i class="fa fa-search" style="font-size:20px"></i> Pretraži po lokaciji</button>
   </form>
 </div>
 <div style="overflow-x:auto;">
@@ -177,11 +178,11 @@
     document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE, and Opera
   };
 </script>
-<script>
-  function hidediv(){
-    document.getElementById("error-message").style.visibility="hidden";
-  }
-  setTimeout("hidediv()",5000);
-</script>
+<!--<script>-->
+<!--  function hidediv(){-->
+<!--    document.getElementById("error-message").style.visibility="hidden";-->
+<!--  }-->
+<!--  setTimeout("hidediv()",5000);-->
+<!--</script>-->
 </body>
 </html>

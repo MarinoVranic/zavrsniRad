@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 <script type="text/javascript" src="../static/javascript/sidebar.js" th:src="@{/javascript/sidebar.js}"></script>
+<script type="text/javascript" src="../static/javascript/hidedivLokacija.js" th:src="@{/javascript/hidedivLokacija.js}"></script>
 <head>
     <meta charset="UTF-8">
     <title>Lokacije</title>
@@ -52,7 +53,7 @@
 <div class="w3-overlay" onclick="w3_close()" style="cursor:pointer" id="myOverlay"></div>
 <div>
     <button id="openNav" class="w3-button w3-xlarge" onclick="w3_open()">&#9776;</button>
-    <img style="height: 25%" src="../images/AITAC values challenges solutions (1).png" class="centered-image">
+    <img style="height: 25%" src="../images/AITAC values challenges solutions (1).png" class="centered-image" alt="Aitac VCS">
 </div>
 <h1 class="w3-padding w3-center w3-opacity w3-xxxlarge" style="text-shadow:1px 1px 0 #444"><b>Lokacije</b></h1>
 <div class="div-container">
@@ -60,11 +61,11 @@
     <a th:href="@{/lokacija/generatePDF}" class="button-30 w3-right">Izvještaj <i
             class="material-icons">picture_as_pdf</i></a>
 </div>
-<form class="w3-container" th:action="@{/lokacija/find}" method="get">
+<form class="w3-container" th:action="@{/lokacija/find}" method="get" style="margin-bottom: 20px">
     <input type="text" id="nazivLokacije" name="nazivLokacije" placeholder="Pretraži lokaciju po nazivu" required
            onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Popunite polje za pretraživanje!')">
-    <button onclick="hidediv()" type="submit">Pretraži</button>
-    <button type="button" onclick="window.location.href='/lokacija/all'">Prikaži sve</button>
+    <button onclick="hidedivLokacija()" type="submit" class="button-30"><i class="fa fa-search" style="font-size:20px"></i> Pretraži</button>
+    <button type="button" class="button-30" onclick="window.location.href='/lokacija/all'">Prikaži sve</button>
     <label id="error-message" class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>
 </form>
 <div style="overflow-x:auto;">
@@ -90,13 +91,13 @@
         <button id="scrollToTopBtn" title="Go to top" class="button-toTop">Na početak</button>
     </table>
 </div>
-<script>
-    function hidediv() {
-        document.getElementById("error-message").style.visibility = "hidden";
-    }
+<!--<script>-->
+<!--    function hidediv() {-->
+<!--        document.getElementById("error-message").style.visibility = "hidden";-->
+<!--    }-->
 
-    setTimeout("hidediv()", 5000);
-</script>
+<!--    setTimeout("hidediv()", 5000);-->
+<!--</script>-->
 <script>
     var scrollToTopBtn = document.getElementById("scrollToTopBtn");
 
