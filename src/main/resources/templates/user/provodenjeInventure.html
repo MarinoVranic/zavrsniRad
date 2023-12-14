@@ -144,10 +144,8 @@
     </table>
     <button id="scrollToTopBtn" title="Go to top" class="button-toTop">Na početak</button>
 </div>
-
 <script>
     var scrollToTopBtn = document.getElementById("scrollToTopBtn");
-
     // Show the button when user scrolls down 20px from the top of the document
     window.onscroll = function () {
         if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
@@ -156,36 +154,12 @@
             scrollToTopBtn.style.display = "none";
         }
     };
-
     // Scroll to the top of the document when the button is clicked
     scrollToTopBtn.onclick = function () {
         document.body.scrollTop = 0; // For Safari
         document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE, and Opera
     };
 </script>
-<!--<script>-->
-<!--    function hidediv() {-->
-<!--        document.getElementById("error-message").style.visibility = "hidden";-->
-<!--    }-->
-
-<!--    setTimeout("hidediv()", 5000);-->
-<!--</script>-->
-<!--<script>-->
-<!--    function hidediv2() {-->
-<!--        document.getElementById("error-message2").style.visibility = "hidden";-->
-<!--        document.location.href = '/provodenjeInventure/all';-->
-<!--    }-->
-
-<!--    setTimeout("hidediv2()", 1200);-->
-<!--</script>-->
-<!--<script>-->
-<!--    function hidediv3() {-->
-<!--        document.getElementById("error-message3").style.visibility = "hidden";-->
-<!--        document.location.href = '/provodenjeInventure/all';-->
-<!--    }-->
-
-<!--    setTimeout("hidediv3()", 1200);-->
-<!--</script>-->
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         // Set focus on the inventarniBr input field when the page is loaded

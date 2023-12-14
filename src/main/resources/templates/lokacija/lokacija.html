@@ -91,16 +91,8 @@
         <button id="scrollToTopBtn" title="Go to top" class="button-toTop">Na početak</button>
     </table>
 </div>
-<!--<script>-->
-<!--    function hidediv() {-->
-<!--        document.getElementById("error-message").style.visibility = "hidden";-->
-<!--    }-->
-
-<!--    setTimeout("hidediv()", 5000);-->
-<!--</script>-->
 <script>
     var scrollToTopBtn = document.getElementById("scrollToTopBtn");
-
     // Show the button when user scrolls down 20px from the top of the document
     window.onscroll = function () {
         if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
@@ -109,7 +101,6 @@
             scrollToTopBtn.style.display = "none";
         }
     };
-
     // Scroll to the top of the document when the button is clicked
     scrollToTopBtn.onclick = function () {
         document.body.scrollTop = 0; // For Safari

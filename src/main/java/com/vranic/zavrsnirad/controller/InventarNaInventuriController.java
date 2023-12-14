@@ -147,21 +147,6 @@ public class InventarNaInventuriController {
         return "redirect:/provodenjeInventure/all";
     }
 
-    //    @RequestMapping("/find")
-//    public String findByInventarniBroj(@RequestParam("inventarniBroj")String inventarniBroj, Model model){
-//        List<InventarNaInventuri> inventarNaInventuriList = inventarNaInventuriService.findByInventarniBroj(inventarniBroj);
-//        if (inventarNaInventuriList.isEmpty()){
-//            model.addAttribute("error", "Inventar pod tim brojem nije skeniran!");
-//            model.addAttribute("savInvNaInventuri", inventarNaInventuriService.getAllInventarNaInventuri());
-//            InventarNaInventuri inventarNaInventuri = new InventarNaInventuri();
-//            model.addAttribute("invNaInv", inventarNaInventuri);
-//        } else {
-//            model.addAttribute("savInvNaInventuri", inventarNaInventuriList);
-//            InventarNaInventuri inventarNaInventuri = new InventarNaInventuri();
-//            model.addAttribute("invNaInv", inventarNaInventuri);
-//        }
-//        return "inventura/provodenjeInventure";
-//    }
     @RequestMapping("/find")
     public String findByInventarniBroj(@RequestParam("inventarniBroj") String inventarniBroj, Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -184,16 +169,6 @@ public class InventarNaInventuriController {
         }
     }
 
-    //    @GetMapping("/findByGodinaInventure")
-//    public String showInventarByGodinaInventure(@RequestParam("idInventure") Long idInventure, Model model) {
-//        List<Inventura> allInventura = inventuraService.getAllInventura();
-//        List<InventarNaInventuri> inventarNaInventuriList = inventarNaInventuriService.finbByGodinaInventure(idInventure);
-//        model.addAttribute("allInventura", allInventura);
-//        model.addAttribute("savInvNaInventuri", inventarNaInventuriList);
-//        InventarNaInventuri inventarNaInventuri = new InventarNaInventuri();
-//        model.addAttribute("invNaInv", inventarNaInventuri);
-//        return "inventura/provodenjeInventure";
-//    }
     @GetMapping("/findByGodinaInventure")
     public String showInventarByGodinaInventure(@RequestParam("idInventure") Long idInventure, Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -306,26 +281,6 @@ public class InventarNaInventuriController {
         table.addCell(headerCell);
         headerCell.setPhrase(new Phrase("Datum skeniranja", headerFont));
         table.addCell(headerCell);
-//        headerCell.setPhrase(new Phrase("Lokacija", headerFont));
-//        table.addCell(headerCell);
-//        headerCell.setPhrase(new Phrase("Username", headerFont));
-//        table.addCell(headerCell);
-//        headerCell.setPhrase(new Phrase("LAN MAC", headerFont));
-//        table.addCell(headerCell);
-//        headerCell.setPhrase(new Phrase("WiFi MAC", headerFont));
-//        table.addCell(headerCell);
-//        headerCell.setPhrase(new Phrase("Datum zaduženja", headerFont));
-//        table.addCell(headerCell);
-//        headerCell.setPhrase(new Phrase("Datum razduženja", headerFont));
-//        table.addCell(headerCell);
-//        headerCell.setPhrase(new Phrase("Istek garancije", headerFont));
-//        table.addCell(headerCell);
-//        headerCell.setPhrase(new Phrase("Račun", headerFont));
-//        table.addCell(headerCell);
-//        headerCell.setPhrase(new Phrase("Dobavljač", headerFont));
-//        table.addCell(headerCell);
-//        headerCell.setPhrase(new Phrase("Napomena", headerFont));
-//        table.addCell(headerCell);
 
         // Get the list of Inventar objects from service
         List<InventarNaInventuri> scannedInventar = inventarNaInventuriService.finbByGodinaInventure(idInventure);
@@ -342,31 +297,6 @@ public class InventarNaInventuriController {
             table.addCell(dataCell);
             dataCell.setPhrase(new Phrase(inventar.getDatumSkeniranja().toString(), croatianFont));
             table.addCell(dataCell);
-//            dataCell.setPhrase(new Phrase(inventar.getLokacija().getNazivLokacije(), croatianFont));
-//            table.addCell(dataCell);
-//            Korisnik korisnik = inventar.getKorisnik();
-//            if (korisnik != null && korisnik.getUsername() != null) {
-//                dataCell.setPhrase(new Phrase(korisnik.getUsername(), croatianFont));
-//            } else {
-//                dataCell.setPhrase(new Phrase("", croatianFont));
-//            }
-//            table.addCell(dataCell);
-//            dataCell.setPhrase(new Phrase(inventar.getLanMac(), croatianFont));
-//            table.addCell(dataCell);
-//            dataCell.setPhrase(new Phrase(inventar.getWifiMac(), croatianFont));
-//            table.addCell(dataCell);
-//            dataCell.setPhrase(new Phrase(String.valueOf(inventar.getDatumZaduzenja()), croatianFont));
-//            table.addCell(dataCell);
-//            dataCell.setPhrase(new Phrase(String.valueOf(inventar.getDatumRazduzenja()), croatianFont));
-//            table.addCell(dataCell);
-//            dataCell.setPhrase(new Phrase(String.valueOf(inventar.getWarrantyEnding()), croatianFont));
-//            table.addCell(dataCell);
-//            dataCell.setPhrase(new Phrase(inventar.getRacun().getBrojRacuna(), croatianFont));
-//            table.addCell(dataCell);
-//            dataCell.setPhrase(new Phrase(inventar.getDobavljac().getNazivDobavljaca(), croatianFont));
-//            table.addCell(dataCell);
-//            dataCell.setPhrase(new Phrase(inventar.getNapomena(), croatianFont));
-//            table.addCell(dataCell);
         }
 
         // Add the table to the document

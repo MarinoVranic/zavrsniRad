@@ -52,21 +52,6 @@
   }
 </style>
 <body>
-<!--<div class="w3-sidebar w3-bar-block" style="display:none;z-index:5" id="mySidebar">-->
-<!--  <button onclick="w3_close()" class="w3-bar-item w3-large">Zatvori &times;</button>-->
-<!--  <a th:href="@{/index}" class="w3-bar-item w3-button">Glavni izbornik</a>-->
-<!--  <a th:href="@{/racun/all}" class="w3-bar-item w3-button">Računi</a>-->
-<!--  <a th:href="@{/dobavljac/all}" class="w3-bar-item w3-button">Dobavljači</a>-->
-<!--  <a th:href="@{/vrstaUredaja/all}" class="w3-bar-item w3-button">Vrste uređaja</a>-->
-<!--  <a th:href="@{/lokacija/all}" class="w3-bar-item w3-button">Lokacije</a>-->
-<!--  <a th:href="@{/korisnik/all}" class="w3-bar-item w3-button">Korisnici</a>-->
-<!--  <a th:href="@{/inventar/ITall}" class="w3-bar-item w3-button">IT oprema</a>-->
-<!--  <a th:href="@{/inventura/all}" class="w3-bar-item w3-button">Inventure</a>-->
-<!--  <a th:href="@{/provodenjeInventure/all}" class="w3-bar-item w3-button">Izvršavanje inventure</a>-->
-
-<!--  <button id="logout" type="button" onclick="window.location.href='/logout'">Logout</button>-->
-<!--  <img src="../images/A.jpg" alt="Logo" style="position: absolute; bottom: 10px; left: 10px; width: 175px;height: 175px">-->
-<!--</div>-->
 <div class="w3-sidebar w3-bar-block" style="display:none;z-index:5; height: 100%; position: fixed; bottom: 0; left: 0;" id="mySidebar">
   <div style="flex: 1;">
     <button onclick="w3_close()" class="w3-bar-item w3-large">Zatvori &times;</button>
@@ -91,6 +76,7 @@
   <button id="openNav" class="w3-button w3-xlarge" onclick="w3_open()">&#9776;</button>
   <img src="../images/AITAC values challenges solutions (1).png" class="centered-image" alt="Aitac VCS">
 </div>
+<div>
   <h1 class="w3-padding w3-center w3-opacity w3-xxxlarge" style="text-shadow:1px 1px 0 #444"><b>Osnovna sredstva</b></h1>
 </div>
 <div class="div-container">
@@ -159,10 +145,8 @@
 </table>
   <button id="scrollToTopBtn" title="Go to top" class="button-toTop">Na početak</button>
 </div>
-
 <script>
   var scrollToTopBtn = document.getElementById("scrollToTopBtn");
-
   // Show the button when user scrolls down 20px from the top of the document
   window.onscroll = function() {
     if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
@@ -171,18 +155,11 @@
       scrollToTopBtn.style.display = "none";
     }
   };
-
   // Scroll to the top of the document when the button is clicked
   scrollToTopBtn.onclick = function() {
     document.body.scrollTop = 0; // For Safari
     document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE, and Opera
   };
 </script>
-<!--<script>-->
-<!--  function hidediv(){-->
-<!--    document.getElementById("error-message").style.visibility="hidden";-->
-<!--  }-->
-<!--  setTimeout("hidediv()",5000);-->
-<!--</script>-->
 </body>
 </html>

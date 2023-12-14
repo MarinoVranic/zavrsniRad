@@ -64,4 +64,3 @@ public class MyUserDetailsService implements UserDetailsService {
         );
     }
 }
-//                AuthorityUtils.createAuthorityList("ROLE_USER")
