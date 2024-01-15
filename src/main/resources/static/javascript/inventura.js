@@ -8,8 +8,9 @@ function validateForm() {
 }
 
 function generateReport() {
-    var selectedOption = document.getElementById("idInventure").value;
-    if (selectedOption !== "") {
+    var selectedOption1 = document.getElementById("idInventure").value;
+    var selectedOption2 = document.getElementById("tipInventara").value;
+    if (selectedOption1 !== "" && selectedOption2 !== "") {
         var form = document.getElementById("form2");
         form.action = "/provodenjeInventure/generatePDF";
         form.submit();

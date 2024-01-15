@@ -105,6 +105,18 @@
         <label id="error-message3" class="alert alert-danger" role="alert" th:text="${error3}"
                th:if="${error3}"></label>
     </form>
+    <form id="form4" class="w3-container w3-padding form" th:action="@{/provodenjeInventure/odaberi_lokaciju}"
+          method="post" th:object="${allLokacija}">
+        <select class="w3-border w3-round w3-center" id="idLokacije" name="idLokacije" required
+                onchange="this.setCustomValidity('')"
+                oninvalid="this.setCustomValidity('Odaberite lokaciju inventara!')">
+            <option value="">Odaberite lokaciju inventara</option>
+            <option th:each="lokacija : ${allLokacija}" th:value="${lokacija.idLokacije}"
+                    th:text="${lokacija.nazivLokacije}"></option>
+        </select>
+        <button type="submit" class="button-30"><i class="fa fa-search" style="font-size:20px"></i> Postavi lokaciju</button>
+        <label th:if="${trenutnaLokacija != null}">Trenutna lokacija: <span th:text="${trenutnaLokacija.nazivLokacije}"></span></label>
+    </form>
 </div>
 <div class="forms-container" style="display: flex;">
     <form id="form1" class="w3-container w3-padding form" th:action="@{/provodenjeInventure/find}" method="get">
@@ -126,6 +138,13 @@
             <option th:each="inventura : ${allInventura}" th:value="${inventura.idInventure}"
                     th:text="${inventura.idInventure}"></option>
         </select>
+        <select class="w3-border w3-round w3-center" id="tipInventara" name="tipInventara" required
+                onchange="this.setCustomValidity('')"
+                oninvalid="this.setCustomValidity('Odaberite tip inventara!')">
+            <option value="">Odaberite tip inventara</option>
+            <option value="OS">Osnovna sredstva</option>
+            <option value="SI">Sitni inventar</option>
+        </select>
         <button type="submit" class="button-30"><i class="fa fa-search" style="font-size:20px"></i> Pretraži po godini</button>
         <button type="submit" class="button-30" onclick="generateReport()">Izvještaj <i class="material-icons">picture_as_pdf</i></button>
         <button type="submit" class="button-30" onclick="generateCSV()">Izvještaj <i class="material-symbols-outlined">csv</i></button>
@@ -140,6 +159,9 @@
             <th class="w3-dark-grey">Naziv inventara</th>
             <th class="w3-dark-grey">Vrsta inventara</th>
             <th class="w3-dark-grey">Datum skeniranja</th>
+            <th class="w3-dark-grey">Upisana lokacija inventara</th>
+            <th class="w3-dark-grey">Skenirana lokacija inventara</th>
+            <th style="width: 45px" class="w3-dark-grey"></th>
             <th style="width: 45px" class="w3-dark-grey"></th>
         </tr>
         </thead>
@@ -150,15 +172,22 @@
             <td th:text="${invNaInv.inventar.nazivUredaja}"></td>
             <td th:text="${invNaInv.inventar.vrstaUredaja.nazivVrsteUredaja}"></td>
             <td th:text="${invNaInv.datumSkeniranja}"></td>
+            <td th:text="${invNaInv.inventar.lokacija.nazivLokacije}"></td>
+            <td th:text="${invNaInv.lokacija.nazivLokacije}"></td>
+            <td><a style="font-size:15px; text-align: center"
+                   th:if="${invNaInv.lokacija.nazivLokacije != invNaInv.inventar.lokacija.nazivLokacije}"
+                   th:href="@{/provodenjeInventure/changeLocation/{inventarniBroj}/{idInventure}(inventarniBroj=${invNaInv.inventar.inventarniBroj}, idInventure=${invNaInv.inventura.idInventure})}"
+                   class="button-zaduzi">Promijeni<br>lokaciju</a></td>
             <td><a style="font-size:128px"
-                   th:href="@{/provodenjeInventure/delete/{idSkeniranja}(idSkeniranja=${invNaInv.idSkeniranja})}"
+                   href="javascript:void(0);"
+                   th:onclick="'confirmDelete(' + ${invNaInv.idSkeniranja} + ')'"
                    class="button-delete"><i class="material-icons">remove_circle</i></a></td>
         </tr>
         </tbody>
     </table>
     <button id="scrollToTopBtn" title="Go to top" class="button-toTop">Na početak</button>
 </div>
-
+<!--th:href="@{/provodenjeInventure/delete/{idSkeniranja}(idSkeniranja=${invNaInv.idSkeniranja})}"-->
 <script>
     var scrollToTopBtn = document.getElementById("scrollToTopBtn");
     // Show the button when user scrolls down 20px from the top of the document
@@ -175,21 +204,21 @@
         document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE, and Opera
     };
 </script>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Set focus on the inventarniBr input field when the page is loaded
-        document.getElementById('inventarniBr').focus();
+<!--<script>-->
+<!--    document.addEventListener('DOMContentLoaded', function () {-->
+<!--        // Set focus on the inventarniBr input field when the page is loaded-->
+<!--        document.getElementById('inventarniBr').focus();-->
 
-        // Add an input event listener to the inventarniBr input field
-        document.getElementById('inventarniBr').addEventListener('input', function () {
-            // Check if the input length is 13 characters
-            if (this.value.length === 13) {
-                // Automatically submit the form
-                document.getElementById('form3').submit();
-            }
-        });
-    });
-</script>
+<!--        // Add an input event listener to the inventarniBr input field-->
+<!--        document.getElementById('inventarniBr').addEventListener('input', function () {-->
+<!--            // Check if the input length is 13 characters-->
+<!--            if (this.value.length === 13) {-->
+<!--                // Automatically submit the form-->
+<!--                document.getElementById('form3').submit();-->
+<!--            }-->
+<!--        });-->
+<!--    });-->
+<!--</script>-->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Set focus on the inventarniBr input field when the page is loaded
@@ -200,6 +229,15 @@
             document.getElementById('submitBtn').disabled = this.value.length !== 13;
         });
     });
+</script>
+<script>
+    function confirmDelete(idSkeniranja) {
+        var isConfirmed = confirm("Are you sure you want to delete?");
+
+        if (isConfirmed) {
+            window.location.href = `/provodenjeInventure/delete/${idSkeniranja}`;
+        } 
+    }
 </script>
 </body>
 </html>

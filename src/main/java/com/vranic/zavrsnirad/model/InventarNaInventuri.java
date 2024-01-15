@@ -28,4 +28,8 @@ public class InventarNaInventuri {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime datumSkeniranja;
+
+    @ManyToOne
+    @JoinColumn(name = "id_skenirane_lokacije")
+    private Lokacija lokacija;
 }

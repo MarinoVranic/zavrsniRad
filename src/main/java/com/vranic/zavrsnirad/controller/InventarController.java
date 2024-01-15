@@ -249,10 +249,33 @@ public class InventarController {
     @GetMapping(value = "/ean13/{inventarniBroj}", produces = MediaType.IMAGE_PNG_VALUE)
     public ResponseEntity<byte[]> generateAndDownloadEAN13Barcode(@PathVariable(value = "inventarniBroj") String inventarniBroj) {
         try {
+            Inventar inventar = inventarService.getInventarById(inventarniBroj);
             String originalInventarniBroj = inventarniBroj;
-            while(inventarniBroj.length() < 12){
-                inventarniBroj = "0" + inventarniBroj;
+            String sitniInventar = originalInventarniBroj.substring(0,2);
+            System.out.println(sitniInventar);
+//            while(inventarniBroj.length() < 12){
+//                inventarniBroj = "0" + inventarniBroj;
+//            }
+            System.out.println(originalInventarniBroj);
+            System.out.println(inventarniBroj);
+//            if(inventar.getVrstaUredaja().getNazivVrsteUredaja().equals("Laptop")||inventar.getVrstaUredaja().getNazivVrsteUredaja().equals("PC")){
+//                inventarniBroj = "1" + inventarniBroj.substring(1);
+//            } else if (inventar.getVrstaUredaja().getNazivVrsteUredaja().equals("Monitor")) {
+//                inventarniBroj = "2" + inventarniBroj.substring(1);
+//            }
+//            else if (inventar.getVrstaUredaja().getNazivVrsteUredaja().equals("Slušalice")) {
+//                inventarniBroj = "3" + inventarniBroj.substring(1);
+//            }
+            if(sitniInventar.equals("SI"))
+            {
+                inventarniBroj = inventarniBroj.substring(2);
+                System.out.println(inventarniBroj);
+                while(inventarniBroj.length() < 12){
+                    inventarniBroj = "0" + inventarniBroj;
+                }
+                inventarniBroj = "2" + inventarniBroj.substring(1);
             }
+            System.out.println(inventarniBroj);
             BitMatrix bitMatrix = BarcodeGeneratorService.generateEAN13Barcode(inventarniBroj);
             byte[] barcodeImage = BarcodeImageUtils.convertBitMatrixToByteArray(bitMatrix);
 

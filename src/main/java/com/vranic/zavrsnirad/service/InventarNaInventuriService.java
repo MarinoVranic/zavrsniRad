@@ -32,7 +32,23 @@ public class InventarNaInventuriService {
         return inventarNaInventuriRepository.findByGodInventure(idInventure);
     }
 
+    public List<InventarNaInventuri> SIByGodinaInventure(Long idInventure){
+        return inventarNaInventuriRepository.SIByGodInventure(idInventure);
+    }
+
+    public List<InventarNaInventuri> OSByGodinaInventure(Long idInventure){
+        return inventarNaInventuriRepository.OSByGodInventure(idInventure);
+    }
+
     public Long checkIfInventarAlreadyScanned(String inventarniBroj, Long idInventure){
         return inventarNaInventuriRepository.checkIfInvBrojIsScanned(inventarniBroj, idInventure);
+    }
+
+    public InventarNaInventuri selectInvNaInvByBrojAndInventura(String inventarniBroj, Long idInventure){
+        return inventarNaInventuriRepository.selectInvNaInvByBrojAndInventura(inventarniBroj, idInventure);
+    }
+
+    public void changeLokacija(Long idTrenutneLokacije, String inventarniBroj){
+        inventarNaInventuriRepository.changeLokacija(idTrenutneLokacije, inventarniBroj);
     }
 }

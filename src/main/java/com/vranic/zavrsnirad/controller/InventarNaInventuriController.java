@@ -9,8 +9,11 @@ import com.vranic.zavrsnirad.model.*;
 import com.vranic.zavrsnirad.service.InventarNaInventuriService;
 import com.vranic.zavrsnirad.service.InventarService;
 import com.vranic.zavrsnirad.service.InventuraService;
+import com.vranic.zavrsnirad.service.LokacijaService;
 import com.vranic.zavrsnirad.util.CsvGeneratorUtil;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -28,9 +31,11 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/provodenjeInventure")
+@SessionAttributes("trenutnaLokacija")
 public class InventarNaInventuriController {
 
     @Autowired
@@ -45,14 +50,29 @@ public class InventarNaInventuriController {
     @Autowired
     private CsvGeneratorUtil csvGeneratorUtil;
 
+    @Autowired
+    private LokacijaService lokacijaService;
+
     public LocalDate today = LocalDate.now();
 
+
+
+
     @GetMapping("/all")
-    public String getAllInventarNaInventuri(Model model) {
+    public String getAllInventarNaInventuri(Model model, HttpSession session) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         model.addAttribute("savInvNaInventuri", inventarNaInventuriService.getAllInventarNaInventuri());
         List<Inventura> allInventura = inventuraService.getAllInventura();
         model.addAttribute("allInventura", allInventura);
+        List<Lokacija> allLokacija = lokacijaService.getAllLokacija();
+        model.addAttribute("allLokacija", allLokacija);
+        Lokacija trenutnaLokacija = (Lokacija) session.getAttribute("trenutnaLokacija");
+        if(trenutnaLokacija != null){
+            model.addAttribute("trenutnaLokacija", trenutnaLokacija);
+        } else {
+            model.addAttribute("errorLokacija", "Prvo morate postaviti lokaciju");
+        }
+
         if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
             // User has the admin role
             return "inventura/provodenjeInventure";
@@ -62,9 +82,18 @@ public class InventarNaInventuriController {
         }
     }
 
+    @PostMapping("/odaberi_lokaciju")
+    public String odaberiLokaciju(@RequestParam Long idLokacije, Model model, HttpSession session){
+        Lokacija trenutnaLokacija = lokacijaService.getLokacijaById(idLokacije);
+        model.addAttribute("trenutnaLokacija", trenutnaLokacija);
+        session.setAttribute("trenutnaLokacija", trenutnaLokacija);
+        return "redirect:/provodenjeInventure/all";
+    }
+
     @PostMapping("/addNew")
-    public String addNewScan(@RequestParam("invBroj") String inventarniBroj, Model model) {
+    public String addNewScan(@RequestParam("invBroj") String inventarniBroj, Model model, HttpSession session) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Lokacija trenutnaLokacija = (Lokacija) session.getAttribute("trenutnaLokacija");
         Integer currentYear = LocalDate.now().getYear();
         Inventar inventar = inventarService.getInventarById(inventarniBroj);
         Inventura inventura = inventuraService.getInventuraById(currentYear.longValue());
@@ -76,12 +105,16 @@ public class InventarNaInventuriController {
         } else if (inventarNaInventuriService.checkIfInventarAlreadyScanned(inventarNaInventuri.getInventar().getInventarniBroj(), currentYear.longValue()) != 0) {
             model.addAttribute("error2", "Inventar je već skeniran!");
             return getViewBasedOnRole(auth);
+        } else if (trenutnaLokacija == null) {
+            model.addAttribute("error2", "Prvo morate postaviti lokaciju!");
+            return getViewBasedOnRole(auth);
         } else {
             if (inventura == null) {
                 inventura = new Inventura();
                 inventura.setIdInventure(currentYear.longValue());
                 inventarNaInventuri.setInventura(inventura);
                 inventarNaInventuri.setDatumSkeniranja(LocalDateTime.now());
+                inventarNaInventuri.setLokacija(trenutnaLokacija);
                 System.out.println(inventar);
                 System.out.println(currentYear.longValue());
                 System.out.println(inventura.getIdInventure());
@@ -89,6 +122,7 @@ public class InventarNaInventuriController {
             } else {
                 inventarNaInventuri.setInventura(inventura);
                 inventarNaInventuri.setDatumSkeniranja(LocalDateTime.now());
+                inventarNaInventuri.setLokacija(trenutnaLokacija);
                 inventarNaInventuriService.save(inventarNaInventuri);
             }
         }
@@ -106,44 +140,130 @@ public class InventarNaInventuriController {
     }
 
     @PostMapping("/scanNew")
-    public String newScan(@RequestParam("inventarniBr") String inventarniBroj, Model model) {
+    public String newScan(@RequestParam("inventarniBr") String inventarniBroj, Model model, HttpSession session) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Lokacija trenutnaLokacija = (Lokacija) session.getAttribute("trenutnaLokacija");
         Integer currentYear = LocalDate.now().getYear();
+        String vrstaInventara = inventarniBroj.substring(0,1);
+        System.out.println(vrstaInventara);
         String invBroj = inventarniBroj.substring(8, 12);
         int invBrSaNulama = Integer.parseInt(invBroj);
         String invBrBezNula = String.valueOf(invBrSaNulama);
-        Inventar inventar = inventarService.getInventarById(invBrBezNula);
-        Inventura inventura = inventuraService.getInventuraById(currentYear.longValue());
-        InventarNaInventuri inventarNaInventuri = new InventarNaInventuri();
-        inventarNaInventuri.setInventar(inventar);
-        if (inventar == null) {
-            model.addAttribute("error3", "Skenirani inventar nije zaveden u bazi!");
-            return getViewBasedOnRole(auth);
-        } else if (inventarNaInventuriService.checkIfInventarAlreadyScanned(inventarNaInventuri.getInventar().getInventarniBroj(), currentYear.longValue()) != 0) {
-            model.addAttribute("error3", "Inventar je već skeniran!");
-            return getViewBasedOnRole(auth);
-        } else {
-            if (inventura == null) {
-                inventura = new Inventura();
-                inventura.setIdInventure(currentYear.longValue());
-                inventarNaInventuri.setInventura(inventura);
-                inventarNaInventuri.setDatumSkeniranja(LocalDateTime.now());
-                System.out.println(inventar);
-                System.out.println(currentYear.longValue());
-                System.out.println(inventura.getIdInventure());
-                inventarNaInventuriService.save(inventarNaInventuri);
+//        Inventar inventar = inventarService.getInventarById(invBrBezNula);
+//        Inventura inventura = inventuraService.getInventuraById(currentYear.longValue());
+//        InventarNaInventuri inventarNaInventuri = new InventarNaInventuri();
+//        inventarNaInventuri.setInventar(inventar);
+//        inventarNaInventuri.setLokacija(trenutnaLokacija);
+        if(vrstaInventara.equals("2"))
+        {
+            invBrBezNula = "SI" + invBrBezNula;
+            Inventar inventar = inventarService.getInventarById(invBrBezNula);
+            Inventura inventura = inventuraService.getInventuraById(currentYear.longValue());
+            InventarNaInventuri inventarNaInventuri = new InventarNaInventuri();
+            inventarNaInventuri.setInventar(inventar);
+            inventarNaInventuri.setLokacija(trenutnaLokacija);
+            if (inventar == null) {
+                model.addAttribute("error3", "Skenirani inventar nije zaveden u bazi!");
+                return getViewBasedOnRole(auth);
+            } else if (inventarNaInventuriService.checkIfInventarAlreadyScanned(inventarNaInventuri.getInventar().getInventarniBroj(), currentYear.longValue()) != 0) {
+                model.addAttribute("error3", "Inventar je već skeniran!");
+                return getViewBasedOnRole(auth);
+            } else if (trenutnaLokacija == null) {
+                model.addAttribute("error3", "Prvo morate postaviti lokaciju!");
+                return getViewBasedOnRole(auth);
             } else {
-                inventarNaInventuri.setInventura(inventura);
-                inventarNaInventuri.setDatumSkeniranja(LocalDateTime.now());
-                inventarNaInventuriService.save(inventarNaInventuri);
+                if (inventura == null) {
+                    inventura = new Inventura();
+                    inventura.setIdInventure(currentYear.longValue());
+                    inventarNaInventuri.setInventura(inventura);
+                    inventarNaInventuri.setDatumSkeniranja(LocalDateTime.now());
+                    inventarNaInventuri.setLokacija(trenutnaLokacija);
+                    System.out.println(inventar);
+                    System.out.println(currentYear.longValue());
+                    System.out.println(inventura.getIdInventure());
+                    inventarNaInventuriService.save(inventarNaInventuri);
+                } else {
+                    inventarNaInventuri.setInventura(inventura);
+                    inventarNaInventuri.setDatumSkeniranja(LocalDateTime.now());
+                    inventarNaInventuri.setLokacija(trenutnaLokacija);
+                    inventarNaInventuriService.save(inventarNaInventuri);
+                }
+            }
+        } else {
+            Inventar inventar = inventarService.getInventarById(invBrBezNula);
+            Inventura inventura = inventuraService.getInventuraById(currentYear.longValue());
+            InventarNaInventuri inventarNaInventuri = new InventarNaInventuri();
+            inventarNaInventuri.setInventar(inventar);
+            inventarNaInventuri.setLokacija(trenutnaLokacija);
+            if (inventar == null) {
+                model.addAttribute("error3", "Skenirani inventar nije zaveden u bazi!");
+                return getViewBasedOnRole(auth);
+            } else if (inventarNaInventuriService.checkIfInventarAlreadyScanned(inventarNaInventuri.getInventar().getInventarniBroj(), currentYear.longValue()) != 0) {
+                model.addAttribute("error3", "Inventar je već skeniran!");
+                return getViewBasedOnRole(auth);
+            } else if (trenutnaLokacija == null) {
+                model.addAttribute("error3", "Prvo morate postaviti lokaciju!");
+                return getViewBasedOnRole(auth);
+            } else {
+                if (inventura == null) {
+                    inventura = new Inventura();
+                    inventura.setIdInventure(currentYear.longValue());
+                    inventarNaInventuri.setInventura(inventura);
+                    inventarNaInventuri.setDatumSkeniranja(LocalDateTime.now());
+                    inventarNaInventuri.setLokacija(trenutnaLokacija);
+                    System.out.println(inventar);
+                    System.out.println(currentYear.longValue());
+                    System.out.println(inventura.getIdInventure());
+                    inventarNaInventuriService.save(inventarNaInventuri);
+                } else {
+                    inventarNaInventuri.setInventura(inventura);
+                    inventarNaInventuri.setDatumSkeniranja(LocalDateTime.now());
+                    inventarNaInventuri.setLokacija(trenutnaLokacija);
+                    inventarNaInventuriService.save(inventarNaInventuri);
+                }
             }
         }
+//        if (inventar == null) {
+//            model.addAttribute("error3", "Skenirani inventar nije zaveden u bazi!");
+//            return getViewBasedOnRole(auth);
+//        } else if (inventarNaInventuriService.checkIfInventarAlreadyScanned(inventarNaInventuri.getInventar().getInventarniBroj(), currentYear.longValue()) != 0) {
+//            model.addAttribute("error3", "Inventar je već skeniran!");
+//            return getViewBasedOnRole(auth);
+//        } else if (trenutnaLokacija == null) {
+//            model.addAttribute("error3", "Prvo morate postaviti lokaciju!");
+//            return getViewBasedOnRole(auth);
+//        } else {
+//            if (inventura == null) {
+//                inventura = new Inventura();
+//                inventura.setIdInventure(currentYear.longValue());
+//                inventarNaInventuri.setInventura(inventura);
+//                inventarNaInventuri.setDatumSkeniranja(LocalDateTime.now());
+//                inventarNaInventuri.setLokacija(trenutnaLokacija);
+//                System.out.println(inventar);
+//                System.out.println(currentYear.longValue());
+//                System.out.println(inventura.getIdInventure());
+//                inventarNaInventuriService.save(inventarNaInventuri);
+//            } else {
+//                inventarNaInventuri.setInventura(inventura);
+//                inventarNaInventuri.setDatumSkeniranja(LocalDateTime.now());
+//                inventarNaInventuri.setLokacija(trenutnaLokacija);
+//                inventarNaInventuriService.save(inventarNaInventuri);
+//            }
+//        }
         return "redirect:/provodenjeInventure/all";
     }
 
     @GetMapping("delete/{idSkeniranja}")
     public String deleteById(@PathVariable(value = "idSkeniranja") Long idSkeniranja) {
         inventarNaInventuriService.deleteById(idSkeniranja);
+        return "redirect:/provodenjeInventure/all";
+    }
+
+    @GetMapping("/changeLocation/{inventarniBroj}/{idInventure}")
+    @Transactional
+    public String changeLocation(@PathVariable(value = "inventarniBroj") String inventarniBroj, @PathVariable(value = "idInventure") Long idInventure){
+        InventarNaInventuri inventarNaInventuri = inventarNaInventuriService.selectInvNaInvByBrojAndInventura(inventarniBroj, idInventure);
+        inventarNaInventuriService.changeLokacija(inventarNaInventuri.getLokacija().getIdLokacije(), inventarniBroj);
         return "redirect:/provodenjeInventure/all";
     }
 
@@ -170,29 +290,47 @@ public class InventarNaInventuriController {
     }
 
     @GetMapping("/findByGodinaInventure")
-    public String showInventarByGodinaInventure(@RequestParam("idInventure") Long idInventure, Model model) {
+    public String showInventarByGodinaInventure(@RequestParam("idInventure") Long idInventure, @RequestParam("tipInventara") String tipInventara, Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         List<Inventura> allInventura = inventuraService.getAllInventura();
-        List<InventarNaInventuri> inventarNaInventuriList = inventarNaInventuriService.finbByGodinaInventure(idInventure);
-        model.addAttribute("allInventura", allInventura);
-        model.addAttribute("savInvNaInventuri", inventarNaInventuriList);
+        if(tipInventara.equals("SI"))
+        {
+            List<InventarNaInventuri> inventarNaInventuriList = inventarNaInventuriService.SIByGodinaInventure(idInventure);
+            model.addAttribute("allInventura", allInventura);
+            model.addAttribute("savInvNaInventuri", inventarNaInventuriList);
 
-        if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
-            // User has the admin role
-            return "inventura/provodenjeInventure";
+            if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+                // User has the admin role
+                return "inventura/provodenjeInventure";
+            } else {
+                // User has user role
+                InventarNaInventuri inventarNaInventuri = new InventarNaInventuri();
+                model.addAttribute("invNaInv", inventarNaInventuri);
+                return "user/provodenjeInventure";
+            }
         } else {
-            // User has user role
-            InventarNaInventuri inventarNaInventuri = new InventarNaInventuri();
-            model.addAttribute("invNaInv", inventarNaInventuri);
-            return "user/provodenjeInventure";
+            List<InventarNaInventuri> inventarNaInventuriList = inventarNaInventuriService.OSByGodinaInventure(idInventure);
+            model.addAttribute("allInventura", allInventura);
+            model.addAttribute("savInvNaInventuri", inventarNaInventuriList);
+
+            if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+                // User has the admin role
+                return "inventura/provodenjeInventure";
+            } else {
+                // User has user role
+                InventarNaInventuri inventarNaInventuri = new InventarNaInventuri();
+                model.addAttribute("invNaInv", inventarNaInventuri);
+                return "user/provodenjeInventure";
+            }
         }
+
     }
 
     @GetMapping("/generatePDF")
-    public void generatePDF(@RequestParam("idInventure") Long idInventure, HttpServletResponse response) throws IOException, DocumentException {
+    public void generatePDF(@RequestParam("idInventure") Long idInventure, @RequestParam("tipInventara") String tipInventara, HttpServletResponse response) throws IOException, DocumentException {
         // Set the content type and attachment header
         response.setContentType("application/pdf");
-        response.setHeader("Content-Disposition", "attachment; filename=\"Izvjestaj_inventure-" + idInventure + ".pdf\"");
+        response.setHeader("Content-Disposition", "attachment; filename=\"Izvjestaj_inventure_za-" + tipInventara + "_" + idInventure + ".pdf\"");
 
         // Create a new PDF document
         Document document = new Document(PageSize.A4.rotate());
@@ -283,51 +421,98 @@ public class InventarNaInventuriController {
         table.addCell(headerCell);
 
         // Get the list of Inventar objects from service
-        List<InventarNaInventuri> scannedInventar = inventarNaInventuriService.finbByGodinaInventure(idInventure);
+        if(tipInventara.equals("SI")) {
+            List<InventarNaInventuri> scannedInventar = inventarNaInventuriService.SIByGodinaInventure(idInventure);
+            for (InventarNaInventuri inventar : scannedInventar) {
+                dataCell.setPhrase(new Phrase(inventar.getInventura().getIdInventure().toString(), croatianFont));
+                table.addCell(dataCell);
+                dataCell.setPhrase(new Phrase(inventar.getInventar().getInventarniBroj(), croatianFont));
+                table.addCell(dataCell);
+                dataCell.setPhrase(new Phrase(inventar.getInventar().getNazivUredaja(), croatianFont));
+                table.addCell(dataCell);
+                dataCell.setPhrase(new Phrase(inventar.getInventar().getVrstaUredaja().getNazivVrsteUredaja(), croatianFont));
+                table.addCell(dataCell);
+                dataCell.setPhrase(new Phrase(inventar.getDatumSkeniranja().toString(), croatianFont));
+                table.addCell(dataCell);
+            }
 
-        // Add data cells to the table
-        for (InventarNaInventuri inventar : scannedInventar) {
-            dataCell.setPhrase(new Phrase(inventar.getInventura().getIdInventure().toString(), croatianFont));
-            table.addCell(dataCell);
-            dataCell.setPhrase(new Phrase(inventar.getInventar().getInventarniBroj(), croatianFont));
-            table.addCell(dataCell);
-            dataCell.setPhrase(new Phrase(inventar.getInventar().getNazivUredaja(), croatianFont));
-            table.addCell(dataCell);
-            dataCell.setPhrase(new Phrase(inventar.getInventar().getVrstaUredaja().getNazivVrsteUredaja(), croatianFont));
-            table.addCell(dataCell);
-            dataCell.setPhrase(new Phrase(inventar.getDatumSkeniranja().toString(), croatianFont));
-            table.addCell(dataCell);
+            // Add the table to the document
+            document.add(table);
+
+            //Adding another image and setting its size and position
+            String imagePath = "static/images/AitacLine.png"; // Relative path to the image file
+            Resource resource = new ClassPathResource(imagePath);
+            Image image = Image.getInstance(resource.getURL());
+
+            // Set the desired width and height of the image in centimeters
+            float desiredWidthInCm = 17f;
+            float desiredHeightInCm = 7f;
+
+            // Convert centimeters to points
+            float desiredWidthInPoints = desiredWidthInCm * 72 / 2.54f;
+            float desiredHeightInPoints = desiredHeightInCm * 72 / 2.54f;
+
+            // Set the desired width and height of the image in points
+            float desiredWidth = desiredWidthInPoints;
+            float desiredHeight = desiredHeightInPoints;
+            image.scaleToFit(desiredWidth, desiredHeight);
+
+            // Calculate the coordinates to position the image at the bottom
+            float x = (pageWidth - desiredWidth) / 2; // Centered horizontally
+            float y = image.getScaledHeight() + document.bottomMargin(); // Position from the bottom
+
+            image.setAbsolutePosition(x, y);
+            document.add(image);
+            // Close the document
+            document.close();
+        } else {
+            List<InventarNaInventuri> scannedInventar = inventarNaInventuriService.OSByGodinaInventure(idInventure);
+
+            // Add data cells to the table
+            for (InventarNaInventuri inventar : scannedInventar) {
+                dataCell.setPhrase(new Phrase(inventar.getInventura().getIdInventure().toString(), croatianFont));
+                table.addCell(dataCell);
+                dataCell.setPhrase(new Phrase(inventar.getInventar().getInventarniBroj(), croatianFont));
+                table.addCell(dataCell);
+                dataCell.setPhrase(new Phrase(inventar.getInventar().getNazivUredaja(), croatianFont));
+                table.addCell(dataCell);
+                dataCell.setPhrase(new Phrase(inventar.getInventar().getVrstaUredaja().getNazivVrsteUredaja(), croatianFont));
+                table.addCell(dataCell);
+                dataCell.setPhrase(new Phrase(inventar.getDatumSkeniranja().toString(), croatianFont));
+                table.addCell(dataCell);
+            }
+
+            // Add the table to the document
+            document.add(table);
+
+            //Adding another image and setting its size and position
+            String imagePath = "static/images/AitacLine.png"; // Relative path to the image file
+            Resource resource = new ClassPathResource(imagePath);
+            Image image = Image.getInstance(resource.getURL());
+
+            // Set the desired width and height of the image in centimeters
+            float desiredWidthInCm = 17f;
+            float desiredHeightInCm = 7f;
+
+            // Convert centimeters to points
+            float desiredWidthInPoints = desiredWidthInCm * 72 / 2.54f;
+            float desiredHeightInPoints = desiredHeightInCm * 72 / 2.54f;
+
+            // Set the desired width and height of the image in points
+            float desiredWidth = desiredWidthInPoints;
+            float desiredHeight = desiredHeightInPoints;
+            image.scaleToFit(desiredWidth, desiredHeight);
+
+            // Calculate the coordinates to position the image at the bottom
+            float x = (pageWidth - desiredWidth) / 2; // Centered horizontally
+            float y = image.getScaledHeight() + document.bottomMargin(); // Position from the bottom
+
+            image.setAbsolutePosition(x, y);
+            document.add(image);
+            // Close the document
+            document.close();
         }
 
-        // Add the table to the document
-        document.add(table);
-
-        //Adding another image and setting its size and position
-        String imagePath = "static/images/AitacLine.png"; // Relative path to the image file
-        Resource resource = new ClassPathResource(imagePath);
-        Image image = Image.getInstance(resource.getURL());
-
-        // Set the desired width and height of the image in centimeters
-        float desiredWidthInCm = 17f;
-        float desiredHeightInCm = 7f;
-
-        // Convert centimeters to points
-        float desiredWidthInPoints = desiredWidthInCm * 72 / 2.54f;
-        float desiredHeightInPoints = desiredHeightInCm * 72 / 2.54f;
-
-        // Set the desired width and height of the image in points
-        float desiredWidth = desiredWidthInPoints;
-        float desiredHeight = desiredHeightInPoints;
-        image.scaleToFit(desiredWidth, desiredHeight);
-
-        // Calculate the coordinates to position the image at the bottom
-        float x = (pageWidth - desiredWidth) / 2; // Centered horizontally
-        float y = image.getScaledHeight() + document.bottomMargin(); // Position from the bottom
-
-        image.setAbsolutePosition(x, y);
-        document.add(image);
-        // Close the document
-        document.close();
     }
 
     @GetMapping("/generateCSV")
