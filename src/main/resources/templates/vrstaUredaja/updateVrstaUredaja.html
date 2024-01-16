@@ -5,12 +5,12 @@
 <script type="text/javascript" src="../static/javascript/sidebar.js" th:src="@{/javascript/sidebar.js}"></script>
 <head>
     <meta charset="UTF-8">
-    <title>Ažuriranje vrste uređaja</title>
+    <title>Ažuriranje vrste sredstva</title>
 </head>
 <body>
 <div class="w3-card-4 w3-center w3-display-middle w3-light-grey" style="width: 50%; position: fixed">
     <div class="w3-container w3-gray">
-        <h2 class="w3-text-light-grey"><b>Ažuriranje vrste uređaja</b>
+        <h2 class="w3-text-light-grey"><b>Ažuriranje vrste sredstva</b>
             <button class="w3-right button-30" onclick="window.location.href='/vrstaUredaja/all'"><b>Odustani</b>
             </button>
         </h2>
@@ -19,21 +19,21 @@
           method="POST">
         <div class="w3-row-padding">
             <p class="w3-center">
-                <label class="w3-text-dark-grey" for="idVrsteUredaja"><b>ID vrste uređaja</b><br></label>
+                <label class="w3-text-dark-grey" for="idVrsteUredaja"><b>ID vrste sredstva</b><br></label>
                 <input class="w3-input w3-border w3-round w3-center" id="idVrsteUredaja" name="idVrsteUredaja"
                        type="text" th:field="*{idVrsteUredaja}" placeholder="Nepotreban unos, sustav sam upisuje!"
                        readonly></p>
             <p class="w3-center">
-                <label class="w3-text-dark-grey" for="nazivVrsteUredaja"><b>Naziv vrste uređaja</b><br></label>
+                <label class="w3-text-dark-grey" for="nazivVrsteUredaja"><b>Naziv vrste sredstva</b><br></label>
                 <label id="error-message" class="error alert alert-danger" role="alert" th:text="${error}"
                        th:if="${error}"></label>
                 <input class="w3-input w3-border w3-round w3-center" id="nazivVrsteUredaja" name="nazivVrsteUredaja"
                        type="text" th:field="*{nazivVrsteUredaja}" required
                        onchange="this.setCustomValidity('')"
-                       oninvalid="this.setCustomValidity('Ispunite polje za naziv vrste uređaja!')"></p>
+                       oninvalid="this.setCustomValidity('Ispunite polje za naziv vrste sredstva!')"></p>
             <div>
                 <div>
-                    <button class="button-30"><b>Ažuriraj vrstu uređaja</b></button>
+                    <button class="button-30"><b>Ažuriraj vrstu sredstva</b></button>
                 </div>
             </div>
         </div>
