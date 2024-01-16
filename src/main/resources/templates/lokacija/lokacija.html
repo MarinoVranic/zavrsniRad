@@ -84,7 +84,9 @@
             <td th:text="${lokacija.nazivLokacije}"></td>
             <td><a th:href="@{/lokacija/update/{id}(id=${lokacija.idLokacije})}" type="button" class="button-edit"><i
                     class="fa fa-edit" style="font-size:36px"></i></a></td>
-            <td><a style="font-size:128px" th:href="@{/lokacija/delete/{id}(id=${lokacija.idLokacije})}"
+            <td><a style="font-size:128px"
+                   href="javascript:void(0);"
+                   th:onclick="'confirmDelete(' + ${lokacija.idLokacije} + ')'"
                    class="button-delete"><i class="material-icons">remove_circle</i></a></td>
         </tr>
         </tbody>
@@ -106,6 +108,15 @@
         document.body.scrollTop = 0; // For Safari
         document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE, and Opera
     };
+</script>
+<script>
+    function confirmDelete(idLokacije) {
+        var isConfirmed = confirm("Are you sure you want to delete?");
+
+        if (isConfirmed) {
+            window.location.href = `/lokacija/delete/${idLokacije}`;
+        }
+    }
 </script>
 </body>
 </html>

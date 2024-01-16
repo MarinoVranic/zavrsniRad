@@ -84,7 +84,9 @@
             <td th:text="${vrstaUredaja.nazivVrsteUredaja}"></td>
             <td><a th:href="@{/vrstaUredaja/update/{id}(id=${vrstaUredaja.idVrsteUredaja})}" type="button"
                    class="button-edit"><i class="fa fa-edit" style="font-size:36px"></i></a></td>
-            <td><a style="font-size:128px" th:href="@{/vrstaUredaja/delete/{id}(id=${vrstaUredaja.idVrsteUredaja})}"
+            <td><a style="font-size:128px"
+                   href="javascript:void(0);"
+                   th:onclick="'confirmDelete(' + ${vrstaUredaja.idVrsteUredaja} + ')'"
                    class="button-delete"><i class="material-icons">remove_circle</i></a></td>
         </tr>
         </tbody>
@@ -106,6 +108,15 @@
         document.body.scrollTop = 0; // For Safari
         document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE, and Opera
     };
+</script>
+<script>
+    function confirmDelete(idVrsteUredaja) {
+        var isConfirmed = confirm("Are you sure you want to delete?");
+
+        if (isConfirmed) {
+            window.location.href = `/vrstaUredaja/delete/${idVrsteUredaja}`;
+        }
+    }
 </script>
 </body>
 </html>

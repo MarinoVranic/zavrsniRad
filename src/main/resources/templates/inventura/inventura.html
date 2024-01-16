@@ -109,7 +109,8 @@
         <tr th:each="inventura:${sveInventure}">
             <td th:text="${inventura.idInventure}"></td>
             <td><a style="font-size:128px"
-                   th:href="@{/inventura/delete/{idInventure}(idInventure=${inventura.idInventure})}"
+                   href="javascript:void(0);"
+                   th:onclick="'confirmDelete(' + ${inventura.idInventure} + ')'"
                    class="button-delete"><i class="material-icons">remove_circle</i></a></td>
         </tr>
         </tbody>
@@ -131,6 +132,15 @@
         document.body.scrollTop = 0; // For Safari
         document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE, and Opera
     };
+</script>
+<script>
+    function confirmDelete(idInventure) {
+        var isConfirmed = confirm("Are you sure you want to delete?");
+
+        if (isConfirmed) {
+            window.location.href = `/inventura/delete/${idInventure}`;
+        }
+    }
 </script>
 </body>
 </html>

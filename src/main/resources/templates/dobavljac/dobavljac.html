@@ -77,7 +77,9 @@
             <td th:text="${dobavljac.nazivDobavljaca}"></td>
             <td><a th:href="@{/dobavljac/update/{id}(id=${dobavljac.idDobavljaca})}" type="button"
                    class="button-edit"><i class="fa fa-edit" style="font-size:36px"></i></a></td>
-            <td><a style="font-size:128px" th:href="@{/dobavljac/delete/{id}(id=${dobavljac.idDobavljaca})}"
+            <td><a style="font-size:128px"
+                   href="javascript:void(0);"
+                   th:onclick="'confirmDelete(' + ${dobavljac.idDobavljaca} + ')'"
                    class="button-delete"><i class="material-icons">remove_circle</i></a></td>
         </tr>
         </tbody>
@@ -99,6 +101,15 @@
         document.body.scrollTop = 0; // For Safari
         document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE, and Opera
     };
+</script>
+<script>
+    function confirmDelete(idDobavljaca) {
+        var isConfirmed = confirm("Are you sure you want to delete?");
+
+        if (isConfirmed) {
+            window.location.href = `/dobavljac/delete/${idDobavljaca}`;
+        }
+    }
 </script>
 </body>
 </html>
