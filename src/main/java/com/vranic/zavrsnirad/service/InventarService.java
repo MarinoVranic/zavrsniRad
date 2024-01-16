@@ -53,7 +53,19 @@ public class InventarService {
         return inventarRepository.findAllByLokacija(idLokacije);
     }
 
+    public List<Inventar> getInventarBySI(){
+        return inventarRepository.findAllBySI();
+    }
+
+    public List<Inventar> getInventarByOS(){
+        return inventarRepository.findAllByOS();
+    }
+
     public List<Inventar> getInventarForIT(){
         return inventarRepository.findAllIT();
+    }
+
+    public List<Inventar> getInventarByUser(String username){
+        return inventarRepository.findAllByUser(username);
     }
 }

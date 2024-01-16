@@ -62,6 +62,8 @@ public class InventarController {
         model.addAttribute("allVrstaUredaja", allVrstaUredaja);
         List<Lokacija> allLokacija = lokacijaService.getAllLokacija();
         model.addAttribute("allLokacija", allLokacija);
+        List<Korisnik> allKorisnik = korisnikService.getAllKorisnik();
+        model.addAttribute("allKorisnik", allKorisnik);
         return "inventar/inventar";
     }
 
@@ -244,6 +246,35 @@ public class InventarController {
         Inventar inventar = new Inventar();
         model.addAttribute("inventar", inventar);
         return "inventar/inventar";
+    }
+
+    @GetMapping("/findByUser")
+    public String showInventarByUser(@RequestParam("username") String username, Model model) {
+        List<Korisnik> allKorisnik = korisnikService.getAllKorisnik();
+        List<Inventar> inventarList = inventarService.getInventarByUser(username);
+        model.addAttribute("allKorisnik", allKorisnik);
+        model.addAttribute("savInventar", inventarList);
+        Inventar inventar = new Inventar();
+        model.addAttribute("inventar", inventar);
+        return "inventar/inventar";
+    }
+
+    @GetMapping("/findByTipInventara")
+    public String showInventarByTipInventara(@RequestParam("tipInventara") String tipInventara, Model model) {
+        if(tipInventara.equals("OS"))
+        {
+            List<Inventar> inventarList = inventarService.getInventarByOS();
+            model.addAttribute("savInventar", inventarList);
+            Inventar inventar = new Inventar();
+            model.addAttribute("inventar", inventar);
+            return "inventar/inventar";
+        } else {
+            List<Inventar> inventarList = inventarService.getInventarBySI();
+            model.addAttribute("savInventar", inventarList);
+            Inventar inventar = new Inventar();
+            model.addAttribute("inventar", inventar);
+            return "inventar/inventar";
+        }
     }
 
     @GetMapping(value = "/ean13/{inventarniBroj}", produces = MediaType.IMAGE_PNG_VALUE)

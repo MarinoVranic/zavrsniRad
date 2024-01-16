@@ -115,7 +115,7 @@
                     th:text="${lokacija.nazivLokacije}"></option>
         </select>
         <button type="submit" class="button-30"><i class="fa fa-search" style="font-size:20px"></i> Postavi lokaciju</button>
-        <label th:if="${trenutnaLokacija != null}">Trenutna lokacija: <span th:text="${trenutnaLokacija.nazivLokacije}"></span></label>
+        <label th:if="${trenutnaLokacija != null}">Trenutno postavljena lokacija: <span style="font-size: large" th:text="${trenutnaLokacija.nazivLokacije}"></span></label>
     </form>
 </div>
 <div class="forms-container" style="display: flex;">
