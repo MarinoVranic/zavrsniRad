@@ -33,8 +33,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Controller
-@RequestMapping("/inventar")
-public class InventarController {
+@RequestMapping("/inventarIT")
+public class InventarITController {
     @Autowired
     private InventarService inventarService;
 
@@ -56,18 +56,6 @@ public class InventarController {
     public LocalDate today = LocalDate.now();
 
     @GetMapping("/all")
-    public String getAllInventar(Model model) {
-        model.addAttribute("savInventar", inventarService.getAllInventar());
-        List<VrstaUredaja> allVrstaUredaja = vrstaUredajaService.getAllVrstaUredaja();
-        model.addAttribute("allVrstaUredaja", allVrstaUredaja);
-        List<Lokacija> allLokacija = lokacijaService.getAllLokacija();
-        model.addAttribute("allLokacija", allLokacija);
-        List<Korisnik> allKorisnik = korisnikService.getAllKorisnik();
-        model.addAttribute("allKorisnik", allKorisnik);
-        return "inventar/inventar";
-    }
-
-    @GetMapping("/ITall")
     public String getAllItInventar(Model model) {
         model.addAttribute("savInventar", inventarService.getInventarForIT());
         List<VrstaUredaja> allVrstaUredaja = vrstaUredajaService.getAllVrstaUredaja();
@@ -109,7 +97,7 @@ public class InventarController {
         model.addAttribute("allDobavljac", allDobavljac);
         model.addAttribute("selectedRacun", selectedRacun);
         model.addAttribute("allRacun", allRacun);
-        return "inventar/updateInventar";
+        return "inventar/updateInventarIT";
     }
 
     @GetMapping("/addNew")
@@ -124,14 +112,14 @@ public class InventarController {
         model.addAttribute("allRacun", allRacun);
         List<Dobavljac> allDobavljac = dobavljacService.getAllDobavljaci();
         model.addAttribute("allDobavljac", allDobavljac);
-        return "inventar/newInventar";
+        return "inventar/newInventarIT";
     }
 
     @PostMapping("/addNew")
     public String addInventar(@ModelAttribute("inventar") Inventar inventar, Model model) {
         if (inventarService.checkIfInvBrojIsAvailable(inventar.getInventarniBroj()) != 0) {
             model.addAttribute("error", "Inventarni broj već postoji!");
-            return "inventar/newInventar";
+            return "inventar/newInventarIT";
         } else {
             // Set the username to null if it is blank
             if (StringUtils.isBlank(inventar.getKorisnik().getUsername())) {
@@ -139,23 +127,23 @@ public class InventarController {
             }
             inventarService.save(inventar);
         }
-        return "redirect:/inventar/all";
+        return "redirect:/inventarIT/all";
     }
 
     @PostMapping("/save")
     public String saveInventar(@ModelAttribute("inventar") Inventar inventar) {
-            // Set the username to null if it is blank
-            if (StringUtils.isBlank(inventar.getKorisnik().getUsername())) {
-                inventar.setKorisnik(null);
-            }
-            inventarService.save(inventar);
-        return "redirect:/inventar/all";
+        // Set the username to null if it is blank
+        if (StringUtils.isBlank(inventar.getKorisnik().getUsername())) {
+            inventar.setKorisnik(null);
+        }
+        inventarService.save(inventar);
+        return "redirect:/inventarIT/all";
     }
 
     @GetMapping("delete/{inventarniBroj}")
     public String deleteById(@PathVariable(value = "inventarniBroj") String inventarniBroj) {
         inventarService.deleteById(inventarniBroj);
-        return "redirect:/inventar/all";
+        return "redirect:/inventarIT/all";
     }
 
     @GetMapping("/find")
@@ -171,7 +159,7 @@ public class InventarController {
             Inventar inventar = new Inventar();
             model.addAttribute("inventar", inventar);
         }
-        return "inventar/inventar";
+        return "inventar/inventarIT";
     }
 
     @GetMapping("zaduzi/{inventarniBroj}")
@@ -199,7 +187,7 @@ public class InventarController {
         model.addAttribute("allDobavljac", allDobavljac);
         model.addAttribute("selectedRacun", selectedRacun);
         model.addAttribute("allRacun", allRacun);
-        return "inventar/zaduziInventar";
+        return "inventar/zaduziInventarIT";
     }
 
     @PostMapping("/saveZaduzenje")
@@ -218,14 +206,14 @@ public class InventarController {
             inventarService.zaduziInventar(inventar.getHostname(), inventar.getLokacija().getIdLokacije(), inventar.getKorisnik().getUsername(),
                     today, inventar.getInventarniBroj());
         }
-        return "redirect:/inventar/all";
+        return "redirect:/inventarIT/all";
     }
 
     @GetMapping("razduzi/{inventarniBroj}")
     @Transactional
     public String razduziInventar(@PathVariable(value = "inventarniBroj") String inventarniBroj){
         inventarService.razduziInventar(today, inventarniBroj);
-        return "redirect:/inventar/all";
+        return "redirect:/inventarIT/all";
     }
 
     @GetMapping("/findByVrsta")
@@ -234,13 +222,13 @@ public class InventarController {
         List<Inventar> inventarList = inventarService.getInventarByVrstaUredaja(idVrsteUredaja);
         List<Lokacija> allLokacija = lokacijaService.getAllLokacija();
         List<Korisnik> allKorisnik = korisnikService.getAllKorisnik();
-        model.addAttribute("allKorisnik", allKorisnik);
         model.addAttribute("allLokacija", allLokacija);
+        model.addAttribute("allKorisnik", allKorisnik);
         model.addAttribute("allVrstaUredaja", allVrstaUredaja);
         model.addAttribute("savInventar", inventarList);
         Inventar inventar = new Inventar();
         model.addAttribute("inventar", inventar);
-        return "inventar/inventar";
+        return "inventar/inventarIT";
     }
 
     @GetMapping("/findByLokacija")
@@ -255,40 +243,22 @@ public class InventarController {
         model.addAttribute("savInventar", inventarList);
         Inventar inventar = new Inventar();
         model.addAttribute("inventar", inventar);
-        return "inventar/inventar";
+        return "inventar/inventarIT";
     }
 
     @GetMapping("/findByUser")
     public String showInventarByUser(@RequestParam("username") String username, Model model) {
         List<Korisnik> allKorisnik = korisnikService.getAllKorisnik();
         List<Inventar> inventarList = inventarService.getInventarByUser(username);
-        List<VrstaUredaja> allVrstaUredaja = vrstaUredajaService.getAllVrstaUredaja();
         List<Lokacija> allLokacija = lokacijaService.getAllLokacija();
+        List<VrstaUredaja> allVrstaUredaja = vrstaUredajaService.getAllVrstaUredaja();
+        model.addAttribute("allLokacija", allLokacija);
+        model.addAttribute("allVrstaUredaja", allVrstaUredaja);
         model.addAttribute("allKorisnik", allKorisnik);
         model.addAttribute("savInventar", inventarList);
-        model.addAttribute("allVrstaUredaja", allVrstaUredaja);
-        model.addAttribute("allLokacija", allLokacija);
         Inventar inventar = new Inventar();
         model.addAttribute("inventar", inventar);
-        return "inventar/inventar";
-    }
-
-    @GetMapping("/findByTipInventara")
-    public String showInventarByTipInventara(@RequestParam("tipInventara") String tipInventara, Model model) {
-        if(tipInventara.equals("OS"))
-        {
-            List<Inventar> inventarList = inventarService.getInventarByOS();
-            model.addAttribute("savInventar", inventarList);
-            Inventar inventar = new Inventar();
-            model.addAttribute("inventar", inventar);
-            return "inventar/inventar";
-        } else {
-            List<Inventar> inventarList = inventarService.getInventarBySI();
-            model.addAttribute("savInventar", inventarList);
-            Inventar inventar = new Inventar();
-            model.addAttribute("inventar", inventar);
-            return "inventar/inventar";
-        }
+        return "inventar/inventarIT";
     }
 
     @GetMapping(value = "/ean13/{inventarniBroj}", produces = MediaType.IMAGE_PNG_VALUE)
