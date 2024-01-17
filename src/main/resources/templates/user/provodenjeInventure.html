@@ -96,6 +96,18 @@
         <label id="error-message3" class="alert alert-danger" role="alert" th:text="${error3}"
                th:if="${error3}"></label>
     </form>
+    <form id="form4" class="w3-container w3-padding form" th:action="@{/provodenjeInventure/odaberi_lokaciju}"
+          method="post" th:object="${allLokacija}">
+        <select class="w3-border w3-round w3-center" id="idLokacije" name="idLokacije" required
+                onchange="this.setCustomValidity('')"
+                oninvalid="this.setCustomValidity('Odaberite lokaciju inventara!')">
+            <option value="">Odaberite lokaciju inventara</option>
+            <option th:each="lokacija : ${allLokacija}" th:value="${lokacija.idLokacije}"
+                    th:text="${lokacija.nazivLokacije}"></option>
+        </select>
+        <button type="submit" class="button-30"><i class="fa fa-search" style="font-size:20px"></i> Postavi lokaciju</button>
+        <label th:if="${trenutnaLokacija != null}">Trenutno postavljena lokacija: <span style="font-size: large" th:text="${trenutnaLokacija.nazivLokacije}"></span></label>
+    </form>
 </div>
 <div class="forms-container" style="display: flex;">
     <form id="form1" class="w3-container w3-padding form" th:action="@{/provodenjeInventure/find}" method="get">
@@ -130,6 +142,8 @@
             <th class="w3-dark-grey">Naziv inventara</th>
             <th class="w3-dark-grey">Vrsta inventara</th>
             <th class="w3-dark-grey">Datum skeniranja</th>
+            <th class="w3-dark-grey">Upisana lokacija inventara</th>
+            <th class="w3-dark-grey">Skenirana lokacija inventara</th>
         </tr>
         </thead>
         <tbody>
@@ -139,6 +153,8 @@
             <td th:text="${invNaInv.inventar.nazivUredaja}"></td>
             <td th:text="${invNaInv.inventar.vrstaUredaja.nazivVrsteUredaja}"></td>
             <td th:text="${invNaInv.datumSkeniranja}"></td>
+            <td th:text="${invNaInv.inventar.lokacija.nazivLokacije}"></td>
+            <td th:text="${invNaInv.lokacija.nazivLokacije}"></td>
         </tr>
         </tbody>
     </table>

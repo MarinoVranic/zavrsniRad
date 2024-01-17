@@ -18,6 +18,7 @@ public class SecurityConfig {
     @Autowired
     private MyUserDetailsService myUserDetailsService;
 
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
@@ -26,7 +27,7 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // Allow access to static resources
                 .requestMatchers("/CSS/customStyle.css", "/fonts", "/images", "/javascript/sidebar.js", "/javascript/hidedivProvodenjeInventure.js").permitAll()
-                .requestMatchers("/index","/","/provodenjeInventure/all", "/provodenjeInventure/addNew", "/provodenjeInventure/scanNew", "/provodenjeInventure/findByGodinaInventure", "provodenjeInventure/find").hasAnyRole("ADMIN", "USER")
+                .requestMatchers("/index","/","/provodenjeInventure/all", "/provodenjeInventure/addNew", "/provodenjeInventure/scanNew", "/provodenjeInventure/findByGodinaInventure", "provodenjeInventure/find", "provodenjeInventure/odaberi_lokaciju").hasAnyRole("ADMIN", "USER")
                 .requestMatchers("/**").hasRole("ADMIN")
                 .anyRequest()
                 .authenticated()
