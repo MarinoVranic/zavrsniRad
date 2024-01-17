@@ -115,14 +115,18 @@ public class InventarNaInventuriController {
                 inventarNaInventuri.setInventura(inventura);
                 inventarNaInventuri.setDatumSkeniranja(LocalDateTime.now());
                 inventarNaInventuri.setLokacija(trenutnaLokacija);
-                System.out.println(inventar);
-                System.out.println(currentYear.longValue());
-                System.out.println(inventura.getIdInventure());
+                inventarNaInventuri.setStanje("Aktivno");
+                inventarNaInventuri.setOtpis("Ne");
+//                System.out.println(inventar);
+//                System.out.println(currentYear.longValue());
+//                System.out.println(inventura.getIdInventure());
                 inventarNaInventuriService.save(inventarNaInventuri);
             } else {
                 inventarNaInventuri.setInventura(inventura);
                 inventarNaInventuri.setDatumSkeniranja(LocalDateTime.now());
                 inventarNaInventuri.setLokacija(trenutnaLokacija);
+                inventarNaInventuri.setStanje("Aktivno");
+                inventarNaInventuri.setOtpis("Ne");
                 inventarNaInventuriService.save(inventarNaInventuri);
             }
         }
@@ -178,14 +182,18 @@ public class InventarNaInventuriController {
                     inventarNaInventuri.setInventura(inventura);
                     inventarNaInventuri.setDatumSkeniranja(LocalDateTime.now());
                     inventarNaInventuri.setLokacija(trenutnaLokacija);
-                    System.out.println(inventar);
-                    System.out.println(currentYear.longValue());
-                    System.out.println(inventura.getIdInventure());
+                    inventarNaInventuri.setStanje("Aktivno");
+                    inventarNaInventuri.setOtpis("Ne");
+//                    System.out.println(inventar);
+//                    System.out.println(currentYear.longValue());
+//                    System.out.println(inventura.getIdInventure());
                     inventarNaInventuriService.save(inventarNaInventuri);
                 } else {
                     inventarNaInventuri.setInventura(inventura);
                     inventarNaInventuri.setDatumSkeniranja(LocalDateTime.now());
                     inventarNaInventuri.setLokacija(trenutnaLokacija);
+                    inventarNaInventuri.setStanje("Aktivno");
+                    inventarNaInventuri.setOtpis("Ne");
                     inventarNaInventuriService.save(inventarNaInventuri);
                 }
             }
@@ -211,14 +219,18 @@ public class InventarNaInventuriController {
                     inventarNaInventuri.setInventura(inventura);
                     inventarNaInventuri.setDatumSkeniranja(LocalDateTime.now());
                     inventarNaInventuri.setLokacija(trenutnaLokacija);
-                    System.out.println(inventar);
-                    System.out.println(currentYear.longValue());
-                    System.out.println(inventura.getIdInventure());
+                    inventarNaInventuri.setStanje("Aktivno");
+                    inventarNaInventuri.setOtpis("Ne");
+//                    System.out.println(inventar);
+//                    System.out.println(currentYear.longValue());
+//                    System.out.println(inventura.getIdInventure());
                     inventarNaInventuriService.save(inventarNaInventuri);
                 } else {
                     inventarNaInventuri.setInventura(inventura);
                     inventarNaInventuri.setDatumSkeniranja(LocalDateTime.now());
                     inventarNaInventuri.setLokacija(trenutnaLokacija);
+                    inventarNaInventuri.setStanje("Aktivno");
+                    inventarNaInventuri.setOtpis("Ne");
                     inventarNaInventuriService.save(inventarNaInventuri);
                 }
             }
@@ -264,6 +276,32 @@ public class InventarNaInventuriController {
     public String changeLocation(@PathVariable(value = "inventarniBroj") String inventarniBroj, @PathVariable(value = "idInventure") Long idInventure){
         InventarNaInventuri inventarNaInventuri = inventarNaInventuriService.selectInvNaInvByBrojAndInventura(inventarniBroj, idInventure);
         inventarNaInventuriService.changeLokacija(inventarNaInventuri.getLokacija().getIdLokacije(), inventarniBroj);
+        return "redirect:/provodenjeInventure/all";
+    }
+
+    @GetMapping("/changeState/{idSkeniranja}")
+    @Transactional
+    public String changeState(@PathVariable(value = "idSkeniranja") Long idskeniranja){
+        InventarNaInventuri inventarNaInventuri = inventarNaInventuriService.findById(idskeniranja);
+        if(inventarNaInventuri.getStanje().equals("Aktivno"))
+        {
+            inventarNaInventuriService.changeStanje("Neaktivno", idskeniranja);
+        } else {
+            inventarNaInventuriService.changeStanje("Aktivno", idskeniranja);
+        }
+        return "redirect:/provodenjeInventure/all";
+    }
+
+    @GetMapping("/changeWriteOff/{idSkeniranja}")
+    @Transactional
+    public String changeWriteOff(@PathVariable(value = "idSkeniranja") Long idskeniranja){
+        InventarNaInventuri inventarNaInventuri = inventarNaInventuriService.findById(idskeniranja);
+        if(inventarNaInventuri.getOtpis().equals("Ne"))
+        {
+            inventarNaInventuriService.changeOtpis("Da", idskeniranja);
+        } else {
+            inventarNaInventuriService.changeOtpis("Ne", idskeniranja);
+        }
         return "redirect:/provodenjeInventure/all";
     }
 

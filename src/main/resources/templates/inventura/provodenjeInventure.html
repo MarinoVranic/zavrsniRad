@@ -161,6 +161,10 @@
             <th class="w3-dark-grey">Datum skeniranja</th>
             <th class="w3-dark-grey">Upisana lokacija inventara</th>
             <th class="w3-dark-grey">Skenirana lokacija inventara</th>
+            <th class="w3-dark-grey">Stanje</th>
+            <th class="w3-dark-grey">Otpis</th>
+            <th style="width: 45px" class="w3-dark-grey"></th>
+            <th style="width: 45px" class="w3-dark-grey"></th>
             <th style="width: 45px" class="w3-dark-grey"></th>
             <th style="width: 45px" class="w3-dark-grey"></th>
         </tr>
@@ -174,6 +178,14 @@
             <td th:text="${invNaInv.datumSkeniranja}"></td>
             <td th:text="${invNaInv.inventar.lokacija.nazivLokacije}"></td>
             <td th:text="${invNaInv.lokacija.nazivLokacije}"></td>
+            <td th:text="${invNaInv.stanje}"></td>
+            <td th:text="${invNaInv.otpis}"></td>
+            <td><a style="font-size:15px; text-align: center"
+                   th:href="@{/provodenjeInventure/changeState/{idSkeniranja}(idSkeniranja=${invNaInv.idSkeniranja})}"
+                   class="button-zaduzi">Promijeni<br>stanje</a></td>
+            <td><a style="font-size:15px; text-align: center"
+                   th:href="@{/provodenjeInventure/changeWriteOff/{idSkeniranja}(idSkeniranja=${invNaInv.idSkeniranja})}"
+                   class="button-zaduzi">Promijeni<br>otpis</a></td>
             <td><a style="font-size:15px; text-align: center"
                    th:if="${invNaInv.lokacija.nazivLokacije != invNaInv.inventar.lokacija.nazivLokacije}"
                    th:href="@{/provodenjeInventure/changeLocation/{inventarniBroj}/{idInventure}(inventarniBroj=${invNaInv.inventar.inventarniBroj}, idInventure=${invNaInv.inventura.idInventure})}"

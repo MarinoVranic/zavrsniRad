@@ -32,4 +32,7 @@ public class InventarNaInventuri {
     @ManyToOne
     @JoinColumn(name = "id_skenirane_lokacije")
     private Lokacija lokacija;
+
+    private String otpis;
+    private String stanje;
 }

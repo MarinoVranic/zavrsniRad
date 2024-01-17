@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class InventarNaInventuriService {
@@ -22,6 +23,10 @@ public class InventarNaInventuriService {
     }
     public void deleteById(Long skeniraniId){
         inventarNaInventuriRepository.deleteById(skeniraniId);
+    }
+
+    public InventarNaInventuri findById(Long idSkeniranja){
+        return inventarNaInventuriRepository.findByIdSkeniranja(idSkeniranja);
     }
 
     public List<InventarNaInventuri> findByInventarniBroj(String inventarniBroj){
@@ -50,5 +55,13 @@ public class InventarNaInventuriService {
 
     public void changeLokacija(Long idTrenutneLokacije, String inventarniBroj){
         inventarNaInventuriRepository.changeLokacija(idTrenutneLokacije, inventarniBroj);
+    }
+
+    public void changeStanje(String stanje, Long idSkeniranja){
+        inventarNaInventuriRepository.changeStanje(stanje, idSkeniranja);
+    }
+
+    public void changeOtpis(String otpis, Long idSkeniranja){
+        inventarNaInventuriRepository.changeOtpis(otpis, idSkeniranja);
     }
 }

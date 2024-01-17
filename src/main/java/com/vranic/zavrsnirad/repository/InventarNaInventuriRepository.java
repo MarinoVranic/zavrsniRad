@@ -19,6 +19,9 @@ public interface InventarNaInventuriRepository extends JpaRepository<InventarNaI
     @Query(value = "SELECT * FROM inventar_na_inventuri ini WHERE ini.Inventarni_broj = :inventarniBroj", nativeQuery = true)
     List<InventarNaInventuri> findByInvBroj(String inventarniBroj);
 
+    @Query(value = "SELECT * FROM inventar_na_inventuri ini WHERE ini.id_skeniranja = :idSkeniranja", nativeQuery = true)
+    InventarNaInventuri findByIdSkeniranja(Long idSkeniranja);
+
     @Query(value = "SELECT * FROM inventar_na_inventuri ini WHERE ini.ID_Inventure = :idInventure", nativeQuery = true)
     List<InventarNaInventuri> findByGodInventure(Long idInventure);
 
@@ -37,4 +40,12 @@ public interface InventarNaInventuriRepository extends JpaRepository<InventarNaI
     @Modifying
     @Query(value = "UPDATE inventar i SET i.ID_lokacije = :idTrenutneLokacije WHERE i.Inventarni_broj = :inventarniBroj", nativeQuery = true)
     void changeLokacija(@Param("idTrenutneLokacije") Long idTrenutneLokacije, @Param("inventarniBroj") String inventarniBroj);
+
+    @Modifying
+    @Query(value = "UPDATE inventar_na_inventuri ini SET ini.stanje = :stanje WHERE ini.id_skeniranja = :idSkeniranja", nativeQuery = true)
+    void changeStanje(@Param("stanje") String stanje, @Param("idSkeniranja") Long idSkeniranja);
+
+    @Modifying
+    @Query(value = "UPDATE inventar_na_inventuri ini SET ini.otpis = :otpis WHERE ini.id_skeniranja = :idSkeniranja", nativeQuery = true)
+    void changeOtpis(@Param("otpis") String otpis, @Param("idSkeniranja") Long idSkeniranja);
 }
