@@ -675,3 +675,16 @@ th, td {
     justify-content: space-between;
     height: 100%;
 }
+
+ .currency-input {
+     position: relative;
+ }
+
+.currency-input::after {
+    content: "EUR";
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none; /* Make sure the pseudo-element doesn't interfere with user input */
+}

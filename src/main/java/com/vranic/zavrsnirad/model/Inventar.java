@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -54,4 +55,5 @@ public class Inventar {
     private Dobavljac dobavljac;
 
     private String napomena;
+    private BigDecimal nabavnaVrijednost;
 }

@@ -133,8 +133,15 @@
                     </select>
                 </div>
                 <div class="w3-half">
+                    <label class="w3-text-dark-grey" for="nabavnaVrijednost"><b>Nabavna vrijednost sredstva</b></label>
+                    <div class="currency-input">
+                        <input class="w3-input w3-border w3-round w3-center" id="nabavnaVrijednost" name="nabavnaVrijednost"
+                               type="text" th:field="*{nabavnaVrijednost}">
+                    </div>
+                </div>
+                <div class="w3-center">
                     <label class="w3-text-dark-grey" for="napomena"><b>Napomena</b></label>
-                    <input class="w3-input w3-border w3-round w3-center w3-padding-48" id="napomena" name="napomena"
+                    <input class="w3-input w3-border w3-round w3-center w3-padding-24" id="napomena" name="napomena"
                            type="text" th:field="*{napomena}"></p>
                 </div>
             </div>

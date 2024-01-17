@@ -294,7 +294,7 @@ public class InventarController {
     @GetMapping(value = "/ean13/{inventarniBroj}", produces = MediaType.IMAGE_PNG_VALUE)
     public ResponseEntity<byte[]> generateAndDownloadEAN13Barcode(@PathVariable(value = "inventarniBroj") String inventarniBroj) {
         try {
-            Inventar inventar = inventarService.getInventarById(inventarniBroj);
+//            Inventar inventar = inventarService.getInventarById(inventarniBroj);
             String originalInventarniBroj = inventarniBroj;
             String sitniInventar = originalInventarniBroj.substring(0,2);
             System.out.println(sitniInventar);
