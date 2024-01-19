@@ -145,7 +145,14 @@
             <option value="OS">Osnovna sredstva</option>
             <option value="SI">Sitni inventar</option>
         </select>
-        <button type="submit" class="button-30"><i class="fa fa-search" style="font-size:20px"></i> Pretraži po godini</button>
+        <select class="w3-border w3-round w3-center" id="isFound" name="isFound" required
+                onchange="this.setCustomValidity('')"
+                oninvalid="this.setCustomValidity('Odaberite želite li pronađeni ili nepronađeni inventar!')">
+            <option value="">Odaberite pronađeno?</option>
+            <option value="Pronađeno">Pronađeno</option>
+            <option value="Nepronađeno">Nepronađeno</option>
+        </select>
+        <button type="submit" class="button-30"><i class="fa fa-search" style="font-size:20px"></i> Pretraži</button>
         <button type="submit" class="button-30" onclick="generateReport()">Izvještaj <i class="material-icons">picture_as_pdf</i></button>
         <button type="submit" class="button-30" onclick="generateCSV()">Izvještaj <i class="material-symbols-outlined">csv</i></button>
     </form>
@@ -153,7 +160,7 @@
 <div style="overflow-x:auto;">
     <table style="table-layout:auto;width:100%" class="w3-table-all w3-hoverable w3-centered w3-card-4">
         <thead>
-        <tr>
+        <tr th:if="${not #lists.isEmpty(savInvNaInventuri)}">
             <th class="w3-dark-grey">Inventura</th>
             <th class="w3-dark-grey">Skenirani inventar</th>
             <th class="w3-dark-grey">Naziv inventara</th>
@@ -168,9 +175,17 @@
             <th style="width: 45px" class="w3-dark-grey"></th>
             <th style="width: 45px" class="w3-dark-grey"></th>
         </tr>
+        <tr th:if="${#lists.isEmpty(savInvNaInventuri)}">
+            <th class="w3-dark-grey">Inventarni broj</th>
+            <th class="w3-dark-grey">Naziv osnovnog sredstva</th>
+            <th class="w3-dark-grey">Vrsta osnovnog sredstva</th>
+            <th class="w3-dark-grey">Zaduženo na</th>
+            <th class="w3-dark-grey">Upisana lokacija<br>osnovnog sredstva</th>
+            <th class="w3-dark-grey">Nabavna vrijednost</th>
+        </tr>
         </thead>
         <tbody>
-        <tr th:each="invNaInv:${savInvNaInventuri}">
+        <tr th:if="${not #lists.isEmpty(savInvNaInventuri)}" th:each="invNaInv:${savInvNaInventuri}">
             <td th:text="${invNaInv.inventura.idInventure}"></td>
             <td th:text="${invNaInv.inventar.inventarniBroj}"></td>
             <td th:text="${invNaInv.inventar.nazivUredaja}"></td>
@@ -194,6 +209,17 @@
                    href="javascript:void(0);"
                    th:onclick="'confirmDelete(' + ${invNaInv.idSkeniranja} + ')'"
                    class="button-delete"><i class="material-icons">remove_circle</i></a></td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(savInvNaInventuri)}" th:each="inventar:${savInventar}">
+            <td><p th:text="${inventar.inventarniBroj}"></p></td>
+            <td><p th:text="${inventar.nazivUredaja}"></p></td>
+            <td><p th:text="${inventar.vrstaUredaja.nazivVrsteUredaja}"></p></td>
+            <td><p th:if="${inventar.korisnik != null && inventar.korisnik.username != null}">
+                <span th:text="${inventar.korisnik.firstName}"></span>
+                <span th:text="${inventar.korisnik.lastName}"></span>
+            </p></td>
+            <td><p th:text="${inventar.lokacija.nazivLokacije}"></p></td>
+            <td><p th:text="${inventar.nabavnaVrijednost} + ' EUR'"></p></td>
         </tr>
         </tbody>
     </table>

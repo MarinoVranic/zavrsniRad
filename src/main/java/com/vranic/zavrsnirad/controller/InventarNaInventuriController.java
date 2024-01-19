@@ -6,10 +6,7 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.vranic.zavrsnirad.model.*;
-import com.vranic.zavrsnirad.service.InventarNaInventuriService;
-import com.vranic.zavrsnirad.service.InventarService;
-import com.vranic.zavrsnirad.service.InventuraService;
-import com.vranic.zavrsnirad.service.LokacijaService;
+import com.vranic.zavrsnirad.service.*;
 import com.vranic.zavrsnirad.util.CsvGeneratorUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -328,40 +325,46 @@ public class InventarNaInventuriController {
     }
 
     @GetMapping("/findByGodinaInventure")
-    public String showInventarByGodinaInventure(@RequestParam("idInventure") Long idInventure, @RequestParam("tipInventara") String tipInventara, Model model) {
+    public String showInventarByGodinaInventure(@RequestParam("idInventure") Long idInventure, @RequestParam("tipInventara") String tipInventara, @RequestParam("isFound") String isFound, Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         List<Inventura> allInventura = inventuraService.getAllInventura();
-        if(tipInventara.equals("SI"))
-        {
-            List<InventarNaInventuri> inventarNaInventuriList = inventarNaInventuriService.SIByGodinaInventure(idInventure);
-            model.addAttribute("allInventura", allInventura);
-            model.addAttribute("savInvNaInventuri", inventarNaInventuriList);
+        List<Lokacija> allLokacija = lokacijaService.getAllLokacija();
 
-            if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
-                // User has the admin role
-                return "inventura/provodenjeInventure";
-            } else {
-                // User has user role
-                InventarNaInventuri inventarNaInventuri = new InventarNaInventuri();
-                model.addAttribute("invNaInv", inventarNaInventuri);
-                return "user/provodenjeInventure";
+        if (tipInventara.equals("SI")) {
+            if (isFound.equals("Pronađeno")) {
+                List<InventarNaInventuri> inventarNaInventuriList = inventarNaInventuriService.SIByGodinaInventure(idInventure);
+                model.addAttribute("allInventura", allInventura);
+                model.addAttribute("allLokacija", allLokacija);
+                model.addAttribute("savInvNaInventuri", inventarNaInventuriList);
+            } else if (isFound.equals("Nepronađeno")){
+                List<Inventar> inventarList = inventarNaInventuriService.reportSIByInventuraAndNotFound(idInventure);
+                model.addAttribute("allInventura", allInventura);
+                model.addAttribute("allLokacija", allLokacija);
+                model.addAttribute("savInventar", inventarList);
             }
-        } else {
-            List<InventarNaInventuri> inventarNaInventuriList = inventarNaInventuriService.OSByGodinaInventure(idInventure);
-            model.addAttribute("allInventura", allInventura);
-            model.addAttribute("savInvNaInventuri", inventarNaInventuriList);
-
-            if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
-                // User has the admin role
-                return "inventura/provodenjeInventure";
-            } else {
-                // User has user role
-                InventarNaInventuri inventarNaInventuri = new InventarNaInventuri();
-                model.addAttribute("invNaInv", inventarNaInventuri);
-                return "user/provodenjeInventure";
+        } else if (tipInventara.equals("OS")) {
+            if (isFound.equals("Pronađeno")) {
+                List<InventarNaInventuri> inventarNaInventuriList = inventarNaInventuriService.OSByGodinaInventure(idInventure);
+                model.addAttribute("allInventura", allInventura);
+                model.addAttribute("allLokacija", allLokacija);
+                model.addAttribute("savInvNaInventuri", inventarNaInventuriList);
+            } else if (isFound.equals("Nepronađeno")) {
+                List<Inventar> inventarList = inventarNaInventuriService.reportOSByInventuraAndNotFound(idInventure);
+//                System.out.println(inventarList);
+                model.addAttribute("allInventura", allInventura);
+                model.addAttribute("allLokacija", allLokacija);
+                model.addAttribute("savInventar", inventarList);
             }
         }
-
+        if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+            // User has the admin role
+            return "inventura/provodenjeInventure";
+        } else {
+            // User has user role
+            InventarNaInventuri inventarNaInventuri = new InventarNaInventuri();
+            model.addAttribute("invNaInv", inventarNaInventuri);
+            return "user/provodenjeInventure";
+        }
     }
 
     @GetMapping("/generatePDF")
