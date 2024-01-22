@@ -9,7 +9,7 @@
 <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 <head>
     <meta charset="UTF-8">
-    <title>Računi</title>
+    <title>Računi/Dokumenti</title>
 </head>
 <style>
     html {
@@ -55,13 +55,13 @@
     <button id="openNav" class="w3-button w3-xlarge" onclick="w3_open()">&#9776;</button>
     <img src="../images/AITAC values challenges solutions (1).png" class="centered-image" alt="Aitac VCS">
 </div>
-<h1 class="w3-padding w3-center w3-opacity w3-xxxlarge" style="text-shadow:1px 1px 0 #444"><b>Računi</b></h1>
+<h1 class="w3-padding w3-center w3-opacity w3-xxxlarge" style="text-shadow:1px 1px 0 #444"><b>Računi i dokumenti</b></h1>
 <div class="div-container">
-    <a th:href="@{/racun/addNew}" class="button-add"><i class="material-icons">add_circle</i> Novi račun</a>
+    <a th:href="@{/racun/addNew}" class="button-add"><i class="material-icons">add_circle</i> Novi račun/dokument</a>
     <a th:href="@{/racun/generatePDF}" class="button-30">Izvještaj <i class="material-icons">picture_as_pdf</i></a>
 </div>
 <form class="w3-container" th:action="@{/racun/find}" method="get" style="margin-bottom: 20px">
-    <input type="text" id="brojRacuna" name="brojRacuna" placeholder="Pretraži račun po broju" required
+    <input type="text" id="brojRacuna" name="brojRacuna" placeholder="Pretraži po broju" required
            onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Popunite polje za pretraživanje!')">
     <button onclick="hidedivRacun()" type="submit" class="button-30"><i class="fa fa-search" style="font-size:20px"></i> Pretraži</button>
     <button type="button" class="button-30" onclick="window.location.href='/racun/all'">Prikaži sve</button>
@@ -72,8 +72,8 @@
         <thead>
         <tr>
             <th class="w3-dark-grey">ID</th>
-            <th class="w3-dark-grey">Broj računa</th>
-            <th class="w3-dark-grey">Datum računa</th>
+            <th class="w3-dark-grey">Broj računa/dokumenta</th>
+            <th class="w3-dark-grey">Datum računa/dokumenta</th>
             <th class="w3-dark-grey"></th>
             <th class="w3-dark-grey"></th>
         </tr>

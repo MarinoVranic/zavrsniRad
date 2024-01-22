@@ -56,7 +56,7 @@ public class RacunController {
     @PostMapping("/addNew")
     public String addRacun(@ModelAttribute("racun") Racun racun, Model model) {
         if(racunService.checkIfBrojRacunaIsAvailable(racun.getBrojRacuna())!=0){
-            model.addAttribute("error", "Broj računa već postoji!");
+            model.addAttribute("error", "Broj računa/dokumenta već postoji!");
             return "racun/newRacun";
         }else {
             racunService.save(racun);
@@ -68,7 +68,7 @@ public class RacunController {
     public String saveRacun(@ModelAttribute("racun") Racun racun, Model model) {
         if(racunService.checkIfBrojRacunaIsAvailable(racun.getBrojRacuna())!=0)
         {
-            model.addAttribute("error", "Broj računa već postoji!");
+            model.addAttribute("error", "Broj računa/dokumenta već postoji!");
             return "racun/updateRacun";
         }
         racunService.save(racun);
@@ -85,7 +85,7 @@ public class RacunController {
     public String findDobavljacByName(@RequestParam("brojRacuna") String brojRacuna, Model model) {
         List<Racun> racunList = racunService.findRacunByBrojRacuna(brojRacuna);
         if (racunList.isEmpty()) {
-            model.addAttribute("error", "Račun pod tim brojem ne postoji u sustavu!");
+            model.addAttribute("error", "Račun/dokument pod tim brojem ne postoji u sustavu!");
             model.addAttribute("sviRacuni", racunService.getAllRacun());
             Racun racun = new Racun();
             model.addAttribute("racun", racun);
@@ -146,7 +146,7 @@ public class RacunController {
 
         Paragraph header = new Paragraph();
         Font boldFont = new Font(arialBoldItalicFont, 18, Font.BOLD);
-        Phrase headerPhrase = new Phrase("IZVJEŠTAJ O RAČUNIMA", boldFont);
+        Phrase headerPhrase = new Phrase("IZVJEŠTAJ O RAČUNIMA/DOKUMENTIMA", boldFont);
         header.add(headerPhrase);
         header.setAlignment(Element.ALIGN_CENTER);
         header.setSpacingAfter(20); // Adjust the value as per your requirement
@@ -182,11 +182,11 @@ public class RacunController {
         headerCell.setPadding(5);
 
         // Add table header cells
-        headerCell.setPhrase(new Phrase("ID računa", headerFont));
+        headerCell.setPhrase(new Phrase("ID računa/dokumenta", headerFont));
         table.addCell(headerCell);
-        headerCell.setPhrase(new Phrase("Naziv računa", headerFont));
+        headerCell.setPhrase(new Phrase("Naziv računa/dokumenta", headerFont));
         table.addCell(headerCell);
-        headerCell.setPhrase(new Phrase("Datum računa", headerFont));
+        headerCell.setPhrase(new Phrase("Datum računa/dokumenta", headerFont));
         table.addCell(headerCell);
 
         // Get the list of Racun objects from service
