@@ -168,8 +168,20 @@
             <th class="w3-dark-grey">Datum skeniranja</th>
             <th class="w3-dark-grey">Upisana lokacija inventara</th>
             <th class="w3-dark-grey">Skenirana lokacija inventara</th>
-            <th class="w3-dark-grey">Stanje</th>
-            <th class="w3-dark-grey">Otpis</th>
+            <th class="w3-dark-grey">Stanje<br>
+                <button style="font-weight: normal" type="button" onclick="window.location.href='/provodenjeInventure/allActiveState'">
+                    Aktivno
+                </button>
+                <button style="font-weight: normal" type="button" onclick="window.location.href='/provodenjeInventure/allInactiveState'">
+                    Neaktivno
+                </button></th>
+            <th class="w3-dark-grey">Otpis<br>
+                <button style="font-weight: normal" type="button" onclick="window.location.href='/provodenjeInventure/allWriteOff'">
+                    Da
+                </button>
+                <button style="font-weight: normal" type="button" onclick="window.location.href='/provodenjeInventure/allNonWriteOff'">
+                    Ne
+                </button></th>
             <th style="width: 45px" class="w3-dark-grey"></th>
             <th style="width: 45px" class="w3-dark-grey"></th>
             <th style="width: 45px" class="w3-dark-grey"></th>

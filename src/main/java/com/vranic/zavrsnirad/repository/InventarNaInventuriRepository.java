@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -16,6 +15,18 @@ public interface InventarNaInventuriRepository extends JpaRepository<InventarNaI
 
     @Query(value = "SELECT inventarNaInventuri FROM InventarNaInventuri inventarNaInventuri LEFT JOIN FETCH inventarNaInventuri.inventar LEFT JOIN FETCH inventarNaInventuri.inventura LEFT JOIN FETCH inventarNaInventuri.lokacija ORDER BY inventarNaInventuri.inventar.inventarniBroj DESC")
     List<InventarNaInventuri> findAll();
+
+    @Query(value = "SELECT inventarNaInventuri FROM InventarNaInventuri inventarNaInventuri WHERE inventarNaInventuri.stanje = 'Aktivno' ORDER BY inventarNaInventuri.inventar.inventarniBroj DESC")
+    List<InventarNaInventuri> showAllActiveState();
+
+    @Query(value = "SELECT inventarNaInventuri FROM InventarNaInventuri inventarNaInventuri WHERE inventarNaInventuri.stanje = 'Neaktivno' ORDER BY inventarNaInventuri.inventar.inventarniBroj DESC")
+    List<InventarNaInventuri> showAllInactiveState();
+
+    @Query(value = "SELECT inventarNaInventuri FROM InventarNaInventuri inventarNaInventuri WHERE inventarNaInventuri.otpis = 'Ne' ORDER BY inventarNaInventuri.inventar.inventarniBroj DESC")
+    List<InventarNaInventuri> showAllNonWriteOff();
+
+    @Query(value = "SELECT inventarNaInventuri FROM InventarNaInventuri inventarNaInventuri WHERE inventarNaInventuri.otpis = 'Da' ORDER BY inventarNaInventuri.inventar.inventarniBroj DESC")
+    List<InventarNaInventuri> showAllWriteOff();
 
     @Query(value = "SELECT * FROM inventar_na_inventuri ini WHERE ini.Inventarni_broj = :inventarniBroj", nativeQuery = true)
     List<InventarNaInventuri> findByInvBroj(String inventarniBroj);

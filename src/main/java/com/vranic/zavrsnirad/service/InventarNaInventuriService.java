@@ -19,6 +19,22 @@ public class InventarNaInventuriService {
         return inventarNaInventuriRepository.findAll();
     }
 
+    public List<InventarNaInventuri> showAllActiveState(){
+        return inventarNaInventuriRepository.showAllActiveState();
+    }
+
+    public List<InventarNaInventuri> showAllInactiveState(){
+        return inventarNaInventuriRepository.showAllInactiveState();
+    }
+
+    public List<InventarNaInventuri> showAllWriteOff(){
+        return inventarNaInventuriRepository.showAllWriteOff();
+    }
+
+    public List<InventarNaInventuri> showAllNonWriteOff(){
+        return inventarNaInventuriRepository.showAllNonWriteOff();
+    }
+
     public void save(InventarNaInventuri inventarNaInventuri){
         inventarNaInventuriRepository.save(inventarNaInventuri);
     }

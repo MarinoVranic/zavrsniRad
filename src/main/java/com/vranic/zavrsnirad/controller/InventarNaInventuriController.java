@@ -79,6 +79,102 @@ public class InventarNaInventuriController {
         }
     }
 
+    @GetMapping("/allActiveState")
+    public String showAllActiveState(Model model, HttpSession session) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        model.addAttribute("savInvNaInventuri", inventarNaInventuriService.showAllActiveState());
+        List<Inventura> allInventura = inventuraService.getAllInventura();
+        model.addAttribute("allInventura", allInventura);
+        List<Lokacija> allLokacija = lokacijaService.getAllLokacija();
+        model.addAttribute("allLokacija", allLokacija);
+        Lokacija trenutnaLokacija = (Lokacija) session.getAttribute("trenutnaLokacija");
+        if(trenutnaLokacija != null){
+            model.addAttribute("trenutnaLokacija", trenutnaLokacija);
+        } else {
+            model.addAttribute("errorLokacija", "Prvo morate postaviti lokaciju");
+        }
+
+        if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+            // User has the admin role
+            return "inventura/provodenjeInventure";
+        } else {
+            // User has user role
+            return "user/provodenjeInventure";
+        }
+    }
+
+    @GetMapping("/allInactiveState")
+    public String showAllInactiveState(Model model, HttpSession session) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        model.addAttribute("savInvNaInventuri", inventarNaInventuriService.showAllInactiveState());
+        List<Inventura> allInventura = inventuraService.getAllInventura();
+        model.addAttribute("allInventura", allInventura);
+        List<Lokacija> allLokacija = lokacijaService.getAllLokacija();
+        model.addAttribute("allLokacija", allLokacija);
+        Lokacija trenutnaLokacija = (Lokacija) session.getAttribute("trenutnaLokacija");
+        if(trenutnaLokacija != null){
+            model.addAttribute("trenutnaLokacija", trenutnaLokacija);
+        } else {
+            model.addAttribute("errorLokacija", "Prvo morate postaviti lokaciju");
+        }
+
+        if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+            // User has the admin role
+            return "inventura/provodenjeInventure";
+        } else {
+            // User has user role
+            return "user/provodenjeInventure";
+        }
+    }
+
+    @GetMapping("/allWriteOff")
+    public String showAllWriteOff(Model model, HttpSession session) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        model.addAttribute("savInvNaInventuri", inventarNaInventuriService.showAllWriteOff());
+        List<Inventura> allInventura = inventuraService.getAllInventura();
+        model.addAttribute("allInventura", allInventura);
+        List<Lokacija> allLokacija = lokacijaService.getAllLokacija();
+        model.addAttribute("allLokacija", allLokacija);
+        Lokacija trenutnaLokacija = (Lokacija) session.getAttribute("trenutnaLokacija");
+        if(trenutnaLokacija != null){
+            model.addAttribute("trenutnaLokacija", trenutnaLokacija);
+        } else {
+            model.addAttribute("errorLokacija", "Prvo morate postaviti lokaciju");
+        }
+
+        if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+            // User has the admin role
+            return "inventura/provodenjeInventure";
+        } else {
+            // User has user role
+            return "user/provodenjeInventure";
+        }
+    }
+
+    @GetMapping("/allNonWriteOff")
+    public String showAllNonWriteOff(Model model, HttpSession session) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        model.addAttribute("savInvNaInventuri", inventarNaInventuriService.showAllNonWriteOff());
+        List<Inventura> allInventura = inventuraService.getAllInventura();
+        model.addAttribute("allInventura", allInventura);
+        List<Lokacija> allLokacija = lokacijaService.getAllLokacija();
+        model.addAttribute("allLokacija", allLokacija);
+        Lokacija trenutnaLokacija = (Lokacija) session.getAttribute("trenutnaLokacija");
+        if(trenutnaLokacija != null){
+            model.addAttribute("trenutnaLokacija", trenutnaLokacija);
+        } else {
+            model.addAttribute("errorLokacija", "Prvo morate postaviti lokaciju");
+        }
+
+        if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+            // User has the admin role
+            return "inventura/provodenjeInventure";
+        } else {
+            // User has user role
+            return "user/provodenjeInventure";
+        }
+    }
+
     @PostMapping("/odaberi_lokaciju")
     public String odaberiLokaciju(@RequestParam Long idLokacije, Model model, HttpSession session){
         Lokacija trenutnaLokacija = lokacijaService.getLokacijaById(idLokacije);
