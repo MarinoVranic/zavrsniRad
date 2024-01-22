@@ -574,7 +574,7 @@ public class InventarNaInventuriController {
                     table.addCell(dataCell);
                     dataCell.setPhrase(new Phrase(inventar.getInventar().getVrstaUredaja().getNazivVrsteUredaja(), croatianFont));
                     table.addCell(dataCell);
-                    dataCell.setPhrase(new Phrase(inventar.getDatumSkeniranja().toString(), croatianFont));
+                    dataCell.setPhrase(new Phrase(inventar.getDatumSkeniranja().toLocalDate().toString() + " " + inventar.getDatumSkeniranja().toLocalTime().toString(), croatianFont));
                     table.addCell(dataCell);
                     dataCell.setPhrase(new Phrase(inventar.getInventar().getLokacija().getNazivLokacije(), croatianFont));
                     table.addCell(dataCell);
@@ -624,7 +624,8 @@ public class InventarNaInventuriController {
                     table.addCell(dataCell);
                     dataCell.setPhrase(new Phrase(inventar.getInventar().getVrstaUredaja().getNazivVrsteUredaja(), croatianFont));
                     table.addCell(dataCell);
-                    dataCell.setPhrase(new Phrase(inventar.getDatumSkeniranja().toString(), croatianFont));
+//                    dataCell.setPhrase(new Phrase(inventar.getDatumSkeniranja().toString(), croatianFont));
+                    dataCell.setPhrase(new Phrase(inventar.getDatumSkeniranja().toLocalDate().toString() + " " + inventar.getDatumSkeniranja().toLocalTime().toString(), croatianFont));
                     table.addCell(dataCell);
                     dataCell.setPhrase(new Phrase(inventar.getInventar().getLokacija().getNazivLokacije(), croatianFont));
                     table.addCell(dataCell);

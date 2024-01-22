@@ -105,7 +105,7 @@
             <option th:each="lokacija : ${allLokacija}" th:value="${lokacija.idLokacije}"
                     th:text="${lokacija.nazivLokacije}"></option>
         </select>
-        <button type="submit" class="button-30"><i class="fa fa-search" style="font-size:20px"></i> Postavi lokaciju</button>
+        <button type="submit" class="button-30"><i class="material-icons">location_on</i> Postavi lokaciju</button>
         <label th:if="${trenutnaLokacija != null}">Trenutno postavljena lokacija: <span style="font-size: large" th:text="${trenutnaLokacija.nazivLokacije}"></span></label>
     </form>
 </div>
@@ -119,18 +119,6 @@
         </button>
         <button type="button" class="button-30" onclick="window.location.href='/provodenjeInventure/all'">Prikaži sve</button>
         <label id="error-message" class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>
-    </form>
-    <form id="form2" class="w3-container w3-padding form" th:action="@{/provodenjeInventure/findByGodinaInventure}"
-          method="get" th:object="${allInventura}">
-        <select class=" w3-border w3-round w3-center" id="idInventure" name="idInventure" required
-                onchange="this.setCustomValidity('');updateRequiredFields()"
-                oninvalid="this.setCustomValidity('Odaberite godinu inventure!')">
-            <option value="">Odaberite godinu inventure</option>
-            <option th:each="inventura : ${allInventura}" th:value="${inventura.idInventure}"
-                    th:text="${inventura.idInventure}"></option>
-        </select>
-        <button onclick="hidediv()" type="submit" class="button-30"><i class="fa fa-search" style="font-size:20px"></i> Pretraži po godini
-        </button>
     </form>
 </div>
 <div style="overflow-x:auto;">
@@ -152,7 +140,7 @@
             <td th:text="${invNaInv.inventar.inventarniBroj}"></td>
             <td th:text="${invNaInv.inventar.nazivUredaja}"></td>
             <td th:text="${invNaInv.inventar.vrstaUredaja.nazivVrsteUredaja}"></td>
-            <td th:text="${invNaInv.datumSkeniranja}"></td>
+            <td th:text="${#temporals.format(invNaInv.datumSkeniranja, 'yyyy-MM-dd HH:mm:ss')}"></td>
             <td th:text="${invNaInv.inventar.lokacija.nazivLokacije}"></td>
             <td th:text="${invNaInv.lokacija.nazivLokacije}"></td>
         </tr>

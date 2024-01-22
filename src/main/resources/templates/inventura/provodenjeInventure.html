@@ -202,7 +202,7 @@
             <td th:text="${invNaInv.inventar.inventarniBroj}"></td>
             <td th:text="${invNaInv.inventar.nazivUredaja}"></td>
             <td th:text="${invNaInv.inventar.vrstaUredaja.nazivVrsteUredaja}"></td>
-            <td th:text="${invNaInv.datumSkeniranja}"></td>
+            <td th:text="${#temporals.format(invNaInv.datumSkeniranja, 'yyyy-MM-dd HH:mm:ss')}"></td>
             <td th:text="${invNaInv.inventar.lokacija.nazivLokacije}"></td>
             <td th:text="${invNaInv.lokacija.nazivLokacije}"></td>
             <td th:text="${invNaInv.stanje}"></td>

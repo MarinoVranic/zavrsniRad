@@ -29,7 +29,7 @@ public class CsvGeneratorUtil {
                                 .append(inventarNaInventuri.getInventar().getInventarniBroj()).append(",")
                                 .append(inventarNaInventuri.getInventar().getNazivUredaja()).append(",")
                                 .append(inventarNaInventuri.getInventar().getVrstaUredaja().getNazivVrsteUredaja()).append(",")
-                                .append(inventarNaInventuri.getDatumSkeniranja()).append("\n");
+                                .append(inventarNaInventuri.getDatumSkeniranja().toLocalDate() + " " + inventarNaInventuri.getDatumSkeniranja().toLocalTime()).append("\n");
                     }
 
                     return csvContent.toString();
@@ -63,7 +63,7 @@ public class CsvGeneratorUtil {
                                 .append(inventarNaInventuri.getInventar().getInventarniBroj()).append(",")
                                 .append(inventarNaInventuri.getInventar().getNazivUredaja()).append(",")
                                 .append(inventarNaInventuri.getInventar().getVrstaUredaja().getNazivVrsteUredaja()).append(",")
-                                .append(inventarNaInventuri.getDatumSkeniranja()).append("\n");
+                                .append(inventarNaInventuri.getDatumSkeniranja().toLocalDate() + " " + inventarNaInventuri.getDatumSkeniranja().toLocalTime()).append("\n");
                     }
                     return csvContent.toString();
                 } else if (isFound.equals("Nepronađeno")){
