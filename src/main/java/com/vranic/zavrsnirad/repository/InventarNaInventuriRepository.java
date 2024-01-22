@@ -1,5 +1,6 @@
 package com.vranic.zavrsnirad.repository;
 
+import com.vranic.zavrsnirad.model.Inventar;
 import com.vranic.zavrsnirad.model.InventarNaInventuri;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -7,7 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -15,6 +15,18 @@ public interface InventarNaInventuriRepository extends JpaRepository<InventarNaI
 
     @Query(value = "SELECT inventarNaInventuri FROM InventarNaInventuri inventarNaInventuri LEFT JOIN FETCH inventarNaInventuri.inventar LEFT JOIN FETCH inventarNaInventuri.inventura LEFT JOIN FETCH inventarNaInventuri.lokacija ORDER BY inventarNaInventuri.inventar.inventarniBroj DESC")
     List<InventarNaInventuri> findAll();
+
+    @Query(value = "SELECT inventarNaInventuri FROM InventarNaInventuri inventarNaInventuri WHERE inventarNaInventuri.stanje = 'Aktivno' ORDER BY inventarNaInventuri.inventar.inventarniBroj DESC")
+    List<InventarNaInventuri> showAllActiveState();
+
+    @Query(value = "SELECT inventarNaInventuri FROM InventarNaInventuri inventarNaInventuri WHERE inventarNaInventuri.stanje = 'Neaktivno' ORDER BY inventarNaInventuri.inventar.inventarniBroj DESC")
+    List<InventarNaInventuri> showAllInactiveState();
+
+    @Query(value = "SELECT inventarNaInventuri FROM InventarNaInventuri inventarNaInventuri WHERE inventarNaInventuri.otpis = 'Ne' ORDER BY inventarNaInventuri.inventar.inventarniBroj DESC")
+    List<InventarNaInventuri> showAllNonWriteOff();
+
+    @Query(value = "SELECT inventarNaInventuri FROM InventarNaInventuri inventarNaInventuri WHERE inventarNaInventuri.otpis = 'Da' ORDER BY inventarNaInventuri.inventar.inventarniBroj DESC")
+    List<InventarNaInventuri> showAllWriteOff();
 
     @Query(value = "SELECT * FROM inventar_na_inventuri ini WHERE ini.Inventarni_broj = :inventarniBroj", nativeQuery = true)
     List<InventarNaInventuri> findByInvBroj(String inventarniBroj);
@@ -48,4 +60,10 @@ public interface InventarNaInventuriRepository extends JpaRepository<InventarNaI
     @Modifying
     @Query(value = "UPDATE inventar_na_inventuri ini SET ini.otpis = :otpis WHERE ini.id_skeniranja = :idSkeniranja", nativeQuery = true)
     void changeOtpis(@Param("otpis") String otpis, @Param("idSkeniranja") Long idSkeniranja);
+
+    @Query(value = "SELECT inventar FROM Inventar inventar LEFT JOIN InventarNaInventuri ini ON inventar.inventarniBroj = ini.inventar.inventarniBroj AND ini.inventura.idInventure = :idInventure WHERE ini.inventar.inventarniBroj IS NULL AND inventar.inventarniBroj NOT LIKE 'SI%'")
+    List<Inventar> reportOSByInventuraAndNotFound(@Param("idInventure") Long idInventure);
+
+    @Query(value = "SELECT inventar FROM Inventar inventar LEFT JOIN InventarNaInventuri ini ON inventar.inventarniBroj = ini.inventar.inventarniBroj AND ini.inventura.idInventure = :idInventure WHERE ini.inventar.inventarniBroj IS NULL AND inventar.inventarniBroj LIKE 'SI%'")
+    List<Inventar> reportSIByInventuraAndNotFound(@Param("idInventure") Long idInventure);
 }

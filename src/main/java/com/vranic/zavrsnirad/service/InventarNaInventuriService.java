@@ -1,5 +1,6 @@
 package com.vranic.zavrsnirad.service;
 
+import com.vranic.zavrsnirad.model.Inventar;
 import com.vranic.zavrsnirad.model.InventarNaInventuri;
 import com.vranic.zavrsnirad.repository.InventarNaInventuriRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,22 @@ public class InventarNaInventuriService {
 
     public List<InventarNaInventuri> getAllInventarNaInventuri(){
         return inventarNaInventuriRepository.findAll();
+    }
+
+    public List<InventarNaInventuri> showAllActiveState(){
+        return inventarNaInventuriRepository.showAllActiveState();
+    }
+
+    public List<InventarNaInventuri> showAllInactiveState(){
+        return inventarNaInventuriRepository.showAllInactiveState();
+    }
+
+    public List<InventarNaInventuri> showAllWriteOff(){
+        return inventarNaInventuriRepository.showAllWriteOff();
+    }
+
+    public List<InventarNaInventuri> showAllNonWriteOff(){
+        return inventarNaInventuriRepository.showAllNonWriteOff();
     }
 
     public void save(InventarNaInventuri inventarNaInventuri){
@@ -63,5 +80,13 @@ public class InventarNaInventuriService {
 
     public void changeOtpis(String otpis, Long idSkeniranja){
         inventarNaInventuriRepository.changeOtpis(otpis, idSkeniranja);
+    }
+
+    public List<Inventar> reportOSByInventuraAndNotFound(Long idInventure) {
+        return inventarNaInventuriRepository.reportOSByInventuraAndNotFound(idInventure);
+    }
+
+    public List<Inventar> reportSIByInventuraAndNotFound(Long idInventure){
+        return inventarNaInventuriRepository.reportSIByInventuraAndNotFound(idInventure);
     }
 }

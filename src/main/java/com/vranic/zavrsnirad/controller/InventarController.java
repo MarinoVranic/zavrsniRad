@@ -465,7 +465,7 @@ public class InventarController {
         table.addCell(headerCell);
         headerCell.setPhrase(new Phrase("Istek garancije", headerFont));
         table.addCell(headerCell);
-        headerCell.setPhrase(new Phrase("Račun", headerFont));
+        headerCell.setPhrase(new Phrase("Račun/Dokument", headerFont));
         table.addCell(headerCell);
         headerCell.setPhrase(new Phrase("Dobavljač", headerFont));
         table.addCell(headerCell);
