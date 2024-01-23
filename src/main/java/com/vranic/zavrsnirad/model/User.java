@@ -1,6 +1,7 @@
 package com.vranic.zavrsnirad.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,4 +20,8 @@ public class User {
     private String password;
     private boolean active;
     private String roles;
+    @Pattern(regexp = "^[a-zA-ZčćžšđČĆŽŠĐ -]+$", message = "Ime ne smije sadržavati broj niti specijalne znakove!")
+    private String firstName;
+    @Pattern(regexp = "^[a-zA-ZčćžšđČĆŽŠĐ -]+$", message = "Prezime ne smije sadržavati broj niti specijalne znakove!")
+    private String lastName;
 }
