@@ -2,34 +2,30 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link th:href="@{/CSS/customStyle.css}" rel="stylesheet"/>
-<script type="text/javascript" src="../static/javascript/sidebar.js" th:src="@{/javascript/sidebar.js}"></script>
 <head>
     <meta charset="UTF-8">
-    <title>Dodavanje Usera</title>
+    <title>Ažuriranje Usera</title>
 </head>
-<style>
-    * {
-        box-sizing: border-box;
-    }
-</style>
 <body>
-<div class="w3-card-4 w3-center w3-display-middle w3-light-grey" style="width: 50%; position: absolute">
+<div class="w3-card-4 w3-center w3-display-middle" style="width: 50%; position: fixed">
     <div class="w3-container w3-gray">
-        <h2 class="w3-text-light-grey"><b>Forma za dodavanje novog usera</b>
-            <button class="button-30 w3-right" onclick="window.location.href='/appUsers/all'"><b>Odustani</b></button>
+<!--        <h2 class="w3-text-light-grey" th:object="${user}" th:text="'User '+*{firstName}+' '+*{lastName}">-->
+<!--            </h2><button class="w3-right button-30" onclick="window.location.href='/appUsers/all'"><b>Odustani</b></button>-->
+        <h2 class="w3-text-light-grey" th:object="${user}" th:text="'User '+*{firstName}+' '+*{lastName}" style="display: inline-block; line-height: 30px;">
         </h2>
+        <button class="button-30 w3-right" onclick="window.location.href='/appUsers/all'"><b>Odustani</b></button>
     </div>
-    <form class="w3-container w3-light-grey" action="#" th:action="@{/appUsers/addNew}" th:object="${user}"
+    <form class="w3-container w3-light-grey" action="#" th:action="@{/appUsers/save}" th:object="${user}"
           method="POST">
         <div class="w3-row-padding">
             <p class="w3-center">
+                <label class="w3-text-dark-grey" for="idUsera"><b>ID usera</b><br></label>
+                <input class="w3-input w3-border w3-round w3-center" id="idUsera" name="idUsera" type="text"
+                       th:field="*{id}" placeholder="Nepotreban unos, sustav sam upisuje!" readonly></p>
+            <p class="w3-center">
                 <label class="w3-text-dark-grey" for="username"><b>Username</b><br></label>
-                <label id="error-message" class="error alert alert-danger" role="alert" th:text="${error}"
-                       th:if="${error}"></label>
-                <input class="w3-input w3-border w3-round w3-center" id="username" name="username" type="text"
-                       th:field="*{userName}"
-                       placeholder="Username se automatski kreira upisivanjem imena i prezimena, može se prema potrebi izmjeniti."
-                       required
+                <input style="font-size: x-large" class="w3-input w3-border w3-round w3-center" id="username"
+                       name="username" type="text" th:field="*{userName}" required
                        onchange="this.setCustomValidity('')"
                        oninvalid="this.setCustomValidity('Ispunite polje za username!')"></p>
             <p class="w3-half">
@@ -65,6 +61,13 @@
                     <option th:value="'USER'" th:text="User"></option>
                 </select>
             </p>
+<!--            <p class="w3-center">-->
+<!--                <label class="w3-text-dark-grey" for="password"><b>Password</b></label>-->
+<!--                <input class="w3-input w3-border w3-round w3-center" id="password" name="password" type="text"-->
+<!--                       th:field="*{password}" required-->
+<!--                       onchange="this.setCustomValidity('')"-->
+<!--                       oninvalid="this.setCustomValidity('Upišite novu lozinku')"></p>-->
+<!--            <p>-->
 <!--            <p class="w3-half">-->
 <!--                <label class="w3-text-dark-grey" for="subcontractor"><b>Poslodavac</b></label>-->
 <!--                <input class="w3-input w3-border w3-round w3-center" id="subcontractor" name="subcontractor" type="text"-->
@@ -96,33 +99,39 @@
 <!--            <p>-->
 <!--            <p class="w3-half">-->
 <!--                <label class="w3-text-dark-grey" for="userCreated"><b>Korisnik aktiviran</b><br></label>-->
+<!--                <span class="error" th:if="${#fields.hasErrors('userCreated')}" th:errors="*{userCreated}">E-mail aktiviran error</span>-->
 <!--                <input class="w3-input w3-border w3-round w3-center" id="userCreated" name="userCreated" type="date"-->
-<!--                       th:field="*{userCreated}"></p>-->
+<!--                       th:field="*{userCreated}" required-->
+<!--                       onchange="this.setCustomValidity('')"-->
+<!--                       oninvalid="this.setCustomValidity('Ispunite polje kada je korisnik aktiviran!')"></p>-->
 <!--            <p>-->
 <!--            <p class="w3-half">-->
 <!--                <label class="w3-text-dark-grey" for="userDisabled"><b>Korisnik deaktiviran</b></label>-->
 <!--                <input class="w3-input w3-border w3-round w3-center" id="userDisabled" name="userDisabled" type="date"-->
-<!--                       th:field="*{userDisabled}" disabled></p>-->
+<!--                       th:field="*{userDisabled}"></p>-->
 <!--            <p>-->
 <!--            <p class="w3-half">-->
 <!--                <label class="w3-text-dark-grey" for="emailCreated"><b>E-mail aktiviran</b></label>-->
+<!--                <span class="error" th:if="${#fields.hasErrors('emailCreated')}" th:errors="*{emailCreated}">E-mail aktiviran error</span>-->
 <!--                <input class="w3-input w3-border w3-round w3-center" id="emailCreated" name="emailCreated" type="date"-->
-<!--                       th:field="*{emailCreated}"></p>-->
+<!--                       th:field="*{emailCreated}" required-->
+<!--                       onchange="this.setCustomValidity('')"-->
+<!--                       oninvalid="this.setCustomValidity('Ispunite polje kada je e-mail aktiviran!')"></p>-->
 <!--            <p>-->
 <!--            <p class="w3-half">-->
 <!--                <label class="w3-text-dark-grey" for="emailDisabled"><b>E-mail deaktiviran</b></label>-->
 <!--                <input class="w3-input w3-border w3-round w3-center" id="emailDisabled" name="emailDisabled" type="date"-->
-<!--                       th:field="*{emailDisabled}" disabled></p>-->
+<!--                       th:field="*{emailDisabled}"></p>-->
 <!--            <p>-->
-            <p class="w3-center">
-                <label class="w3-text-dark-grey" for="password"><b>Password</b></label>
-                <input class="w3-input w3-border w3-round w3-center" id="password" name="password"
-                       type="text" th:field="*{password}"></p>
-            <p>
-            <div>
-                <div>
-                    <button class="button-30"><b>Dodaj usera</b></button>
-                </div>
+<!--            <p class="w3-center">-->
+<!--                <label class="w3-text-dark-grey" for="komentar"><b>Komentar</b></label>-->
+<!--                <input class="w3-input w3-border w3-round w3-center w3-padding-48" id="komentar" name="komentar"-->
+<!--                       type="text" th:field="*{komentar}"></p>-->
+<!--            <p>-->
+        </div>
+        <div class="w3-show-inline-block">
+            <div class="w3-bar">
+                <button class="button-30"><b>Ažuriraj usera</b></button>
             </div>
         </div>
     </form>
@@ -137,38 +146,5 @@
     }
 
     setTimeout("hidediv()", 5000);
-</script>
-<script>
-    function concatAndConvert(str, str2) {
-        const specialChars = {
-            'ć': 'c',
-            'č': 'c',
-            'š': 's',
-            'ž': 'z',
-            'đ': 'd'
-        };
-
-        const firstLetter = str.charAt(0).toLowerCase();
-        // const remainingString = str.slice(1);
-        const convertedString = str2.replace(/[ćčšžđ]/g, char => specialChars[char]).toLowerCase();
-        const result = firstLetter + convertedString;
-
-        return result;
-    }
-
-    const nameInput = document.getElementById('firstName');
-    const lastnameInput = document.getElementById('lastName');
-    const outputInput = document.getElementById('username');
-
-    nameInput.addEventListener('input', updateOutput);
-    lastnameInput.addEventListener('input', updateOutput);
-
-    function updateOutput() {
-        const name = nameInput.value;
-        const lastname = lastnameInput.value;
-        const concatenatedName = concatAndConvert(name, lastname);
-        // const concatenatedLastname = concatAndConvert(lastname);
-        outputInput.value = concatenatedName;
-    }
 </script>
 </html>

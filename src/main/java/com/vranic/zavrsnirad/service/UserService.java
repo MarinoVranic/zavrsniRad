@@ -30,11 +30,28 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public void update(User user){
+        userRepository.save(user);
+    }
+
     public void deleteById(Long id){
         userRepository.deleteById(id);
     }
 
     public List<User> findUserByUsername(String username){
        return userRepository.getUsersByUsername(username);
+    }
+
+    public List<User> getAllActiveUsers(){
+        return userRepository.getActiveUsers();
+    }
+
+    public List<User> getAllInactiveUsers(){
+        return userRepository.getInactiveUsers();
+    }
+
+    public void resetUserPassword(Long userId, String newPassword){
+        String encodedPasword = passwordEncoder.encode(newPassword);
+        userRepository.updatePassword(userId, encodedPasword);
     }
 }

@@ -5,7 +5,7 @@
 <link th:href="@{/CSS/customStyle.css}" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script type="text/javascript" src="../static/javascript/sidebar.js" th:src="@{/javascript/sidebar.js}"></script>
-<script type="text/javascript" src="../static/javascript/hidedivKorisnik.js" th:src="@{/javascript/hidedivKorisnik.js}"></script>
+<script type="text/javascript" src="../static/javascript/hidedivUser.js" th:src="@{/javascript/hidedivUser.js}"></script>
 <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 <head>
     <meta charset="UTF-8">
@@ -79,11 +79,11 @@
 <!--    </div>-->
 </div>
 <form class="w3-container" th:action="@{/appUsers/find}" method="get" style="margin-bottom: 20px">
-    <label for="lastName"></label>
-    <input type="text" id="lastName" name="lastName" placeholder="Pretraži po prezimenu" required
+    <label for="username"></label>
+    <input type="text" id="username" name="username" placeholder="Pretraži po username-u" required
            onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Popunite polje za pretraživanje!')">
-    <button onclick="hidedivKorisnik()" type="submit" class="button-30"><i class="fa fa-search" style="font-size:20px"></i> Pretraži</button>
-    <button type="button" class="button-30" onclick="window.location.href='/korisnik/all'">Prikaži sve</button>
+    <button onclick="hidedivUser()" type="submit" class="button-30"><i class="fa fa-search" style="font-size:20px"></i> Pretraži</button>
+    <button type="button" class="button-30" onclick="window.location.href='/appUsers/all'">Prikaži sve</button>
     <label id="error-message" class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>
 </form>
 <div style="overflow-x:auto;">
@@ -101,16 +101,6 @@
                     Neaktivni
                 </button>
             </th>
-<!--            <th class="w3-dark-grey">Vrsta korisnika</th>-->
-<!--            <th class="w3-dark-grey">Poslodavac</th>-->
-<!--            <th class="w3-dark-grey">Godina zaposlenja</th>-->
-<!--            <th style="width: 150px" class="w3-dark-grey">E-mail adresa</th>-->
-<!--            <th class="w3-dark-grey">Inicijalna lozinka</th>-->
-<!--            <th style="width: 120px" class="w3-dark-grey">Korisnik aktiviran</th>-->
-<!--            <th class="w3-dark-grey">Korisnik deaktiviran</th>-->
-<!--            <th style="width: 120px" class="w3-dark-grey">E-mail aktiviran</th>-->
-<!--            <th class="w3-dark-grey">E-mail deaktiviran</th>-->
-<!--            <th class="w3-dark-grey">Komentar</th>-->
             <th class="w3-dark-grey"></th>
             <th class="w3-dark-grey"></th>
             <th class="w3-dark-grey"></th>
@@ -122,24 +112,12 @@
             <td th:text="${user.firstName} + ' ' + ${user.lastName}"></td>
             <td th:text="${user.roles}"></td>
             <td th:text="${user.active}"></td>
-<!--            <td th:text="${korisnik.accountType}"></td>-->
-<!--            <td th:text="${korisnik.subcontractor}"></td>-->
-<!--            <td th:text="${korisnik.godina}"></td>-->
-<!--            <td style="width: 150px" th:text="${korisnik.email}"></td>-->
-<!--            <td th:text="${korisnik.initialPassword}"></td>-->
-<!--            <td style="width: 120px" th:text="${korisnik.userCreated}"></td>-->
-<!--            <td th:text="${korisnik.userDisabled}"></td>-->
-<!--            <td style="width: 120px" th:text="${korisnik.emailCreated}"></td>-->
-<!--            <td th:text="${korisnik.emailDisabled}"></td>-->
-<!--            <td th:text="${korisnik.komentar}"></td>-->
+            <td><a style="font-size:15px; text-align: center"
+                   th:href="@{/appUsers/resetPassword/{id}(id=${user.id})}"
+                   class="button-zaduzi">Reset<br>password</a></td>
             <td>
-<!--                <a th:if="${korisnik.userDisabled == null}"-->
-<!--                   style="font-size:15px" th:href="@{/korisnik/deactivate/{username}(username=${korisnik.username})}"-->
-<!--                   type="button" class="button-deactivate"><i class="fa fa-user-times" style="font-size:36px"></i></a>-->
-            </td>
-            <td>
-<!--                <a th:href="@{/korisnik/update/{username}(username=${korisnik.username})}" type="button"-->
-<!--                   class="button-edit"><i class="fa fa-edit" style="font-size:24px"></i></a>-->
+                <a th:href="@{/appUsers/update/{id}(id=${user.id})}" type="button"
+                   class="button-edit"><i class="fa fa-edit" style="font-size:24px"></i></a>
             </td>
             <td>
                 <a style="font-size:128px"
