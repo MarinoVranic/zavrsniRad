@@ -50,6 +50,9 @@ public class InventarNaInventuriController {
     @Autowired
     private LokacijaService lokacijaService;
 
+    @Autowired
+    private UserService userService;
+
     public LocalDate today = LocalDate.now();
 
 
@@ -186,6 +189,8 @@ public class InventarNaInventuriController {
     @PostMapping("/addNew")
     public String addNewScan(@RequestParam("invBroj") String inventarniBroj, Model model, HttpSession session) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        User user = userService.getUserByUsername(username);
         Lokacija trenutnaLokacija = (Lokacija) session.getAttribute("trenutnaLokacija");
         Integer currentYear = LocalDate.now().getYear();
         Inventar inventar = inventarService.getInventarById(inventarniBroj);
@@ -210,9 +215,7 @@ public class InventarNaInventuriController {
                 inventarNaInventuri.setLokacija(trenutnaLokacija);
                 inventarNaInventuri.setStanje("Aktivno");
                 inventarNaInventuri.setOtpis("Ne");
-//                System.out.println(inventar);
-//                System.out.println(currentYear.longValue());
-//                System.out.println(inventura.getIdInventure());
+                inventarNaInventuri.setUser(user);
                 inventarNaInventuriService.save(inventarNaInventuri);
             } else {
                 inventarNaInventuri.setInventura(inventura);
@@ -220,6 +223,7 @@ public class InventarNaInventuriController {
                 inventarNaInventuri.setLokacija(trenutnaLokacija);
                 inventarNaInventuri.setStanje("Aktivno");
                 inventarNaInventuri.setOtpis("Ne");
+                inventarNaInventuri.setUser(user);
                 inventarNaInventuriService.save(inventarNaInventuri);
             }
         }
@@ -239,6 +243,8 @@ public class InventarNaInventuriController {
     @PostMapping("/scanNew")
     public String newScan(@RequestParam("inventarniBr") String inventarniBroj, Model model, HttpSession session) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        User user = userService.getUserByUsername(username);
         Lokacija trenutnaLokacija = (Lokacija) session.getAttribute("trenutnaLokacija");
         Integer currentYear = LocalDate.now().getYear();
         String vrstaInventara = inventarniBroj.substring(0,1);
@@ -246,11 +252,6 @@ public class InventarNaInventuriController {
         String invBroj = inventarniBroj.substring(8, 12);
         int invBrSaNulama = Integer.parseInt(invBroj);
         String invBrBezNula = String.valueOf(invBrSaNulama);
-//        Inventar inventar = inventarService.getInventarById(invBrBezNula);
-//        Inventura inventura = inventuraService.getInventuraById(currentYear.longValue());
-//        InventarNaInventuri inventarNaInventuri = new InventarNaInventuri();
-//        inventarNaInventuri.setInventar(inventar);
-//        inventarNaInventuri.setLokacija(trenutnaLokacija);
         if(vrstaInventara.equals("2"))
         {
             invBrBezNula = "SI" + invBrBezNula;
@@ -277,9 +278,7 @@ public class InventarNaInventuriController {
                     inventarNaInventuri.setLokacija(trenutnaLokacija);
                     inventarNaInventuri.setStanje("Aktivno");
                     inventarNaInventuri.setOtpis("Ne");
-//                    System.out.println(inventar);
-//                    System.out.println(currentYear.longValue());
-//                    System.out.println(inventura.getIdInventure());
+                    inventarNaInventuri.setUser(user);
                     inventarNaInventuriService.save(inventarNaInventuri);
                 } else {
                     inventarNaInventuri.setInventura(inventura);
@@ -287,6 +286,7 @@ public class InventarNaInventuriController {
                     inventarNaInventuri.setLokacija(trenutnaLokacija);
                     inventarNaInventuri.setStanje("Aktivno");
                     inventarNaInventuri.setOtpis("Ne");
+                    inventarNaInventuri.setUser(user);
                     inventarNaInventuriService.save(inventarNaInventuri);
                 }
             }
@@ -314,9 +314,7 @@ public class InventarNaInventuriController {
                     inventarNaInventuri.setLokacija(trenutnaLokacija);
                     inventarNaInventuri.setStanje("Aktivno");
                     inventarNaInventuri.setOtpis("Ne");
-//                    System.out.println(inventar);
-//                    System.out.println(currentYear.longValue());
-//                    System.out.println(inventura.getIdInventure());
+                    inventarNaInventuri.setUser(user);
                     inventarNaInventuriService.save(inventarNaInventuri);
                 } else {
                     inventarNaInventuri.setInventura(inventura);
@@ -324,37 +322,11 @@ public class InventarNaInventuriController {
                     inventarNaInventuri.setLokacija(trenutnaLokacija);
                     inventarNaInventuri.setStanje("Aktivno");
                     inventarNaInventuri.setOtpis("Ne");
+                    inventarNaInventuri.setUser(user);
                     inventarNaInventuriService.save(inventarNaInventuri);
                 }
             }
         }
-//        if (inventar == null) {
-//            model.addAttribute("error3", "Skenirani inventar nije zaveden u bazi!");
-//            return getViewBasedOnRole(auth);
-//        } else if (inventarNaInventuriService.checkIfInventarAlreadyScanned(inventarNaInventuri.getInventar().getInventarniBroj(), currentYear.longValue()) != 0) {
-//            model.addAttribute("error3", "Inventar je već skeniran!");
-//            return getViewBasedOnRole(auth);
-//        } else if (trenutnaLokacija == null) {
-//            model.addAttribute("error3", "Prvo morate postaviti lokaciju!");
-//            return getViewBasedOnRole(auth);
-//        } else {
-//            if (inventura == null) {
-//                inventura = new Inventura();
-//                inventura.setIdInventure(currentYear.longValue());
-//                inventarNaInventuri.setInventura(inventura);
-//                inventarNaInventuri.setDatumSkeniranja(LocalDateTime.now());
-//                inventarNaInventuri.setLokacija(trenutnaLokacija);
-//                System.out.println(inventar);
-//                System.out.println(currentYear.longValue());
-//                System.out.println(inventura.getIdInventure());
-//                inventarNaInventuriService.save(inventarNaInventuri);
-//            } else {
-//                inventarNaInventuri.setInventura(inventura);
-//                inventarNaInventuri.setDatumSkeniranja(LocalDateTime.now());
-//                inventarNaInventuri.setLokacija(trenutnaLokacija);
-//                inventarNaInventuriService.save(inventarNaInventuri);
-//            }
-//        }
         return "redirect:/provodenjeInventure/all";
     }
 

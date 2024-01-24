@@ -182,6 +182,7 @@
                 <button style="font-weight: normal" type="button" onclick="window.location.href='/provodenjeInventure/allNonWriteOff'">
                     Ne
                 </button></th>
+            <th class="w3-dark-grey">Skenirao</th>
             <th style="width: 45px" class="w3-dark-grey"></th>
             <th style="width: 45px" class="w3-dark-grey"></th>
             <th style="width: 45px" class="w3-dark-grey"></th>
@@ -207,6 +208,7 @@
             <td th:text="${invNaInv.lokacija.nazivLokacije}"></td>
             <td th:text="${invNaInv.stanje}"></td>
             <td th:text="${invNaInv.otpis}"></td>
+            <td th:text="${invNaInv.user.firstName} + ' ' + ${invNaInv.user.lastName}"></td>
             <td><a style="font-size:15px; text-align: center"
                    th:href="@{/provodenjeInventure/changeState/{idSkeniranja}(idSkeniranja=${invNaInv.idSkeniranja})}"
                    class="button-zaduzi">Promijeni<br>stanje</a></td>

@@ -35,4 +35,8 @@ public class InventarNaInventuri {
 
     private String otpis;
     private String stanje;
+
+    @ManyToOne
+    @JoinColumn(name = "id_usera")
+    private User user;
 }
