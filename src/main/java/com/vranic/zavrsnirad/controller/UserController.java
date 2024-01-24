@@ -77,11 +77,12 @@ public class UserController {
     }
 
     @PostMapping("/save")
+    @Transactional
     public String saveUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             return "appUsers/updateAppUser";
         }
-        userService.update(user);
+        userService.updateUser(user.getId(), user.getUserName(), user.isActive(), user.getRoles(), user.getFirstName(), user.getLastName());
         return "redirect:/appUsers/all";
     }
 

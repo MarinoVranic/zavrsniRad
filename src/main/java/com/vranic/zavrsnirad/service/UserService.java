@@ -30,8 +30,8 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void update(User user){
-        userRepository.save(user);
+    public void updateUser(Long userId, String username, Boolean active, String roles, String firstName, String lastName){
+        userRepository.updateUser(userId, username, active, roles, firstName, lastName);
     }
 
     public void deleteById(Long id){
