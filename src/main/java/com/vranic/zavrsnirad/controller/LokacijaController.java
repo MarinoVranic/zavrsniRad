@@ -11,6 +11,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -25,10 +27,21 @@ public class LokacijaController {
     @Autowired
     private LokacijaService lokacijaService;
 
+    private String getViewBasedOnRole(Authentication auth) {
+        if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+            // User has the admin role
+            return "admin/lokacija";
+        } else {
+            // User has super_admin role
+            return "lokacija/lokacija";
+        }
+    }
+
     @GetMapping("/all")
     public String getAllLokacija(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         model.addAttribute("sveLokacije", lokacijaService.getAllLokacija());
-        return "lokacija/lokacija";
+        return getViewBasedOnRole(auth);
     }
 
     @GetMapping("/{id}")
@@ -80,6 +93,7 @@ public class LokacijaController {
 
     @GetMapping("/find")
     public String findDobavljacByName(@RequestParam("nazivLokacije") String nazivLokacije, Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         List<Lokacija> lokacijaList = lokacijaService.findLokacijaByName(nazivLokacije);
         if (lokacijaList.isEmpty()) {
             model.addAttribute("error", "Lokacija tog naziva ne postoji u sustavu!");
@@ -91,7 +105,7 @@ public class LokacijaController {
             Lokacija lokacija = new Lokacija();
             model.addAttribute("lokacija", lokacija);
         }
-        return "lokacija/lokacija";
+        return getViewBasedOnRole(auth);
     }
 
     @GetMapping("/generatePDF")

@@ -9,8 +9,6 @@
 <body>
 <div class="w3-card-4 w3-center w3-display-middle" style="width: 50%; position: fixed">
     <div class="w3-container w3-gray">
-<!--        <h2 class="w3-text-light-grey" th:object="${user}" th:text="'User '+*{firstName}+' '+*{lastName}">-->
-<!--            </h2><button class="w3-right button-30" onclick="window.location.href='/appUsers/all'"><b>Odustani</b></button>-->
         <h2 class="w3-text-light-grey" th:object="${user}" th:text="'User '+*{firstName}+' '+*{lastName}" style="display: inline-block; line-height: 30px;">
         </h2>
         <button class="button-30 w3-right" onclick="window.location.href='/appUsers/all'"><b>Odustani</b></button>
@@ -57,77 +55,11 @@
                         required
                         onchange="this.setCustomValidity('')"
                         oninvalid="this.setCustomValidity('Odaberite rolu!')">
+                    <option th:value="'SUPER_ADMIN'" th:text="Super admin"></option>
                     <option th:value="'ADMIN'" th:text="Admin"></option>
                     <option th:value="'USER'" th:text="User"></option>
                 </select>
             </p>
-<!--            <p class="w3-center">-->
-<!--                <label class="w3-text-dark-grey" for="password"><b>Password</b></label>-->
-<!--                <input class="w3-input w3-border w3-round w3-center" id="password" name="password" type="text"-->
-<!--                       th:field="*{password}" required-->
-<!--                       onchange="this.setCustomValidity('')"-->
-<!--                       oninvalid="this.setCustomValidity('Upišite novu lozinku')"></p>-->
-<!--            <p>-->
-<!--            <p class="w3-half">-->
-<!--                <label class="w3-text-dark-grey" for="subcontractor"><b>Poslodavac</b></label>-->
-<!--                <input class="w3-input w3-border w3-round w3-center" id="subcontractor" name="subcontractor" type="text"-->
-<!--                       th:field="*{subcontractor}" required-->
-<!--                       onchange="this.setCustomValidity('')"-->
-<!--                       oninvalid="this.setCustomValidity('Ispunite polje za poslodavca!')"></p>-->
-<!--            <p>-->
-<!--            <p class="w3-half">-->
-<!--                <label class="w3-text-dark-grey" for="godina"><b>Godina zaposlenja</b></label>-->
-<!--                <span class="error" th:if="${#fields.hasErrors('godina')}" th:errors="*{godina}">Godina error</span>-->
-<!--                <input class="w3-input w3-border w3-round w3-center" id="godina" name="godina" type="text"-->
-<!--                       th:field="*{godina}" required-->
-<!--                       onchange="this.setCustomValidity('')"-->
-<!--                       oninvalid="this.setCustomValidity('Ispunite polje za godinu zaposlenja!')"></p>-->
-<!--            <p>-->
-<!--            <p class="w3-half">-->
-<!--                <label class="w3-text-dark-grey" for="email"><b>E-mail</b></label>-->
-<!--                <input class="w3-input w3-border w3-round w3-center" id="email" name="email" type="email"-->
-<!--                       th:field="*{email}" required-->
-<!--                       onchange="this.setCustomValidity('')"-->
-<!--                       oninvalid="this.setCustomValidity('Ispunite polje za e-mail!')"></p>-->
-<!--            <p>-->
-<!--            <p class="w3-half">-->
-<!--                <label class="w3-text-dark-grey" for="initialPassword"><b>Inicijalna lozinka</b></label>-->
-<!--                <input class="w3-input w3-border w3-round w3-center" id="initialPassword" name="initialPassword"-->
-<!--                       type="text" th:field="*{initialPassword}" required-->
-<!--                       onchange="this.setCustomValidity('')"-->
-<!--                       oninvalid="this.setCustomValidity('Ispunite polje za inicijalnu lozinku!')"></p>-->
-<!--            <p>-->
-<!--            <p class="w3-half">-->
-<!--                <label class="w3-text-dark-grey" for="userCreated"><b>Korisnik aktiviran</b><br></label>-->
-<!--                <span class="error" th:if="${#fields.hasErrors('userCreated')}" th:errors="*{userCreated}">E-mail aktiviran error</span>-->
-<!--                <input class="w3-input w3-border w3-round w3-center" id="userCreated" name="userCreated" type="date"-->
-<!--                       th:field="*{userCreated}" required-->
-<!--                       onchange="this.setCustomValidity('')"-->
-<!--                       oninvalid="this.setCustomValidity('Ispunite polje kada je korisnik aktiviran!')"></p>-->
-<!--            <p>-->
-<!--            <p class="w3-half">-->
-<!--                <label class="w3-text-dark-grey" for="userDisabled"><b>Korisnik deaktiviran</b></label>-->
-<!--                <input class="w3-input w3-border w3-round w3-center" id="userDisabled" name="userDisabled" type="date"-->
-<!--                       th:field="*{userDisabled}"></p>-->
-<!--            <p>-->
-<!--            <p class="w3-half">-->
-<!--                <label class="w3-text-dark-grey" for="emailCreated"><b>E-mail aktiviran</b></label>-->
-<!--                <span class="error" th:if="${#fields.hasErrors('emailCreated')}" th:errors="*{emailCreated}">E-mail aktiviran error</span>-->
-<!--                <input class="w3-input w3-border w3-round w3-center" id="emailCreated" name="emailCreated" type="date"-->
-<!--                       th:field="*{emailCreated}" required-->
-<!--                       onchange="this.setCustomValidity('')"-->
-<!--                       oninvalid="this.setCustomValidity('Ispunite polje kada je e-mail aktiviran!')"></p>-->
-<!--            <p>-->
-<!--            <p class="w3-half">-->
-<!--                <label class="w3-text-dark-grey" for="emailDisabled"><b>E-mail deaktiviran</b></label>-->
-<!--                <input class="w3-input w3-border w3-round w3-center" id="emailDisabled" name="emailDisabled" type="date"-->
-<!--                       th:field="*{emailDisabled}"></p>-->
-<!--            <p>-->
-<!--            <p class="w3-center">-->
-<!--                <label class="w3-text-dark-grey" for="komentar"><b>Komentar</b></label>-->
-<!--                <input class="w3-input w3-border w3-round w3-center w3-padding-48" id="komentar" name="komentar"-->
-<!--                       type="text" th:field="*{komentar}"></p>-->
-<!--            <p>-->
         </div>
         <div class="w3-show-inline-block">
             <div class="w3-bar">

@@ -13,6 +13,8 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,22 +32,35 @@ public class KorisnikController {
     private KorisnikService korisnikService;
     public LocalDate today = LocalDate.now();
 
+    private String getViewBasedOnRole(Authentication auth) {
+        if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+            // User has the admin role
+            return "admin/korisnik";
+        } else {
+            // User has super_admin role
+            return "korisnik/korisnik";
+        }
+    }
+
     @GetMapping("/all")
     public String getAllKorisnik(Model model){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         model.addAttribute("sviKorisnici", korisnikService.getAllKorisnik());
-        return "korisnik/korisnik";
+        return getViewBasedOnRole(auth);
     }
 
     @GetMapping("/active")
     public String getAllActiveKorisnik(Model model){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         model.addAttribute("sviKorisnici", korisnikService.getAllActiveKorisnik());
-        return "korisnik/korisnik";
+        return getViewBasedOnRole(auth);
     }
 
     @GetMapping("/inactive")
     public String getAllInactiveKorisnik(Model model){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         model.addAttribute("sviKorisnici", korisnikService.getAllInactiveKorisnik());
-        return "korisnik/korisnik";
+        return getViewBasedOnRole(auth);
     }
 
     @GetMapping("/{username}")
@@ -110,6 +125,7 @@ public class KorisnikController {
 
     @GetMapping("/find")
     public String findKorisnikByLastName(@RequestParam("lastName") String lastName, Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         List<Korisnik> korisnikList = korisnikService.findKorisnikByLastName(lastName);
         if (korisnikList.isEmpty()) {
             model.addAttribute("error", "Korisnik/ici tog prezimena nisu pronađeni!");
@@ -117,7 +133,7 @@ public class KorisnikController {
         } else {
             model.addAttribute("sviKorisnici", korisnikList);
         }
-        return "korisnik/korisnik";
+        return getViewBasedOnRole(auth);
     }
 
     @GetMapping("/generatePDFaktivni")

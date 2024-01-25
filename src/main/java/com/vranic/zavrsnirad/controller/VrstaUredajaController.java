@@ -12,6 +12,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -26,10 +28,21 @@ public class VrstaUredajaController {
     @Autowired
     private VrstaUredajaService vrstaUredajaService;
 
+    private String getViewBasedOnRole(Authentication auth) {
+        if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+            // User has admin role
+            return "admin/vrstaUredaja";
+        } else if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_SUPER_ADMIN"))) {
+            return "vrstaUredaja/vrstaUredaja";
+        }
+        return "error";
+    }
+
     @GetMapping("/all")
     public String getAllVrstaUredaja(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         model.addAttribute("sveVrsteUredaja", vrstaUredajaService.getAllVrstaUredaja());
-        return "vrstaUredaja/vrstaUredaja";
+        return getViewBasedOnRole(auth);
     }
 
     @GetMapping("/{id}")
@@ -81,6 +94,7 @@ public class VrstaUredajaController {
 
     @GetMapping("/find")
     public String findVrstaUredajaByName(@RequestParam("nazivVrsteUredaja") String nazivVrsteUredaja, Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         List<VrstaUredaja> vrstaUredajaList = vrstaUredajaService.findVrstaUredajaByName(nazivVrsteUredaja);
         if (vrstaUredajaList.isEmpty()) {
             model.addAttribute("error", "Vrsta uređaja tog naziva ne postoji u sustavu!");
@@ -92,7 +106,7 @@ public class VrstaUredajaController {
             VrstaUredaja vrstaUredaja = new VrstaUredaja();
             model.addAttribute("vrstaUredaja", vrstaUredaja);
         }
-        return "vrstaUredaja/vrstaUredaja";
+        return getViewBasedOnRole(auth);
     }
 
     @GetMapping("/generatePDF")

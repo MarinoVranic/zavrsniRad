@@ -4,6 +4,8 @@ import com.vranic.zavrsnirad.model.Inventura;
 import com.vranic.zavrsnirad.service.InventuraService;
 import org.bouncycastle.math.raw.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,18 +18,29 @@ public class InventuraController {
     @Autowired
     private InventuraService inventuraService;
 
-    @GetMapping("/all")
-    public String getAllInventura(Model model){
-        model.addAttribute("sveInventure", inventuraService.getAllInventura());
-        return "inventura/inventura";
+    private String getViewBasedOnRole(Authentication auth) {
+        if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+            // User has the admin role
+            return "admin/inventura";
+        } else {
+            // User has user role
+            return "inventura/inventura";
+        }
     }
 
-    @GetMapping("/update/{id}")
-    public String updateInventura(@PathVariable(value = "id") Long id, Model model){
-        Inventura inventura = inventuraService.getInventuraById(id);
-        model.addAttribute("inventura", inventura);
-        return "inventura/updateInventura";
+    @GetMapping("/all")
+    public String getAllInventura(Model model){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        model.addAttribute("sveInventure", inventuraService.getAllInventura());
+        return getViewBasedOnRole(auth);
     }
+
+//    @GetMapping("/update/{id}")
+//    public String updateInventura(@PathVariable(value = "id") Long id, Model model){
+//        Inventura inventura = inventuraService.getInventuraById(id);
+//        model.addAttribute("inventura", inventura);
+//        return "inventura/updateInventura";
+//    }
 
     @GetMapping("/addNew")
     public String addNewInventura(Model model){
@@ -47,15 +60,15 @@ public class InventuraController {
         return "redirect:/inventura/all";
     }
 
-    @PostMapping("/save")
-    public String saveInventura(@ModelAttribute("inventura") Inventura inventura, Model model){
-        if(inventuraService.checkIfInventuraIsExisting(inventura.getIdInventure())!=0){
-            model.addAttribute("error", "Inventura već postoji!");
-            return "inventura/updateInventura";
-        }
-        inventuraService.save(inventura);
-        return "redirect:/inventura/all";
-    }
+//    @PostMapping("/save")
+//    public String saveInventura(@ModelAttribute("inventura") Inventura inventura, Model model){
+//        if(inventuraService.checkIfInventuraIsExisting(inventura.getIdInventure())!=0){
+//            model.addAttribute("error", "Inventura već postoji!");
+//            return "inventura/updateInventura";
+//        }
+//        inventuraService.save(inventura);
+//        return "redirect:/inventura/all";
+//    }
 
     @GetMapping("delete/{id}")
     public String deleteById(@PathVariable(value = "id") Long id){
@@ -65,6 +78,7 @@ public class InventuraController {
 
     @GetMapping("/find")
     public String findInventuraWithId(@RequestParam("idInventure") Long idInventure, Model model){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         List<Inventura> inventuraList = inventuraService.findInventuraById(idInventure);
         if(inventuraList.isEmpty()){
             model.addAttribute("error", "Inventura ne postoji!");
@@ -76,6 +90,6 @@ public class InventuraController {
             Inventura inventura = new Inventura();
             model.addAttribute("inventura", inventura);
         }
-        return "inventura/inventura";
+        return getViewBasedOnRole(auth);
     }
 }

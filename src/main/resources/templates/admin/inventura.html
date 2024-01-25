@@ -5,11 +5,11 @@
 <link th:href="@{/CSS/customStyle.css}" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script type="text/javascript" src="../static/javascript/sidebar.js" th:src="@{/javascript/sidebar.js}"></script>
-<script type="text/javascript" src="../static/javascript/hidedivVrstaUredaja.js" th:src="@{/javascript/hidedivVrstaUredaja.js}"></script>
+<script type="text/javascript" src="../static/javascript/hidedivInventura.js" th:src="@{/javascript/hidedivInventura.js}"></script>
 <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 <head>
     <meta charset="UTF-8">
-    <title>Vrste sredstva</title>
+    <title>Inventure</title>
 </head>
 <style>
     html {
@@ -18,7 +18,7 @@
 
     table {
         border-collapse: collapse;
-        width: 100%;
+        width: auto;
     }
 
     th, td {
@@ -26,6 +26,31 @@
         text-align: center;
         border-bottom: 1px solid #ddd;
         border-left: 1px solid #ddd;
+    }
+
+    #scrollToTopBtn {
+        display: none;
+        position: fixed;
+        bottom: 10px;
+        left: 10px;
+        z-index: 99;
+        padding: 5px;
+        background-color: #000;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+    }
+
+    .forms-container {
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-start;
+        margin-bottom: 10px;
+    }
+
+    .form {
+        margin-right: 0px;
+        margin-bottom: 10px;
     }
 </style>
 <body>
@@ -35,16 +60,14 @@
         <button onclick="w3_close()" class="w3-bar-item w3-large">Zatvori &times;</button>
         <a th:href="@{/index}" class="w3-bar-item w3-button">Glavni izbornik</a>
         <a th:href="@{/racun/all}" class="w3-bar-item w3-button">Računi/Dokumenti</a>
-        <a th:href="@{/lokacija/all}" class="w3-bar-item w3-button">Lokacije</a>
         <a th:href="@{/dobavljac/all}" class="w3-bar-item w3-button">Dobavljači</a>
+        <a th:href="@{/vrstaUredaja/all}" class="w3-bar-item w3-button">Vrste sredstva</a>
+        <a th:href="@{/lokacija/all}" class="w3-bar-item w3-button">Lokacije</a>
         <a th:href="@{/korisnik/all}" class="w3-bar-item w3-button">Korisnici</a>
         <a th:href="@{/inventar/all}" class="w3-bar-item w3-button">Osnovna sredstva</a>
         <a th:href="@{/inventarIT/all}" class="w3-bar-item w3-button">IT oprema</a>
-        <a th:href="@{/inventura/all}" class="w3-bar-item w3-button">Inventure</a>
         <a th:href="@{/provodenjeInventure/all}" class="w3-bar-item w3-button">Izvršavanje inventure</a>
-        <a th:href="@{/appUsers/all}" class="w3-bar-item w3-button">App useri</a>
     </div>
-
     <div style="text-align: center; position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);">
         <img src="../images/A.jpg" alt="Logo" style="width: 175px; height: 175px;">
         <button id="logout" type="button" onclick="window.location.href='/logout'" style="margin-top: 10px;">Logout
@@ -56,38 +79,38 @@
     <button id="openNav" class="w3-button w3-xlarge" onclick="w3_open()">&#9776;</button>
     <img src="../images/AITAC values challenges solutions (1).png" class="centered-image" alt="Aitac VCS">
 </div>
-<h1 class="w3-padding w3-center w3-opacity w3-xxxlarge" style="text-shadow:1px 1px 0 #444"><b>Vrste sredstva</b></h1>
-<div class="div-container">
-    <a th:href="@{/vrstaUredaja/addNew}" class="button-add"><i class="material-icons">add_circle</i> Nova vrsta sredstva</a>
-    <a th:href="@{/vrstaUredaja/generatePDF}" class="button-30">Izvještaj <i
-            class="material-icons">picture_as_pdf</i></a>
+<div>
+<h1 class="w3-padding w3-center w3-opacity w3-xxxlarge" style="text-shadow:1px 1px 0 #444"><b>Inventure</b></h1>
 </div>
-<form class="w3-container" th:action="@{/vrstaUredaja/find}" method="get" style="margin-bottom: 20px">
-    <input type="text" id="nazivVrsteUredaja" name="nazivVrsteUredaja" placeholder="Pretraži po nazivu" required
-           onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Popunite polje za pretraživanje!')">
-    <button onclick="hidedivVrstaUredaja()" type="submit" class="button-30"><i class="fa fa-search" style="font-size:20px"></i> Pretraži</button>
-    <button type="button" class="button-30" onclick="window.location.href='/vrstaUredaja/all'">Prikaži sve</button>
-    <label id="error-message" class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>
-</form>
+<div class="div-container">
+    <a th:href="@{/inventura/addNew}" class="button-add"><i class="material-icons">add_circle</i> Nova inventura</a>
+</div>
+<div class="forms-container" style="display: flex;">
+    <form id="form1" class="w3-container w3-padding form" th:action="@{/inventura/find}" method="get">
+        <label for="idInventure"></label>
+        <input type="text" id="idInventure" name="idInventure" placeholder="Pretraži po god. inventure" required
+               onchange="this.setCustomValidity('')"
+               oninvalid="this.setCustomValidity('Popunite polje za pretraživanje!')">
+        <button onclick="hidedivInventura()" type="submit" class="button-30"><i class="fa fa-search" style="font-size:20px"></i> Pronađi inventuru
+        </button>
+        <button type="button" class="button-30" onclick="window.location.href='/inventura/all'">Prikaži sve</button>
+        <label id="error-message" class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>
+    </form>
+</div>
 <div style="overflow-x:auto;">
     <table style="table-layout:auto;width:100%" class="w3-table-all w3-hoverable w3-centered w3-card-4">
         <thead>
         <tr>
-            <th class="w3-dark-grey">ID</th>
-            <th class="w3-dark-grey">Naziv vrste sredstva</th>
-            <th class="w3-dark-grey"></th>
-            <th class="w3-dark-grey"></th>
+            <th class="w3-dark-grey">Inventura</th>
+            <th style="width: 45px" class="w3-dark-grey"></th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="vrstaUredaja:${sveVrsteUredaja}">
-            <td th:text="${vrstaUredaja.idVrsteUredaja}"></td>
-            <td th:text="${vrstaUredaja.nazivVrsteUredaja}"></td>
-            <td><a th:href="@{/vrstaUredaja/update/{id}(id=${vrstaUredaja.idVrsteUredaja})}" type="button"
-                   class="button-edit"><i class="fa fa-edit" style="font-size:36px"></i></a></td>
+        <tr th:each="inventura:${sveInventure}">
+            <td th:text="${inventura.idInventure}"></td>
             <td><a style="font-size:128px"
                    href="javascript:void(0);"
-                   th:onclick="'confirmDelete(' + ${vrstaUredaja.idVrsteUredaja} + ')'"
+                   th:onclick="'confirmDelete(' + ${inventura.idInventure} + ')'"
                    class="button-delete"><i class="material-icons">remove_circle</i></a></td>
         </tr>
         </tbody>
@@ -111,11 +134,11 @@
     };
 </script>
 <script>
-    function confirmDelete(idVrsteUredaja) {
+    function confirmDelete(idInventure) {
         var isConfirmed = confirm("Are you sure you want to delete?");
 
         if (isConfirmed) {
-            window.location.href = `/vrstaUredaja/delete/${idVrsteUredaja}`;
+            window.location.href = `/inventura/delete/${idInventure}`;
         }
     }
 </script>

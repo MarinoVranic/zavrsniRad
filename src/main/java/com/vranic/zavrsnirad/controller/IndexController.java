@@ -14,9 +14,12 @@ public class IndexController {
         if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_USER"))) {
             // User has the user role
             return "user/index";
-        } else {
+        } else if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
             // User has admin role
+            return "admin/index";
+        } else if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_SUPER_ADMIN"))) {
             return "index";
         }
+        return "index";
     }
 }

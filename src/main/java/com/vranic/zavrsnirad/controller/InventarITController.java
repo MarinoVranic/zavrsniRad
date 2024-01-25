@@ -19,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -55,8 +57,19 @@ public class InventarITController {
 
     public LocalDate today = LocalDate.now();
 
+    private String getViewBasedOnRole(Authentication auth) {
+        if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+            // User has the admin role
+            return "admin/inventarIT";
+        } else {
+            // User has user role
+            return "inventar/inventarIT";
+        }
+    }
+
     @GetMapping("/all")
     public String getAllItInventar(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         model.addAttribute("savInventar", inventarService.getInventarForIT());
         List<VrstaUredaja> allVrstaUredaja = vrstaUredajaService.getAllVrstaUredaja();
         model.addAttribute("allVrstaUredaja", allVrstaUredaja);
@@ -64,7 +77,7 @@ public class InventarITController {
         model.addAttribute("allLokacija", allLokacija);
         List<Korisnik> allKorisnik = korisnikService.getAllKorisnik();
         model.addAttribute("allKorisnik", allKorisnik);
-        return "inventar/inventarIT";
+        return getViewBasedOnRole(auth);
     }
 
     @GetMapping("/{inventarniBroj}")
@@ -148,6 +161,7 @@ public class InventarITController {
 
     @GetMapping("/find")
     public String findInventarByName(@RequestParam("inventarniBroj") String inventarniBroj, Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         List<Inventar> inventarList = inventarService.findInventarByInvBroj(inventarniBroj);
         if (inventarList.isEmpty()) {
             model.addAttribute("error", "Inventar pod tim brojem ne postoji u sustavu!");
@@ -159,7 +173,7 @@ public class InventarITController {
             Inventar inventar = new Inventar();
             model.addAttribute("inventar", inventar);
         }
-        return "inventar/inventarIT";
+        return getViewBasedOnRole(auth);
     }
 
     @GetMapping("zaduzi/{inventarniBroj}")
@@ -218,6 +232,7 @@ public class InventarITController {
 
     @GetMapping("/findByVrsta")
     public String showInventarByVrstaUredaja(@RequestParam("idVrsteUredaja") Long idVrsteUredaja, Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         List<VrstaUredaja> allVrstaUredaja = vrstaUredajaService.getAllVrstaUredaja();
         List<Inventar> inventarList = inventarService.getInventarByVrstaUredaja(idVrsteUredaja);
         List<Lokacija> allLokacija = lokacijaService.getAllLokacija();
@@ -228,11 +243,12 @@ public class InventarITController {
         model.addAttribute("savInventar", inventarList);
         Inventar inventar = new Inventar();
         model.addAttribute("inventar", inventar);
-        return "inventar/inventarIT";
+        return getViewBasedOnRole(auth);
     }
 
     @GetMapping("/findByLokacija")
     public String showInventarByLokacija(@RequestParam("idLokacije") Long idLokacije, Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         List<Lokacija> allLokacija = lokacijaService.getAllLokacija();
         List<Inventar> inventarList = inventarService.getInventarByLokacija(idLokacije);
         List<Korisnik> allKorisnik = korisnikService.getAllKorisnik();
@@ -243,11 +259,12 @@ public class InventarITController {
         model.addAttribute("savInventar", inventarList);
         Inventar inventar = new Inventar();
         model.addAttribute("inventar", inventar);
-        return "inventar/inventarIT";
+        return getViewBasedOnRole(auth);
     }
 
     @GetMapping("/findByUser")
     public String showInventarByUser(@RequestParam("username") String username, Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         List<Korisnik> allKorisnik = korisnikService.getAllKorisnik();
         List<Inventar> inventarList = inventarService.getInventarByUser(username);
         List<Lokacija> allLokacija = lokacijaService.getAllLokacija();
@@ -258,7 +275,7 @@ public class InventarITController {
         model.addAttribute("savInventar", inventarList);
         Inventar inventar = new Inventar();
         model.addAttribute("inventar", inventar);
-        return "inventar/inventarIT";
+        return getViewBasedOnRole(auth);
     }
 
     @GetMapping(value = "/ean13/{inventarniBroj}", produces = MediaType.IMAGE_PNG_VALUE)

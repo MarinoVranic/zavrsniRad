@@ -61,59 +61,11 @@
                         required
                         onchange="this.setCustomValidity('')"
                         oninvalid="this.setCustomValidity('Odaberite rolu!')">
+                    <option th:value="'SUPER_ADMIN'" th:text="Super admin"></option>
                     <option th:value="'ADMIN'" th:text="Admin"></option>
                     <option th:value="'USER'" th:text="User"></option>
                 </select>
             </p>
-<!--            <p class="w3-half">-->
-<!--                <label class="w3-text-dark-grey" for="subcontractor"><b>Poslodavac</b></label>-->
-<!--                <input class="w3-input w3-border w3-round w3-center" id="subcontractor" name="subcontractor" type="text"-->
-<!--                       th:field="*{subcontractor}" required-->
-<!--                       onchange="this.setCustomValidity('')"-->
-<!--                       oninvalid="this.setCustomValidity('Ispunite polje za poslodavca!')"></p>-->
-<!--            <p>-->
-<!--            <p class="w3-half">-->
-<!--                <label class="w3-text-dark-grey" for="godina"><b>Godina zaposlenja</b></label>-->
-<!--                <span class="error" th:if="${#fields.hasErrors('godina')}" th:errors="*{godina}">Godina error</span>-->
-<!--                <input class="w3-input w3-border w3-round w3-center" id="godina" name="godina" type="text"-->
-<!--                       th:field="*{godina}" required-->
-<!--                       onchange="this.setCustomValidity('')"-->
-<!--                       oninvalid="this.setCustomValidity('Ispunite polje za godinu zaposlenja!')"></p>-->
-<!--            <p>-->
-<!--            <p class="w3-half">-->
-<!--                <label class="w3-text-dark-grey" for="email"><b>E-mail</b></label>-->
-<!--                <input class="w3-input w3-border w3-round w3-center" id="email" name="email" type="email"-->
-<!--                       th:field="*{email}" required-->
-<!--                       onchange="this.setCustomValidity('')"-->
-<!--                       oninvalid="this.setCustomValidity('Ispunite polje za e-mail!')"></p>-->
-<!--            <p>-->
-<!--            <p class="w3-half">-->
-<!--                <label class="w3-text-dark-grey" for="initialPassword"><b>Inicijalna lozinka</b></label>-->
-<!--                <input class="w3-input w3-border w3-round w3-center" id="initialPassword" name="initialPassword"-->
-<!--                       type="text" th:field="*{initialPassword}" required-->
-<!--                       onchange="this.setCustomValidity('')"-->
-<!--                       oninvalid="this.setCustomValidity('Ispunite polje za inicijalnu lozinku!')"></p>-->
-<!--            <p>-->
-<!--            <p class="w3-half">-->
-<!--                <label class="w3-text-dark-grey" for="userCreated"><b>Korisnik aktiviran</b><br></label>-->
-<!--                <input class="w3-input w3-border w3-round w3-center" id="userCreated" name="userCreated" type="date"-->
-<!--                       th:field="*{userCreated}"></p>-->
-<!--            <p>-->
-<!--            <p class="w3-half">-->
-<!--                <label class="w3-text-dark-grey" for="userDisabled"><b>Korisnik deaktiviran</b></label>-->
-<!--                <input class="w3-input w3-border w3-round w3-center" id="userDisabled" name="userDisabled" type="date"-->
-<!--                       th:field="*{userDisabled}" disabled></p>-->
-<!--            <p>-->
-<!--            <p class="w3-half">-->
-<!--                <label class="w3-text-dark-grey" for="emailCreated"><b>E-mail aktiviran</b></label>-->
-<!--                <input class="w3-input w3-border w3-round w3-center" id="emailCreated" name="emailCreated" type="date"-->
-<!--                       th:field="*{emailCreated}"></p>-->
-<!--            <p>-->
-<!--            <p class="w3-half">-->
-<!--                <label class="w3-text-dark-grey" for="emailDisabled"><b>E-mail deaktiviran</b></label>-->
-<!--                <input class="w3-input w3-border w3-round w3-center" id="emailDisabled" name="emailDisabled" type="date"-->
-<!--                       th:field="*{emailDisabled}" disabled></p>-->
-<!--            <p>-->
             <p class="w3-center">
                 <label class="w3-text-dark-grey" for="password"><b>Password</b></label>
                 <input class="w3-input w3-border w3-round w3-center" id="password" name="password"

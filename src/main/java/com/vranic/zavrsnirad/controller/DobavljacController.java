@@ -12,6 +12,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -27,10 +29,21 @@ public class DobavljacController {
     @Autowired
     private DobavljacService dobavljacService;
 
+    private String getViewBasedOnRole(Authentication auth) {
+        if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+            // User has the admin role
+            return "admin/dobavljac";
+        } else {
+            // User has user role
+            return "dobavljac/dobavljac";
+        }
+    }
+
     @GetMapping("/all")
     public String getAllDobavljac(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         model.addAttribute("sviDobavljaci", dobavljacService.getAllDobavljaci());
-        return "dobavljac/dobavljac";
+        return getViewBasedOnRole(auth);
     }
 
     @GetMapping("/{id}")
@@ -82,6 +95,7 @@ public class DobavljacController {
 
     @GetMapping("/find")
     public String findDobavljacByName(@RequestParam("nazivDobavljaca") String nazivDobavljaca, Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         List<Dobavljac> dobavljacList = dobavljacService.findDobavljacByName(nazivDobavljaca);
         if (dobavljacList.isEmpty()) {
             model.addAttribute("error", "Dobavljač tog naziva ne postoji u sustavu!");
@@ -93,7 +107,7 @@ public class DobavljacController {
             Dobavljac dobavljac = new Dobavljac();
             model.addAttribute("dobavljac", dobavljac);
         }
-        return "dobavljac/dobavljac";
+        return getViewBasedOnRole(auth);
     }
 
     @GetMapping("/generatePDF")

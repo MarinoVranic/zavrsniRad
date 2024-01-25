@@ -13,6 +13,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -28,10 +30,21 @@ public class RacunController {
     @Autowired
     private RacunService racunService;
 
+    private String getViewBasedOnRole(Authentication auth) {
+        if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+            // User has the admin role
+            return "admin/racun";
+        } else {
+            // User has super_admin role
+            return "racun/racun";
+        }
+    }
+
     @GetMapping("/all")
     public String getAllRacun(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         model.addAttribute("sviRacuni", racunService.getAllRacun());
-        return "racun/racun";
+        return getViewBasedOnRole(auth);
     }
 
     @GetMapping("/{id}")
@@ -83,6 +96,7 @@ public class RacunController {
 
     @GetMapping("/find")
     public String findDobavljacByName(@RequestParam("brojRacuna") String brojRacuna, Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         List<Racun> racunList = racunService.findRacunByBrojRacuna(brojRacuna);
         if (racunList.isEmpty()) {
             model.addAttribute("error", "Račun/dokument pod tim brojem ne postoji u sustavu!");
@@ -94,7 +108,7 @@ public class RacunController {
             Racun racun = new Racun();
             model.addAttribute("racun", racun);
         }
-        return "racun/racun";
+        return getViewBasedOnRole(auth);
     }
 
     @GetMapping("/generatePDF")

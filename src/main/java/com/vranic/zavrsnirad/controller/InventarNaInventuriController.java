@@ -75,9 +75,11 @@ public class InventarNaInventuriController {
 
         if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
             // User has the admin role
+            return "admin/provodenjeInventure";
+        } else if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_SUPER_ADMIN"))) {
+            // User has user role
             return "inventura/provodenjeInventure";
         } else {
-            // User has user role
             return "user/provodenjeInventure";
         }
     }
@@ -99,9 +101,11 @@ public class InventarNaInventuriController {
 
         if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
             // User has the admin role
+            return "admin/provodenjeInventure";
+        } else if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_SUPER_ADMIN"))) {
+            // User has user role
             return "inventura/provodenjeInventure";
         } else {
-            // User has user role
             return "user/provodenjeInventure";
         }
     }
@@ -123,9 +127,11 @@ public class InventarNaInventuriController {
 
         if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
             // User has the admin role
+            return "admin/provodenjeInventure";
+        } else if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_SUPER_ADMIN"))) {
+            // User has user role
             return "inventura/provodenjeInventure";
         } else {
-            // User has user role
             return "user/provodenjeInventure";
         }
     }
@@ -147,9 +153,11 @@ public class InventarNaInventuriController {
 
         if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
             // User has the admin role
+            return "admin/provodenjeInventure";
+        } else if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_SUPER_ADMIN"))) {
+            // User has user role
             return "inventura/provodenjeInventure";
         } else {
-            // User has user role
             return "user/provodenjeInventure";
         }
     }
@@ -171,9 +179,11 @@ public class InventarNaInventuriController {
 
         if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
             // User has the admin role
+            return "admin/provodenjeInventure";
+        } else if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_SUPER_ADMIN"))) {
+            // User has user role
             return "inventura/provodenjeInventure";
         } else {
-            // User has user role
             return "user/provodenjeInventure";
         }
     }
@@ -233,9 +243,11 @@ public class InventarNaInventuriController {
     private String getViewBasedOnRole(Authentication auth) {
         if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
             // User has the admin role
+            return "admin/provodenjeInventure";
+        } else if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_SUPER_ADMIN"))) {
+            // User has user role
             return "inventura/provodenjeInventure";
         } else {
-            // User has user role
             return "user/provodenjeInventure";
         }
     }
@@ -383,6 +395,9 @@ public class InventarNaInventuriController {
 
         if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
             // User has the admin role
+            return "admin/provodenjeInventure";
+        } else if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_SUPER_ADMIN"))) {
+            // User has user role
             return "inventura/provodenjeInventure";
         } else {
             // User has user role
@@ -426,6 +441,9 @@ public class InventarNaInventuriController {
         }
         if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
             // User has the admin role
+            return "admin/provodenjeInventure";
+        } else if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_SUPER_ADMIN"))) {
+            // User has user role
             return "inventura/provodenjeInventure";
         } else {
             // User has user role
