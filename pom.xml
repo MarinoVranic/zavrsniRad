@@ -94,19 +94,6 @@
                     </excludes>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>com.vranic</groupId> <!-- Replace with the actual groupId of your plugin -->
-                <artifactId>zavrsniRad</artifactId> <!-- Replace with the actual artifactId of your plugin -->
-                <version>0.0.1-SNAPSHOT</version> <!-- Replace with the actual version of your plugin -->
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>run</goal> <!-- Replace with the actual goal you want to execute -->
-                        </goals>
-                    </execution>
-                </executions>
-                <!-- Any additional configuration for your plugin -->
-            </plugin>
         </plugins>
     </build>
 
