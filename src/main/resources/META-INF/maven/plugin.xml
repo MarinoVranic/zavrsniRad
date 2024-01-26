@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+    <name>Your Plugin Name</name>
+    <groupId>com.vranic</groupId>
+    <artifactId>zavrsniRad</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <goals>
+        <goal>run</goal> <!-- Replace with the actual goal name -->
+    </goals>
+</plugin>
