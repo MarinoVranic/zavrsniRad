@@ -260,7 +260,6 @@ public class InventarNaInventuriController {
         Lokacija trenutnaLokacija = (Lokacija) session.getAttribute("trenutnaLokacija");
         Integer currentYear = LocalDate.now().getYear();
         String vrstaInventara = inventarniBroj.substring(0,1);
-        System.out.println(vrstaInventara);
         String invBroj = inventarniBroj.substring(8, 12);
         int invBrSaNulama = Integer.parseInt(invBroj);
         String invBrBezNula = String.valueOf(invBrSaNulama);

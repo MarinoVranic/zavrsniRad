@@ -300,21 +300,38 @@ public class InventarController {
     @GetMapping(value = "/ean13/{inventarniBroj}", produces = MediaType.IMAGE_PNG_VALUE)
     public ResponseEntity<byte[]> generateAndDownloadEAN13Barcode(@PathVariable(value = "inventarniBroj") String inventarniBroj) {
         try {
-//            Inventar inventar = inventarService.getInventarById(inventarniBroj);
             String originalInventarniBroj = inventarniBroj;
-            String sitniInventar = originalInventarniBroj.substring(0,2);
-            if(sitniInventar.equals("SI"))
-            {
-                inventarniBroj = inventarniBroj.substring(2);
-                while(inventarniBroj.length() < 12){
-                    inventarniBroj = "0" + inventarniBroj;
+            if(originalInventarniBroj.length()<2){
+                String sitniInventar = "";
+                if(sitniInventar.equals("SI"))
+                {
+                    inventarniBroj = inventarniBroj.substring(2);
+                    while(inventarniBroj.length() < 12){
+                        inventarniBroj = "0" + inventarniBroj;
+                    }
+                    inventarniBroj = "2" + inventarniBroj.substring(1);
+                } else {
+                    while(inventarniBroj.length() < 12){
+                        inventarniBroj = "0" + inventarniBroj;
+                    }
+                    inventarniBroj = "1" + inventarniBroj.substring(1);
                 }
-                inventarniBroj = "2" + inventarniBroj.substring(1);
-            } else {
-                while(inventarniBroj.length() < 12){
-                    inventarniBroj = "0" + inventarniBroj;
+            }
+            else {
+                String sitniInventar = originalInventarniBroj.substring(0,2);
+                if(sitniInventar.equals("SI"))
+                {
+                    inventarniBroj = inventarniBroj.substring(2);
+                    while(inventarniBroj.length() < 12){
+                        inventarniBroj = "0" + inventarniBroj;
+                    }
+                    inventarniBroj = "2" + inventarniBroj.substring(1);
+                } else {
+                    while(inventarniBroj.length() < 12){
+                        inventarniBroj = "0" + inventarniBroj;
+                    }
+                    inventarniBroj = "1" + inventarniBroj.substring(1);
                 }
-                inventarniBroj = "1" + inventarniBroj.substring(1);
             }
             BitMatrix bitMatrix = BarcodeGeneratorService.generateEAN13Barcode(inventarniBroj);
             byte[] barcodeImage = BarcodeImageUtils.convertBitMatrixToByteArray(bitMatrix);
