@@ -301,6 +301,44 @@ public class InventarNaInventuriController {
                     inventarNaInventuriService.save(inventarNaInventuri);
                 }
             }
+        } else if(vrstaInventara.equals("3"))
+        {
+            invBroj = "IT" + invBroj;
+            Inventar inventar = inventarService.getInventarById(invBroj);
+            Inventura inventura = inventuraService.getInventuraById(currentYear.longValue());
+            InventarNaInventuri inventarNaInventuri = new InventarNaInventuri();
+            inventarNaInventuri.setInventar(inventar);
+            inventarNaInventuri.setLokacija(trenutnaLokacija);
+            if (inventar == null) {
+                model.addAttribute("error3", "Skenirani inventar nije zaveden u bazi!");
+                return getViewBasedOnRole(auth);
+            } else if (inventarNaInventuriService.checkIfInventarAlreadyScanned(inventarNaInventuri.getInventar().getInventarniBroj(), currentYear.longValue()) != 0) {
+                model.addAttribute("error3", "Inventar je već skeniran!");
+                return getViewBasedOnRole(auth);
+            } else if (trenutnaLokacija == null) {
+                model.addAttribute("error3", "Prvo morate postaviti lokaciju!");
+                return getViewBasedOnRole(auth);
+            } else {
+                if (inventura == null) {
+                    inventura = new Inventura();
+                    inventura.setIdInventure(currentYear.longValue());
+                    inventarNaInventuri.setInventura(inventura);
+                    inventarNaInventuri.setDatumSkeniranja(LocalDateTime.now());
+                    inventarNaInventuri.setLokacija(trenutnaLokacija);
+                    inventarNaInventuri.setStanje("Aktivno");
+                    inventarNaInventuri.setOtpis("Ne");
+                    inventarNaInventuri.setUser(user);
+                    inventarNaInventuriService.save(inventarNaInventuri);
+                } else {
+                    inventarNaInventuri.setInventura(inventura);
+                    inventarNaInventuri.setDatumSkeniranja(LocalDateTime.now());
+                    inventarNaInventuri.setLokacija(trenutnaLokacija);
+                    inventarNaInventuri.setStanje("Aktivno");
+                    inventarNaInventuri.setOtpis("Ne");
+                    inventarNaInventuri.setUser(user);
+                    inventarNaInventuriService.save(inventarNaInventuri);
+                }
+            }
         } else {
             Inventar inventar = inventarService.getInventarById(invBrBezNula);
             Inventura inventura = inventuraService.getInventuraById(currentYear.longValue());
