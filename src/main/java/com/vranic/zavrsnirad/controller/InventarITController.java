@@ -32,6 +32,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -57,6 +58,7 @@ public class InventarITController {
     private RacunService racunService;
 
     public LocalDate today = LocalDate.now();
+    public DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
     private String getViewBasedOnRole(Authentication auth) {
         if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
@@ -615,6 +617,7 @@ public class InventarITController {
         BaseFont arialNormalFont = BaseFont.createFont(arialNormal, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
         BaseFont arialBoldItalicFont = BaseFont.createFont(arialBoldItalic, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
         Font croatianFont = FontFactory.getFont(arialNormal, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+        Font croatianFontBold = FontFactory.getFont(arialBold, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 
         // Set image and it's size
         String imagePath2 = "static/images/AITAC values challenges solutions (1).png"; // Relative path to the image file
@@ -653,9 +656,15 @@ public class InventarITController {
         image3.setSpacingAfter(40);
         document.add(image3);
 
+
+
         Paragraph aitacPodaci1 = new Paragraph();
+        Font fontBlueLine = new Font(arialNormalFont, 5, Font.BOLD);
+        fontBlueLine.setColor(35, 47, 131);
+        Chunk blueLine = new Chunk("_______________________________________________________________________________________________________________________________ \n", fontBlueLine);
+        aitacPodaci1.add(blueLine);
         Font fontAitacPodaci = new Font(arialNormalFont, 6, Font.NORMAL);
-        fontAitacPodaci.setColor(224, 224, 224);
+        fontAitacPodaci.setColor(160, 160, 160);
         Phrase prviRed = new Phrase("AITAC d.o.o. Žegoti 6/1, 51215 Kastav, Hrvatska · T:+385 51 626 712 · F:+385 51 626 720 · E:info@aitac.nl · W: www.aitac.nl", fontAitacPodaci);
         aitacPodaci1.setAlignment(Element.ALIGN_CENTER);
         aitacPodaci1.add(prviRed);
@@ -666,6 +675,7 @@ public class InventarITController {
         Phrase drugiRed = new Phrase("Temeljni kapital: 18.000,00 kn uplaćen kod ZAP Rijeka, Hrvatska · Članovi uprave: M. Lorencin, MBS:040226601, Trgovački Sud u Rijeci", fontAitacPodaci);
         aitacPodaci2.setAlignment(Element.ALIGN_CENTER);
         aitacPodaci2.add(drugiRed);
+        aitacPodaci2.add(blueLine);
         aitacPodaci2.setSpacingAfter(30);
         document.add(aitacPodaci2);
 
@@ -674,8 +684,8 @@ public class InventarITController {
         Phrase headerPhrase = new Phrase("Zaduženja tijekom rada", boldFont);
         header.add(headerPhrase);
         header.setAlignment(Element.ALIGN_CENTER);
-        header.setSpacingAfter(50);
-        header.setSpacingBefore(75);
+        header.setSpacingAfter(75);
+        header.setSpacingBefore(50);
         document.add(header);
 
         Paragraph podaciKorisnika = new Paragraph();
@@ -686,14 +696,16 @@ public class InventarITController {
         podaciKorisnika.setSpacingAfter(5);
         Font boldFontKorisnika = new Font(arialBoldFont, 13, Font.BOLD);
         Inventar inventarOne = selectedInventar.get(0);
-        Phrase selectedKorisnik = new Phrase(inventarOne.getKorisnik().getFirstName() + " " + inventarOne.getKorisnik().getLastName(), boldFontKorisnika);
+        Chunk nazivKorisnika = new Chunk(inventarOne.getKorisnik().getFirstName() + " " + inventarOne.getKorisnik().getLastName(), boldFontKorisnika);
+        nazivKorisnika.setUnderline(0.3f, -2f);
+        Phrase selectedKorisnik = new Phrase(nazivKorisnika);
         podaciKorisnika.add(selectedKorisnik);
         document.add(podaciKorisnika);
 
         //Adding date of the report
         Paragraph printDate = new Paragraph();
         String datum = "Datum: ";
-        String todayDate =  today.toString();
+        String todayDate =  today.format(formatter);
         Font datumFont = new Font(arialNormalFont, 9, Font.NORMAL);
         Font dateFont = new Font(arialBoldFont, 10, Font.BOLD);
         Phrase datumPhrase = new Phrase(datum, datumFont);
@@ -701,7 +713,7 @@ public class InventarITController {
         printDate.add(datumPhrase);
         printDate.add(datePhrase);
         printDate.setAlignment(Element.ALIGN_LEFT);
-        printDate.setSpacingAfter(100);
+        printDate.setSpacingAfter(70);
         document.add(printDate);
 
         // Create a table with 15 columns
@@ -766,19 +778,58 @@ public class InventarITController {
             if(inventar.getDatumZaduzenja() == null){
                 setCellContentAndFont(cell, "", croatianFont);
             } else {
-                setCellContentAndFont(cell, String.valueOf(inventar.getDatumZaduzenja()), croatianFont);
+                setCellContentAndFont(cell, inventar.getDatumZaduzenja().format(formatter), croatianFontBold);
             }
             table.addCell(cell);
             if(inventar.getDatumRazduzenja() == null){
                 setCellContentAndFont(cell, "", croatianFont);
             } else {
-                setCellContentAndFont(cell, String.valueOf(inventar.getDatumRazduzenja()), croatianFont);
+                setCellContentAndFont(cell, inventar.getDatumRazduzenja().format(formatter), croatianFont);
             }
             table.addCell(cell);
         }
 
         // Add the table to the document
         document.add(table);
+
+        Paragraph pravilnik = new Paragraph();
+        Font fontPravilnik = new Font(arialNormalFont, 9, Font.NORMAL);
+        Font fontPravilnikBold = new Font(arialBoldFont, 9, Font.BOLD);
+        Font fontPravilnikLink = new Font(arialNormalFont, 9, Font.BOLD);
+        fontPravilnikLink.setColor(35, 47, 131);
+        Phrase redI = new Phrase();
+        redI.add(new Chunk("Svojim potpisom korisnik potvrđuje da je upoznat te da će se pridržavati pravilnika o " +
+                "korištenju informatičke opreme: \n", fontPravilnik));
+        Chunk boldChunk = new Chunk("QMS-POL-DOC-001-2  Politika pravilne uporabe informacijskih resursa \n", fontPravilnikBold);
+        redI.add(boldChunk);
+        redI.add(new Chunk("LINK: ", fontPravilnik));
+        Chunk linkChunk = new Chunk("\\\\osiris\\ISO\\AITAC ISO 9001\\15. POSLOVNE POLITIKE \n", fontPravilnikLink);
+        linkChunk.setUnderline(0.1f, -2f);
+        redI.add(linkChunk);
+        redI.add(new Chunk("\n"));
+        Phrase redII = new Phrase("Svojim potpisom potvrđujem da je sve navedeno zaduženo u dobrom stanju.", fontPravilnik);
+        pravilnik.setAlignment(Element.ALIGN_LEFT);
+        pravilnik.add(redI);
+        pravilnik.add(redII);
+        pravilnik.setSpacingBefore(60);
+        document.add(pravilnik);
+
+        Paragraph potpisnik = new Paragraph();
+        Font fontPotpisnik = new Font(arialNormalFont, 9, Font.NORMAL);
+        Phrase red1 = new Phrase();
+        red1.add(new Chunk("_____________________________________", fontPotpisnik));
+        red1.add(new Chunk("                              "));
+        red1.add(new Chunk("_____________________________________ \n", fontPotpisnik));
+        Phrase red2 = new Phrase();
+        red2.add(new Chunk("Zaposlenik", fontPotpisnik));
+        red2.add(new Chunk("                                                                      "));
+        red2.add(new Chunk("Odgovorna Osoba", fontPotpisnik));
+        potpisnik.setAlignment(Element.ALIGN_CENTER);
+        potpisnik.add(red1);
+        potpisnik.add(red2);
+        potpisnik.setSpacingBefore(90);
+        potpisnik.setSpacingAfter(20);
+        document.add(potpisnik);
 
         //Adding another image and setting its size and position
         String imagePath = "static/images/AitacLine.png"; // Relative path to the image file
