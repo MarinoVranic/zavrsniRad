@@ -712,7 +712,7 @@ public class KorisnikController {
             table.addCell(rightCell);
             setCellContentAndFontLarge(leftCell, "E-mail login", croatianFont);
             table.addCell(leftCell);
-            setCellContentAndFontLarge(rightCell, "https://www.office.come", fontLink);
+            setCellContentAndFontLarge(rightCell, "https://www.office.com", fontLink);
             table.addCell(rightCell);
             setCellContentAndFontLarge(leftCell, "Odoo login", croatianFont);
             table.addCell(leftCell);
