@@ -485,7 +485,7 @@ public class InventarController {
         table.addCell(headerCell);
 
         // Get the list of Inventar objects from service
-        List<Inventar> inventari = inventarService.getAllInventar();
+        List<Inventar> inventari = inventarService.getInventarForAdministration();
 
         // Add data cells to the table
         for (Inventar inventar : inventari) {
@@ -519,13 +519,13 @@ public class InventarController {
             table.addCell(cell);
             setCellContentAndFont(cell, inventar.getDobavljac().getNazivDobavljaca(), croatianFont);
             table.addCell(cell);
+            setCellContentAndFont(cell, inventar.getNabavnaVrijednost() + " EUR", croatianFont);
+            table.addCell(cell);
             if(inventar.getNapomena() == null){
                 setCellContentAndFont(cell, "", croatianFont);
             } else {
                 setCellContentAndFont(cell, inventar.getNapomena(), croatianFont);
             }
-            table.addCell(cell);
-            setCellContentAndFont(cell, inventar.getNabavnaVrijednost() + " EUR", croatianFont);
             table.addCell(cell);
         }
 

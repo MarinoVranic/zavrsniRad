@@ -76,4 +76,8 @@ public class InventarService {
     public List<Inventar> getInventarByUser(String username){
         return inventarRepository.findAllByUser(username);
     }
+
+    public List<Inventar> getInventarForAdministration(){
+        return inventarRepository.findAllForAdministration();
+    }
 }
