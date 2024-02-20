@@ -128,6 +128,8 @@ public class InventarITController {
         model.addAttribute("allRacun", allRacun);
         List<Dobavljac> allDobavljac = dobavljacService.getAllDobavljaci();
         model.addAttribute("allDobavljac", allDobavljac);
+        List<Korisnik> allKorisnik = korisnikService.getAllKorisnik();
+        model.addAttribute("allKorisnik", allKorisnik);
         return "inventar/newInventarIT";
     }
 
@@ -168,6 +170,23 @@ public class InventarITController {
         List<Inventar> inventarList = inventarService.findInventarByInvBroj(inventarniBroj);
         if (inventarList.isEmpty()) {
             model.addAttribute("error", "Inventar pod tim brojem ne postoji u sustavu!");
+            model.addAttribute("savInventar", inventarService.getAllInventar());
+            Inventar inventar = new Inventar();
+            model.addAttribute("inventar", inventar);
+        } else {
+            model.addAttribute("savInventar", inventarList);
+            Inventar inventar = new Inventar();
+            model.addAttribute("inventar", inventar);
+        }
+        return getViewBasedOnRole(auth);
+    }
+
+    @GetMapping("/findBySerialNumber")
+    public String findInventarBySerialNumber(@RequestParam("serialNumber") String serijskiBroj, Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        List<Inventar> inventarList = inventarService.getInventarBySerialNumber(serijskiBroj);
+        if (inventarList.isEmpty()) {
+            model.addAttribute("error2", "Inventar tog serijskog broja ne postoji u sustavu!");
             model.addAttribute("savInventar", inventarService.getAllInventar());
             Inventar inventar = new Inventar();
             model.addAttribute("inventar", inventar);
@@ -279,6 +298,49 @@ public class InventarITController {
         Inventar inventar = new Inventar();
         model.addAttribute("inventar", inventar);
         return getViewBasedOnRole(auth);
+    }
+
+    @GetMapping("/findByTipInventara")
+    public String showInventarByTipInventara(@RequestParam("tipInventara") String tipInventara, Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if(tipInventara.equals("OS"))
+        {
+            List<Korisnik> allKorisnik = korisnikService.getAllKorisnik();
+            List<Lokacija> allLokacija = lokacijaService.getAllLokacija();
+            List<VrstaUredaja> allVrstaUredaja = vrstaUredajaService.getAllVrstaUredaja();
+            model.addAttribute("allLokacija", allLokacija);
+            model.addAttribute("allVrstaUredaja", allVrstaUredaja);
+            model.addAttribute("allKorisnik", allKorisnik);
+            List<Inventar> inventarList = inventarService.getInventarByOS();
+            model.addAttribute("savInventar", inventarList);
+            Inventar inventar = new Inventar();
+            model.addAttribute("inventar", inventar);
+            return getViewBasedOnRole(auth);
+        } else if(tipInventara.equals("IT")) {
+            List<Korisnik> allKorisnik = korisnikService.getAllKorisnik();
+            List<Lokacija> allLokacija = lokacijaService.getAllLokacija();
+            List<VrstaUredaja> allVrstaUredaja = vrstaUredajaService.getAllVrstaUredaja();
+            model.addAttribute("allLokacija", allLokacija);
+            model.addAttribute("allVrstaUredaja", allVrstaUredaja);
+            model.addAttribute("allKorisnik", allKorisnik);
+            List<Inventar> inventarList = inventarService.getInventarByIT();
+            model.addAttribute("savInventar", inventarList);
+            Inventar inventar = new Inventar();
+            model.addAttribute("inventar", inventar);
+            return getViewBasedOnRole(auth);
+        } else {
+            List<Korisnik> allKorisnik = korisnikService.getAllKorisnik();
+            List<Lokacija> allLokacija = lokacijaService.getAllLokacija();
+            List<VrstaUredaja> allVrstaUredaja = vrstaUredajaService.getAllVrstaUredaja();
+            model.addAttribute("allLokacija", allLokacija);
+            model.addAttribute("allVrstaUredaja", allVrstaUredaja);
+            model.addAttribute("allKorisnik", allKorisnik);
+            List<Inventar> inventarList = inventarService.getInventarBySI();
+            model.addAttribute("savInventar", inventarList);
+            Inventar inventar = new Inventar();
+            model.addAttribute("inventar", inventar);
+            return getViewBasedOnRole(auth);
+        }
     }
 
     @GetMapping(value = "/ean13/{inventarniBroj}", produces = MediaType.IMAGE_PNG_VALUE)

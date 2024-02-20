@@ -43,7 +43,7 @@ public interface InventarRepository extends JpaRepository<Inventar, String> {
     List<Inventar> findAllByLokacija(@Param("idLokacije") Long idLokacije);
 
     @Query(value = "SELECT inventar FROM Inventar inventar LEFT JOIN FETCH inventar.vrstaUredaja vu LEFT JOIN FETCH inventar.lokacija" +
-            " LEFT JOIN FETCH inventar.racun LEFT JOIN FETCH inventar.dobavljac LEFT JOIN inventar.korisnik korisnik WHERE vu.nazivVrsteUredaja IN ('laptop', 'pc') ORDER BY inventar.inventarniBroj DESC")
+            " LEFT JOIN FETCH inventar.racun LEFT JOIN FETCH inventar.dobavljac LEFT JOIN inventar.korisnik korisnik WHERE vu.nazivVrsteUredaja IN ('laptop', 'pc', 'monitor', 'spacemouse', 'slušalice', 'mobitel', 'speakerphone') ORDER BY inventar.inventarniBroj DESC")
     List<Inventar> findAllIT();
 
     @Query(value = "SELECT inventar FROM Inventar inventar LEFT JOIN FETCH inventar.vrstaUredaja vu LEFT JOIN FETCH inventar.lokacija" +
@@ -51,10 +51,16 @@ public interface InventarRepository extends JpaRepository<Inventar, String> {
     List<Inventar> findAllBySI();
 
     @Query(value = "SELECT inventar FROM Inventar inventar LEFT JOIN FETCH inventar.vrstaUredaja vu LEFT JOIN FETCH inventar.lokacija" +
-            " LEFT JOIN FETCH inventar.racun LEFT JOIN FETCH inventar.dobavljac LEFT JOIN inventar.korisnik korisnik WHERE inventar.inventarniBroj NOT LIKE 'SI%' ORDER BY inventar.inventarniBroj ASC")
+            " LEFT JOIN FETCH inventar.racun LEFT JOIN FETCH inventar.dobavljac LEFT JOIN inventar.korisnik korisnik WHERE inventar.inventarniBroj LIKE 'IT%' ORDER BY inventar.inventarniBroj ASC")
+    List<Inventar> findAllByIT();
+
+    @Query(value = "SELECT inventar FROM Inventar inventar LEFT JOIN FETCH inventar.vrstaUredaja vu LEFT JOIN FETCH inventar.lokacija" +
+            " LEFT JOIN FETCH inventar.racun LEFT JOIN FETCH inventar.dobavljac LEFT JOIN inventar.korisnik korisnik WHERE inventar.inventarniBroj NOT LIKE 'SI%' AND inventar.inventarniBroj NOT LIKE 'IT%' ORDER BY inventar.inventarniBroj ASC")
     List<Inventar> findAllByOS();
 
     @Query(value = "SELECT inventar FROM Inventar inventar LEFT JOIN FETCH inventar.vrstaUredaja LEFT JOIN FETCH inventar.lokacija i" +
             " LEFT JOIN FETCH inventar.racun LEFT JOIN FETCH inventar.dobavljac LEFT JOIN inventar.korisnik korisnik WHERE korisnik.username = :username ORDER BY inventar.inventarniBroj ASC")
     List<Inventar> findAllByUser(@Param("username") String username);
+
+    List<Inventar> findAllBySerijskiBroj(@Param("serijskiBroj") String serijskiBroj);
 }

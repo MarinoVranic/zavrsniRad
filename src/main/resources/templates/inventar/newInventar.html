@@ -55,11 +55,6 @@
                 </select>
             </p>
             <p class="w3-half">
-                <label class="w3-text-dark-grey" for="hostname"><b>Hostname</b><br></label>
-                <input class="w3-input w3-border w3-round w3-center" id="hostname" name="hostname" type="text"
-                       th:field="*{hostname}"></p>
-            <p>
-            <p class="w3-half">
                 <label class="w3-text-dark-grey" for="nazivLokacije"><b>Lokacija</b></label>
                 <select class="w3-input w3-border w3-round w3-center" id="nazivLokacije" name="nazivLokacije"
                         th:field="*{lokacija.idLokacije}" required
@@ -71,40 +66,14 @@
             </p>
             <p class="w3-half">
                 <label class="w3-text-dark-grey" for="username"><b>Korisnik</b></label>
-                <input class="w3-input w3-border w3-round w3-center" id="username" name="username" type="text"
-                       th:field="*{korisnik.username}"></p>
-            <p>
-            <p class="w3-half">
-                <label class="w3-text-dark-grey" for="lanMac"><b>LAN MAC</b></label>
-                <input class="w3-input w3-border w3-round w3-center" id="lanMac" name="lanMac" type="text"
-                       th:field="*{lanMac}"
-                       onchange="this.setCustomValidity('')"
-                       oninvalid="this.setCustomValidity('Ispunite polje za LAN MAC adresu!')"></p>
-            <p>
-            <p class="w3-half">
-                <label class="w3-text-dark-grey" for="wifiMac"><b>Wi-Fi MAC</b></label>
-                <input class="w3-input w3-border w3-round w3-center" id="wifiMac" name="wifiMac" type="text"
-                       th:field="*{wifiMac}"
-                       onchange="this.setCustomValidity('')"
-                       oninvalid="this.setCustomValidity('Ispunite polje za WiFi MAC adresu!')"></p>
-            <p>
-            <p class="w3-half">
-                <label class="w3-text-dark-grey" for="datumZaduzenja"><b>Datum zaduženja</b><br></label>
-                <input class="w3-input w3-border w3-round w3-center" id="datumZaduzenja" name="datumZaduzenja"
-                       type="date" th:field="*{datumZaduzenja}"></p>
-            <p>
-            <p class="w3-half">
-                <label class="w3-text-dark-grey" for="datumRazduzenja"><b>Datum razduženja</b></label>
-                <input class="w3-input w3-border w3-round w3-center" id="datumRazduzenja" name="datumRazduzenja"
-                       type="date" th:field="*{datumRazduzenja}"></p>
-            <p>
-            <p class="w3-half">
-                <label class="w3-text-dark-grey" for="warrantyEnding"><b>Istek garancije</b></label>
-                <input class="w3-input w3-border w3-round w3-center" id="warrantyEnding" name="warrantyEnding"
-                       type="date" th:field="*{warrantyEnding}" required
-                       onchange="this.setCustomValidity('')"
-                       oninvalid="this.setCustomValidity('Ispunite polje do kada traje garancija!')"></p>
-            <p>
+                <select class="w3-input w3-border w3-round w3-center" id="username" name="username"
+                        th:field="*{korisnik.username}"
+                        onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Odaberite korisnika!')">
+                    <option value="">Odaberite korisnika</option>
+                    <option th:each="korisnik : ${allKorisnik}" th:value="${korisnik.username}"
+                            th:text="${korisnik.firstName} + ' ' + ${korisnik.lastName}"></option>
+                </select>
+            </p>
             <p class="w3-half">
                 <label class="w3-text-dark-grey" for="brojRacuna"><b>Račun</b></label>
                 <select class="w3-input w3-border w3-round w3-center" id="brojRacuna" name="brojRacuna"
@@ -116,7 +85,7 @@
                 </select>
             </p>
             <div class="w3-row-padding">
-                <div class="w3-half">
+                <p class="w3-half">
                     <label class="w3-text-dark-grey" for="nazivDobavljaca"><b>Dobavljač</b></label>
                     <select class="w3-input w3-border w3-round w3-center" id="nazivDobavljaca" name="nazivDobavljaca"
                             th:field="*{dobavljac.idDobavljaca}" required
@@ -126,7 +95,14 @@
                         <option th:each="dobavljac : ${allDobavljac}" th:value="${dobavljac.idDobavljaca}"
                                 th:text="${dobavljac.nazivDobavljaca}"></option>
                     </select>
-                </div>
+                </p>
+                <p class="w3-half">
+                    <label class="w3-text-dark-grey" for="warrantyEnding"><b>Istek garancije</b></label>
+                    <input class="w3-input w3-border w3-round w3-center" id="warrantyEnding" name="warrantyEnding"
+                           type="date" th:field="*{warrantyEnding}" required
+                           onchange="this.setCustomValidity('')"
+                           oninvalid="this.setCustomValidity('Ispunite polje do kada traje garancija!')">
+                </p>
                 <div class="w3-half">
                     <label class="w3-text-dark-grey" for="nabavnaVrijednost"><b>Nabavna vrijednost sredstva</b></label>
                     <div class="currency-input">
@@ -134,10 +110,10 @@
                                type="text" th:field="*{nabavnaVrijednost}">
                     </div>
                 </div>
-                <div class="w3-center">
+                <div class="w3-half">
                     <label class="w3-text-dark-grey" for="napomena"><b>Napomena</b></label>
                     <input class="w3-input w3-border w3-round w3-center w3-padding-24" id="napomena" name="napomena"
-                           type="text" th:field="*{napomena}">
+                           type="text" th:field="*{napomena}"><p></p>
                 </div>
             </div>
             <div>

@@ -71,8 +71,13 @@
             </p>
             <p class="w3-half">
                 <label class="w3-text-dark-grey" for="username"><b>Korisnik</b></label>
-                <input class="w3-input w3-border w3-round w3-center" id="username" name="username" type="text"
-                       th:field="*{korisnik.username}"></p>
+                <select class="w3-input w3-border w3-round w3-center" id="username" name="username"
+                        th:field="*{korisnik.username}" required
+                        onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Odaberite korisnika!')">
+                    <option value="">Odaberite korisnika</option>
+                    <option th:each="korisnik : ${allKorisnik}" th:value="${korisnik.username}"
+                            th:text="${korisnik.firstName} + ' ' + ${korisnik.lastName}"></option>
+                </select>
             <p>
             <p class="w3-half">
                 <label class="w3-text-dark-grey" for="lanMac"><b>LAN MAC</b></label>
@@ -116,7 +121,7 @@
                 </select>
             </p>
             <div class="w3-row-padding">
-                <div class="w3-half">
+                <p class="w3-half">
                     <label class="w3-text-dark-grey" for="nazivDobavljaca"><b>Dobavljač</b></label>
                     <select class="w3-input w3-border w3-round w3-center" id="nazivDobavljaca" name="nazivDobavljaca"
                             th:field="*{dobavljac.idDobavljaca}" required
@@ -126,11 +131,11 @@
                         <option th:each="dobavljac : ${allDobavljac}" th:value="${dobavljac.idDobavljaca}"
                                 th:text="${dobavljac.nazivDobavljaca}"></option>
                     </select>
-                </div>
+                </p>
                 <div class="w3-half">
                     <label class="w3-text-dark-grey" for="napomena"><b>Napomena</b></label>
-                    <input class="w3-input w3-border w3-round w3-center w3-padding-48" id="napomena" name="napomena"
-                           type="text" th:field="*{napomena}"></p>
+                    <input class="w3-input w3-border w3-round w3-center w3-padding-24" id="napomena" name="napomena"
+                           type="text" th:field="*{napomena}"><p></p>
                 </div>
             </div>
             <div>

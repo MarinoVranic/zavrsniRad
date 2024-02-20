@@ -125,6 +125,8 @@ public class InventarController {
         model.addAttribute("allRacun", allRacun);
         List<Dobavljac> allDobavljac = dobavljacService.getAllDobavljaci();
         model.addAttribute("allDobavljac", allDobavljac);
+        List<Korisnik> allKorisnik = korisnikService.getAllKorisnik();
+        model.addAttribute("allKorisnik", allKorisnik);
         return "inventar/newInventar";
     }
 
@@ -284,6 +286,12 @@ public class InventarController {
         if(tipInventara.equals("OS"))
         {
             List<Inventar> inventarList = inventarService.getInventarByOS();
+            model.addAttribute("savInventar", inventarList);
+            Inventar inventar = new Inventar();
+            model.addAttribute("inventar", inventar);
+            return getViewBasedOnRole(auth);
+        } else if(tipInventara.equals("IT")) {
+            List<Inventar> inventarList = inventarService.getInventarByIT();
             model.addAttribute("savInventar", inventarList);
             Inventar inventar = new Inventar();
             model.addAttribute("inventar", inventar);

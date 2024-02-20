@@ -77,7 +77,9 @@
 <div class="w3-overlay" onclick="w3_close()" style="cursor:pointer" id="myOverlay"></div>
 <div>
     <button id="openNav" class="w3-button w3-xlarge" onclick="w3_open()">&#9776;</button>
-    <img src="../images/AITAC values challenges solutions (1).png" class="centered-image" alt="Aitac VCS">
+    <a th:href="@{/index}">
+        <img src="../images/AITAC values challenges solutions (1).png" class="centered-image" alt="Aitac VCS">
+    </a>
 </div>
 <div>
     <h1 class="w3-padding w3-center w3-opacity w3-xxxlarge" style="text-shadow:1px 1px 0 #444"><b>IT oprema</b></h1>
@@ -100,6 +102,19 @@
             </div>
         </div>
         <label id="error-message" class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>
+    </form>
+    <form id="form6" class="w3-container w3-padding form" th:action="@{/inventarIT/findBySerialNumber}" method="get">
+        <label for="serialNumber"></label>
+        <div style="display: flex; flex-direction: column; align-items: center;">
+            <input type="text" id="serialNumber" name="serialNumber" placeholder="Pretraži po serijskom broju" required
+                   onchange="this.setCustomValidity('')"
+                   oninvalid="this.setCustomValidity('Popunite polje za pretraživanje!')">
+            <div style="margin-top: 10px">
+                <button onclick="hidedivInventarIT2()" type="submit" class="button-small"><i class="fa fa-search" style="font-size:12px"></i> Pretraži</button>
+                <button type="button" class="button-small" onclick="window.location.href='/inventarIT/all'">Prikaži sve</button>
+            </div>
+        </div>
+        <label id="error-message2" class="alert alert-danger" role="alert" th:text="${error2}" th:if="${error2}"></label>
     </form>
     <form id="form2" class="w3-container w3-padding form" th:action="@{/inventarIT/findByVrsta}" method="get"
           th:object="${allVrstaUredaja}">
@@ -144,6 +159,22 @@
         </div>
         <div style="margin-top: 17px">
             <button onclick="hidedivInventar()" type="submit" class="button-small"><i class="fa fa-search" style="font-size:12px"></i> Pretraži po korisniku</button>
+        </div>
+    </form>
+    <form id="form5" class="w3-container w3-padding form" th:action="@{/inventarIT/findByTipInventara}" method="get"
+          th:object="${allVrstaUredaja}">
+        <div style="display: flex; flex-direction: column; align-items: center;">
+            <select class=" w3-border w3-round w3-center" id="tipInventara" name="tipInventara" required
+                    onchange="this.setCustomValidity('');updateRequiredFields()"
+                    oninvalid="this.setCustomValidity('Odaberite tip inventara!')">
+                <option value="">Odaberite tip inventara</option>
+                <option value="OS">Osnovna sredstva</option>
+                <option value="SI">Sitni inventar</option>
+                <option value="IT">IT inventar</option>
+            </select>
+        </div>
+        <div style="margin-top: 17px">
+            <button onclick="hidedivInventar()" type="submit" class="button-small"><i class="fa fa-search" style="font-size:12px"></i> Pretraži po tipu inventara</button>
         </div>
     </form>
 </div>
