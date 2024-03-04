@@ -70,7 +70,7 @@ public class InventarController {
     @GetMapping("/all")
     public String getAllInventar(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        model.addAttribute("savInventar", inventarService.getAllInventar());
+        model.addAttribute("savInventar", inventarService.getInventarForAdministration());
         List<VrstaUredaja> allVrstaUredaja = vrstaUredajaService.getAllVrstaUredaja();
         model.addAttribute("allVrstaUredaja", allVrstaUredaja);
         List<Lokacija> allLokacija = lokacijaService.getAllLokacija();
@@ -167,7 +167,7 @@ public class InventarController {
         List<Inventar> inventarList = inventarService.findInventarByInvBroj(inventarniBroj);
         if (inventarList.isEmpty()) {
             model.addAttribute("error", "Inventar pod tim brojem ne postoji u sustavu!");
-            model.addAttribute("savInventar", inventarService.getAllInventar());
+            model.addAttribute("savInventar", inventarService.getInventarForAdministration());
             Inventar inventar = new Inventar();
             model.addAttribute("inventar", inventar);
         } else {
