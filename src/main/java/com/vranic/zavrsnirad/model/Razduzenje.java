@@ -21,6 +21,8 @@ public class Razduzenje {
     @JoinColumn(name = "Inventarni_broj")
     private Inventar inventar;
 
+    private String hostname;
+
     @ManyToOne
     @JoinColumn(name = "id_zaduzene_lokacija")
     private Lokacija lokacija;
@@ -35,4 +37,6 @@ public class Razduzenje {
     @ManyToOne
     @JoinColumn(name = "id_usera")
     private User user;
+
+    private String napomena;
 }

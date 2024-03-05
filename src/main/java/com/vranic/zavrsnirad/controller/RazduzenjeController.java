@@ -7,6 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.time.LocalDate;
@@ -24,5 +25,11 @@ public class RazduzenjeController {
     public String getAllRazduzenje(Model model){
         model.addAttribute("svaRazduzenja", razduzenjeService.getAllRazduzenje());
         return "razduzenje/razduzenje";
+    }
+
+    @GetMapping("/delete/{idRazduzenja}")
+    public String deleteById(@PathVariable(value = "idRazduzenja") Long idRazduzenja){
+        razduzenjeService.deleteById(idRazduzenja);
+        return "redirect:/razduzenje/all";
     }
 }
