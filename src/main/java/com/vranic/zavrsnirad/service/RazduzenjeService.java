@@ -25,5 +25,11 @@ public class RazduzenjeService {
         razduzenjeRepository.deleteById(idRazduzenja);
     }
 
+    public List<Razduzenje> getAllByInventarniBroj(String inventarniBroj){
+        return razduzenjeRepository.findAllByInventarniBroj(inventarniBroj);
+    }
 
+    public List<Razduzenje> getAllByUser(String username){
+        return razduzenjeRepository.findAllByUser(username);
+    }
 }
