@@ -24,26 +24,22 @@ public class SecurityConfig {
 
         http.userDetailsService(myUserDetailsService)
                 .csrf().disable()
-//                .authorizeRequests()
                 .authorizeRequests(authorize -> authorize
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        .requestMatchers("/CSS/customStyle.css", "/fonts", "/images", "/javascript/sidebar.js", "/javascript/hidedivProvodenjeInventure.js").permitAll()
+                        .requestMatchers("/CSS/customStyle.css", "/fonts", "/images", "/javascript/sidebar.js", "/javascript/hidedivProvodenjeInventure.js", "/favicon.ico").permitAll()
                         .requestMatchers("/index", "/", "/provodenjeInventure/all", "/provodenjeInventure/addNew", "/provodenjeInventure/scanNew", "/provodenjeInventure/findByGodinaInventure", "/provodenjeInventure/find", "/provodenjeInventure/odaberi_lokaciju").access("hasAnyRole('SUPER_ADMIN', 'ADMIN', 'USER')")
                         .requestMatchers("/korisnik/**", "/inventar/**", "/inventura/**", "/lokacija/**", "/dobavljac/**", "/vrstaUredaja/**", "/racun/**").access("hasAnyRole('SUPER_ADMIN', 'ADMIN')")
                         .requestMatchers("/appUsers/**").access("hasRole('SUPER_ADMIN')")
                         .anyRequest().authenticated()
                 )
-//                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // Allow access to static resources
-//                .requestMatchers("/CSS/customStyle.css", "/fonts", "/images", "/javascript/sidebar.js", "/javascript/hidedivProvodenjeInventure.js").permitAll()
-//                .requestMatchers("/index","/","/provodenjeInventure/all", "/provodenjeInventure/addNew", "/provodenjeInventure/scanNew", "/provodenjeInventure/findByGodinaInventure", "provodenjeInventure/find", "provodenjeInventure/odaberi_lokaciju").hasAnyRole("SUPER_ADMIN", "ADMIN", "USER")
-//                .requestMatchers("/korisnik/**", "inventar/**", "inventura/**", "lokacija/**", "dobavljac/**", "vrstaUredaja/**", "racun/**", "appUsers/**").hasRole("SUPER_ADMIN")
-//                .requestMatchers("/korisnik/**", "inventar/**", "inventura/**", "lokacija/**", "dobavljac/**", "vrstaUredaja/**", "racun/**").hasRole("ADMIN")
-//                .anyRequest()
-//                .authenticated()
-//                .and()
                 .formLogin()
                 .loginPage("/login")
                 .permitAll()
+//                .failureHandler(((request, response, exception) -> {
+//                    if(request.getRequestURI().equals("error?continue")){
+//                        response.sendRedirect("/login");
+//                    }
+//                }))
                 .failureUrl("/login?error=bad_credentials")
                 .and()
                 .logout()
