@@ -70,7 +70,7 @@ public class InventarController {
     @GetMapping("/all")
     public String getAllInventar(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        model.addAttribute("savInventar", inventarService.getAllInventar());
+        model.addAttribute("savInventar", inventarService.getInventarForAdministration());
         List<VrstaUredaja> allVrstaUredaja = vrstaUredajaService.getAllVrstaUredaja();
         model.addAttribute("allVrstaUredaja", allVrstaUredaja);
         List<Lokacija> allLokacija = lokacijaService.getAllLokacija();
@@ -125,6 +125,8 @@ public class InventarController {
         model.addAttribute("allRacun", allRacun);
         List<Dobavljac> allDobavljac = dobavljacService.getAllDobavljaci();
         model.addAttribute("allDobavljac", allDobavljac);
+        List<Korisnik> allKorisnik = korisnikService.getAllKorisnik();
+        model.addAttribute("allKorisnik", allKorisnik);
         return "inventar/newInventar";
     }
 
@@ -165,7 +167,7 @@ public class InventarController {
         List<Inventar> inventarList = inventarService.findInventarByInvBroj(inventarniBroj);
         if (inventarList.isEmpty()) {
             model.addAttribute("error", "Inventar pod tim brojem ne postoji u sustavu!");
-            model.addAttribute("savInventar", inventarService.getAllInventar());
+            model.addAttribute("savInventar", inventarService.getInventarForAdministration());
             Inventar inventar = new Inventar();
             model.addAttribute("inventar", inventar);
         } else {
@@ -288,6 +290,12 @@ public class InventarController {
             Inventar inventar = new Inventar();
             model.addAttribute("inventar", inventar);
             return getViewBasedOnRole(auth);
+        } else if(tipInventara.equals("IT")) {
+            List<Inventar> inventarList = inventarService.getInventarByIT();
+            model.addAttribute("savInventar", inventarList);
+            Inventar inventar = new Inventar();
+            model.addAttribute("inventar", inventar);
+            return getViewBasedOnRole(auth);
         } else {
             List<Inventar> inventarList = inventarService.getInventarBySI();
             model.addAttribute("savInventar", inventarList);
@@ -319,6 +327,7 @@ public class InventarController {
             }
             else {
                 String sitniInventar = originalInventarniBroj.substring(0,2);
+                System.out.println(sitniInventar);
                 if(sitniInventar.equals("SI"))
                 {
                     inventarniBroj = inventarniBroj.substring(2);
@@ -326,6 +335,12 @@ public class InventarController {
                         inventarniBroj = "0" + inventarniBroj;
                     }
                     inventarniBroj = "2" + inventarniBroj.substring(1);
+                } else if (sitniInventar.equals("IT")) {
+                    inventarniBroj = inventarniBroj.substring(2);
+                    while(inventarniBroj.length() < 12){
+                        inventarniBroj = "0" + inventarniBroj;
+                    }
+                    inventarniBroj = "3" + inventarniBroj.substring(1);
                 } else {
                     while(inventarniBroj.length() < 12){
                         inventarniBroj = "0" + inventarniBroj;
@@ -333,6 +348,7 @@ public class InventarController {
                     inventarniBroj = "1" + inventarniBroj.substring(1);
                 }
             }
+            System.out.println(inventarniBroj);
             BitMatrix bitMatrix = BarcodeGeneratorService.generateEAN13Barcode(inventarniBroj);
             byte[] barcodeImage = BarcodeImageUtils.convertBitMatrixToByteArray(bitMatrix);
 
@@ -374,7 +390,7 @@ public class InventarController {
     public void generatePDF(HttpServletResponse response) throws IOException, DocumentException {
         // Set the content type and attachment header
         response.setContentType("application/pdf");
-        response.setHeader("Content-Disposition", "attachment; filename=\"inventar-izvjestaj.pdf\"");
+        response.setHeader("Content-Disposition", "attachment; filename=\"OS_SI-izvjestaj.pdf\"");
 
         // Create a new PDF document
         Document document = new Document(PageSize.A4.rotate());
@@ -418,7 +434,7 @@ public class InventarController {
 
         Paragraph header = new Paragraph();
         Font boldFont = new Font(arialBoldItalicFont, 18, Font.BOLD);
-        Phrase headerPhrase = new Phrase("IZVJEŠTAJ O OPREMI", boldFont);
+        Phrase headerPhrase = new Phrase("IZVJEŠTAJ OSNOVNIH SREDSTAVA", boldFont);
         header.add(headerPhrase);
         header.setAlignment(Element.ALIGN_CENTER);
         header.setSpacingAfter(20); // Adjust the value as per your requirement
@@ -435,95 +451,82 @@ public class InventarController {
         document.add(printDate);
 
         // Create a table with 15 columns
-        PdfPTable table = new PdfPTable(15);
+        PdfPTable table = new PdfPTable(10);
 
         // Set the table width as a percentage of the available page width
         table.setWidthPercentage(100);
 
-        // Set the data cell style
-        PdfPCell dataCell = new PdfPCell();
-        dataCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-
         // Set table header cell styles
-        Font headerFont = new Font(arialBoldFont, 12, Font.BOLD);
-        headerFont.setColor(BaseColor.WHITE);
+        Font headerFont = new Font(arialBoldFont, 12, Font.BOLD, BaseColor.WHITE);
         PdfPCell headerCell = new PdfPCell();
         headerCell.setBackgroundColor(BaseColor.DARK_GRAY);
         headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
         headerCell.setPadding(5);
 
-        // Add table header cells
-        headerCell.setPhrase(new Phrase("Inventarni broj", headerFont));
+        setCellContentAndFont(headerCell,"Inventarni broj", headerFont);
         table.addCell(headerCell);
-        headerCell.setPhrase(new Phrase("Naziv uređaja", headerFont));
+        setCellContentAndFont(headerCell,"Naziv uređaja", headerFont);
         table.addCell(headerCell);
-        headerCell.setPhrase(new Phrase("Serijski broj", headerFont));
+        setCellContentAndFont(headerCell,"Serijski broj", headerFont);
         table.addCell(headerCell);
-        headerCell.setPhrase(new Phrase("Vrsta uređaja", headerFont));
+        setCellContentAndFont(headerCell,"Vrsta uređaja", headerFont);
         table.addCell(headerCell);
-        headerCell.setPhrase(new Phrase("Hostname", headerFont));
+        setCellContentAndFont(headerCell,"Lokacija", headerFont);
         table.addCell(headerCell);
-        headerCell.setPhrase(new Phrase("Lokacija", headerFont));
+        setCellContentAndFont(headerCell,"Zaduženo na korisnika", headerFont);
         table.addCell(headerCell);
-        headerCell.setPhrase(new Phrase("Username", headerFont));
+        setCellContentAndFont(headerCell,"Račun/Dokument", headerFont);
         table.addCell(headerCell);
-        headerCell.setPhrase(new Phrase("LAN MAC", headerFont));
+        setCellContentAndFont(headerCell,"Dobavljač", headerFont);
         table.addCell(headerCell);
-        headerCell.setPhrase(new Phrase("WiFi MAC", headerFont));
+        setCellContentAndFont(headerCell,"Nabavna vrijednost", headerFont);
         table.addCell(headerCell);
-        headerCell.setPhrase(new Phrase("Datum zaduženja", headerFont));
-        table.addCell(headerCell);
-        headerCell.setPhrase(new Phrase("Datum razduženja", headerFont));
-        table.addCell(headerCell);
-        headerCell.setPhrase(new Phrase("Istek garancije", headerFont));
-        table.addCell(headerCell);
-        headerCell.setPhrase(new Phrase("Račun/Dokument", headerFont));
-        table.addCell(headerCell);
-        headerCell.setPhrase(new Phrase("Dobavljač", headerFont));
-        table.addCell(headerCell);
-        headerCell.setPhrase(new Phrase("Napomena", headerFont));
+        setCellContentAndFont(headerCell,"Napomena", headerFont);
         table.addCell(headerCell);
 
         // Get the list of Inventar objects from service
-        List<Inventar> inventari = inventarService.getAllInventar();
+        List<Inventar> inventari = inventarService.getInventarForAdministration();
 
         // Add data cells to the table
         for (Inventar inventar : inventari) {
-            dataCell.setPhrase(new Phrase(inventar.getInventarniBroj(), croatianFont));
-            table.addCell(dataCell);
-            dataCell.setPhrase(new Phrase(inventar.getNazivUredaja(), croatianFont));
-            table.addCell(dataCell);
-            dataCell.setPhrase(new Phrase(inventar.getSerijskiBroj(), croatianFont));
-            table.addCell(dataCell);
-            dataCell.setPhrase(new Phrase(inventar.getVrstaUredaja().getNazivVrsteUredaja(), croatianFont));
-            table.addCell(dataCell);
-            dataCell.setPhrase(new Phrase(inventar.getHostname(), croatianFont));
-            table.addCell(dataCell);
-            dataCell.setPhrase(new Phrase(inventar.getLokacija().getNazivLokacije(), croatianFont));
-            table.addCell(dataCell);
-            Korisnik korisnik = inventar.getKorisnik();
-            if (korisnik != null && korisnik.getUsername() != null) {
-                dataCell.setPhrase(new Phrase(korisnik.getUsername(), croatianFont));
+
+            PdfPCell cell = new PdfPCell();
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+
+            setCellContentAndFont(cell, inventar.getInventarniBroj(), croatianFont);
+            table.addCell(cell);
+            setCellContentAndFont(cell, inventar.getNazivUredaja(), croatianFont);
+            table.addCell(cell);
+            if(inventar.getNazivUredaja() == null){
+                setCellContentAndFont(cell, "", croatianFont);
             } else {
-                dataCell.setPhrase(new Phrase("", croatianFont));
+                setCellContentAndFont(cell, inventar.getSerijskiBroj(), croatianFont);
             }
-            table.addCell(dataCell);
-            dataCell.setPhrase(new Phrase(inventar.getLanMac(), croatianFont));
-            table.addCell(dataCell);
-            dataCell.setPhrase(new Phrase(inventar.getWifiMac(), croatianFont));
-            table.addCell(dataCell);
-            dataCell.setPhrase(new Phrase(String.valueOf(inventar.getDatumZaduzenja()), croatianFont));
-            table.addCell(dataCell);
-            dataCell.setPhrase(new Phrase(String.valueOf(inventar.getDatumRazduzenja()), croatianFont));
-            table.addCell(dataCell);
-            dataCell.setPhrase(new Phrase(String.valueOf(inventar.getWarrantyEnding()), croatianFont));
-            table.addCell(dataCell);
-            dataCell.setPhrase(new Phrase(inventar.getRacun().getBrojRacuna(), croatianFont));
-            table.addCell(dataCell);
-            dataCell.setPhrase(new Phrase(inventar.getDobavljac().getNazivDobavljaca(), croatianFont));
-            table.addCell(dataCell);
-            dataCell.setPhrase(new Phrase(inventar.getNapomena(), croatianFont));
-            table.addCell(dataCell);
+            table.addCell(cell);
+            setCellContentAndFont(cell, inventar.getVrstaUredaja().getNazivVrsteUredaja(), croatianFont);
+            table.addCell(cell);
+            setCellContentAndFont(cell, inventar.getLokacija().getNazivLokacije(), croatianFont);
+            table.addCell(cell);
+            Korisnik korisnik = inventar.getKorisnik();
+            if(korisnik != null && korisnik.getUsername() != null){
+                setCellContentAndFont(cell, korisnik.getFirstName() + " " + korisnik.getLastName(), croatianFont);
+            } else {
+                setCellContentAndFont(cell, "", croatianFont);
+
+            }
+            table.addCell(cell);
+            setCellContentAndFont(cell, inventar.getRacun().getBrojRacuna(), croatianFont);
+            table.addCell(cell);
+            setCellContentAndFont(cell, inventar.getDobavljac().getNazivDobavljaca(), croatianFont);
+            table.addCell(cell);
+            setCellContentAndFont(cell, inventar.getNabavnaVrijednost() + " EUR", croatianFont);
+            table.addCell(cell);
+            if(inventar.getNapomena() == null){
+                setCellContentAndFont(cell, "", croatianFont);
+            } else {
+                setCellContentAndFont(cell, inventar.getNapomena(), croatianFont);
+            }
+            table.addCell(cell);
         }
 
         // Add the table to the document
@@ -555,5 +558,28 @@ public class InventarController {
         document.add(image);
         // Close the document
         document.close();
+    }
+
+    // Method to set content and font for cell with font shrinking if necessary
+    private void setCellContentAndFont(PdfPCell cell, String content, Font font) {
+        // Set initial font size
+        float fontSize = 12f;
+        float minFontSize = 8f; // Minimum font size for readability
+
+        // Set content and font for the cell
+        cell.setPhrase(new Phrase(content, new Font(font.getBaseFont(), fontSize)));
+
+        // Calculate width of content in the cell
+        float contentWidth = font.getBaseFont().getWidthPoint(content, fontSize);
+
+        // Calculate available width in the cell
+        float availableWidth = cell.getWidth() - cell.getPaddingLeft() - cell.getPaddingRight();
+
+        // If content width is greater than available width, shrink font size
+        while (contentWidth > availableWidth && fontSize > minFontSize) {
+            fontSize -= 0.1f; // Adjust the decrement value as per need
+            cell.setPhrase(new Phrase(content, new Font(font.getBaseFont(), fontSize, font.getStyle(), font.getColor())));
+            contentWidth = font.getBaseFont().getWidthPoint(content, fontSize);
+        }
     }
 }

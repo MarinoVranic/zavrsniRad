@@ -65,7 +65,19 @@ public class InventarService {
         return inventarRepository.findAllIT();
     }
 
+    public List<Inventar> getInventarByIT(){
+        return inventarRepository.findAllByIT();
+    }
+
+    public List<Inventar> getInventarBySerialNumber(String serijskiBroj){
+        return inventarRepository.findAllBySerijskiBroj(serijskiBroj);
+    }
+
     public List<Inventar> getInventarByUser(String username){
         return inventarRepository.findAllByUser(username);
+    }
+
+    public List<Inventar> getInventarForAdministration(){
+        return inventarRepository.findAllForAdministration();
     }
 }

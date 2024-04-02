@@ -64,6 +64,7 @@
     <a th:href="@{/lokacija/all}" class="w3-bar-item w3-button">Lokacije</a>
     <a th:href="@{/korisnik/all}" class="w3-bar-item w3-button">Korisnici</a>
     <a th:href="@{/inventar/all}" class="w3-bar-item w3-button">Osnovna sredstva</a>
+        <a th:href="@{/razduzenje/all}" class="w3-bar-item w3-button">Razduženja</a>
     <a th:href="@{/inventura/all}" class="w3-bar-item w3-button">Inventure</a>
     <a th:href="@{/provodenjeInventure/all}" class="w3-bar-item w3-button">Izvršavanje inventure</a>
         <a th:href="@{/appUsers/all}" class="w3-bar-item w3-button">App useri</a>
@@ -77,14 +78,17 @@
 <div class="w3-overlay" onclick="w3_close()" style="cursor:pointer" id="myOverlay"></div>
 <div>
     <button id="openNav" class="w3-button w3-xlarge" onclick="w3_open()">&#9776;</button>
-    <img src="../images/AITAC values challenges solutions (1).png" class="centered-image" alt="Aitac VCS">
+    <a th:href="@{/index}">
+        <img src="../images/AITAC values challenges solutions (1).png" class="centered-image" alt="Aitac VCS">
+    </a>
 </div>
 <div>
     <h1 class="w3-padding w3-center w3-opacity w3-xxxlarge" style="text-shadow:1px 1px 0 #444"><b>IT oprema</b></h1>
 </div>
 <div class="div-container">
     <a th:href="@{/inventarIT/addNew}" class="button-add"><i class="material-icons">add_circle</i> Novi inventar</a>
-    <a th:href="@{/inventarIT/generatePDF}" class="button-30">Izvještaj <i class="material-icons">picture_as_pdf</i></a>
+    <a th:href="@{/inventarIT/generatePDF}" class="button-30 button-right">Izvještaj <i class="material-icons">picture_as_pdf</i></a>
+    <button id="printButton" onclick="submitForm()" class="button-30" disabled>Zaduženje za označene <i class="material-icons">picture_as_pdf</i></button>
 </div>
 <div class="forms-container" style="display: flex;">
     <form id="form1" class="w3-container w3-padding form" th:action="@{/inventarIT/find}" method="get">
@@ -99,6 +103,19 @@
             </div>
         </div>
         <label id="error-message" class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>
+    </form>
+    <form id="form6" class="w3-container w3-padding form" th:action="@{/inventarIT/findBySerialNumber}" method="get">
+        <label for="serialNumber"></label>
+        <div style="display: flex; flex-direction: column; align-items: center;">
+            <input type="text" id="serialNumber" name="serialNumber" placeholder="Pretraži po serijskom broju" required
+                   onchange="this.setCustomValidity('')"
+                   oninvalid="this.setCustomValidity('Popunite polje za pretraživanje!')">
+            <div style="margin-top: 10px">
+                <button onclick="hidedivInventarIT2()" type="submit" class="button-small"><i class="fa fa-search" style="font-size:12px"></i> Pretraži</button>
+                <button type="button" class="button-small" onclick="window.location.href='/inventarIT/all'">Prikaži sve</button>
+            </div>
+        </div>
+        <label id="error-message2" class="alert alert-danger" role="alert" th:text="${error2}" th:if="${error2}"></label>
     </form>
     <form id="form2" class="w3-container w3-padding form" th:action="@{/inventarIT/findByVrsta}" method="get"
           th:object="${allVrstaUredaja}">
@@ -145,12 +162,28 @@
             <button onclick="hidedivInventar()" type="submit" class="button-small"><i class="fa fa-search" style="font-size:12px"></i> Pretraži po korisniku</button>
         </div>
     </form>
+    <form id="form5" class="w3-container w3-padding form" th:action="@{/inventarIT/findByTipInventara}" method="get"
+          th:object="${allVrstaUredaja}">
+        <div style="display: flex; flex-direction: column; align-items: center;">
+            <select class=" w3-border w3-round w3-center" id="tipInventara" name="tipInventara" required
+                    onchange="this.setCustomValidity('');updateRequiredFields()"
+                    oninvalid="this.setCustomValidity('Odaberite tip inventara!')">
+                <option value="">Odaberite tip inventara</option>
+                <option value="OS">Osnovna sredstva</option>
+                <option value="SI">Sitni inventar</option>
+                <option value="IT">IT inventar</option>
+            </select>
+        </div>
+        <div style="margin-top: 17px">
+            <button onclick="hidedivInventar()" type="submit" class="button-small"><i class="fa fa-search" style="font-size:12px"></i> Pretraži po tipu inventara</button>
+        </div>
+    </form>
 </div>
 <div style="overflow-x:auto;">
     <table style="table-layout:auto;width:auto" class="w3-table-all w3-hoverable w3-centered w3-card-4">
         <thead>
         <tr>
-            <th style="width: 45px" class="w3-dark-grey">Inventarni broj</th>
+            <th style="width: 45px" class="w3-dark-grey">Inventarni broj<br><input type="checkbox" id="checkAll"></th>
             <th class="w3-dark-grey">Naziv uređaja</th>
             <th class="w3-dark-grey">Serijski broj</th>
             <th class="w3-dark-grey">Vrsta uređaja<br></th>
@@ -171,8 +204,9 @@
         </tr>
         </thead>
         <tbody>
+        <form id="selectedItemsForm" th:action="@{/inventarIT/printPDFzaduzenja}" method="get">
         <tr th:each="inventar:${savInventar}">
-            <td th:text="${inventar.inventarniBroj}"></td>
+            <td><span th:text="${inventar.inventarniBroj}"></span><br><input type="checkbox" th:value="${inventar.inventarniBroj}" name="selectedItems"></td>
             <td th:text="${inventar.nazivUredaja}"></td>
             <td th:text="${inventar.serijskiBroj}"></td>
             <td th:text="${inventar.vrstaUredaja.nazivVrsteUredaja}"></td>
@@ -213,6 +247,7 @@
                    onclick="confirmDelete()"
                    class="button-delete"><i class="material-icons">remove_circle</i></a></td>
         </tr>
+        </form>
         </tbody>
     </table>
     <button id="scrollToTopBtn" title="Go to top" class="button-toTop">Na početak</button>
@@ -243,6 +278,57 @@
             window.location.href = `/inventarIT/delete/${dataAttribute}`;
         }
     }
+</script>
+<script>
+    function submitForm() {
+        document.getElementById('selectedItemsForm').submit();
+    }
+</script>
+<script>
+    // Get all checkboxes
+    var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
+    // Function to check if any checkbox is checked
+    function checkIfAnyChecked() {
+        var anyChecked = false;
+        checkboxes.forEach(function(checkbox) {
+            if (checkbox.checked) {
+                anyChecked = true;
+            }
+        });
+        return anyChecked;
+    }
+
+    // Function to enable/disable printButton based on checkbox status
+    function updatePrintButton() {
+        var printButton = document.getElementById('printButton');
+        if (checkIfAnyChecked()) {
+            printButton.disabled = false;
+        } else {
+            printButton.disabled = true;
+        }
+    }
+
+    // Attach event listener to checkboxes to update printButton status
+    checkboxes.forEach(function(checkbox) {
+        checkbox.addEventListener('change', updatePrintButton);
+    });
+</script>
+<script>
+    // JavaScript to handle checkbox functionality
+    window.onload = function() {
+        // Select the checkbox in the header
+        var checkAll = document.getElementById('checkAll');
+        // Add event listener to the checkbox
+        checkAll.addEventListener('click', function() {
+            // Select all checkboxes in the table body
+            var checkboxes = document.querySelectorAll('tbody input[type="checkbox"]');
+            // Toggle the checked state of each checkbox based on the header checkbox
+            checkboxes.forEach(function(checkbox) {
+                checkbox.checked = checkAll.checked;
+            });
+        });
+    };
 </script>
 </body>
 </html>

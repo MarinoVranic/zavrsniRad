@@ -53,6 +53,7 @@
         <a th:href="@{/lokacija/all}" class="w3-bar-item w3-button">Lokacije</a>
         <a th:href="@{/inventar/all}" class="w3-bar-item w3-button">Osnovna sredstva</a>
         <a th:href="@{/inventarIT/all}" class="w3-bar-item w3-button">IT oprema</a>
+        <a th:href="@{/razduzenje/all}" class="w3-bar-item w3-button">Razduženja</a>
         <a th:href="@{/inventura/all}" class="w3-bar-item w3-button">Inventure</a>
         <a th:href="@{/provodenjeInventure/all}" class="w3-bar-item w3-button">Izvršavanje inventure</a>
         <a th:href="@{/appUsers/all}" class="w3-bar-item w3-button">App useri</a>
@@ -77,6 +78,7 @@
     <div class="button-group">
         <a th:href="@{/korisnik/generatePDFaktivni}" class="button-30">Izvještaj aktivnih <i class="material-icons">picture_as_pdf</i></a>
         <a th:href="@{/korisnik/generatePDFneaktivni}" class="button-30">Izvještaj neaktivnih <i class="material-icons">picture_as_pdf</i></a>
+        <button style="margin-left: 10px" id="printButton" onclick="submitForm()" class="button-30" disabled>Printout za označenog <i class="material-icons">picture_as_pdf</i></button>
     </div>
 </div>
 <form class="w3-container" th:action="@{/korisnik/find}" method="get" style="margin-bottom: 20px">
@@ -118,8 +120,9 @@
         </tr>
         </thead>
         <tbody>
+        <form id="selectedItemsForm" th:action="@{/korisnik/printPDFzaduzenja}" method="get">
         <tr th:each="korisnik:${sviKorisnici}">
-            <td th:text="${korisnik.username}"></td>
+            <td><span th:text="${korisnik.username}"></span><br><input type="checkbox" th:value="${korisnik.username}" name="selectedItems"></td>
             <td th:text="${korisnik.firstName}"></td>
             <td th:text="${korisnik.lastName}"></td>
             <td th:text="${korisnik.status}"></td>
@@ -146,6 +149,7 @@
                    onclick="confirmDelete()"
                    class="button-delete"><i class="material-icons">remove_circle</i></a></td>
         </tr>
+        </form>
         </tbody>
     </table>
     <button id="scrollToTopBtn" title="Go to top" class="button-toTop">Na početak</button>
@@ -168,7 +172,7 @@
 </script>
 <script>
     function confirmDelete() {
-        // Retrieve the inventarniBroj value from the data attribute
+        // Retrieve the username value from the data attribute
         var dataAttribute = event.currentTarget.getAttribute('data-korisnik');
         var isConfirmed = confirm("Are you sure you want to delete?");
 
@@ -176,6 +180,41 @@
             window.location.href = `/korisnik/delete/${dataAttribute}`;
         }
     }
+</script>
+<script>
+    function submitForm() {
+        document.getElementById('selectedItemsForm').submit();
+    }
+</script>
+<script>
+    // Get all checkboxes
+    var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
+    // Function to check if any checkbox is checked
+    function checkIfAnyChecked() {
+        var anyChecked = false;
+        checkboxes.forEach(function(checkbox) {
+            if (checkbox.checked) {
+                anyChecked = true;
+            }
+        });
+        return anyChecked;
+    }
+
+    // Function to enable/disable printButton based on checkbox status
+    function updatePrintButton() {
+        var printButton = document.getElementById('printButton');
+        if (checkIfAnyChecked()) {
+            printButton.disabled = false;
+        } else {
+            printButton.disabled = true;
+        }
+    }
+
+    // Attach event listener to checkboxes to update printButton status
+    checkboxes.forEach(function(checkbox) {
+        checkbox.addEventListener('change', updatePrintButton);
+    });
 </script>
 </body>
 </html>
