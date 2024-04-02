@@ -57,6 +57,12 @@ public class InventarITController {
     @Autowired
     private RacunService racunService;
 
+    @Autowired
+    private RazduzenjeService razduzenjeService;
+
+    @Autowired
+    private UserService userService;
+
     public LocalDate today = LocalDate.now();
     public DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
@@ -248,6 +254,20 @@ public class InventarITController {
     @GetMapping("razduzi/{inventarniBroj}")
     @Transactional
     public String razduziInventar(@PathVariable(value = "inventarniBroj") String inventarniBroj){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        User user = userService.getUserByUsername(username);
+        Inventar inventar = inventarService.getInventarById(inventarniBroj);
+        Razduzenje razduzenje = new Razduzenje();
+        razduzenje.setInventar(inventar);
+        razduzenje.setHostname(inventar.getHostname());
+        razduzenje.setLokacija(inventar.getLokacija());
+        razduzenje.setKorisnik(inventar.getKorisnik());
+        razduzenje.setDatumZaduzenja(inventar.getDatumZaduzenja());
+        razduzenje.setDatumRazduzenja(today);
+        razduzenje.setUser(user);
+        razduzenje.setNapomena(inventar.getNapomena());
+        razduzenjeService.save(razduzenje);
         inventarService.razduziInventar(today, inventarniBroj);
         return "redirect:/inventarIT/all";
     }
