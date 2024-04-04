@@ -35,11 +35,6 @@ public class SecurityConfig {
                 .formLogin()
                 .loginPage("/login")
                 .permitAll()
-//                .failureHandler(((request, response, exception) -> {
-//                    if(request.getRequestURI().equals("error?continue")){
-//                        response.sendRedirect("/login");
-//                    }
-//                }))
                 .failureUrl("/login?error=bad_credentials")
                 .and()
                 .logout()
