@@ -1,5 +1,6 @@
 package com.vranic.zavrsnirad.controller;
 
+import com.vranic.zavrsnirad.model.Dobavljac;
 import com.vranic.zavrsnirad.model.File;
 import com.vranic.zavrsnirad.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @Controller
 @RequestMapping("/file")
@@ -42,5 +44,21 @@ public class FileController {
                     .body(fileEntity.getData());
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/find")
+    public String findFileByFileName(@RequestParam("fileName") String fileName, Model model){
+        List<File> fileList = fileService.getFileByFileName(fileName);
+        if (fileList.isEmpty()) {
+            model.addAttribute("error", "Datoteka tog naziva ne postoji u sustavu!");
+            model.addAttribute("files", fileService.getAllFiles());
+            File file = new File();
+            model.addAttribute("file", file);
+        } else {
+            model.addAttribute("files", fileList);
+            File file = new File();
+            model.addAttribute("file", file);
+        }
+        return "file/file";
     }
 }

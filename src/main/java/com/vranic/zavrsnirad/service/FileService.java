@@ -41,4 +41,8 @@ public class FileService {
     public File getFileById(Long id) {
         return fileRepository.findById(id).orElse(null);
     }
+
+    public List<File> getFileByFileName(String fileName){
+        return fileRepository.findByFileName(fileName);
+    }
 }
