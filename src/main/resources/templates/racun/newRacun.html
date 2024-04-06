@@ -17,33 +17,67 @@
             <button class="w3-right button-30" onclick="window.location.href='/racun/all'"><b>Odustani</b></button>
         </h2>
     </div>
-    <form class="w3-container w3-light-grey" action="#" th:action="@{/racun/addNew}" th:object="${racun}" method="POST">
+<!--    <form class="w3-container w3-light-grey" action="#" th:action="@{/racun/addNew}" th:object="${racun}" method="POST">-->
+<!--        <div class="w3-row-padding">-->
+<!--            <p class="w3-center">-->
+<!--                <label class="w3-text-dark-grey" for="idRacuna"><b>ID računa/dokumenta</b><br></label>-->
+<!--                <input class="w3-input w3-border w3-round w3-center" id="idRacuna" name="idRacuna" type="text"-->
+<!--                       th:field="*{idRacuna}" placeholder="Nepotreban unos, sustav sam upisuje!" readonly></p>-->
+<!--            <p class="w3-center">-->
+<!--                <label class="w3-text-dark-grey" for="brojRacuna"><b>Broj računa/dokumenta</b><br></label>-->
+<!--                <label id="error-message" class="error alert alert-danger" role="alert" th:text="${error}"-->
+<!--                       th:if="${error}"></label>-->
+<!--                <input class="w3-input w3-border w3-round w3-center" id="brojRacuna" name="brojRacuna" type="text"-->
+<!--                       th:field="*{brojRacuna}" required-->
+<!--                       onchange="this.setCustomValidity('')"-->
+<!--                       oninvalid="this.setCustomValidity('Napišite broj računa/dokumenta!')"></p>-->
+<!--            <p class="w3-center">-->
+<!--                <label class="w3-text-dark-grey" for="datumRacuna"><b>Datum računa/dokumenta</b><br></label>-->
+<!--                <input class="w3-input w3-border w3-round w3-center" id="datumRacuna" name="datumRacuna" type="date"-->
+<!--                       th:field="*{datumRacuna}" required-->
+<!--                       onchange="this.setCustomValidity('')"-->
+<!--                       oninvalid="this.setCustomValidity('Ispunite datum računa/dokumenta!')"></p>-->
+<!--            <div>-->
+<!--                <div>-->
+<!--                    <button class="button-30"><b>Dodaj račun/dokument</b></button>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </form>-->
+    <form class="w3-container w3-light-grey" action="#" th:action="@{/racun/addNew}" th:object="${racun}" method="POST" enctype="multipart/form-data">
         <div class="w3-row-padding">
             <p class="w3-center">
                 <label class="w3-text-dark-grey" for="idRacuna"><b>ID računa/dokumenta</b><br></label>
                 <input class="w3-input w3-border w3-round w3-center" id="idRacuna" name="idRacuna" type="text"
-                       th:field="*{idRacuna}" placeholder="Nepotreban unos, sustav sam upisuje!" readonly></p>
+                       th:field="*{idRacuna}" placeholder="Nepotreban unos, sustav sam upisuje!" readonly>
+            </p>
             <p class="w3-center">
                 <label class="w3-text-dark-grey" for="brojRacuna"><b>Broj računa/dokumenta</b><br></label>
-                <label id="error-message" class="error alert alert-danger" role="alert" th:text="${error}"
-                       th:if="${error}"></label>
+                <label id="error-message" class="error alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>
                 <input class="w3-input w3-border w3-round w3-center" id="brojRacuna" name="brojRacuna" type="text"
                        th:field="*{brojRacuna}" required
                        onchange="this.setCustomValidity('')"
-                       oninvalid="this.setCustomValidity('Napišite broj računa/dokumenta!')"></p>
+                       oninvalid="this.setCustomValidity('Napišite broj računa/dokumenta!')">
+            </p>
             <p class="w3-center">
                 <label class="w3-text-dark-grey" for="datumRacuna"><b>Datum računa/dokumenta</b><br></label>
                 <input class="w3-input w3-border w3-round w3-center" id="datumRacuna" name="datumRacuna" type="date"
                        th:field="*{datumRacuna}" required
                        onchange="this.setCustomValidity('')"
-                       oninvalid="this.setCustomValidity('Ispunite datum računa/dokumenta!')"></p>
-            <div>
-                <div>
-                    <button class="button-30"><b>Dodaj račun/dokument</b></button>
-                </div>
+                       oninvalid="this.setCustomValidity('Ispunite datum računa/dokumenta!')">
+            </p>
+            <p class="w3-center">
+                <label class="w3-text-dark-grey" for="file"><b>Odaberite datoteku računa/dokumenta</b><br></label>
+                <label for="file" class="upload-label-button">Odaberite datoteku</label>
+                <input type="file" name="datoteka" id="file" required style="display: none;"/>
+                <span id="fileMessage" class="file-message">Morate odabrati datoteku!</span>
+            </p>
+            <div class="w3-center">
+                <button class="button-30" type="submit"><b>Dodaj račun/dokument</b></button>
             </div>
         </div>
     </form>
+
 </div>
 </body>
 <script>
@@ -55,5 +89,12 @@
     }
 
     setTimeout("hidediv()", 5000);
+</script>
+<script>
+    // Update the file message when file input changes
+    document.getElementById('file').addEventListener('change', function() {
+        var fileName = this.files[0] ? this.files[0].name : "Morate odabrati datoteku!";
+        document.getElementById('fileMessage').textContent = fileName;
+    });
 </script>
 </html>

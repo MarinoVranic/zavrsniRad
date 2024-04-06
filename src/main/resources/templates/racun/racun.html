@@ -75,6 +75,7 @@
         <tr>
             <th class="w3-dark-grey">ID</th>
             <th class="w3-dark-grey">Broj računa/dokumenta</th>
+            <th class="w3-dark-grey">Datoteka računa/dokumenta</th>
             <th class="w3-dark-grey">Datum računa/dokumenta</th>
             <th class="w3-dark-grey"></th>
             <th class="w3-dark-grey"></th>
@@ -84,6 +85,11 @@
         <tr th:each="racun:${sviRacuni}">
             <td th:text="${racun.idRacuna}"></td>
             <td th:text="${racun.brojRacuna}"></td>
+            <td><p th:if="${racun.file != null && racun.file.id != null}">
+                <a th:href="@{'/file/download/' + ${racun.file.id}}" th:text="${racun.file.fileName}"></a>
+            </p>
+                <p th:unless="${racun.file != null && racun.file.id != null}">
+                </p></td>
             <td th:text="${racun.datumRacuna}"></td>
             <td><a th:href="@{/racun/update/{id}(id=${racun.idRacuna})}" type="button" class="button-edit"><i
                     class="fa fa-edit" style="font-size:36px"></i></a></td>
