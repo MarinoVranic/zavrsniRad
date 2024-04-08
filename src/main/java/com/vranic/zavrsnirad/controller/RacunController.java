@@ -7,6 +7,7 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.vranic.zavrsnirad.model.Dobavljac;
+import com.vranic.zavrsnirad.model.File;
 import com.vranic.zavrsnirad.model.Racun;
 import com.vranic.zavrsnirad.service.FileService;
 import com.vranic.zavrsnirad.service.RacunService;
@@ -60,7 +61,11 @@ public class RacunController {
     @GetMapping("/update/{id}")
     public String updateRacun(@PathVariable(value = "id") Long id, Model model) {
         Racun racun = racunService.getRacunById(id);
+        File selectedFile = racun.getFile();
+        List<File> fileList = fileService.getAllFiles();
         model.addAttribute("racun", racun);
+        model.addAttribute("allFiles", fileList);
+        model.addAttribute("selectedFile", selectedFile);
         return "racun/updateRacun";
     }
 
@@ -85,12 +90,7 @@ public class RacunController {
     }
 
     @PostMapping("/save")
-    public String saveRacun(@ModelAttribute("racun") Racun racun, Model model) {
-        if(racunService.checkIfBrojRacunaIsAvailable(racun.getBrojRacuna())!=0)
-        {
-            model.addAttribute("error", "Broj računa/dokumenta već postoji!");
-            return "racun/updateRacun";
-        }
+    public String saveRacun(@ModelAttribute("racun") Racun racun) {
         racunService.save(racun);
         return "redirect:/racun/all";
     }
