@@ -28,6 +28,12 @@ public class FileController {
         return "file/file"; // Assuming your Thymeleaf file is named fileUploadDownload.html
     }
 
+    @GetMapping("/delete/{id}")
+    public String deleteById(@PathVariable(value = "id") Long id){
+        fileService.deleteById(id);
+        return "redirect:/file/all";
+    }
+
     @PostMapping("/upload")
     public String uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
         fileService.uploadFile(file);

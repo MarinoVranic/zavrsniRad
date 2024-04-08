@@ -19,6 +19,10 @@ public class FileService {
         return fileRepository.findAll();
     }
 
+    public void deleteById(Long id){
+        fileRepository.deleteById(id);
+    }
+
     public void uploadFile(MultipartFile datoteka) throws IOException {
         File file = new File();
         file.setFileName(datoteka.getOriginalFilename());
