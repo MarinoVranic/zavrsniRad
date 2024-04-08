@@ -71,27 +71,13 @@ public class RacunController {
         return "racun/newRacun";
     }
 
-//    @PostMapping("/addNew")
-//    public String addRacun(@ModelAttribute("racun") Racun racun, Model model) {
-//        if(racunService.checkIfBrojRacunaIsAvailable(racun.getBrojRacuna())!=0){
-//            model.addAttribute("error", "Broj računa/dokumenta već postoji!");
-//            return "racun/newRacun";
-//        }else {
-//            racunService.save(racun);
-//        }
-//        return "redirect:/racun/all";
-//    }
-
     @PostMapping("/addNew")
     public String addRacun(@ModelAttribute("racun") Racun racun, @RequestParam("datoteka") MultipartFile file, Model model) throws IOException {
         if(racunService.checkIfBrojRacunaIsAvailable(racun.getBrojRacuna()) != 0){
             model.addAttribute("error", "Broj računa/dokumenta već postoji!");
             return "racun/newRacun";
         } else {
-            // Upload file and get its ID or path
             Long fileId = fileService.uploadFileReturnId(file);
-            System.out.println(fileId);
-            // Set the file ID or path in the Racun object
             racun.setFile(fileService.getFileById(fileId));
             racunService.save(racun);
         }
