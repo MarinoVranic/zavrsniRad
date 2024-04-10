@@ -42,7 +42,7 @@
                     <option value="">Odaberite datoteku</option>
                     <option th:each="file : ${allFiles}" th:value="${file.id}"
                             th:text="${file.fileName}"
-                            th:selected="${file.id == selectedFile.id}"></option>
+                            th:selected="${file.id == (file != null ? file.id : null)}"></option>
                 </select>
             <div>
                 <div>

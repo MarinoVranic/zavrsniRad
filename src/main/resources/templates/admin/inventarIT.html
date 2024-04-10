@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 <link th:href="@{/CSS/customStyle.css}" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script type="text/javascript" src="../static/javascript/sidebar.js" th:src="@{/javascript/sidebar.js}"></script>
@@ -189,7 +190,12 @@
             <td style="width: 120px" th:text="${inventar.datumZaduzenja}"></td>
             <td th:text="${inventar.datumRazduzenja}"></td>
             <td style="width: 120px" th:text="${inventar.warrantyEnding}"></td>
-            <td th:text="${inventar.racun.brojRacuna}"></td>
+            <td>
+                <p th:text="${inventar.racun.brojRacuna}"></p>
+                <a th:if="${inventar.racun.file != null}" th:href="@{'/file/download/' + ${inventar.racun.file.id}}" type="button" class="button-zaduzi">
+                    <span class="material-symbols-outlined">file_save</span>
+                </a>
+            </td>
             <td th:text="${inventar.dobavljac.nazivDobavljaca}"></td>
             <td th:text="${inventar.napomena}"></td>
             <td>

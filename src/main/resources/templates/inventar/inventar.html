@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 <link th:href="@{/CSS/customStyle.css}" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script type="text/javascript" src="../static/javascript/sidebar.js" th:src="@{/javascript/sidebar.js}"></script>
@@ -52,6 +53,17 @@
     .form {
         margin-right: 0px;
         margin-bottom: 10px;
+    }
+
+    .cell-with-text-and-button {
+        white-space: nowrap; /* Prevent text wrapping */
+    }
+
+    .cell-with-text-and-button p,
+    .cell-with-text-and-button a {
+        display: inline-flex; /* Display elements inline */
+        vertical-align: center; /* Align elements vertically */
+        margin-right: 10px; /* Adjust spacing between text and button */
     }
 </style>
 <body>
@@ -199,7 +211,12 @@
                 <p th:unless="${inventar.korisnik != null && inventar.korisnik.username != null}">
                 </p></td>
             <td><p th:text="${inventar.nabavnaVrijednost} + ' EUR'"></p></td>
-            <td><p th:text="${inventar.racun.brojRacuna}"></p></td>
+            <td class="cell-with-text-and-button">
+                <p th:text="${inventar.racun.brojRacuna}"></p>
+                <a th:if="${inventar.racun.file != null}" th:href="@{'/file/download/' + ${inventar.racun.file.id}}" type="button" class="button-zaduzi">
+                    <span class="material-symbols-outlined">file_save</span>
+                </a>
+            </td>
             <td><p th:text="${inventar.napomena}"></p></td>
             <td><a th:href="@{/inventar/update/{inventarniBroj}(inventarniBroj=${inventar.inventarniBroj})}"
                    type="button" class="button-edit"><i class="fa fa-edit" style="font-size:24px"></i></a></td>

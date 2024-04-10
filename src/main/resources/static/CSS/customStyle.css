@@ -350,6 +350,12 @@ th, td {
     transform: translateY(2px);
 }
 
+.button-add[disabled] {
+    background-color: #ddd;
+    color: #666;
+    cursor: not-allowed;
+}
+
 .button-edit {
     align-items: center;
     appearance: none;
