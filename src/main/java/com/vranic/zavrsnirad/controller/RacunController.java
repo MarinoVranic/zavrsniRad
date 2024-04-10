@@ -7,7 +7,9 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.vranic.zavrsnirad.model.Dobavljac;
+import com.vranic.zavrsnirad.model.File;
 import com.vranic.zavrsnirad.model.Racun;
+import com.vranic.zavrsnirad.service.FileService;
 import com.vranic.zavrsnirad.service.RacunService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 
 import java.io.IOException;
@@ -29,6 +32,9 @@ import java.util.List;
 public class RacunController {
     @Autowired
     private RacunService racunService;
+
+    @Autowired
+    private FileService fileService;
 
     private String getViewBasedOnRole(Authentication auth) {
         if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
@@ -55,7 +61,11 @@ public class RacunController {
     @GetMapping("/update/{id}")
     public String updateRacun(@PathVariable(value = "id") Long id, Model model) {
         Racun racun = racunService.getRacunById(id);
+        File selectedFile = racun.getFile();
+        List<File> fileList = fileService.getAllFiles();
         model.addAttribute("racun", racun);
+        model.addAttribute("allFiles", fileList);
+        model.addAttribute("selectedFile", selectedFile);
         return "racun/updateRacun";
     }
 
@@ -67,23 +77,20 @@ public class RacunController {
     }
 
     @PostMapping("/addNew")
-    public String addRacun(@ModelAttribute("racun") Racun racun, Model model) {
-        if(racunService.checkIfBrojRacunaIsAvailable(racun.getBrojRacuna())!=0){
+    public String addRacun(@ModelAttribute("racun") Racun racun, @RequestParam("datoteka") MultipartFile file, Model model) throws IOException {
+        if(racunService.checkIfBrojRacunaIsAvailable(racun.getBrojRacuna()) != 0){
             model.addAttribute("error", "Broj računa/dokumenta već postoji!");
             return "racun/newRacun";
-        }else {
+        } else {
+            Long fileId = fileService.uploadFileReturnId(file);
+            racun.setFile(fileService.getFileById(fileId));
             racunService.save(racun);
         }
         return "redirect:/racun/all";
     }
 
     @PostMapping("/save")
-    public String saveRacun(@ModelAttribute("racun") Racun racun, Model model) {
-        if(racunService.checkIfBrojRacunaIsAvailable(racun.getBrojRacuna())!=0)
-        {
-            model.addAttribute("error", "Broj računa/dokumenta već postoji!");
-            return "racun/updateRacun";
-        }
+    public String saveRacun(@ModelAttribute("racun") Racun racun) {
         racunService.save(racun);
         return "redirect:/racun/all";
     }

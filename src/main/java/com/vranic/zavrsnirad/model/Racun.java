@@ -18,6 +18,11 @@ public class Racun {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idRacuna;
     private String brojRacuna;
+
+    @ManyToOne
+    @JoinColumn(name = "id")
+    private File file;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate datumRacuna;
 }

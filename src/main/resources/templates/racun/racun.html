@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 <link th:href="@{/CSS/customStyle.css}" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script type="text/javascript" src="../static/javascript/sidebar.js" th:src="@{/javascript/sidebar.js}"></script>
@@ -27,6 +28,17 @@
         border-bottom: 1px solid #ddd;
         border-left: 1px solid #ddd;
     }
+
+    .cell-with-text-and-button {
+        white-space: nowrap; /* Prevent text wrapping */
+    }
+
+    .cell-with-text-and-button p,
+    .cell-with-text-and-button a {
+        display: inline-flex; /* Display elements inline */
+        vertical-align: center; /* Align elements vertically */
+        margin-right: 10px; /* Adjust spacing between text and button */
+    }
 </style>
 <body>
 <div class="w3-sidebar w3-bar-block" style="display:none;z-index:5; height: 100%; position: fixed; bottom: 0; left: 0;"
@@ -34,6 +46,7 @@
     <div style="flex: 1;">
         <button onclick="w3_close()" class="w3-bar-item w3-large">Zatvori &times;</button>
         <a th:href="@{/index}" class="w3-bar-item w3-button">Glavni izbornik</a>
+        <a th:href="@{/file/all}" class="w3-bar-item w3-button">Datoteke</a>
         <a th:href="@{/lokacija/all}" class="w3-bar-item w3-button">Lokacije</a>
         <a th:href="@{/dobavljac/all}" class="w3-bar-item w3-button">Dobavljači</a>
         <a th:href="@{/vrstaUredaja/all}" class="w3-bar-item w3-button">Vrste sredstva</a>
@@ -75,6 +88,7 @@
         <tr>
             <th class="w3-dark-grey">ID</th>
             <th class="w3-dark-grey">Broj računa/dokumenta</th>
+            <th class="w3-dark-grey">Datoteka računa/dokumenta</th>
             <th class="w3-dark-grey">Datum računa/dokumenta</th>
             <th class="w3-dark-grey"></th>
             <th class="w3-dark-grey"></th>
@@ -84,6 +98,12 @@
         <tr th:each="racun:${sviRacuni}">
             <td th:text="${racun.idRacuna}"></td>
             <td th:text="${racun.brojRacuna}"></td>
+            <td class="cell-with-text-and-button">
+                <p th:if="${racun.file != null}" th:text="${racun.file.fileName}"></p>
+                <a th:if="${racun.file != null}" th:href="@{'/file/download/' + ${racun.file.id}}" type="button" class="button-zaduzi">
+                    <span class="material-symbols-outlined">file_save</span>
+                </a>
+            </td>
             <td th:text="${racun.datumRacuna}"></td>
             <td><a th:href="@{/racun/update/{id}(id=${racun.idRacuna})}" type="button" class="button-edit"><i
                     class="fa fa-edit" style="font-size:36px"></i></a></td>
