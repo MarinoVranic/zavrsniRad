@@ -33,6 +33,10 @@ public class RacunService {
         return racunRepository.findByBrojRacuna(brojRacuna);
     }
 
+    public List<Racun> findRacunByBrojUre(String brojUre){
+        return racunRepository.findByBrojUre(brojUre);
+    }
+
     public Long checkIfBrojRacunaIsAvailable(String brojRacuna){
         return racunRepository.checkBrojRacunaIsFree(brojRacuna);
     }

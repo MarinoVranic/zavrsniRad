@@ -18,6 +18,7 @@ public class Racun {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idRacuna;
     private String brojRacuna;
+    private String brojUre;
 
     @ManyToOne
     @JoinColumn(name = "id")

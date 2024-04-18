@@ -26,12 +26,20 @@
                        th:field="*{idRacuna}" placeholder="Nepotreban unos, sustav sam upisuje!" readonly>
             </p>
             <p class="w3-center">
-                <label class="w3-text-dark-grey" for="brojRacuna"><b>Broj računa/dokumenta</b><br></label>
+                <label class="w3-text-dark-grey" for="brojRacuna"><b>Broj računa/dokumenta dobavljača</b><br></label>
                 <label id="error-message" class="error alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>
                 <input class="w3-input w3-border w3-round w3-center" id="brojRacuna" name="brojRacuna" type="text"
                        th:field="*{brojRacuna}" required
                        onchange="this.setCustomValidity('')"
                        oninvalid="this.setCustomValidity('Napišite broj računa/dokumenta!')">
+            </p>
+            <p class="w3-center">
+                <label class="w3-text-dark-grey" for="brojUre"><b>Broj računa/dokumenta URE</b><br></label>
+                <label id="error-message2" class="error alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>
+                <input class="w3-input w3-border w3-round w3-center" id="brojUre" name="brojRacuna" type="text"
+                       th:field="*{brojUre}" required
+                       onchange="this.setCustomValidity('')"
+                       oninvalid="this.setCustomValidity('Napišite broj URE!')">
             </p>
             <p class="w3-center">
                 <label class="w3-text-dark-grey" for="datumRacuna"><b>Datum računa/dokumenta</b><br></label>

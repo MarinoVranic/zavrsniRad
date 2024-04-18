@@ -13,6 +13,9 @@ public interface RacunRepository extends JpaRepository<Racun, Long> {
     @Query(value = "SELECT * FROM racun r WHERE r.Broj_racuna = :brojRacuna", nativeQuery = true)
     List<Racun> findByBrojRacuna(String brojRacuna);
 
+    @Query(value = "SELECT racun FROM Racun racun WHERE racun.brojUre LIKE CONCAT('%', :brojUre, '%')")
+    List<Racun> findByBrojUre(String brojUre);
+
     @Query(value = "SELECT * FROM racun r ORDER BY r.Datum_racuna DESC", nativeQuery = true)
     List<Racun> findAll();
 

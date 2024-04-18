@@ -118,6 +118,23 @@ public class RacunController {
         return getViewBasedOnRole(auth);
     }
 
+    @GetMapping("/findByUra")
+    public String findDobavljacByUra(@RequestParam("brojUre") String brojUre, Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        List<Racun> racunList = racunService.findRacunByBrojUre(brojUre);
+        if (racunList.isEmpty()) {
+            model.addAttribute("error", "URA s tim brojem ne postoji u sustavu!");
+            model.addAttribute("sviRacuni", racunService.getAllRacun());
+            Racun racun = new Racun();
+            model.addAttribute("racun", racun);
+        } else {
+            model.addAttribute("sviRacuni", racunList);
+            Racun racun = new Racun();
+            model.addAttribute("racun", racun);
+        }
+        return getViewBasedOnRole(auth);
+    }
+
     @GetMapping("/generatePDF")
     public void generatePDF(HttpServletResponse response) throws IOException, DocumentException {
         // Set the content type and attachment header
@@ -205,7 +222,9 @@ public class RacunController {
         // Add table header cells
         headerCell.setPhrase(new Phrase("ID računa/dokumenta", headerFont));
         table.addCell(headerCell);
-        headerCell.setPhrase(new Phrase("Naziv računa/dokumenta", headerFont));
+        headerCell.setPhrase(new Phrase("Naziv računa/dokumenta dobavljača", headerFont));
+        table.addCell(headerCell);
+        headerCell.setPhrase(new Phrase("Naziv računa/dokumenta URE", headerFont));
         table.addCell(headerCell);
         headerCell.setPhrase(new Phrase("Datum računa/dokumenta", headerFont));
         table.addCell(headerCell);
@@ -218,6 +237,8 @@ public class RacunController {
             dataCell.setPhrase(new Phrase(String.valueOf(racun.getIdRacuna()), croatianFont));
             table.addCell(dataCell);
             dataCell.setPhrase(new Phrase(racun.getBrojRacuna(), croatianFont));
+            table.addCell(dataCell);
+            dataCell.setPhrase(new Phrase(racun.getBrojUre(), croatianFont));
             table.addCell(dataCell);
             dataCell.setPhrase(new Phrase(String.valueOf(racun.getDatumRacuna()), croatianFont));
             table.addCell(dataCell);
