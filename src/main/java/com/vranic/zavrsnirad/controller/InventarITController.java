@@ -387,6 +387,7 @@ public class InventarITController {
                     }
                     inventarniBroj = "1" + inventarniBroj.substring(1);
                 }
+                System.out.println(inventarniBroj);
             }
             else {
                 String sitniInventar = originalInventarniBroj.substring(0,2);
@@ -398,6 +399,7 @@ public class InventarITController {
                     }
                     inventarniBroj = "2" + inventarniBroj.substring(1);
                 } else if (sitniInventar.equals("IT")) {
+                    inventarniBroj = inventarniBroj.substring(2);
                     while(inventarniBroj.length() < 12){
                         inventarniBroj = "0" + inventarniBroj;
                     }
@@ -408,7 +410,9 @@ public class InventarITController {
                     }
                     inventarniBroj = "1" + inventarniBroj.substring(1);
                 }
+                System.out.println(inventarniBroj);
             }
+            System.out.println(inventarniBroj);
             BitMatrix bitMatrix = BarcodeGeneratorService.generateEAN13Barcode(inventarniBroj);
             byte[] barcodeImage = BarcodeImageUtils.convertBitMatrixToByteArray(bitMatrix);
 
