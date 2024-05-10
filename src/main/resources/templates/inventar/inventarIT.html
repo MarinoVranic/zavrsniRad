@@ -244,7 +244,8 @@
                 <td th:text="${inventar.hostname}"></td>
                 <td th:text="${inventar.lokacija.nazivLokacije}"></td>
                 <td><p th:if="${inventar.korisnik != null && inventar.korisnik.username != null}">
-                    <span th:text="${inventar.korisnik.username}"></span>
+                    <span th:text="${inventar.korisnik.firstName}"></span>
+                    <span th:text="${inventar.korisnik.lastName}"></span>
                 </p>
                     <p th:unless="${inventar.korisnik != null && inventar.korisnik.username != null}">
                     </p></td>
@@ -255,12 +256,20 @@
                 <td th:text="${inventar.datumRazduzenja}"></td>
                 <td style="width: 120px" th:text="${inventar.warrantyEnding}"></td>
                 <td>
-                    <p th:text="${inventar.racun.brojRacuna}"></p>
-                    <a th:if="${inventar.racun.file != null}" th:href="@{'/file/download/' + ${inventar.racun.file.id}}" type="button" class="button-zaduzi">
+                    <p th:if="${inventar.racun != null && inventar.racun.brojRacuna != null}">
+                        <span th:text="${inventar.racun.brojRacuna}"></span>
+                    </p>
+                    <p th:unless="${inventar.racun != null && inventar.racun.brojRacuna != null}"></p>
+                    <a th:if="${inventar.racun != null && inventar.racun.file != null}" th:href="@{'/file/download/' + ${inventar.racun.file.id}}" type="button" class="button-zaduzi">
                         <span class="material-symbols-outlined">file_save</span>
                     </a>
                 </td>
-                <td th:text="${inventar.dobavljac.nazivDobavljaca}"></td>
+                <td>
+                    <p th:if="${inventar.dobavljac != null && inventar.dobavljac.nazivDobavljaca != null}">
+                        <span th:text="${inventar.dobavljac.nazivDobavljaca}"></span>
+                    </p>
+                    <p th:unless="${inventar.dobavljac != null && inventar.dobavljac.nazivDobavljaca != null}"></p>
+                </td>
                 <td th:text="${inventar.napomena}"></td>
                 <td>
                     <a th:if="${inventar.korisnik == null || inventar.korisnik.username == null}"
