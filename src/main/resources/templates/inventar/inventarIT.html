@@ -28,6 +28,7 @@
         text-align: center;
         border-bottom: 1px solid #ddd;
         border-left: 1px solid #ddd;
+        font-size: small;
     }
 
     #scrollToTopBtn {
@@ -209,18 +210,18 @@
     </form>
 </div>
 <div style="overflow-x:auto;">
-    <table style="table-layout:auto;width:auto" class="w3-table-all w3-hoverable w3-centered w3-card-4">
+    <table style="table-layout:fixed;word-wrap:break-word" class="w3-table-all w3-hoverable w3-centered w3-card-4">
         <thead>
         <tr>
-            <th style="width: 45px" class="w3-dark-grey">Inventarni broj<br><input type="checkbox" id="checkAll"></th>
-            <th class="w3-dark-grey">Naziv uređaja</th>
+            <th style="width: 100px;padding-left: 8px" class="w3-dark-grey">Inventarni<br>broj<br><input type="checkbox" id="checkAll"></th>
+            <th style="width: 150px" class="w3-dark-grey">Naziv<br>uređaja</th>
             <th class="w3-dark-grey">Serijski broj</th>
             <th class="w3-dark-grey">Vrsta uređaja<br></th>
-            <th class="w3-dark-grey">Hostname</th>
+<!--            <th class="w3-dark-grey">Hostname</th>-->
             <th class="w3-dark-grey">Lokacija</th>
-            <th class="w3-dark-grey">Username</th>
-            <th style="width: 150px" class="w3-dark-grey">LAN MAC</th>
-            <th style="width: 150px" class="w3-dark-grey">Wi-Fi MAC</th>
+            <th class="w3-dark-grey">Korisnik</th>
+            <th style="width: 120px" class="w3-dark-grey">LAN MAC</th>
+            <th style="width: 120px" class="w3-dark-grey">Wi-Fi MAC</th>
             <th style="width: 120px" class="w3-dark-grey">Datum zaduženja</th>
             <th class="w3-dark-grey">Datum razduženja</th>
             <th style="width: 120px" class="w3-dark-grey">Istek garancije</th>
@@ -241,17 +242,21 @@
                 <td th:text="${inventar.nazivUredaja}"></td>
                 <td th:text="${inventar.serijskiBroj}"></td>
                 <td th:text="${inventar.vrstaUredaja.nazivVrsteUredaja}"></td>
-                <td th:text="${inventar.hostname}"></td>
-                <td th:text="${inventar.lokacija.nazivLokacije}"></td>
+<!--                <td th:text="${inventar.hostname}"></td>-->
+                <td>
+                    <p th:if="${inventar.lokacija != null && inventar.lokacija.nazivLokacije != null}">
+                        <span th:text="${inventar.lokacija.nazivLokacije}"></span>
+                    </p>
+                    <p th:unless="${inventar.lokacija != null && inventar.lokacija.nazivLokacije != null}"></p>
+                </td>
                 <td><p th:if="${inventar.korisnik != null && inventar.korisnik.username != null}">
                     <span th:text="${inventar.korisnik.firstName}"></span>
                     <span th:text="${inventar.korisnik.lastName}"></span>
                 </p>
                     <p th:unless="${inventar.korisnik != null && inventar.korisnik.username != null}">
                     </p></td>
-                <td style="width: 150px" th:text="${inventar.lanMac}"></td>
-
-                <td th:text="${inventar.wifiMac}"></td>
+                <td style="width: 120px" th:text="${inventar.lanMac}"></td>
+                <td style="width: 120px" th:text="${inventar.wifiMac}"></td>
                 <td style="width: 120px" th:text="${inventar.datumZaduzenja}"></td>
                 <td th:text="${inventar.datumRazduzenja}"></td>
                 <td style="width: 120px" th:text="${inventar.warrantyEnding}"></td>

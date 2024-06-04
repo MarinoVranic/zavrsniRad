@@ -289,18 +289,36 @@ public class InventarController {
             model.addAttribute("savInventar", inventarList);
             Inventar inventar = new Inventar();
             model.addAttribute("inventar", inventar);
+            List<Korisnik> allKorisnik = korisnikService.getAllKorisnik();
+            List<VrstaUredaja> allVrstaUredaja = vrstaUredajaService.getAllVrstaUredaja();
+            List<Lokacija> allLokacija = lokacijaService.getAllLokacija();
+            model.addAttribute("allKorisnik", allKorisnik);
+            model.addAttribute("allVrstaUredaja", allVrstaUredaja);
+            model.addAttribute("allLokacija", allLokacija);
             return getViewBasedOnRole(auth);
         } else if(tipInventara.equals("IT")) {
             List<Inventar> inventarList = inventarService.getInventarByIT();
             model.addAttribute("savInventar", inventarList);
             Inventar inventar = new Inventar();
             model.addAttribute("inventar", inventar);
+            List<Korisnik> allKorisnik = korisnikService.getAllKorisnik();
+            List<VrstaUredaja> allVrstaUredaja = vrstaUredajaService.getAllVrstaUredaja();
+            List<Lokacija> allLokacija = lokacijaService.getAllLokacija();
+            model.addAttribute("allKorisnik", allKorisnik);
+            model.addAttribute("allVrstaUredaja", allVrstaUredaja);
+            model.addAttribute("allLokacija", allLokacija);
             return getViewBasedOnRole(auth);
         } else {
             List<Inventar> inventarList = inventarService.getInventarBySI();
             model.addAttribute("savInventar", inventarList);
             Inventar inventar = new Inventar();
             model.addAttribute("inventar", inventar);
+            List<Korisnik> allKorisnik = korisnikService.getAllKorisnik();
+            List<VrstaUredaja> allVrstaUredaja = vrstaUredajaService.getAllVrstaUredaja();
+            List<Lokacija> allLokacija = lokacijaService.getAllLokacija();
+            model.addAttribute("allKorisnik", allKorisnik);
+            model.addAttribute("allVrstaUredaja", allVrstaUredaja);
+            model.addAttribute("allLokacija", allLokacija);
             return getViewBasedOnRole(auth);
         }
     }
@@ -515,9 +533,17 @@ public class InventarController {
 
             }
             table.addCell(cell);
-            setCellContentAndFont(cell, inventar.getRacun().getBrojRacuna(), croatianFont);
+            if(inventar.getRacun() == null){
+                setCellContentAndFont(cell, "", croatianFont);
+            } else {
+                setCellContentAndFont(cell, inventar.getRacun().getBrojRacuna(), croatianFont);
+            }
             table.addCell(cell);
-            setCellContentAndFont(cell, inventar.getDobavljac().getNazivDobavljaca(), croatianFont);
+            if(inventar.getDobavljac() == null){
+                setCellContentAndFont(cell, "", croatianFont);
+            } else {
+                setCellContentAndFont(cell, inventar.getDobavljac().getNazivDobavljaca(), croatianFont);
+            }
             table.addCell(cell);
             setCellContentAndFont(cell, inventar.getNabavnaVrijednost() + " EUR", croatianFont);
             table.addCell(cell);
@@ -562,6 +588,9 @@ public class InventarController {
 
     // Method to set content and font for cell with font shrinking if necessary
     private void setCellContentAndFont(PdfPCell cell, String content, Font font) {
+        if (content == null) {
+            content = ""; // or handle it in some other appropriate way
+        }
         // Set initial font size
         float fontSize = 12f;
         float minFontSize = 8f; // Minimum font size for readability

@@ -590,7 +590,11 @@ public class InventarITController {
                 setCellContentAndFont(cell, inventar.getHostname(), croatianFont);
             }
             table.addCell(cell);
-            setCellContentAndFont(cell, inventar.getLokacija().getNazivLokacije(), croatianFont);
+            if(inventar.getLokacija() == null){
+                setCellContentAndFont(cell, "", croatianFont);
+            } else {
+                setCellContentAndFont(cell, inventar.getLokacija().getNazivLokacije(), croatianFont);
+            }
             table.addCell(cell);
             Korisnik korisnik = inventar.getKorisnik();
             if(korisnik != null && korisnik.getUsername() != null){
@@ -626,9 +630,17 @@ public class InventarITController {
             table.addCell(cell);
             setCellContentAndFont(cell, String.valueOf(inventar.getWarrantyEnding()), croatianFont);
             table.addCell(cell);
-            setCellContentAndFont(cell, inventar.getRacun().getBrojRacuna(), croatianFont);
+            if(inventar.getRacun() == null){
+                setCellContentAndFont(cell, "", croatianFont);
+            } else {
+                setCellContentAndFont(cell, inventar.getRacun().getBrojRacuna(), croatianFont);
+            }
             table.addCell(cell);
-            setCellContentAndFont(cell, inventar.getDobavljac().getNazivDobavljaca(), croatianFont);
+            if(inventar.getDobavljac() == null){
+                setCellContentAndFont(cell, "", croatianFont);
+            } else {
+                setCellContentAndFont(cell, inventar.getDobavljac().getNazivDobavljaca(), croatianFont);
+            }
             table.addCell(cell);
             if(inventar.getNapomena() == null){
                 setCellContentAndFont(cell, "", croatianFont);
@@ -946,6 +958,9 @@ public class InventarITController {
     }
 
     private void setCellContentAndFont(PdfPCell cell, String content, Font font) {
+        if (content == null) {
+            content = ""; // or handle it in some other appropriate way
+        }
         // Set initial font size
         float fontSize = 12f;
         float minFontSize = 8f; // Minimum font size for readability
