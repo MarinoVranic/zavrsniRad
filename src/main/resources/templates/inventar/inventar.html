@@ -118,6 +118,25 @@
         </div>
         <label id="error-message" class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>
     </form>
+    <form id="form6" class="w3-container w3-padding form" th:action="@{/inventar/findBySerialNumber}" method="get">
+        <label for="serialNumber"></label>
+        <div style="display: flex; flex-direction: column; align-items: center;">
+            <input type="text" id="serialNumber" name="serialNumber" placeholder="Pretraži po serijskom br." required
+                   onchange="this.setCustomValidity('')"
+                   oninvalid="this.setCustomValidity('Popunite polje za pretraživanje!')">
+            <div style="margin-top: 10px">
+                <button onclick="hidedivInventarIT2()" type="submit" class="button-small"><i class="fa fa-search"
+                                                                                             style="font-size:12px"></i>
+                    Pretraži
+                </button>
+                <button type="button" class="button-small" onclick="window.location.href='/inventar/all'">Prikaži
+                    sve
+                </button>
+            </div>
+        </div>
+        <label id="error-message2" class="alert alert-danger" role="alert" th:text="${error2}"
+               th:if="${error2}"></label>
+    </form>
     <form id="form2" class="w3-container w3-padding form" th:action="@{/inventar/findByVrsta}" method="get"
           th:object="${allVrstaUredaja}">
         <div style="display: flex; flex-direction: column; align-items: center;">

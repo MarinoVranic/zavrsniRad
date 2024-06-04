@@ -178,6 +178,23 @@ public class InventarController {
         return getViewBasedOnRole(auth);
     }
 
+    @GetMapping("/findBySerialNumber")
+    public String findInventarBySerialNumber(@RequestParam("serialNumber") String serijskiBroj, Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        List<Inventar> inventarList = inventarService.getInventarBySerialNumber(serijskiBroj);
+        if (inventarList.isEmpty()) {
+            model.addAttribute("error2", "Inventar tog serijskog broja ne postoji u sustavu!");
+            model.addAttribute("savInventar", inventarService.getAllInventar());
+            Inventar inventar = new Inventar();
+            model.addAttribute("inventar", inventar);
+        } else {
+            model.addAttribute("savInventar", inventarList);
+            Inventar inventar = new Inventar();
+            model.addAttribute("inventar", inventar);
+        }
+        return getViewBasedOnRole(auth);
+    }
+
     @GetMapping("zaduzi/{inventarniBroj}")
     public String zaduziInventar(@PathVariable(value = "inventarniBroj") String inventarniBroj, Model model) {
         Inventar inventar = inventarService.getInventarById(inventarniBroj);
