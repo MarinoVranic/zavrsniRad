@@ -112,7 +112,7 @@
             <p class="w3-half">
                 <label class="w3-text-dark-grey" for="warrantyEnding"><b>Istek garancije</b></label>
                 <input class="w3-input w3-border w3-round w3-center" id="warrantyEnding" name="warrantyEnding"
-                       type="date" th:field="*{warrantyEnding}" required
+                       type="date" th:field="*{warrantyEnding}"
                        onchange="this.setCustomValidity('')"
                        oninvalid="this.setCustomValidity('Ispunite polje do kada traje garancija!')"></p>
             <p>
@@ -123,7 +123,7 @@
                         onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Odaberite račun!')">
                     <option value="">Odaberite račun</option>
                     <option th:each="racun : ${allRacun}" th:value="${racun.idRacuna}" th:text="${racun.brojRacuna}"
-                            th:selected="${racun.idRacuna == selectedRacun.idRacuna}"></option>
+                            th:selected="${racun.idRacuna == selectedRacun?.idRacuna}"></option>
                 </select>
             </p>
             <div class="w3-row-padding">

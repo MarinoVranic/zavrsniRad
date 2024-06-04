@@ -118,7 +118,7 @@
                         onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Odaberite račun!')">
                     <option value="">Odaberite račun</option>
                     <option th:each="racun : ${allRacun}" th:value="${racun.idRacuna}" th:text="${racun.brojRacuna}"
-                            th:selected="${racun.idRacuna == selectedRacun.idRacuna}"></option>
+                            th:selected="${racun.idRacuna == selectedRacun?.idRacuna}"></option>
                 </select>
             </p>
             <div class="w3-row-padding">
