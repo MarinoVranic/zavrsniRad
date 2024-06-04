@@ -33,6 +33,10 @@ public class KorisnikService {
         return korisnikRepository.findKorisnikByLastName(lastName);
     }
 
+    public List<Korisnik> findKorisnikByFirstName(String firstName){
+        return korisnikRepository.findKorisnikByFirstName(firstName);
+    }
+
     public Long checkIfUsernameIsFree(String username){
         return korisnikRepository.checkUsernameIsFree(username);
     }

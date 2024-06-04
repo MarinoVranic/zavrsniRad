@@ -13,10 +13,13 @@ import java.util.List;
 @Repository
 public interface KorisnikRepository extends JpaRepository<Korisnik, String> {
 
-    @Query(value="SELECT * FROM korisnik k WHERE k.Last_name = :lastName ORDER BY k.First_name", nativeQuery = true)
+    @Query(value = "SELECT korisnik FROM Korisnik korisnik WHERE korisnik.lastName LIKE CONCAT('%', :lastName, '%') ORDER BY korisnik.firstName ASC")
     List<Korisnik> findKorisnikByLastName(String lastName);
 
-    @Query(value = "SELECT * FROM korisnik k ORDER BY k.Last_name ASC", nativeQuery = true)
+    @Query(value = "SELECT korisnik FROM Korisnik korisnik WHERE korisnik.firstName = :firstName ORDER BY korisnik.lastName ASC")
+    List<Korisnik> findKorisnikByFirstName(String firstName);
+
+    @Query(value = "SELECT korisnik FROM Korisnik korisnik ORDER BY korisnik.userCreated DESC")
     List<Korisnik> findAll();
 
     @Query(value = "SELECT COUNT(k.Username) FROM korisnik k WHERE k.Username = :username", nativeQuery = true)

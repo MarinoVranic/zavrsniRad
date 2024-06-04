@@ -40,6 +40,16 @@
         border: none;
         cursor: pointer;
     }
+    .forms-container {
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-start;
+        margin-bottom: 10px;
+    }
+    .form {
+        margin-right: 0px;
+        margin-bottom: 10px;
+    }
 </style>
 <body>
 <div class="w3-sidebar w3-bar-block" style="display:none;z-index:5; height: 100%; position: fixed; bottom: 0; left: 0;"
@@ -82,14 +92,24 @@
         <button style="margin-left: 10px" id="printButton" onclick="submitForm()" class="button-30" disabled>Printout za označenog <i class="material-icons">picture_as_pdf</i></button>
     </div>
 </div>
-<form class="w3-container" th:action="@{/korisnik/find}" method="get" style="margin-bottom: 20px">
-    <label for="lastName"></label>
-    <input type="text" id="lastName" name="lastName" placeholder="Pretraži po prezimenu" required
-           onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Popunite polje za pretraživanje!')">
-    <button onclick="hidedivKorisnik()" type="submit" class="button-30"><i class="fa fa-search" style="font-size:20px"></i> Pretraži</button>
-    <button type="button" class="button-30" onclick="window.location.href='/korisnik/all'">Prikaži sve</button>
-    <label id="error-message" class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>
-</form>
+<div class="forms-container">
+    <form id="form0" class="w3-container form" th:action="@{/korisnik/findByFirstName}" method="get" style="margin-bottom: 20px">
+        <label for="firstName"></label>
+        <input type="text" id="firstName" name="firstName" placeholder="Pretraži po imenu" required
+               onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Popunite polje za pretraživanje!')">
+        <button onclick="hidedivKorisnik()" type="submit" class="button-30"><i class="fa fa-search" style="font-size:20px"></i> Pretraži</button>
+        <button type="button" class="button-30" onclick="window.location.href='/korisnik/all'">Prikaži sve</button>
+        <label id="error-message2" class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>
+    </form>
+    <form id="form1" class="w3-container form" th:action="@{/korisnik/find}" method="get" style="margin-bottom: 20px">
+        <label for="lastName"></label>
+        <input type="text" id="lastName" name="lastName" placeholder="Pretraži po prezimenu" required
+               onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Popunite polje za pretraživanje!')">
+        <button onclick="hidedivKorisnik()" type="submit" class="button-30"><i class="fa fa-search" style="font-size:20px"></i> Pretraži</button>
+        <button type="button" class="button-30" onclick="window.location.href='/korisnik/all'">Prikaži sve</button>
+        <label id="error-message" class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>
+    </form>
+</div>
 <div style="overflow-x:auto;">
     <table style="table-layout:auto;width:100%" class="w3-table-all w3-hoverable w3-centered w3-card-4">
         <thead>

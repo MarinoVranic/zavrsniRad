@@ -137,6 +137,19 @@ public class KorisnikController {
         return getViewBasedOnRole(auth);
     }
 
+    @GetMapping("/findByFirstName")
+    public String findKorisnikByFirstName(@RequestParam("firstName") String firstName, Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        List<Korisnik> korisnikList = korisnikService.findKorisnikByFirstName(firstName);
+        if (korisnikList.isEmpty()) {
+            model.addAttribute("error2", "Korisnik/ici tog imena nisu pronađeni!");
+            model.addAttribute("sviKorisnici", korisnikService.getAllKorisnik());
+        } else {
+            model.addAttribute("sviKorisnici", korisnikList);
+        }
+        return getViewBasedOnRole(auth);
+    }
+
     @GetMapping("/generatePDFaktivni")
     public void generatePDF(HttpServletResponse response) throws IOException, DocumentException {
         // Set the content type and attachment header

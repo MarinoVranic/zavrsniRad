@@ -638,6 +638,11 @@ th, td {
     margin-bottom: 10px;
 }
 
+.form {
+    margin-right: 0px;
+    margin-bottom: 10px;
+}
+
 .button {
     background-color: #4CAF50;
     border: none;
