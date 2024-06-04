@@ -1,3 +1,10 @@
+.w3-table td,.w3-table th,.w3-table-all td,.w3-table-all th {
+    padding: 8px 8px;
+    display: table-cell;
+    text-align: left;
+    vertical-align: middle;
+}
+
 table {
     border-collapse: collapse;
     width: 100%;
