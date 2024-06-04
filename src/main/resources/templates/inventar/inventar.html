@@ -173,9 +173,9 @@
                 <option th:each="korisnik : ${allKorisnik}" th:value="${korisnik.username}"
                         th:text="${korisnik.firstName} + ' ' + ${korisnik.lastName}"></option>
             </select>
-        </div>
-        <div style="margin-top: 17px">
-            <button onclick="hidedivInventar()" type="submit" class="button-small"><i class="fa fa-search" style="font-size:12px"></i> Pretraži po korisniku</button>
+            <div style="margin-top: 17px">
+                <button onclick="hidedivInventar()" type="submit" class="button-small"><i class="fa fa-search" style="font-size:12px"></i> Pretraži po korisniku</button>
+            </div>
         </div>
     </form>
 </div>
