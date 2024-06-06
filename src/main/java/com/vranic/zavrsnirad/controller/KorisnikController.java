@@ -150,6 +150,19 @@ public class KorisnikController {
         return getViewBasedOnRole(auth);
     }
 
+    @GetMapping("/findBySubcontractor")
+    public String findKorisnikBySubcontractor(@RequestParam("subcontractor") String subcontractor, Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        List<Korisnik> korisnikList = korisnikService.findKorisnikByPoslodavac(subcontractor);
+        if (korisnikList.isEmpty()) {
+            model.addAttribute("error3", "Traženi poslodavac nema korisnika!");
+            model.addAttribute("sviKorisnici", korisnikService.getAllKorisnik());
+        } else {
+            model.addAttribute("sviKorisnici", korisnikList);
+        }
+        return getViewBasedOnRole(auth);
+    }
+
     @GetMapping("/generatePDFaktivni")
     public void generatePDF(HttpServletResponse response) throws IOException, DocumentException {
         // Set the content type and attachment header

@@ -93,7 +93,7 @@
     </div>
 </div>
 <div class="forms-container">
-    <form id="form0" class="w3-container form" th:action="@{/korisnik/findByFirstName}" method="get" style="margin-bottom: 20px">
+    <form id="form2" class="w3-container form" th:action="@{/korisnik/findByFirstName}" method="get" style="margin-bottom: 20px">
         <label for="firstName"></label>
         <input type="text" id="firstName" name="firstName" placeholder="Pretraži po imenu" required
                onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Popunite polje za pretraživanje!')">
@@ -108,6 +108,14 @@
         <button onclick="hidedivKorisnik()" type="submit" class="button-30"><i class="fa fa-search" style="font-size:20px"></i> Pretraži</button>
         <button type="button" class="button-30" onclick="window.location.href='/korisnik/all'">Prikaži sve</button>
         <label id="error-message" class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>
+    </form>
+    <form id="form3" class="w3-container form" th:action="@{/korisnik/findBySubcontractor}" method="get" style="margin-bottom: 20px">
+        <label for="subcontractor"></label>
+        <input type="text" id="subcontractor" name="subcontractor" placeholder="Pretraži po poslodavcu" required
+               onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Popunite polje za pretraživanje!')">
+        <button onclick="hidedivKorisnik3()" type="submit" class="button-30"><i class="fa fa-search" style="font-size:20px"></i> Pretraži</button>
+        <button type="button" class="button-30" onclick="window.location.href='/korisnik/all'">Prikaži sve</button>
+        <label id="error-message3" class="alert alert-danger" role="alert" th:text="${error3}" th:if="${error3}"></label>
     </form>
 </div>
 <div style="overflow-x:auto;">

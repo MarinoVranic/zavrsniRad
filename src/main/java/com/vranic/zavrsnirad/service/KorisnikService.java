@@ -37,6 +37,10 @@ public class KorisnikService {
         return korisnikRepository.findKorisnikByFirstName(firstName);
     }
 
+    public List<Korisnik> findKorisnikByPoslodavac(String subcontractor){
+        return korisnikRepository.findKorisnikByPoslodavac(subcontractor);
+    }
+
     public Long checkIfUsernameIsFree(String username){
         return korisnikRepository.checkUsernameIsFree(username);
     }
