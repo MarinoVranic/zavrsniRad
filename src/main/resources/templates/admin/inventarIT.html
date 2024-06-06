@@ -65,7 +65,6 @@
     <a th:href="@{/dobavljac/all}" class="w3-bar-item w3-button">Dobavljači</a>
     <a th:href="@{/vrstaUredaja/all}" class="w3-bar-item w3-button">Vrste sredstva</a>
     <a th:href="@{/lokacija/all}" class="w3-bar-item w3-button">Lokacije</a>
-    <a th:href="@{/korisnik/all}" class="w3-bar-item w3-button">Korisnici</a>
     <a th:href="@{/inventar/all}" class="w3-bar-item w3-button">Osnovna sredstva</a>
     <a th:href="@{/inventura/all}" class="w3-bar-item w3-button">Inventure</a>
     <a th:href="@{/provodenjeInventure/all}" class="w3-bar-item w3-button">Izvršavanje inventure</a>
@@ -79,13 +78,14 @@
 <div class="w3-overlay" onclick="w3_close()" style="cursor:pointer" id="myOverlay"></div>
 <div>
     <button id="openNav" class="w3-button w3-xlarge" onclick="w3_open()">&#9776;</button>
-    <img src="../images/AITAC values challenges solutions (1).png" class="centered-image" alt="Aitac VCS">
+    <a th:href="@{/index}">
+        <img src="../images/AITAC values challenges solutions (1).png" class="centered-image" alt="Aitac VCS">
+    </a>
 </div>
 <div>
     <h1 class="w3-padding w3-center w3-opacity w3-xxxlarge" style="text-shadow:1px 1px 0 #444"><b>IT oprema</b></h1>
 </div>
 <div class="div-container">
-    <a th:href="@{/inventarIT/addNew}" class="button-add"><i class="material-icons">add_circle</i> Novi inventar</a>
     <a th:href="@{/inventarIT/generatePDF}" class="button-30">Izvještaj <i class="material-icons">picture_as_pdf</i></a>
 </div>
 <div class="forms-container" style="display: flex;">
@@ -204,9 +204,6 @@
             <th class="w3-dark-grey">Račun</th>
             <th class="w3-dark-grey">Dobavljač</th>
             <th class="w3-dark-grey">Napomena</th>
-            <th class="w3-dark-grey"></th>
-            <th class="w3-dark-grey"></th>
-            <th class="w3-dark-grey"></th>
         </tr>
         </thead>
         <tbody>
@@ -247,26 +244,6 @@
                 <p th:unless="${inventar.dobavljac != null && inventar.dobavljac.nazivDobavljaca != null}"></p>
             </td>
             <td th:text="${inventar.napomena}"></td>
-            <td>
-                <a th:if="${inventar.korisnik == null || inventar.korisnik.username == null}"
-                   style="font-size:15px"
-                   th:href="@{/inventarIT/zaduzi/{inventarniBroj}(inventarniBroj=${inventar.inventarniBroj})}"
-                   type="button" class="button-zaduzi">Zaduži</a>
-
-                <a th:if="${inventar.korisnik != null && inventar.korisnik.username != null}"
-                   style="font-size:15px"
-                   th:href="@{/inventarIT/razduzi/{inventarniBroj}(inventarniBroj=${inventar.inventarniBroj})}"
-                   type="button" class="button-zaduzi">Razduži</a>
-            </td>
-            <td><a th:href="@{/inventarIT/update/{inventarniBroj}(inventarniBroj=${inventar.inventarniBroj})}"
-                   type="button" class="button-edit"><i class="fa fa-edit" style="font-size:24px"></i></a>
-                <a th:href="@{/inventarIT/ean13/{inventarniBroj}(inventarniBroj=${inventar.inventarniBroj})}"
-                   type="button" class="button-edit"><i class="fa fa-barcode" style="font-size:32px"></i></a></td>
-            <td><a style="font-size:128px"
-                   href="javascript:void(0);"
-                   th:data-inventarni-broj="${inventar.inventarniBroj}"
-                   onclick="confirmDelete()"
-                   class="button-delete"><i class="material-icons">remove_circle</i></a></td>
         </tr>
         </tbody>
     </table>
@@ -287,17 +264,6 @@
         document.body.scrollTop = 0; // For Safari
         document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE, and Opera
     };
-</script>
-<script>
-    function confirmDelete() {
-        // Retrieve the inventarniBroj value from the data attribute
-        var dataAttribute = event.currentTarget.getAttribute('data-inventarni-broj');
-        var isConfirmed = confirm("Are you sure you want to delete?");
-
-        if (isConfirmed) {
-            window.location.href = `/inventarIT/delete/${dataAttribute}`;
-        }
-    }
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
