@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface RazduzenjeRepository extends JpaRepository<Razduzenje, Long> {
-    @Query(value = "SELECT razduzenje FROM Razduzenje razduzenje LEFT JOIN FETCH razduzenje.inventar LEFT JOIN FETCH razduzenje.lokacija LEFT JOIN FETCH razduzenje.korisnik ORDER BY razduzenje.idRazduzenja ASC")
+    @Query(value = "SELECT razduzenje FROM Razduzenje razduzenje LEFT JOIN FETCH razduzenje.inventar LEFT JOIN FETCH razduzenje.lokacija LEFT JOIN FETCH razduzenje.korisnik ORDER BY razduzenje.idRazduzenja DESC")
     List<Razduzenje> findAll();
 
     @Query(value = "SELECT razduzenje FROM Razduzenje razduzenje LEFT JOIN FETCH razduzenje.inventar LEFT JOIN FETCH razduzenje.lokacija LEFT JOIN FETCH razduzenje.korisnik WHERE razduzenje.inventar.inventarniBroj = :inventarniBroj ORDER BY razduzenje.idRazduzenja ASC")

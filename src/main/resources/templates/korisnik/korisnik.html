@@ -97,9 +97,9 @@
         <label for="firstName"></label>
         <input type="text" id="firstName" name="firstName" placeholder="Pretraži po imenu" required
                onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Popunite polje za pretraživanje!')">
-        <button onclick="hidedivKorisnik()" type="submit" class="button-30"><i class="fa fa-search" style="font-size:20px"></i> Pretraži</button>
+        <button onclick="hidedivKorisnik2()" type="submit" class="button-30"><i class="fa fa-search" style="font-size:20px"></i> Pretraži</button>
         <button type="button" class="button-30" onclick="window.location.href='/korisnik/all'">Prikaži sve</button>
-        <label id="error-message2" class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>
+        <label id="error-message2" class="alert alert-danger" role="alert" th:text="${error2}" th:if="${error2}"></label>
     </form>
     <form id="form1" class="w3-container form" th:action="@{/korisnik/find}" method="get" style="margin-bottom: 20px">
         <label for="lastName"></label>
@@ -236,6 +236,12 @@
     checkboxes.forEach(function(checkbox) {
         checkbox.addEventListener('change', updatePrintButton);
     });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Set focus on the username input field when the page is loaded
+        document.getElementById('lastName').focus();
+    })
 </script>
 </body>
 </html>

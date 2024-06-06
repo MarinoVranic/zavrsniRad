@@ -29,6 +29,18 @@
         border-left: 1px solid #ddd;
     }
 
+    .forms-container {
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-start;
+        margin-bottom: 10px;
+    }
+
+    .form {
+        margin-right: 0px;
+        margin-bottom: 10px;
+    }
+
     .cell-with-text-and-button {
         white-space: nowrap; /* Prevent text wrapping */
     }
@@ -73,13 +85,34 @@
     <a th:href="@{/racun/addNew}" class="button-add"><i class="material-icons">add_circle</i> Novi račun/dokument</a>
     <a th:href="@{/racun/generatePDF}" class="button-30">Izvještaj <i class="material-icons">picture_as_pdf</i></a>
 </div>
-<form class="w3-container" th:action="@{/racun/find}" method="get" style="margin-bottom: 20px">
-    <input type="text" id="brojRacuna" name="brojRacuna" placeholder="Pretraži po broju" required
-           onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Popunite polje za pretraživanje!')">
-    <button onclick="hidedivRacun()" type="submit" class="button-30"><i class="fa fa-search" style="font-size:20px"></i> Pretraži</button>
-    <button type="button" class="button-30" onclick="window.location.href='/racun/all'">Prikaži sve</button>
-    <label id="error-message" class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>
-</form>
+<div class="forms-container" style="display: flex;">
+    <form id="form1" class="w3-container w3-padding form" th:action="@{/racun/find}" method="get">
+        <label for="brojRacuna"></label>
+        <div style="display: flex; flex-direction: column; align-items: center;">
+            <input type="text" id="brojRacuna" name="brojRacuna" placeholder="Pretraži po broju računa" required
+                   onchange="this.setCustomValidity('')"
+                   oninvalid="this.setCustomValidity('Popunite polje za pretraživanje!')">
+            <div style="margin-top: 10px">
+                <button onclick="hidedivInventar()" type="submit" class="button-small"><i class="fa fa-search" style="font-size:12px"></i> Pretraži</button>
+                <button type="button" class="button-small" onclick="window.location.href='/racun/all'">Prikaži sve</button>
+            </div>
+        </div>
+        <label id="error-message" class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>
+    </form>
+    <form id="form2" class="w3-container w3-padding form" th:action="@{/racun/findByUra}" method="get">
+        <label for="brojUre"></label>
+        <div style="display: flex; flex-direction: column; align-items: center;">
+            <input type="text" id="brojUre" name="brojUre" placeholder="Pretraži po broju URE" required
+                   onchange="this.setCustomValidity('')"
+                   oninvalid="this.setCustomValidity('Popunite polje za pretraživanje!')">
+            <div style="margin-top: 10px">
+                <button onclick="hidedivInventar()" type="submit" class="button-small"><i class="fa fa-search" style="font-size:12px"></i> Pretraži</button>
+                <button type="button" class="button-small" onclick="window.location.href='/racun/all'">Prikaži sve</button>
+            </div>
+        </div>
+        <label id="error-message2" class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>
+    </form>
+</div>
 <div style="overflow-x:auto;">
     <table style="table-layout:auto;width:100%" class="w3-table-all w3-hoverable w3-centered w3-card-4">
         <thead>

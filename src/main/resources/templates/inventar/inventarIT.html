@@ -181,12 +181,12 @@
                 <option th:each="korisnik : ${allKorisnik}" th:value="${korisnik.username}"
                         th:text="${korisnik.firstName} + ' ' + ${korisnik.lastName}"></option>
             </select>
-        </div>
-        <div style="margin-top: 17px">
-            <button onclick="hidedivInventar()" type="submit" class="button-small"><i class="fa fa-search"
-                                                                                      style="font-size:12px"></i>
-                Pretraži po korisniku
-            </button>
+            <div style="margin-top: 17px">
+                <button onclick="hidedivInventar()" type="submit" class="button-small"><i class="fa fa-search"
+                                                                                          style="font-size:12px"></i>
+                    Pretraži po korisniku
+                </button>
+            </div>
         </div>
     </form>
     <form id="form5" class="w3-container w3-padding form" th:action="@{/inventarIT/findByTipInventara}" method="get"
@@ -217,7 +217,6 @@
             <th style="width: 150px" class="w3-dark-grey">Naziv<br>uređaja</th>
             <th class="w3-dark-grey">Serijski broj</th>
             <th class="w3-dark-grey">Vrsta uređaja<br></th>
-<!--            <th class="w3-dark-grey">Hostname</th>-->
             <th class="w3-dark-grey">Lokacija</th>
             <th class="w3-dark-grey">Korisnik</th>
             <th style="width: 120px" class="w3-dark-grey">LAN MAC</th>
@@ -258,7 +257,7 @@
                 <td style="width: 120px" th:text="${inventar.lanMac}"></td>
                 <td style="width: 120px" th:text="${inventar.wifiMac}"></td>
                 <td style="width: 120px" th:text="${inventar.datumZaduzenja}"></td>
-                <td th:text="${inventar.datumRazduzenja}"></td>
+                <td style="width: 120px" th:text="${inventar.datumRazduzenja}"></td>
                 <td style="width: 120px" th:text="${inventar.warrantyEnding}"></td>
                 <td>
                     <p th:if="${inventar.racun != null && inventar.racun.brojRacuna != null}">
@@ -379,6 +378,12 @@
             });
         });
     };
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Set focus on the inventarniBroj input field when the page is loaded
+        document.getElementById('inventarniBroj').focus();
+    })
 </script>
 </body>
 </html>

@@ -56,7 +56,7 @@
 </div>
 <h1 class="w3-padding w3-center w3-opacity w3-xxxlarge" style="text-shadow:1px 1px 0 #444"><b>Razduženja</b></h1>
 <div class="w3-right">
-    <a th:href="@{/razduzenje/generatePDF}" class="button-30">Izvještaj <i class="material-icons">picture_as_pdf</i></a>
+    <a th:href="@{/razduzenje/generatePDF}" style="margin-right: 20px" class="button-30">Izvještaj <i class="material-icons">picture_as_pdf</i></a>
 </div>
 <div style="display: flex;">
     <form id="form1" class="w3-container w3-padding form" th:action="@{/razduzenje/find}" method="get">
@@ -82,9 +82,9 @@
                 <option th:each="korisnik : ${allKorisnik}" th:value="${korisnik.username}"
                         th:text="${korisnik.firstName} + ' ' + ${korisnik.lastName}"></option>
             </select>
-        </div>
-        <div style="margin-top: 17px">
-            <button onclick="hidedivRazduzenje()" type="submit" class="button-small"><i class="fa fa-search" style="font-size:12px"></i>Pretraži po korisniku</button>
+            <div style="margin-top: 17px">
+                <button onclick="hidedivRazduzenje()" type="submit" class="button-small"><i class="fa fa-search" style="font-size:12px"></i>Pretraži po korisniku</button>
+            </div>
         </div>
     </form>
 </div>
@@ -109,12 +109,37 @@
         <tbody>
         <tr th:each="razduzenje:${svaRazduzenja}">
             <td><p th:text="${razduzenje.idRazduzenja}"></p></td>
-            <td><p th:text="${razduzenje.inventar.inventarniBroj}"></p></td>
-            <td><p th:text="${razduzenje.inventar.nazivUredaja}"></p></td>
-            <td><p th:text="${razduzenje.inventar.serijskiBroj}"></p></td>
+            <td><p th:if="${razduzenje.inventar != null && razduzenje.inventar.inventarniBroj != null}">
+                <span th:text="${razduzenje.inventar.inventarniBroj}"></span>
+            </p>
+                <p th:unless="${razduzenje.inventar != null && razduzenje.inventar.inventarniBroj != null}">
+                </p>
+            </td>
+<!--            <td><p th:text="${razduzenje.inventar.inventarniBroj}"></p></td>-->
+            <td><p th:if="${razduzenje.inventar != null && razduzenje.inventar.nazivUredaja != null}">
+                <span th:text="${razduzenje.inventar.nazivUredaja}"></span>
+            </p>
+                <p th:unless="${razduzenje.inventar != null && razduzenje.inventar.nazivUredaja != null}">
+                </p>
+            </td>
+<!--            <td><p th:text="${razduzenje.inventar.nazivUredaja}"></p></td>-->
+            <td><p th:if="${razduzenje.inventar != null && razduzenje.inventar.serijskiBroj != null}">
+                <span th:text="${razduzenje.inventar.serijskiBroj}"></span>
+            </p>
+                <p th:unless="${razduzenje.inventar != null && razduzenje.inventar.serijskiBroj != null}">
+                </p>
+            </td>
+<!--            <td><p th:text="${razduzenje.inventar.serijskiBroj}"></p></td>-->
             <td><p th:text="${razduzenje.hostname}"></p></td>
             <td><p th:text="${razduzenje.lokacija.nazivLokacije}"></p></td>
-            <td><p th:text="${razduzenje.korisnik.firstName} + ' ' + ${razduzenje.korisnik.lastName}"></p></td>
+            <td><p th:if="${razduzenje.korisnik != null && razduzenje.korisnik.username != null}">
+                <span th:text="${razduzenje.korisnik.firstName}"></span>
+                <span th:text="${razduzenje.korisnik.lastName}"></span>
+            </p>
+                <p th:unless="${razduzenje.korisnik != null && razduzenje.korisnik.username != null}">
+                </p>
+            </td>
+<!--            <td><p th:text="${razduzenje.korisnik.firstName} + ' ' + ${razduzenje.korisnik.lastName}"></p></td>-->
             <td><p th:text="${razduzenje.datumZaduzenja}"></p></td>
             <td><p th:text="${razduzenje.datumRazduzenja}"></p></td>
             <td><p th:text="${razduzenje.napomena}"></p></td>

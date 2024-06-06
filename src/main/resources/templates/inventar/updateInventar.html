@@ -36,7 +36,7 @@
             <p class="w3-half">
                 <label class="w3-text-dark-grey" for="serijskiBroj"><b>Serijski broj</b><br></label>
                 <input class="w3-input w3-border w3-round w3-center" id="serijskiBroj" name="serijskiBroj" type="text"
-                       th:field="*{serijskiBroj}" required
+                       th:field="*{serijskiBroj}"
                        onchange="this.setCustomValidity('')"
                        oninvalid="this.setCustomValidity('Ispunite polje za serijski broj!')"></p>
             <p>
@@ -52,11 +52,6 @@
                             th:selected="${vrsta.idVrsteUredaja == selectedVrstaUredaja.idVrsteUredaja}"></option>
                 </select>
             </p>
-<!--            <p class="w3-half">-->
-<!--                <label class="w3-text-dark-grey" for="hostname"><b>Hostname</b><br></label>-->
-<!--                <input class="w3-input w3-border w3-round w3-center" id="hostname" name="hostname" type="text"-->
-<!--                       th:field="*{hostname}"></p>-->
-<!--            <p>-->
             <p class="w3-half">
                 <label class="w3-text-dark-grey" for="nazivLokacije"><b>Lokacija</b></label>
                 <select class="w3-input w3-border w3-round w3-center" id="nazivLokacije" name="nazivLokacije"

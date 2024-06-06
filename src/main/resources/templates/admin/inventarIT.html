@@ -27,6 +27,7 @@
         text-align: center;
         border-bottom: 1px solid #ddd;
         border-left: 1px solid #ddd;
+        font-size: small;
     }
 
     #scrollToTopBtn {
@@ -101,6 +102,25 @@
         </div>
         <label id="error-message" class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>
     </form>
+    <form id="form6" class="w3-container w3-padding form" th:action="@{/inventarIT/findBySerialNumber}" method="get">
+        <label for="serialNumber"></label>
+        <div style="display: flex; flex-direction: column; align-items: center;">
+            <input type="text" id="serialNumber" name="serialNumber" placeholder="Pretraži po serijskom br." required
+                   onchange="this.setCustomValidity('')"
+                   oninvalid="this.setCustomValidity('Popunite polje za pretraživanje!')">
+            <div style="margin-top: 10px">
+                <button onclick="hidedivInventarIT2()" type="submit" class="button-small"><i class="fa fa-search"
+                                                                                             style="font-size:12px"></i>
+                    Pretraži
+                </button>
+                <button type="button" class="button-small" onclick="window.location.href='/inventarIT/all'">Prikaži
+                    sve
+                </button>
+            </div>
+        </div>
+        <label id="error-message2" class="alert alert-danger" role="alert" th:text="${error2}"
+               th:if="${error2}"></label>
+    </form>
     <form id="form2" class="w3-container w3-padding form" th:action="@{/inventarIT/findByVrsta}" method="get"
           th:object="${allVrstaUredaja}">
         <div style="display: flex; flex-direction: column; align-items: center;">
@@ -141,25 +161,43 @@
                 <option th:each="korisnik : ${allKorisnik}" th:value="${korisnik.username}"
                         th:text="${korisnik.firstName} + ' ' + ${korisnik.lastName}"></option>
             </select>
+            <div style="margin-top: 17px">
+                <button onclick="hidedivInventar()" type="submit" class="button-small"><i class="fa fa-search" style="font-size:12px"></i> Pretraži po korisniku</button>
+            </div>
+        </div>
+    </form>
+    <form id="form5" class="w3-container w3-padding form" th:action="@{/inventarIT/findByTipInventara}" method="get"
+          th:object="${allVrstaUredaja}">
+        <div style="display: flex; flex-direction: column; align-items: center;">
+            <select class=" w3-border w3-round w3-center" id="tipInventara" name="tipInventara" required
+                    onchange="this.setCustomValidity('');updateRequiredFields()"
+                    oninvalid="this.setCustomValidity('Odaberite tip inventara!')">
+                <option value="">Odaberite tip inventara</option>
+                <option value="OS">Osnovna sredstva</option>
+                <option value="SI">Sitni inventar</option>
+                <option value="IT">IT inventar</option>
+            </select>
         </div>
         <div style="margin-top: 17px">
-            <button onclick="hidedivInventar()" type="submit" class="button-small"><i class="fa fa-search" style="font-size:12px"></i> Pretraži po korisniku</button>
+            <button onclick="hidedivInventar()" type="submit" class="button-small"><i class="fa fa-search"
+                                                                                      style="font-size:12px"></i>
+                Pretraži po tipu inventara
+            </button>
         </div>
     </form>
 </div>
 <div style="overflow-x:auto;">
-    <table style="table-layout:auto;width:auto" class="w3-table-all w3-hoverable w3-centered w3-card-4">
+    <table style="table-layout:fixed;word-wrap: break-word" class="w3-table-all w3-hoverable w3-centered w3-card-4">
         <thead>
         <tr>
-            <th style="width: 45px" class="w3-dark-grey">Inventarni broj</th>
+            <th style="width: 100px;padding-left: 8px" class="w3-dark-grey">Inventarni broj</th>
             <th class="w3-dark-grey">Naziv uređaja</th>
             <th class="w3-dark-grey">Serijski broj</th>
             <th class="w3-dark-grey">Vrsta uređaja<br></th>
-            <th class="w3-dark-grey">Hostname</th>
             <th class="w3-dark-grey">Lokacija</th>
             <th class="w3-dark-grey">Username</th>
-            <th style="width: 150px" class="w3-dark-grey">LAN MAC</th>
-            <th style="width: 150px" class="w3-dark-grey">Wi-Fi MAC</th>
+            <th style="width: 120px" class="w3-dark-grey">LAN MAC</th>
+            <th style="width: 120px" class="w3-dark-grey">Wi-Fi MAC</th>
             <th style="width: 120px" class="w3-dark-grey">Datum zaduženja</th>
             <th class="w3-dark-grey">Datum razduženja</th>
             <th style="width: 120px" class="w3-dark-grey">Istek garancije</th>
@@ -177,26 +215,37 @@
             <td th:text="${inventar.nazivUredaja}"></td>
             <td th:text="${inventar.serijskiBroj}"></td>
             <td th:text="${inventar.vrstaUredaja.nazivVrsteUredaja}"></td>
-            <td th:text="${inventar.hostname}"></td>
-            <td th:text="${inventar.lokacija.nazivLokacije}"></td>
+            <td>
+                <p th:if="${inventar.lokacija != null && inventar.lokacija.nazivLokacije != null}">
+                    <span th:text="${inventar.lokacija.nazivLokacije}"></span>
+                </p>
+                <p th:unless="${inventar.lokacija != null && inventar.lokacija.nazivLokacije != null}"></p>
+            </td>
             <td><p th:if="${inventar.korisnik != null && inventar.korisnik.username != null}">
                 <span th:text="${inventar.korisnik.username}"></span>
             </p>
                 <p th:unless="${inventar.korisnik != null && inventar.korisnik.username != null}">
                 </p></td>
-            <td style="width: 150px" th:text="${inventar.lanMac}"></td>
-
-            <td th:text="${inventar.wifiMac}"></td>
+            <td style="width: 120px" th:text="${inventar.lanMac}"></td>
+            <td style="width: 120px" th:text="${inventar.wifiMac}"></td>
             <td style="width: 120px" th:text="${inventar.datumZaduzenja}"></td>
-            <td th:text="${inventar.datumRazduzenja}"></td>
+            <td style="width: 120px" th:text="${inventar.datumRazduzenja}"></td>
             <td style="width: 120px" th:text="${inventar.warrantyEnding}"></td>
             <td>
-                <p th:text="${inventar.racun.brojRacuna}"></p>
-                <a th:if="${inventar.racun.file != null}" th:href="@{'/file/download/' + ${inventar.racun.file.id}}" type="button" class="button-zaduzi">
+                <p th:if="${inventar.racun != null && inventar.racun.brojRacuna != null}">
+                    <span th:text="${inventar.racun.brojRacuna}"></span>
+                </p>
+                <p th:unless="${inventar.racun != null && inventar.racun.brojRacuna != null}"></p>
+                <a th:if="${inventar.racun != null && inventar.racun.file != null}" th:href="@{'/file/download/' + ${inventar.racun.file.id}}" type="button" class="button-zaduzi">
                     <span class="material-symbols-outlined">file_save</span>
                 </a>
             </td>
-            <td th:text="${inventar.dobavljac.nazivDobavljaca}"></td>
+            <td>
+                <p th:if="${inventar.dobavljac != null && inventar.dobavljac.nazivDobavljaca != null}">
+                    <span th:text="${inventar.dobavljac.nazivDobavljaca}"></span>
+                </p>
+                <p th:unless="${inventar.dobavljac != null && inventar.dobavljac.nazivDobavljaca != null}"></p>
+            </td>
             <td th:text="${inventar.napomena}"></td>
             <td>
                 <a th:if="${inventar.korisnik == null || inventar.korisnik.username == null}"
@@ -249,6 +298,12 @@
             window.location.href = `/inventarIT/delete/${dataAttribute}`;
         }
     }
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Set focus on the inventarniBroj input field when the page is loaded
+        document.getElementById('inventarniBroj').focus();
+    })
 </script>
 </body>
 </html>
