@@ -137,6 +137,20 @@
         <label id="error-message2" class="alert alert-danger" role="alert" th:text="${error2}"
                th:if="${error2}"></label>
     </form>
+    <form id="form5" class="w3-container w3-padding form" th:action="@{/inventar/findByUser}" method="get">
+        <label for="lastName"></label>
+        <div style="display: flex; flex-direction: column; align-items: center;">
+            <input type="text" id="lastName" name="lastName" placeholder="Upišite prezime korisnika" required
+                   onchange="this.setCustomValidity('')"
+                   oninvalid="this.setCustomValidity('Popunite polje za pretraživanje!')">
+            <div style="margin-top: 10px">
+                <button onclick="hidedivInventarIT3()" type="submit" class="button-small"><i class="fa fa-search" style="font-size:12px"></i>Pretraži po korisniku</button>
+                <button type="button" class="button-small" onclick="window.location.href='/inventar/all'">Prikaži sve</button>
+            </div>
+        </div>
+        <label id="error-message3" class="alert alert-danger" role="alert" th:text="${error3}"
+               th:if="${error3}"></label>
+    </form>
     <form id="form2" class="w3-container w3-padding form" th:action="@{/inventar/findByVrsta}" method="get"
           th:object="${allVrstaUredaja}">
         <div style="display: flex; flex-direction: column; align-items: center;">
@@ -180,21 +194,6 @@
         </div>
         <div style="margin-top: 17px">
             <button onclick="hidedivInventar()" type="submit" class="button-small"><i class="fa fa-search" style="font-size:12px"></i> Pretraži po tipu inventara</button>
-        </div>
-    </form>
-    <form id="form5" class="w3-container w3-padding form" th:action="@{/inventar/findByUser}" method="get"
-          th:object="${allKorisnik}">
-        <div style="display: flex; flex-direction: column; align-items: center;">
-            <select class=" w3-border w3-round w3-center" id="username" name="username" required
-                    onchange="this.setCustomValidity('');updateRequiredFields()"
-                    oninvalid="this.setCustomValidity('Odaberite korisnika!')">
-                <option value="">Odaberite korisnika</option>
-                <option th:each="korisnik : ${allKorisnik}" th:value="${korisnik.username}"
-                        th:text="${korisnik.firstName} + ' ' + ${korisnik.lastName}"></option>
-            </select>
-            <div style="margin-top: 17px">
-                <button onclick="hidedivInventar()" type="submit" class="button-small"><i class="fa fa-search" style="font-size:12px"></i> Pretraži po korisniku</button>
-            </div>
         </div>
     </form>
 </div>

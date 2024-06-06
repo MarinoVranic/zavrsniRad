@@ -63,8 +63,8 @@ public interface InventarRepository extends JpaRepository<Inventar, String> {
     List<Inventar> findAllForAdministration();
 
     @Query(value = "SELECT inventar FROM Inventar inventar LEFT JOIN FETCH inventar.vrstaUredaja LEFT JOIN FETCH inventar.lokacija i" +
-            " LEFT JOIN FETCH inventar.racun LEFT JOIN FETCH inventar.dobavljac LEFT JOIN inventar.korisnik korisnik WHERE korisnik.username = :username ORDER BY inventar.inventarniBroj ASC")
-    List<Inventar> findAllByUser(@Param("username") String username);
+            " LEFT JOIN FETCH inventar.racun LEFT JOIN FETCH inventar.dobavljac LEFT JOIN inventar.korisnik korisnik WHERE korisnik.lastName LIKE CONCAT('%', :lastName, '%') ORDER BY inventar.inventarniBroj ASC")
+    List<Inventar> findAllByUser(@Param("lastName") String lastName);
 
     List<Inventar> findAllBySerijskiBroj(@Param("serijskiBroj") String serijskiBroj);
 }

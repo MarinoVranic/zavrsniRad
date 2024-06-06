@@ -73,8 +73,8 @@ public class InventarService {
         return inventarRepository.findAllBySerijskiBroj(serijskiBroj);
     }
 
-    public List<Inventar> getInventarByUser(String username){
-        return inventarRepository.findAllByUser(username);
+    public List<Inventar> getInventarByUser(String lastName){
+        return inventarRepository.findAllByUser(lastName);
     }
 
     public List<Inventar> getInventarForAdministration(){

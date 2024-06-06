@@ -282,18 +282,25 @@ public class InventarController {
     }
 
     @GetMapping("/findByUser")
-    public String showInventarByUser(@RequestParam("username") String username, Model model) {
+    public String showInventarByUser(@RequestParam("lastName") String lastName, Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        List<Korisnik> allKorisnik = korisnikService.getAllKorisnik();
-        List<Inventar> inventarList = inventarService.getInventarByUser(username);
-        List<VrstaUredaja> allVrstaUredaja = vrstaUredajaService.getAllVrstaUredaja();
+        List<Inventar> inventarList = inventarService.getInventarByUser(lastName);
         List<Lokacija> allLokacija = lokacijaService.getAllLokacija();
-        model.addAttribute("allKorisnik", allKorisnik);
-        model.addAttribute("savInventar", inventarList);
-        model.addAttribute("allVrstaUredaja", allVrstaUredaja);
-        model.addAttribute("allLokacija", allLokacija);
-        Inventar inventar = new Inventar();
-        model.addAttribute("inventar", inventar);
+        List<VrstaUredaja> allVrstaUredaja = vrstaUredajaService.getAllVrstaUredaja();
+        if (inventarList.isEmpty()) {
+            model.addAttribute("allLokacija", allLokacija);
+            model.addAttribute("allVrstaUredaja", allVrstaUredaja);
+            model.addAttribute("error3", "Korisnik traženog prezimena ne zadužuje inventar!");
+            model.addAttribute("savInventar", inventarService.getAllInventar());
+            Inventar inventar = new Inventar();
+            model.addAttribute("inventar", inventar);
+        } else {
+            model.addAttribute("allLokacija", allLokacija);
+            model.addAttribute("allVrstaUredaja", allVrstaUredaja);
+            model.addAttribute("savInventar", inventarList);
+            Inventar inventar = new Inventar();
+            model.addAttribute("inventar", inventar);
+        }
         return getViewBasedOnRole(auth);
     }
 
