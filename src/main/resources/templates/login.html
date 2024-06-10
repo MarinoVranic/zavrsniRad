@@ -23,14 +23,28 @@
                placeholder="Password" required/>
         <br/>
         <button class="button-login" type="submit">Log In</button>
+        <div>
+            <a th:href="@{/appUsers/resetPasswordForm}" style="color: white">Forgot password? Click here!</a>
+        </div>
         <div id="error-message" th:if="${param.error}">
             <p style="color: red; font-size: x-large">Invalid username or password</p>
+        </div>
+        <div id="message" th:if="${message}" class="w3-panel w3-green w3-display-container">
+            <span th:text="${message}"></span>
         </div>
     </form>
 </div>
 <script>
     function hidediv() {
-        document.getElementById("error-message").style.visibility = "hidden";
+        var error = document.getElementById("error-message");
+        var message = document.getElementById('message');
+
+        if (message) {
+            message.style.display = "none";
+        }
+        if (error) {
+            error.style.display = "none";
+        }
     }
 
     setTimeout("hidediv()", 5000);

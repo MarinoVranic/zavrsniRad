@@ -3,14 +3,18 @@ package com.vranic.zavrsnirad.controller;
 import com.vranic.zavrsnirad.model.Korisnik;
 import com.vranic.zavrsnirad.model.User;
 import com.vranic.zavrsnirad.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -23,6 +27,19 @@ public class UserController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    private String getViewBasedOnRole(Authentication auth) {
+        if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+            // User has the admin role
+            return "redirect:/index";
+        } else if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_SUPER_ADMIN"))) {
+            // User has super admin role
+            return "redirect:/appUsers/all";
+        } else {
+            // User has user role
+            return "redirect:/index";
+        }
+    }
 
     @GetMapping("/all")
     public String getAllUsers(Model model){
@@ -93,16 +110,52 @@ public class UserController {
         return "appUsers/resetPasswordAppUser";
     }
 
+    @GetMapping("/userResetPassword/")
+    public String resetOwnUserPassword(Model model){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        User user = userService.getUserByUsername(username);
+        model.addAttribute("user", user);
+        return "appUsers/resetPasswordAppUser";
+    }
+
+    @GetMapping("/resetPasswordForm")
+    public String showResetPasswordForm(){
+        return "resetPassword";
+    }
+
+    @PostMapping("/resetPassword")
+    @Transactional
+    public String updatePassword(@RequestParam String username, @RequestParam String password, RedirectAttributes redirectAttributes) {
+        try {
+            User user = userService.getUserByUsername(username);
+            if (user == null) {
+                throw new Exception("Korisničko ime nije pronađeno!!!");
+            }
+            userService.resetUserPassword(user.getId(), password);
+            redirectAttributes.addFlashAttribute("message", "Lozinka uspješno resetirana!");
+            return "redirect:/login";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:/appUsers/resetPasswordForm";
+        }
+    }
+
     @PostMapping("/updatePassword")
     @Transactional
     public String saveNewUserPassword(@ModelAttribute("user") @Valid User user, BindingResult bindingResult){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if(bindingResult.hasErrors()){
             return "appUsers/resetPasswordAppUser";
         }
-        System.out.println(user.getId());
-        System.out.println(user.getPassword());
         userService.resetUserPassword(user.getId(), user.getPassword());
-        return "redirect:/appUsers/all";
+        return getViewBasedOnRole(auth);
+    }
+
+    @GetMapping("/cancel")
+    public String cancel(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return getViewBasedOnRole(auth);
     }
 
     @GetMapping("/find")

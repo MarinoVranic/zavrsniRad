@@ -40,6 +40,14 @@
     <a th:href="@{/inventarIT/all}" class="w3-bar-item w3-button">IT oprema</a>
     <a th:href="@{/inventura/all}" class="w3-bar-item w3-button">Inventure</a>
     <a th:href="@{/provodenjeInventure/all}" class="w3-bar-item w3-button">Izvršavanje inventure</a>
+    <div class="w3-dropdown-click">
+        <button class="w3-button" onclick="resetPasswordDropFunc()">
+            Password settings <i class="fa fa-caret-down"></i>
+        </button>
+        <div id="resetPasswordDrop" class="w3-dropdown-content w3-bar-block w3-white w3-card">
+            <a th:href="@{/appUsers/userResetPassword/}" class="w3-bar-item w3-button">Reset password</a>
+        </div>
+    </div>
 
     <img src="../images/A.jpg" alt="Logo"
          style="position: absolute; bottom: 10px; left: 10px; width: 175px;height: 175px">
@@ -108,6 +116,19 @@
 
         if (isConfirmed) {
             window.location.href = `/dobavljac/delete/${idDobavljaca}`;
+        }
+    }
+</script>
+<script>
+    function resetPasswordDropFunc() {
+        var x = document.getElementById("resetPasswordDrop");
+        if (x.className.indexOf("w3-show") == -1) {
+            x.className += " w3-show";
+            x.previousElementSibling.className += " w3-gray";
+        } else {
+            x.className = x.className.replace(" w3-show", "");
+            x.previousElementSibling.className =
+                x.previousElementSibling.className.replace(" w3-gray", "");
         }
     }
 </script>
