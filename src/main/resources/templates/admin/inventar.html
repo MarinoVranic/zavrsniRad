@@ -129,7 +129,7 @@
                    onchange="this.setCustomValidity('')"
                    oninvalid="this.setCustomValidity('Popunite polje za pretraživanje!')">
             <div style="margin-top: 10px">
-                <button onclick="hidedivInventarIT2()" type="submit" class="button-small"><i class="fa fa-search" style="font-size:12px"></i>Pretraži</button>
+                <button onclick="hidedivInventar2()" type="submit" class="button-small"><i class="fa fa-search" style="font-size:12px"></i>Pretraži</button>
                 <button type="button" class="button-small" onclick="window.location.href='/inventar/all'">Prikaži sve</button>
             </div>
         </div>
@@ -220,7 +220,11 @@
             <td><p th:text="${inventar.nazivUredaja}"></p></td>
             <td><p th:text="${inventar.serijskiBroj}"></p></td>
             <td><p th:text="${inventar.vrstaUredaja.nazivVrsteUredaja}"></p></td>
-            <td><p th:text="${inventar.lokacija.nazivLokacije}"></p></td>
+            <td><p th:if="${inventar.lokacija != null && inventar.lokacija.nazivLokacije != null}">
+                <span th:text="${inventar.lokacija.nazivLokacije}"></span>
+            </p>
+                <p th:unless="${inventar.lokacija != null && inventar.lokacija.nazivLokacije != null}">
+                </p></td>
             <td><p th:if="${inventar.korisnik != null && inventar.korisnik.username != null}">
                 <span th:text="${inventar.korisnik.firstName}"></span>
                 <span th:text="${inventar.korisnik.lastName}"></span>
