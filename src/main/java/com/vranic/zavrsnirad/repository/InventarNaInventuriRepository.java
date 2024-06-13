@@ -13,7 +13,7 @@ import java.util.List;
 @Repository
 public interface InventarNaInventuriRepository extends JpaRepository<InventarNaInventuri, Long> {
 
-    @Query(value = "SELECT inventarNaInventuri FROM InventarNaInventuri inventarNaInventuri LEFT JOIN FETCH inventarNaInventuri.inventar LEFT JOIN FETCH inventarNaInventuri.inventura LEFT JOIN FETCH inventarNaInventuri.lokacija ORDER BY inventarNaInventuri.inventar.inventarniBroj DESC")
+    @Query(value = "SELECT inventarNaInventuri FROM InventarNaInventuri inventarNaInventuri LEFT JOIN FETCH inventarNaInventuri.inventar LEFT JOIN FETCH inventarNaInventuri.inventura LEFT JOIN FETCH inventarNaInventuri.lokacija ORDER BY inventarNaInventuri.datumSkeniranja DESC")
     List<InventarNaInventuri> findAll();
 
     @Query(value = "SELECT inventarNaInventuri FROM InventarNaInventuri inventarNaInventuri WHERE inventarNaInventuri.stanje = 'Aktivno' ORDER BY inventarNaInventuri.inventar.inventarniBroj DESC")
