@@ -97,7 +97,7 @@ public class InventarController {
         Dobavljac selectedDobavljac = inventar.getDobavljac();
         List<Dobavljac> allDobavljac = dobavljacService.getAllDobavljaci();
         Racun selectedRacun = inventar.getRacun();
-        List<Racun> allRacun = racunService.getAllRacun();
+        List<Racun> allRacun = racunService.getAllRacunForDropdown();
 
         model.addAttribute("inventar", inventar);
         model.addAttribute("selectedVrstaUredaja", selectedVrstaUredaja);
@@ -121,7 +121,7 @@ public class InventarController {
         model.addAttribute("allVrstaUredaja", allVrstaUredaja);
         List<Lokacija> allLokacija = lokacijaService.getAllLokacija();
         model.addAttribute("allLokacija", allLokacija);
-        List<Racun> allRacun = racunService.getAllRacun();
+        List<Racun> allRacun = racunService.getAllRacunForDropdown();
         model.addAttribute("allRacun", allRacun);
         List<Dobavljac> allDobavljac = dobavljacService.getAllDobavljaci();
         model.addAttribute("allDobavljac", allDobavljac);
@@ -207,7 +207,7 @@ public class InventarController {
         Dobavljac selectedDobavljac = inventar.getDobavljac();
         List<Dobavljac> allDobavljac = dobavljacService.getAllDobavljaci();
         Racun selectedRacun = inventar.getRacun();
-        List<Racun> allRacun = racunService.getAllRacun();
+        List<Racun> allRacun = racunService.getAllRacunForDropdown();
 
         model.addAttribute("inventar", inventar);
         model.addAttribute("selectedVrstaUredaja", selectedVrstaUredaja);

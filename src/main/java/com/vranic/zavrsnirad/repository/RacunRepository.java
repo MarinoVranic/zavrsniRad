@@ -19,6 +19,9 @@ public interface RacunRepository extends JpaRepository<Racun, Long> {
     @Query(value = "SELECT * FROM racun r ORDER BY r.Datum_racuna DESC", nativeQuery = true)
     List<Racun> findAll();
 
+    @Query(value = "SELECT racun FROM Racun racun ORDER BY racun.idRacuna DESC")
+    List<Racun> findAllForDropdown();
+
     @Query(value = "SELECT COUNT(r.Broj_racuna) FROM racun r WHERE r.Broj_racuna = :brojRacuna", nativeQuery = true)
     Long checkBrojRacunaIsFree(String brojRacuna);
 }

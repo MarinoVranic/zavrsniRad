@@ -17,6 +17,10 @@ public class RacunService {
         return racunRepository.findAll();
     }
 
+    public List<Racun> getAllRacunForDropdown(){
+        return racunRepository.findAllForDropdown();
+    }
+
     public Racun getRacunById (Long idRacuna){
         return racunRepository.findById(idRacuna).orElse(null);
     }
