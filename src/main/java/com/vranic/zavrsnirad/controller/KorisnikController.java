@@ -92,7 +92,9 @@ public class KorisnikController {
 
     @PostMapping("/addNew")
     public String addKorisnik(@ModelAttribute("korisnik") @Valid Korisnik korisnik, BindingResult bindingResult, Model model){
-
+        String usernameFirstChar = korisnik.getUsername().substring(0,1).toUpperCase();
+        String usernameSecondChar = korisnik.getUsername().substring(1,2).toUpperCase();
+        String year = Integer.toString(today.getYear());
         if(bindingResult.hasErrors()){
             return "korisnik/newKorisnik";
         } else if (korisnikService.checkIfUsernameIsFree(korisnik.getUsername())!=0) {
@@ -101,11 +103,49 @@ public class KorisnikController {
         } else if (korisnik.getUserCreated()!=today) {
             korisnik.setUserCreated(today);
             korisnik.setEmailCreated(today);
+            if (korisnik.getEmail().isEmpty())
+            {
+                korisnik.setEmail(korisnik.getUsername()+"@aitac.nl");
+            }
+            if (korisnik.getInitialPassword().isEmpty())
+            {
+                switch (korisnik.getAccountType()) {
+                    case "student", "praktikant" ->
+                            korisnik.setInitialPassword(korisnikService.createPasswordStudent(usernameFirstChar, usernameSecondChar, today));
+                    case "zaposlenik" ->
+                            korisnik.setInitialPassword(korisnikService.createPasswordZaposlenik(usernameFirstChar, usernameSecondChar, today));
+                    case "kooperant" ->
+                            korisnik.setInitialPassword(korisnikService.createPasswordKooperant(usernameFirstChar, usernameSecondChar, today));
+                }
+            }
+            if (korisnik.getGodina().isEmpty()) {
+                korisnik.setGodina(year);
+            }
             korisnikService.save(korisnik);
             return "redirect:/korisnik/all";
         } else
+        {
+            if (korisnik.getEmail().isEmpty())
+            {
+                korisnik.setEmail(korisnik.getUsername()+"@aitac.nl");
+            }
+            if (korisnik.getInitialPassword().isEmpty())
+            {
+                switch (korisnik.getAccountType()) {
+                    case "student", "praktikant" ->
+                            korisnik.setInitialPassword(korisnikService.createPasswordStudent(usernameFirstChar, usernameSecondChar, today));
+                    case "zaposlenik" ->
+                            korisnik.setInitialPassword(korisnikService.createPasswordZaposlenik(usernameFirstChar, usernameSecondChar, today));
+                    case "kooperant" ->
+                            korisnik.setInitialPassword(korisnikService.createPasswordKooperant(usernameFirstChar, usernameSecondChar, today));
+                }
+            }
+            if (korisnik.getGodina().isEmpty())            {
+                korisnik.setGodina(year);
+            }
             korisnikService.save(korisnik);
-            return "redirect:/korisnik/all";
+        }
+        return "redirect:/korisnik/all";
     }
 
     @PostMapping("/save")

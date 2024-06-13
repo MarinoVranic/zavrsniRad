@@ -27,7 +27,7 @@ public class Korisnik {
     private String status;
     private String accountType;
     private String subcontractor;
-    @Pattern(regexp = "^[0-9]+$", message = "Godina zaposlenja smije sadržavati samo brojeve!")
+    @Pattern(regexp = "^[0-9]*$", message = "Godina zaposlenja smije sadržavati samo brojeve!")
     private String godina;
     private String email;
     private String initialPassword;

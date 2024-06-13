@@ -56,4 +56,19 @@ public class KorisnikService {
     public void deactivateKorisnik(LocalDate userDisabled, LocalDate emailDisabled, String username){
         korisnikRepository.deactivateKorisnik(userDisabled, emailDisabled, username);
     }
+
+    public String createPasswordStudent(String usernameFirstChar, String usernameSecondChar, LocalDate today){
+        String year = Integer.toString(today.getYear());
+        return usernameFirstChar+year.substring(0,2)+"AitStd"+year.substring(2,4)+usernameSecondChar;
+    }
+
+    public String createPasswordZaposlenik(String usernameFirstChar, String usernameSecondChar, LocalDate today){
+        String year = Integer.toString(today.getYear());
+        return usernameFirstChar+year.substring(0,2)+"Cat1@"+year.substring(2,4)+usernameSecondChar;
+    }
+
+    public String createPasswordKooperant(String usernameFirstChar, String usernameSecondChar, LocalDate today){
+        String year = Integer.toString(today.getYear());
+        return usernameFirstChar+year.substring(0,2)+"Koop@1t"+year.substring(2,4)+usernameSecondChar;
+    }
 }
