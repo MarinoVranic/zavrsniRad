@@ -211,8 +211,16 @@
             <td th:text="${invNaInv.inventar.nazivUredaja}"></td>
             <td th:text="${invNaInv.inventar.vrstaUredaja.nazivVrsteUredaja}"></td>
             <td th:text="${#temporals.format(invNaInv.datumSkeniranja, 'yyyy-MM-dd HH:mm:ss')}"></td>
-            <td th:text="${invNaInv.inventar.lokacija.nazivLokacije}"></td>
-            <td th:text="${invNaInv.lokacija.nazivLokacije}"></td>
+            <td><p th:if="${invNaInv.inventar.lokacija != null && invNaInv.inventar.lokacija.nazivLokacije != null}">
+                <span th:text="${invNaInv.inventar.lokacija.nazivLokacije}"></span>
+            </p>
+                <p th:unless="${invNaInv.inventar.lokacija != null && invNaInv.inventar.lokacija.nazivLokacije != null}">
+                </p></td>
+            <td><p th:if="${invNaInv.lokacija != null && invNaInv.lokacija.nazivLokacije != null}">
+                <span th:text="${invNaInv.lokacija.nazivLokacije}"></span>
+            </p>
+                <p th:unless="${invNaInv.lokacija != null && invNaInv.lokacija.nazivLokacije != null}">
+                </p></td>
             <td th:text="${invNaInv.stanje}"></td>
             <td th:text="${invNaInv.otpis}"></td>
             <td th:text="${invNaInv.user.firstName} + ' ' + ${invNaInv.user.lastName}"></td>
@@ -223,7 +231,7 @@
                    th:href="@{/provodenjeInventure/changeWriteOff/{idSkeniranja}(idSkeniranja=${invNaInv.idSkeniranja})}"
                    class="button-zaduzi">Promijeni<br>otpis</a></td>
             <td><a style="font-size:15px; text-align: center"
-                   th:if="${invNaInv.lokacija.nazivLokacije != invNaInv.inventar.lokacija.nazivLokacije}"
+                   th:if="${invNaInv.lokacija != null && (invNaInv.inventar.lokacija == null || invNaInv.lokacija.nazivLokacije != invNaInv.inventar.lokacija.nazivLokacije)}"
                    th:href="@{/provodenjeInventure/changeLocation/{inventarniBroj}/{idInventure}(inventarniBroj=${invNaInv.inventar.inventarniBroj}, idInventure=${invNaInv.inventura.idInventure})}"
                    class="button-zaduzi">Promijeni<br>lokaciju</a></td>
             <td><a style="font-size:128px"
@@ -263,21 +271,6 @@
         document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE, and Opera
     };
 </script>
-<!--<script>-->
-<!--    document.addEventListener('DOMContentLoaded', function () {-->
-<!--        // Set focus on the inventarniBr input field when the page is loaded-->
-<!--        document.getElementById('inventarniBr').focus();-->
-
-<!--        // Add an input event listener to the inventarniBr input field-->
-<!--        document.getElementById('inventarniBr').addEventListener('input', function () {-->
-<!--            // Check if the input length is 13 characters-->
-<!--            if (this.value.length === 13) {-->
-<!--                // Automatically submit the form-->
-<!--                document.getElementById('form3').submit();-->
-<!--            }-->
-<!--        });-->
-<!--    });-->
-<!--</script>-->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Set focus on the inventarniBr input field when the page is loaded

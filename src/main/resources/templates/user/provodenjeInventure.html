@@ -148,8 +148,16 @@
             <td th:text="${invNaInv.inventar.nazivUredaja}"></td>
             <td th:text="${invNaInv.inventar.vrstaUredaja.nazivVrsteUredaja}"></td>
             <td th:text="${#temporals.format(invNaInv.datumSkeniranja, 'yyyy-MM-dd HH:mm:ss')}"></td>
-            <td th:text="${invNaInv.inventar.lokacija.nazivLokacije}"></td>
-            <td th:text="${invNaInv.lokacija.nazivLokacije}"></td>
+            <td><p th:if="${invNaInv.inventar.lokacija != null && invNaInv.inventar.lokacija.nazivLokacije != null}">
+                <span th:text="${invNaInv.inventar.lokacija.nazivLokacije}"></span>
+            </p>
+                <p th:unless="${invNaInv.inventar.lokacija != null && invNaInv.inventar.lokacija.nazivLokacije != null}">
+                </p></td>
+            <td><p th:if="${invNaInv.lokacija != null && invNaInv.lokacija.nazivLokacije != null}">
+                <span th:text="${invNaInv.lokacija.nazivLokacije}"></span>
+            </p>
+                <p th:unless="${invNaInv.lokacija != null && invNaInv.lokacija.nazivLokacije != null}">
+                </p></td>
         </tr>
         </tbody>
     </table>
