@@ -592,6 +592,8 @@ public class InventarNaInventuriController {
             // Get the list of Inventar objects from service
             if (tipInventara.equals("SI")) {
                 List<InventarNaInventuri> scannedInventar = inventarNaInventuriService.SIByGodinaInventure(idInventure);
+                PdfPCell cell = new PdfPCell();
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 for (InventarNaInventuri inventar : scannedInventar) {
                     dataCell.setPhrase(new Phrase(inventar.getInventura().getIdInventure().toString(), croatianFont));
                     table.addCell(dataCell);
@@ -603,8 +605,13 @@ public class InventarNaInventuriController {
                     table.addCell(dataCell);
                     dataCell.setPhrase(new Phrase(inventar.getDatumSkeniranja().toLocalDate().toString() + " " + inventar.getDatumSkeniranja().toLocalTime().toString(), croatianFont));
                     table.addCell(dataCell);
-                    dataCell.setPhrase(new Phrase(inventar.getInventar().getLokacija().getNazivLokacije(), croatianFont));
-                    table.addCell(dataCell);
+                    if(inventar.getInventar().getLokacija() == null){
+                        dataCell.setPhrase(new Phrase("", croatianFont));
+                    } else {
+                        dataCell.setPhrase(new Phrase(inventar.getInventar().getLokacija().getNazivLokacije(), croatianFont));
+                    }
+//                    dataCell.setPhrase(new Phrase(inventar.getInventar().getLokacija().getNazivLokacije(), croatianFont));
+                    table.addCell(cell);
                     dataCell.setPhrase(new Phrase(inventar.getLokacija().getNazivLokacije(), croatianFont));
                     table.addCell(dataCell);
                 }
@@ -804,7 +811,12 @@ public class InventarNaInventuriController {
                     }
                     dataCell.setPhrase(new Phrase(inventar.getLokacija().getNazivLokacije(), croatianFont));
                     table.addCell(dataCell);
-                    dataCell.setPhrase(new Phrase(inventar.getNabavnaVrijednost().toString() + " EUR", croatianFont));
+                    if(inventar.getNabavnaVrijednost() == null){
+                        dataCell.setPhrase(new Phrase(" EUR", croatianFont));
+                    } else {
+                        dataCell.setPhrase(new Phrase(inventar.getNabavnaVrijednost().toString() + " EUR", croatianFont));
+                    }
+//                    dataCell.setPhrase(new Phrase(inventar.getNabavnaVrijednost().toString() + " EUR", croatianFont));
                     table.addCell(dataCell);
                 }
 
@@ -904,5 +916,30 @@ public class InventarNaInventuriController {
         byte[] csvBytes = csvGeneratorUtil.generateCsv(idInventure, isFound, tipInventara).getBytes();
 
         return new ResponseEntity<>(csvBytes, headers, HttpStatus.OK);
+    }
+
+    private void setCellContentAndFont(PdfPCell cell, String content, Font font) {
+        if (content == null) {
+            content = ""; // or handle it in some other appropriate way
+        }
+        // Set initial font size
+        float fontSize = 12f;
+        float minFontSize = 8f; // Minimum font size for readability
+
+        // Set content and font for the cell
+        cell.setPhrase(new Phrase(content, new Font(font.getBaseFont(), fontSize)));
+
+        // Calculate width of content in the cell
+        float contentWidth = font.getBaseFont().getWidthPoint(content, fontSize);
+
+        // Calculate available width in the cell
+        float availableWidth = cell.getWidth() - cell.getPaddingLeft() - cell.getPaddingRight();
+
+        // If content width is greater than available width, shrink font size
+        while (contentWidth > availableWidth && fontSize > minFontSize) {
+            fontSize -= 0.1f; // Adjust the decrement value as per need
+            cell.setPhrase(new Phrase(content, new Font(font.getBaseFont(), fontSize, font.getStyle(), font.getColor())));
+            contentWidth = font.getBaseFont().getWidthPoint(content, fontSize);
+        }
     }
 }
