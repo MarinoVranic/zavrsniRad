@@ -10,6 +10,7 @@
 <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Razduženja</title>
 </head>
 <style>
@@ -30,30 +31,34 @@
     }
 </style>
 <body>
-<div class="w3-sidebar w3-bar-block" style="display:none;z-index:5" id="mySidebar">
-    <button onclick="w3_close()" class="w3-bar-item w3-large">Zatvori &times;</button>
-    <a th:href="@{/index}" class="w3-bar-item w3-button">Glavni izbornik</a>
-    <a th:href="@{/racun/all}" class="w3-bar-item w3-button">Računi/Dokumenti</a>
-    <a th:href="@{/file/all}" class="w3-bar-item w3-button">Datoteke</a>
-    <a th:href="@{/lokacija/all}" class="w3-bar-item w3-button">Lokacije</a>
-    <a th:href="@{/vrstaUredaja/all}" class="w3-bar-item w3-button">Vrste sredstva</a>
-    <a th:href="@{/korisnik/all}" class="w3-bar-item w3-button">Korisnici</a>
-    <a th:href="@{/inventar/all}" class="w3-bar-item w3-button">Osnovna sredstva</a>
-    <a th:href="@{/inventarIT/all}" class="w3-bar-item w3-button">IT oprema</a>
-    <a th:href="@{/inventura/all}" class="w3-bar-item w3-button">Inventure</a>
-    <a th:href="@{/provodenjeInventure/all}" class="w3-bar-item w3-button">Izvršavanje inventure</a>
-    <a th:href="@{/appUsers/all}" class="w3-bar-item w3-button">App useri</a>
-    <div class="w3-dropdown-click">
-        <button class="w3-button" onclick="resetPasswordDropFunc()">
-            Password settings <i class="fa fa-caret-down"></i>
-        </button>
-        <div id="resetPasswordDrop" class="w3-dropdown-content w3-bar-block w3-white w3-card">
-            <a th:href="@{/appUsers/userResetPassword/}" class="w3-bar-item w3-button">Reset password</a>
+<div class="w3-sidebar w3-bar-block" style="display:none;z-index:5; height: 100%; position: fixed; bottom: 0; left: 0;"
+     id="mySidebar">
+    <div class="sidebar-top">
+        <button onclick="w3_close()" class="w3-bar-item w3-large">Zatvori &times;</button>
+        <a th:href="@{/index}" class="w3-bar-item w3-button">Glavni izbornik</a>
+        <a th:href="@{/racun/all}" class="w3-bar-item w3-button">Računi/Dokumenti</a>
+        <a th:href="@{/file/all}" class="w3-bar-item w3-button">Datoteke</a>
+        <a th:href="@{/lokacija/all}" class="w3-bar-item w3-button">Lokacije</a>
+        <a th:href="@{/vrstaUredaja/all}" class="w3-bar-item w3-button">Vrste sredstva</a>
+        <a th:href="@{/korisnik/all}" class="w3-bar-item w3-button">Korisnici</a>
+        <a th:href="@{/inventar/all}" class="w3-bar-item w3-button">Osnovna sredstva</a>
+        <a th:href="@{/inventarIT/all}" class="w3-bar-item w3-button">IT oprema</a>
+        <a th:href="@{/inventura/all}" class="w3-bar-item w3-button">Inventure</a>
+        <a th:href="@{/provodenjeInventure/all}" class="w3-bar-item w3-button">Izvršavanje inventure</a>
+        <a th:href="@{/appUsers/all}" class="w3-bar-item w3-button">App useri</a>
+        <div class="w3-dropdown-click">
+            <button class="w3-button" onclick="resetPasswordDropFunc()">
+                Password settings <i class="fa fa-caret-down"></i>
+            </button>
+            <div id="resetPasswordDrop" class="w3-hide w3-white w3-card">
+                <a th:href="@{/appUsers/userResetPassword/}" class="w3-bar-item w3-button">Reset password</a>
+            </div>
         </div>
     </div>
-    <div style="text-align: center; position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);">
+    <div class="sidebar-bottom">
         <img src="../images/A.jpg" alt="Logo" style="width: 175px; height: 175px;">
-        <button id="logout" type="button" onclick="window.location.href='/logout'" style="margin-top: 10px;">Logout</button>
+        <button id="logout" type="button" onclick="window.location.href='/logout'" style="margin-top: 10px;">Logout
+        </button>
     </div>
 </div>
 <div class="w3-overlay" onclick="w3_close()" style="cursor:pointer" id="myOverlay"></div>
@@ -65,7 +70,8 @@
 </div>
 <h1 class="w3-padding w3-center w3-opacity w3-xxxlarge" style="text-shadow:1px 1px 0 #444"><b>Razduženja</b></h1>
 <div class="w3-right">
-    <a th:href="@{/razduzenje/generatePDF}" style="margin-right: 20px" class="button-30">Izvještaj <i class="material-icons">picture_as_pdf</i></a>
+    <a th:href="@{/razduzenje/generatePDF}" style="margin-right: 20px" class="button-30">Izvještaj <i
+            class="material-icons">picture_as_pdf</i></a>
 </div>
 <div style="display: flex;">
     <form id="form1" class="w3-container w3-padding form" th:action="@{/razduzenje/find}" method="get">
@@ -75,8 +81,13 @@
                    onchange="this.setCustomValidity('')"
                    oninvalid="this.setCustomValidity('Popunite polje za pretraživanje!')">
             <div style="margin-top: 10px">
-                <button onclick="hidedivRazduzenje()" type="submit" class="button-small"><i class="fa fa-search" style="font-size:12px"></i> Pretraži</button>
-                <button type="button" class="button-small" onclick="window.location.href='/razduzenje/all'">Prikaži sve</button>
+                <button onclick="hidedivRazduzenje()" type="submit" class="button-small"><i class="fa fa-search"
+                                                                                            style="font-size:12px"></i>
+                    Pretraži
+                </button>
+                <button type="button" class="button-small" onclick="window.location.href='/razduzenje/all'">Prikaži
+                    sve
+                </button>
             </div>
         </div>
         <label id="error-message" class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>
@@ -92,7 +103,10 @@
                         th:text="${korisnik.firstName} + ' ' + ${korisnik.lastName}"></option>
             </select>
             <div style="margin-top: 17px">
-                <button onclick="hidedivRazduzenje()" type="submit" class="button-small"><i class="fa fa-search" style="font-size:12px"></i>Pretraži po korisniku</button>
+                <button onclick="hidedivRazduzenje()" type="submit" class="button-small"><i class="fa fa-search"
+                                                                                            style="font-size:12px"></i>Pretraži
+                    po korisniku
+                </button>
             </div>
         </div>
     </form>
@@ -124,21 +138,21 @@
                 <p th:unless="${razduzenje.inventar != null && razduzenje.inventar.inventarniBroj != null}">
                 </p>
             </td>
-<!--            <td><p th:text="${razduzenje.inventar.inventarniBroj}"></p></td>-->
+            <!--            <td><p th:text="${razduzenje.inventar.inventarniBroj}"></p></td>-->
             <td><p th:if="${razduzenje.inventar != null && razduzenje.inventar.nazivUredaja != null}">
                 <span th:text="${razduzenje.inventar.nazivUredaja}"></span>
             </p>
                 <p th:unless="${razduzenje.inventar != null && razduzenje.inventar.nazivUredaja != null}">
                 </p>
             </td>
-<!--            <td><p th:text="${razduzenje.inventar.nazivUredaja}"></p></td>-->
+            <!--            <td><p th:text="${razduzenje.inventar.nazivUredaja}"></p></td>-->
             <td><p th:if="${razduzenje.inventar != null && razduzenje.inventar.serijskiBroj != null}">
                 <span th:text="${razduzenje.inventar.serijskiBroj}"></span>
             </p>
                 <p th:unless="${razduzenje.inventar != null && razduzenje.inventar.serijskiBroj != null}">
                 </p>
             </td>
-<!--            <td><p th:text="${razduzenje.inventar.serijskiBroj}"></p></td>-->
+            <!--            <td><p th:text="${razduzenje.inventar.serijskiBroj}"></p></td>-->
             <td><p th:text="${razduzenje.hostname}"></p></td>
             <td><p th:text="${razduzenje.lokacija.nazivLokacije}"></p></td>
             <td><p th:if="${razduzenje.korisnik != null && razduzenje.korisnik.username != null}">
@@ -148,7 +162,7 @@
                 <p th:unless="${razduzenje.korisnik != null && razduzenje.korisnik.username != null}">
                 </p>
             </td>
-<!--            <td><p th:text="${razduzenje.korisnik.firstName} + ' ' + ${razduzenje.korisnik.lastName}"></p></td>-->
+            <!--            <td><p th:text="${razduzenje.korisnik.firstName} + ' ' + ${razduzenje.korisnik.lastName}"></p></td>-->
             <td><p th:text="${razduzenje.datumZaduzenja}"></p></td>
             <td><p th:text="${razduzenje.datumRazduzenja}"></p></td>
             <td><p th:text="${razduzenje.napomena}"></p></td>

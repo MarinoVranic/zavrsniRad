@@ -6,9 +6,11 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 <script type="text/javascript" src="../static/javascript/sidebar.js" th:src="@{/javascript/sidebar.js}"></script>
-<script type="text/javascript" src="../static/javascript/hidedivLokacija.js" th:src="@{/javascript/hidedivLokacija.js}"></script>
+<script type="text/javascript" src="../static/javascript/hidedivLokacija.js"
+        th:src="@{/javascript/hidedivLokacija.js}"></script>
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lokacije</title>
 </head>
 <style>
@@ -31,7 +33,7 @@
 <body>
 <div class="w3-sidebar w3-bar-block" style="display:none;z-index:5; height: 100%; position: fixed; bottom: 0; left: 0;"
      id="mySidebar">
-    <div style="flex: 1;">
+    <div class="sidebar-top">
         <button onclick="w3_close()" class="w3-bar-item w3-large">Zatvori &times;</button>
         <a th:href="@{/index}" class="w3-bar-item w3-button">Glavni izbornik</a>
         <a th:href="@{/racun/all}" class="w3-bar-item w3-button">Računi/Dokumenti</a>
@@ -45,18 +47,19 @@
         <a th:href="@{/inventura/all}" class="w3-bar-item w3-button">Inventure</a>
         <a th:href="@{/provodenjeInventure/all}" class="w3-bar-item w3-button">Izvršavanje inventure</a>
         <a th:href="@{/appUsers/all}" class="w3-bar-item w3-button">App useri</a>
-    </div>
-    <div class="w3-dropdown-click">
-        <button class="w3-button" onclick="resetPasswordDropFunc()">
-            Password settings <i class="fa fa-caret-down"></i>
-        </button>
-        <div id="resetPasswordDrop" class="w3-dropdown-content w3-bar-block w3-white w3-card">
-            <a th:href="@{/appUsers/userResetPassword/}" class="w3-bar-item w3-button">Reset password</a>
+        <div class="w3-dropdown-click">
+            <button class="w3-button" onclick="resetPasswordDropFunc()">
+                Password settings <i class="fa fa-caret-down"></i>
+            </button>
+            <div id="resetPasswordDrop" class="w3-hide w3-white w3-card">
+                <a th:href="@{/appUsers/userResetPassword/}" class="w3-bar-item w3-button">Reset password</a>
+            </div>
         </div>
     </div>
-    <div style="text-align: center; position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);">
+    <div class="sidebar-bottom">
         <img src="../images/A.jpg" alt="Logo" style="width: 175px; height: 175px;">
-        <button id="logout" type="button" onclick="window.location.href='/logout'" style="margin-top: 10px;">Logout</button>
+        <button id="logout" type="button" onclick="window.location.href='/logout'" style="margin-top: 10px;">Logout
+        </button>
     </div>
 </div>
 <div class="w3-overlay" onclick="w3_close()" style="cursor:pointer" id="myOverlay"></div>
@@ -75,7 +78,9 @@
 <form class="w3-container" th:action="@{/lokacija/find}" method="get" style="margin-bottom: 20px">
     <input type="text" id="nazivLokacije" name="nazivLokacije" placeholder="Pretraži lokaciju po nazivu" required
            onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Popunite polje za pretraživanje!')">
-    <button onclick="hidedivLokacija()" type="submit" class="button-30"><i class="fa fa-search" style="font-size:20px"></i> Pretraži</button>
+    <button onclick="hidedivLokacija()" type="submit" class="button-30"><i class="fa fa-search"
+                                                                           style="font-size:20px"></i> Pretraži
+    </button>
     <button type="button" class="button-30" onclick="window.location.href='/lokacija/all'">Prikaži sve</button>
     <label id="error-message" class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>
 </form>

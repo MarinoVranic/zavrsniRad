@@ -2,6 +2,7 @@ package com.vranic.zavrsnirad.repository;
 
 import com.vranic.zavrsnirad.model.Inventar;
 import com.vranic.zavrsnirad.model.InventarNaInventuri;
+import jakarta.persistence.SqlResultSetMapping;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -61,9 +62,15 @@ public interface InventarNaInventuriRepository extends JpaRepository<InventarNaI
     @Query(value = "UPDATE inventar_na_inventuri ini SET ini.otpis = :otpis WHERE ini.id_skeniranja = :idSkeniranja", nativeQuery = true)
     void changeOtpis(@Param("otpis") String otpis, @Param("idSkeniranja") Long idSkeniranja);
 
-    @Query(value = "SELECT inventar FROM Inventar inventar LEFT JOIN InventarNaInventuri ini ON inventar.inventarniBroj = ini.inventar.inventarniBroj AND ini.inventura.idInventure = :idInventure WHERE ini.inventar.inventarniBroj IS NULL AND inventar.inventarniBroj NOT LIKE 'SI%'")
+//    @Query(value = "SELECT inventar FROM Inventar inventar LEFT JOIN InventarNaInventuri ini ON inventar.inventarniBroj = ini.inventar.inventarniBroj AND ini.inventura.idInventure = :idInventure WHERE ini.inventar.inventarniBroj IS NULL AND inventar.inventarniBroj NOT LIKE 'SI%'")
+//    List<Inventar> reportOSByInventuraAndNotFound(@Param("idInventure") Long idInventure);
+
+    @Query(name = "Inventar.reportOSByInventuraAndNotFound", nativeQuery = true)
     List<Inventar> reportOSByInventuraAndNotFound(@Param("idInventure") Long idInventure);
 
-    @Query(value = "SELECT inventar FROM Inventar inventar LEFT JOIN InventarNaInventuri ini ON inventar.inventarniBroj = ini.inventar.inventarniBroj AND ini.inventura.idInventure = :idInventure WHERE ini.inventar.inventarniBroj IS NULL AND inventar.inventarniBroj LIKE 'SI%'")
+//    @Query(value = "SELECT inventar FROM Inventar inventar LEFT JOIN InventarNaInventuri ini ON inventar.inventarniBroj = ini.inventar.inventarniBroj AND ini.inventura.idInventure = :idInventure WHERE ini.inventar.inventarniBroj IS NULL AND inventar.inventarniBroj LIKE 'SI%'")
+//    List<Inventar> reportSIByInventuraAndNotFound(@Param("idInventure") Long idInventure);
+
+    @Query(name = "Inventar.reportSIByInventuraAndNotFound", nativeQuery = true)
     List<Inventar> reportSIByInventuraAndNotFound(@Param("idInventure") Long idInventure);
 }
