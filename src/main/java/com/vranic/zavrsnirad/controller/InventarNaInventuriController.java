@@ -469,8 +469,8 @@ public class InventarNaInventuriController {
                 model.addAttribute("allLokacija", allLokacija);
                 model.addAttribute("savInvNaInventuri", inventarNaInventuriList);
             } else if (isFound.equals("Nepronađeno")) {
+                System.out.println(idInventure);
                 List<Inventar> inventarList = inventarNaInventuriService.reportOSByInventuraAndNotFound(idInventure);
-//                System.out.println(inventarList);
                 model.addAttribute("allInventura", allInventura);
                 model.addAttribute("allLokacija", allLokacija);
                 model.addAttribute("savInventar", inventarList);
@@ -610,7 +610,6 @@ public class InventarNaInventuriController {
                     } else {
                         dataCell.setPhrase(new Phrase(inventar.getInventar().getLokacija().getNazivLokacije(), croatianFont));
                     }
-//                    dataCell.setPhrase(new Phrase(inventar.getInventar().getLokacija().getNazivLokacije(), croatianFont));
                     table.addCell(cell);
                     dataCell.setPhrase(new Phrase(inventar.getLokacija().getNazivLokacije(), croatianFont));
                     table.addCell(dataCell);
@@ -658,7 +657,6 @@ public class InventarNaInventuriController {
                     table.addCell(dataCell);
                     dataCell.setPhrase(new Phrase(inventar.getInventar().getVrstaUredaja().getNazivVrsteUredaja(), croatianFont));
                     table.addCell(dataCell);
-//                    dataCell.setPhrase(new Phrase(inventar.getDatumSkeniranja().toString(), croatianFont));
                     dataCell.setPhrase(new Phrase(inventar.getDatumSkeniranja().toLocalDate().toString() + " " + inventar.getDatumSkeniranja().toLocalTime().toString(), croatianFont));
                     table.addCell(dataCell);
                     dataCell.setPhrase(new Phrase(inventar.getInventar().getLokacija().getNazivLokacije(), croatianFont));
@@ -809,15 +807,20 @@ public class InventarNaInventuriController {
                         dataCell.setPhrase(new Phrase("", croatianFont));
                         table.addCell(dataCell);
                     }
-                    dataCell.setPhrase(new Phrase(inventar.getLokacija().getNazivLokacije(), croatianFont));
-                    table.addCell(dataCell);
+                    if(inventar.getLokacija() != null){
+                        dataCell.setPhrase(new Phrase(inventar.getLokacija().getNazivLokacije(), croatianFont));
+                        table.addCell(dataCell);
+                    } else {
+                        dataCell.setPhrase(new Phrase("", croatianFont));
+                        table.addCell(dataCell);
+                    }
                     if(inventar.getNabavnaVrijednost() == null){
                         dataCell.setPhrase(new Phrase(" EUR", croatianFont));
+                        table.addCell(dataCell);
                     } else {
                         dataCell.setPhrase(new Phrase(inventar.getNabavnaVrijednost().toString() + " EUR", croatianFont));
+                        table.addCell(dataCell);
                     }
-//                    dataCell.setPhrase(new Phrase(inventar.getNabavnaVrijednost().toString() + " EUR", croatianFont));
-                    table.addCell(dataCell);
                 }
 
                 // Add the table to the document
@@ -843,7 +846,7 @@ public class InventarNaInventuriController {
 
                 // Calculate the coordinates to position the image at the bottom
                 float x = (pageWidth - desiredWidth) / 2; // Centered horizontally
-                float y = image.getScaledHeight() + document.bottomMargin(); // Position from the bottom
+                float y = document.bottomMargin() - image.getScaledHeight(); // Position from the bottom
 
                 image.setAbsolutePosition(x, y);
                 document.add(image);
@@ -867,10 +870,20 @@ public class InventarNaInventuriController {
                         dataCell.setPhrase(new Phrase("", croatianFont));
                         table.addCell(dataCell);
                     }
-                    dataCell.setPhrase(new Phrase(inventar.getLokacija().getNazivLokacije(), croatianFont));
-                    table.addCell(dataCell);
-                    dataCell.setPhrase(new Phrase(inventar.getNabavnaVrijednost().toString() + " EUR", croatianFont));
-                    table.addCell(dataCell);
+                    if(inventar.getLokacija() != null){
+                        dataCell.setPhrase(new Phrase(inventar.getLokacija().getNazivLokacije(), croatianFont));
+                        table.addCell(dataCell);
+                    } else {
+                        dataCell.setPhrase(new Phrase("", croatianFont));
+                        table.addCell(dataCell);
+                    }
+                    if(inventar.getNabavnaVrijednost() != null){
+                        dataCell.setPhrase(new Phrase(inventar.getNabavnaVrijednost().toString() + " EUR", croatianFont));
+                        table.addCell(dataCell);
+                    } else {
+                        dataCell.setPhrase(new Phrase("", croatianFont));
+                        table.addCell(dataCell);
+                    }
                 }
 
                 // Add the table to the document
@@ -896,7 +909,7 @@ public class InventarNaInventuriController {
 
                 // Calculate the coordinates to position the image at the bottom
                 float x = (pageWidth - desiredWidth) / 2; // Centered horizontally
-                float y = image.getScaledHeight() + document.bottomMargin(); // Position from the bottom
+                float y = document.bottomMargin() - image.getScaledHeight(); // Position from the bottom
 
                 image.setAbsolutePosition(x, y);
                 document.add(image);

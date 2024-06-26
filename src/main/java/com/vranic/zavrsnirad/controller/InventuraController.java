@@ -35,13 +35,6 @@ public class InventuraController {
         return getViewBasedOnRole(auth);
     }
 
-//    @GetMapping("/update/{id}")
-//    public String updateInventura(@PathVariable(value = "id") Long id, Model model){
-//        Inventura inventura = inventuraService.getInventuraById(id);
-//        model.addAttribute("inventura", inventura);
-//        return "inventura/updateInventura";
-//    }
-
     @GetMapping("/addNew")
     public String addNewInventura(Model model){
         Inventura inventura = new Inventura();
@@ -59,16 +52,6 @@ public class InventuraController {
         }
         return "redirect:/inventura/all";
     }
-
-//    @PostMapping("/save")
-//    public String saveInventura(@ModelAttribute("inventura") Inventura inventura, Model model){
-//        if(inventuraService.checkIfInventuraIsExisting(inventura.getIdInventure())!=0){
-//            model.addAttribute("error", "Inventura već postoji!");
-//            return "inventura/updateInventura";
-//        }
-//        inventuraService.save(inventura);
-//        return "redirect:/inventura/all";
-//    }
 
     @GetMapping("delete/{id}")
     public String deleteById(@PathVariable(value = "id") Long id){

@@ -13,7 +13,7 @@ public class CsvGeneratorUtil {
 
     @Autowired
     private InventarNaInventuriService inventarNaInventuriService;
-        private static final String CSV_HEADER_FOUND = "Inventura,Skenirani inventar,Naziv inventara,Vrsta inventara,Datum skeniranja\n";
+        private static final String CSV_HEADER_FOUND = "Inventura;Skenirani inventar;Naziv inventara;Vrsta inventara;Datum skeniranja;Upisana lokacija inventara;Skenirana lokacija inventara\n";
         private static final String CSV_HEADER_NOT_FOUND = "Inventarni broj;Naziv osnovnog sredstva;Vrsta osnovnog sredstva;Zaduženo na;Upisana lokacija osnovnog sredstva;Nabavna vrijednost\n";
 
         public String generateCsv(Long idInventure, String isFound, String tipInventara) {
@@ -25,11 +25,14 @@ public class CsvGeneratorUtil {
                     csvContent.append(CSV_HEADER_FOUND);
 
                     for (InventarNaInventuri inventarNaInventuri : inventarNaInventuriList) {
-                        csvContent.append(inventarNaInventuri.getInventura().getIdInventure().toString()).append(",")
-                                .append(inventarNaInventuri.getInventar().getInventarniBroj()).append(",")
-                                .append(inventarNaInventuri.getInventar().getNazivUredaja()).append(",")
-                                .append(inventarNaInventuri.getInventar().getVrstaUredaja().getNazivVrsteUredaja()).append(",")
-                                .append(inventarNaInventuri.getDatumSkeniranja().toLocalDate() + " " + inventarNaInventuri.getDatumSkeniranja().toLocalTime()).append("\n");
+                        csvContent.append(inventarNaInventuri.getInventura().getIdInventure().toString()).append(";")
+                                .append(inventarNaInventuri.getInventar().getInventarniBroj()).append(";")
+                                .append(inventarNaInventuri.getInventar().getNazivUredaja()).append(";")
+                                .append(inventarNaInventuri.getInventar().getVrstaUredaja().getNazivVrsteUredaja()).append(";")
+                                .append(inventarNaInventuri.getDatumSkeniranja().toLocalDate() + " " + inventarNaInventuri.getDatumSkeniranja().toLocalTime()).append(";")
+                                .append(inventarNaInventuri.getInventar().getLokacija().getNazivLokacije()).append(";")
+                                .append(inventarNaInventuri.getLokacija().getNazivLokacije()).append(";")
+                                .append("\n");
                     }
 
                     return csvContent.toString();
@@ -59,11 +62,14 @@ public class CsvGeneratorUtil {
                     csvContent.append(CSV_HEADER_FOUND);
 
                     for (InventarNaInventuri inventarNaInventuri : inventarNaInventuriList) {
-                        csvContent.append(inventarNaInventuri.getInventura().getIdInventure().toString()).append(",")
-                                .append(inventarNaInventuri.getInventar().getInventarniBroj()).append(",")
-                                .append(inventarNaInventuri.getInventar().getNazivUredaja()).append(",")
-                                .append(inventarNaInventuri.getInventar().getVrstaUredaja().getNazivVrsteUredaja()).append(",")
-                                .append(inventarNaInventuri.getDatumSkeniranja().toLocalDate() + " " + inventarNaInventuri.getDatumSkeniranja().toLocalTime()).append("\n");
+                        csvContent.append(inventarNaInventuri.getInventura().getIdInventure().toString()).append(";")
+                                .append(inventarNaInventuri.getInventar().getInventarniBroj()).append(";")
+                                .append(inventarNaInventuri.getInventar().getNazivUredaja()).append(";")
+                                .append(inventarNaInventuri.getInventar().getVrstaUredaja().getNazivVrsteUredaja()).append(";")
+                                .append(inventarNaInventuri.getDatumSkeniranja().toLocalDate() + " " + inventarNaInventuri.getDatumSkeniranja().toLocalTime()).append(";")
+                                .append(inventarNaInventuri.getInventar().getLokacija().getNazivLokacije()).append(";")
+                                .append(inventarNaInventuri.getLokacija().getNazivLokacije()).append(";")
+                                .append("\n");
                     }
                     return csvContent.toString();
                 } else if (isFound.equals("Nepronađeno")){

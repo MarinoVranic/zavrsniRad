@@ -273,11 +273,27 @@ public class InventarITController {
             String firstPartOfHostname = nazivUredaja[0];
             String secondPartOfHostname = inventar.getKorisnik().getUsername();
             String hostname = firstPartOfHostname+"-"+secondPartOfHostname;
-            inventarService.zaduziInventar(hostname, inventar.getLokacija().getIdLokacije(), inventar.getKorisnik().getUsername(),
-                    today, inventar.getInventarniBroj());
+            if(inventar.getDatumZaduzenja()!=null)
+            {
+                inventarService.zaduziInventar(hostname, inventar.getLokacija().getIdLokacije(), inventar.getKorisnik().getUsername(),
+                        inventar.getDatumZaduzenja(), inventar.getInventarniBroj());
+
+            } else {
+                LocalDate datumZaduzenja = today;
+                inventarService.zaduziInventar(hostname, inventar.getLokacija().getIdLokacije(), inventar.getKorisnik().getUsername(),
+                        datumZaduzenja, inventar.getInventarniBroj());
+            }
         }else {
-            inventarService.zaduziInventar(inventar.getHostname(), inventar.getLokacija().getIdLokacije(), inventar.getKorisnik().getUsername(),
-                    today, inventar.getInventarniBroj());
+            if(inventar.getDatumZaduzenja()!=null)
+            {
+                inventarService.zaduziInventar(inventar.getHostname(), inventar.getLokacija().getIdLokacije(), inventar.getKorisnik().getUsername(),
+                        inventar.getDatumZaduzenja(), inventar.getInventarniBroj());
+
+            } else {
+                LocalDate datumZaduzenja = today;
+                inventarService.zaduziInventar(inventar.getHostname(), inventar.getLokacija().getIdLokacije(), inventar.getKorisnik().getUsername(),
+                        datumZaduzenja, inventar.getInventarniBroj());
+            }
         }
         return "redirect:/inventarIT/all";
     }
@@ -578,7 +594,8 @@ public class InventarITController {
         table.addCell(headerCell);
 
         // Get the list of Inventar objects from service
-        List<Inventar> inventari = inventarService.getAllInventar();
+//        List<Inventar> inventari = inventarService.getAllInventar();
+        List<Inventar> inventari = inventarService.getInventarForIT();
 
         // Add data cells to the table
         for (Inventar inventar : inventari) {

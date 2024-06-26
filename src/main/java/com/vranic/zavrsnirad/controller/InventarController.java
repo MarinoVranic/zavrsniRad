@@ -539,7 +539,7 @@ public class InventarController {
             table.addCell(cell);
             setCellContentAndFont(cell, inventar.getNazivUredaja(), croatianFont);
             table.addCell(cell);
-            if(inventar.getNazivUredaja() == null){
+            if(inventar.getSerijskiBroj() == null){
                 setCellContentAndFont(cell, "", croatianFont);
             } else {
                 setCellContentAndFont(cell, inventar.getSerijskiBroj(), croatianFont);
@@ -547,14 +547,17 @@ public class InventarController {
             table.addCell(cell);
             setCellContentAndFont(cell, inventar.getVrstaUredaja().getNazivVrsteUredaja(), croatianFont);
             table.addCell(cell);
-            setCellContentAndFont(cell, inventar.getLokacija().getNazivLokacije(), croatianFont);
+            if(inventar.getLokacija() == null){
+                setCellContentAndFont(cell, "", croatianFont);
+            } else {
+                setCellContentAndFont(cell, inventar.getLokacija().getNazivLokacije(), croatianFont);
+            }
             table.addCell(cell);
             Korisnik korisnik = inventar.getKorisnik();
             if(korisnik != null && korisnik.getUsername() != null){
                 setCellContentAndFont(cell, korisnik.getFirstName() + " " + korisnik.getLastName(), croatianFont);
             } else {
                 setCellContentAndFont(cell, "", croatianFont);
-
             }
             table.addCell(cell);
             if(inventar.getRacun() == null){
@@ -602,7 +605,7 @@ public class InventarController {
 
         // Calculate the coordinates to position the image at the bottom
         float x = (pageWidth - desiredWidth) / 2; // Centered horizontally
-        float y = image.getScaledHeight() + document.bottomMargin(); // Position from the bottom
+        float y = document.bottomMargin() - image.getScaledHeight(); // Position from the bottom
 
         image.setAbsolutePosition(x, y);
         document.add(image);

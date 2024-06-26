@@ -95,6 +95,7 @@ public class KorisnikController {
         String usernameFirstChar = korisnik.getUsername().substring(0,1).toUpperCase();
         String usernameSecondChar = korisnik.getUsername().substring(1,2).toUpperCase();
         String year = Integer.toString(today.getYear());
+        System.out.println(today);
         if(bindingResult.hasErrors()){
             return "korisnik/newKorisnik";
         } else if (korisnikService.checkIfUsernameIsFree(korisnik.getUsername())!=0) {

@@ -236,11 +236,23 @@ public class RacunController {
         for (Racun racun : racuni) {
             dataCell.setPhrase(new Phrase(String.valueOf(racun.getIdRacuna()), croatianFont));
             table.addCell(dataCell);
-            dataCell.setPhrase(new Phrase(racun.getBrojRacuna(), croatianFont));
+            if(racun.getBrojRacuna() == null){
+                dataCell.setPhrase(new Phrase("", croatianFont));
+            } else {
+                dataCell.setPhrase(new Phrase(racun.getBrojRacuna(), croatianFont));
+            }
             table.addCell(dataCell);
-            dataCell.setPhrase(new Phrase(racun.getBrojUre(), croatianFont));
+            if(racun.getBrojUre() == null){
+                dataCell.setPhrase(new Phrase("", croatianFont));
+            } else {
+                dataCell.setPhrase(new Phrase(racun.getBrojUre(), croatianFont));
+            }
             table.addCell(dataCell);
-            dataCell.setPhrase(new Phrase(String.valueOf(racun.getDatumRacuna()), croatianFont));
+            if(racun.getDatumRacuna() == null){
+                dataCell.setPhrase(new Phrase("", croatianFont));
+            } else {
+                dataCell.setPhrase(new Phrase(String.valueOf(racun.getDatumRacuna()), croatianFont));
+            }
             table.addCell(dataCell);
         }
 
@@ -267,7 +279,7 @@ public class RacunController {
 
         // Calculate the coordinates to position the image at the bottom
         float x = (pageWidth - desiredWidth) / 2; // Centered horizontally
-        float y = image.getScaledHeight() + document.bottomMargin(); // Position from the bottom
+        float y = document.bottomMargin() - image.getScaledHeight(); // Position from the bottom
 
         image.setAbsolutePosition(x, y);
         document.add(image);
