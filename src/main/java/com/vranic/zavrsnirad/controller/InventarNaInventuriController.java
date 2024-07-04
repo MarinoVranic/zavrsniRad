@@ -555,7 +555,7 @@ public class InventarNaInventuriController {
             printDate.setSpacingAfter(5);
             document.add(printDate);
 
-            // Create a table with 15 columns
+            // Create a table with 7 columns
             PdfPTable table = new PdfPTable(7);
 
             // Set the table width as a percentage of the available page width
@@ -758,8 +758,8 @@ public class InventarNaInventuriController {
             printDate.setSpacingAfter(5);
             document.add(printDate);
 
-            // Create a table with 15 columns
-            PdfPTable table = new PdfPTable(6);
+            // Create a table with 7 columns
+            PdfPTable table = new PdfPTable(7);
 
             // Set the table width as a percentage of the available page width
             table.setWidthPercentage(100);
@@ -783,6 +783,8 @@ public class InventarNaInventuriController {
             table.addCell(headerCell);
             headerCell.setPhrase(new Phrase("Vrsta osnovnog sredstva", headerFont));
             table.addCell(headerCell);
+            headerCell.setPhrase(new Phrase("Serijski broj", headerFont));
+            table.addCell(headerCell);
             headerCell.setPhrase(new Phrase("Zaduženo na", headerFont));
             table.addCell(headerCell);
             headerCell.setPhrase(new Phrase("Upisana lokacija osnovnog sredstva", headerFont));
@@ -799,6 +801,8 @@ public class InventarNaInventuriController {
                     dataCell.setPhrase(new Phrase(inventar.getNazivUredaja(), croatianFont));
                     table.addCell(dataCell);
                     dataCell.setPhrase(new Phrase(inventar.getVrstaUredaja().getNazivVrsteUredaja(), croatianFont));
+                    table.addCell(dataCell);
+                    dataCell.setPhrase(new Phrase(inventar.getSerijskiBroj(), croatianFont));
                     table.addCell(dataCell);
                     if(inventar.getKorisnik() != null){
                         dataCell.setPhrase(new Phrase(inventar.getKorisnik().getFirstName() + " " + inventar.getKorisnik().getLastName(), croatianFont));
@@ -862,6 +866,8 @@ public class InventarNaInventuriController {
                     dataCell.setPhrase(new Phrase(inventar.getNazivUredaja(), croatianFont));
                     table.addCell(dataCell);
                     dataCell.setPhrase(new Phrase(inventar.getVrstaUredaja().getNazivVrsteUredaja(), croatianFont));
+                    table.addCell(dataCell);
+                    dataCell.setPhrase(new Phrase(inventar.getSerijskiBroj(), croatianFont));
                     table.addCell(dataCell);
                     if(inventar.getKorisnik() != null){
                         dataCell.setPhrase(new Phrase(inventar.getKorisnik().getFirstName() + " " + inventar.getKorisnik().getLastName(), croatianFont));
