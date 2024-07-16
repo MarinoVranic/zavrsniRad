@@ -27,7 +27,7 @@ public class RazduzenjeController {
     private KorisnikService korisnikService;
 
     @GetMapping("/all")
-    public String getAllRazduzenje(Model model){
+    public String getAllRazduzenje(Model model) throws Exception {
         model.addAttribute("svaRazduzenja", razduzenjeService.getAllRazduzenje());
         model.addAttribute("allKorisnik", korisnikService.getAllKorisnik());
         return "razduzenje/razduzenje";
@@ -40,7 +40,7 @@ public class RazduzenjeController {
     }
 
     @GetMapping("/find")
-    public String findRazduzenjeByInventarniBroj(@RequestParam("inventarniBroj") String inventarniBroj, Model model) {
+    public String findRazduzenjeByInventarniBroj(@RequestParam("inventarniBroj") String inventarniBroj, Model model) throws Exception {
         List<Razduzenje> razduzenjeList = razduzenjeService.getAllByInventarniBroj(inventarniBroj);
         if (razduzenjeList.isEmpty()) {
             model.addAttribute("error", "Inventar pod tim brojem ne postoji u sustavu!");
@@ -56,7 +56,7 @@ public class RazduzenjeController {
     }
 
     @GetMapping("/findByUser")
-    public String showRazduzenjaByUser(@RequestParam("username") String username, Model model) {
+    public String showRazduzenjaByUser(@RequestParam("username") String username, Model model) throws Exception {
         List<Korisnik> allKorisnik = korisnikService.getAllKorisnik();
         List<Razduzenje> razduzenjeList = razduzenjeService.getAllByUser(username);
         model.addAttribute("allKorisnik", allKorisnik);

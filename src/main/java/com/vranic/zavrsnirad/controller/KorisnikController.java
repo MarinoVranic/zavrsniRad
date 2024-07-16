@@ -5,7 +5,6 @@ import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.vranic.zavrsnirad.model.Inventar;
 import com.vranic.zavrsnirad.model.Korisnik;
 import com.vranic.zavrsnirad.service.KorisnikService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -14,6 +13,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -22,6 +22,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
@@ -44,21 +45,21 @@ public class KorisnikController {
     }
 
     @GetMapping("/all")
-    public String getAllKorisnik(Model model){
+    public String getAllKorisnik(Model model) throws Exception {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         model.addAttribute("sviKorisnici", korisnikService.getAllKorisnik());
         return getViewBasedOnRole(auth);
     }
 
     @GetMapping("/active")
-    public String getAllActiveKorisnik(Model model){
+    public String getAllActiveKorisnik(Model model) throws Exception {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         model.addAttribute("sviKorisnici", korisnikService.getAllActiveKorisnik());
         return getViewBasedOnRole(auth);
     }
 
     @GetMapping("/inactive")
-    public String getAllInactiveKorisnik(Model model){
+    public String getAllInactiveKorisnik(Model model) throws Exception {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         model.addAttribute("sviKorisnici", korisnikService.getAllInactiveKorisnik());
         return getViewBasedOnRole(auth);
@@ -70,7 +71,7 @@ public class KorisnikController {
     }
 
     @GetMapping("/update/{username}")
-    public String updateKorisnik(@PathVariable(value = "username") String username, Model model){
+    public String updateKorisnik(@PathVariable(value = "username") String username, Model model) throws Exception{
         Korisnik korisnik = korisnikService.getKorisnikById(username);
         model.addAttribute("korisnik", korisnik);
         return "korisnik/updateKorisnik";
@@ -83,7 +84,7 @@ public class KorisnikController {
     }
 
     @GetMapping("/addNew")
-    public String addNewKorisnik(Model model){
+    public String addNewKorisnik(Model model) throws Exception{
         Korisnik korisnik = new Korisnik();
         model.addAttribute("korisnik", korisnik);
         return "korisnik/newKorisnik";
@@ -91,7 +92,7 @@ public class KorisnikController {
 
 
     @PostMapping("/addNew")
-    public String addKorisnik(@ModelAttribute("korisnik") @Valid Korisnik korisnik, BindingResult bindingResult, Model model){
+    public String addKorisnik(@ModelAttribute("korisnik") @Valid Korisnik korisnik, BindingResult bindingResult, Model model) throws Exception{
         String usernameFirstChar = korisnik.getUsername().substring(0,1).toUpperCase();
         String usernameSecondChar = korisnik.getUsername().substring(1,2).toUpperCase();
         String year = Integer.toString(today.getYear());
@@ -150,7 +151,7 @@ public class KorisnikController {
     }
 
     @PostMapping("/save")
-    public String saveKorisnik(@ModelAttribute("korisnik") @Valid Korisnik korisnik, BindingResult bindingResult){
+    public String saveKorisnik(@ModelAttribute("korisnik") @Valid Korisnik korisnik, BindingResult bindingResult) throws Exception{
         if(bindingResult.hasErrors()){
             return "korisnik/updateKorisnik";
         }
@@ -160,13 +161,13 @@ public class KorisnikController {
 
     @GetMapping("deactivate/{username}")
     @Transactional
-    public String deactivateKorisnik(@PathVariable(value = "username")String username){
+    public String deactivateKorisnik(@PathVariable(value = "username")String username) throws Exception {
         korisnikService.deactivateKorisnik(today, today, username);
         return "redirect:/korisnik/all";
     }
 
     @GetMapping("/find")
-    public String findKorisnikByLastName(@RequestParam("lastName") String lastName, Model model) {
+    public String findKorisnikByLastName(@RequestParam("lastName") String lastName, Model model) throws Exception {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         List<Korisnik> korisnikList = korisnikService.findKorisnikByLastName(lastName);
         if (korisnikList.isEmpty()) {
@@ -179,7 +180,7 @@ public class KorisnikController {
     }
 
     @GetMapping("/findByFirstName")
-    public String findKorisnikByFirstName(@RequestParam("firstName") String firstName, Model model) {
+    public String findKorisnikByFirstName(@RequestParam("firstName") String firstName, Model model) throws Exception {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         List<Korisnik> korisnikList = korisnikService.findKorisnikByFirstName(firstName);
         if (korisnikList.isEmpty()) {
@@ -192,7 +193,7 @@ public class KorisnikController {
     }
 
     @GetMapping("/findBySubcontractor")
-    public String findKorisnikBySubcontractor(@RequestParam("subcontractor") String subcontractor, Model model) {
+    public String findKorisnikBySubcontractor(@RequestParam("subcontractor") String subcontractor, Model model) throws Exception {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         List<Korisnik> korisnikList = korisnikService.findKorisnikByPoslodavac(subcontractor);
         if (korisnikList.isEmpty()) {
@@ -205,16 +206,18 @@ public class KorisnikController {
     }
 
     @GetMapping("/generatePDFaktivni")
-    public void generatePDF(HttpServletResponse response) throws IOException, DocumentException {
+    public ResponseEntity<byte[]> generatePDF(HttpServletResponse response) throws Exception {
         // Set the content type and attachment header
-        response.setContentType("application/pdf");
-        response.setHeader("Content-Disposition", "attachment; filename=\"korisnici-izvjestaj-aktivni.pdf\"");
+//        response.setContentType("application/pdf");
+//        response.setHeader("Content-Disposition", "attachment; filename=\"korisnici-izvjestaj-aktivni.pdf\"");
 
         // Create a new PDF document
         Document document = new Document(PageSize.A4.rotate());
 
         // Create a PdfWriter instance to write the document to the response output stream
-        PdfWriter.getInstance(document, response.getOutputStream());
+//        PdfWriter.getInstance(document, response.getOutputStream());
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        PdfWriter.getInstance(document, baos);
 
         // Open the document
         document.open();
@@ -231,7 +234,7 @@ public class KorisnikController {
         Font croatianFont = FontFactory.getFont(arialNormal, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 
         // Set image and it's size
-        String imagePath2 = "static/images/Aitac Logo Blue Background HiRes.jpg"; // Relative path to the image file
+        String imagePath2 = "static/images/AitacLogoBlueBackgroundHiRes.jpg"; // Relative path to the image file
         Resource resource2 = new ClassPathResource(imagePath2);
         Image image2 = Image.getInstance(resource2.getURL());
         float desiredWidthInCm2 = 5f;
@@ -269,8 +272,10 @@ public class KorisnikController {
         printDate.setSpacingAfter(5);
         document.add(printDate);
 
+//        // Create a table with 14 columns
+//        PdfPTable table = new PdfPTable(14);
         // Create a table with 14 columns
-        PdfPTable table = new PdfPTable(14);
+        PdfPTable table = new PdfPTable(11);
 
         // Set the table width as a percentage of the available page width
         table.setWidthPercentage(100);
@@ -294,8 +299,8 @@ public class KorisnikController {
         table.addCell(headerCell);
         headerCell.setPhrase(new Phrase("Prezime", headerFont));
         table.addCell(headerCell);
-        headerCell.setPhrase(new Phrase("Status", headerFont));
-        table.addCell(headerCell);
+//        headerCell.setPhrase(new Phrase("Status", headerFont));
+//        table.addCell(headerCell);
         headerCell.setPhrase(new Phrase("Vrsta korisnika", headerFont));
         table.addCell(headerCell);
         headerCell.setPhrase(new Phrase("Poslodavac", headerFont));
@@ -308,12 +313,12 @@ public class KorisnikController {
         table.addCell(headerCell);
         headerCell.setPhrase(new Phrase("Korisnik aktiviran", headerFont));
         table.addCell(headerCell);
-        headerCell.setPhrase(new Phrase("Korisnik deaktiviran", headerFont));
-        table.addCell(headerCell);
+//        headerCell.setPhrase(new Phrase("Korisnik deaktiviran", headerFont));
+//        table.addCell(headerCell);
         headerCell.setPhrase(new Phrase("E-mail aktiviran", headerFont));
         table.addCell(headerCell);
-        headerCell.setPhrase(new Phrase("E-mail deaktiviran", headerFont));
-        table.addCell(headerCell);
+//        headerCell.setPhrase(new Phrase("E-mail deaktiviran", headerFont));
+//        table.addCell(headerCell);
         headerCell.setPhrase(new Phrase("Komentar", headerFont));
         table.addCell(headerCell);
 
@@ -328,8 +333,8 @@ public class KorisnikController {
             table.addCell(dataCell);
             dataCell.setPhrase(new Phrase(korisnik.getLastName(), croatianFont));
             table.addCell(dataCell);
-            dataCell.setPhrase(new Phrase(korisnik.getStatus(), croatianFont));
-            table.addCell(dataCell);
+//            dataCell.setPhrase(new Phrase(korisnik.getStatus(), croatianFont));
+//            table.addCell(dataCell);
             dataCell.setPhrase(new Phrase(korisnik.getAccountType(), croatianFont));
             table.addCell(dataCell);
             dataCell.setPhrase(new Phrase(korisnik.getSubcontractor(), croatianFont));
@@ -342,12 +347,12 @@ public class KorisnikController {
             table.addCell(dataCell);
             dataCell.setPhrase(new Phrase(String.valueOf(korisnik.getUserCreated()), croatianFont));
             table.addCell(dataCell);
-            dataCell.setPhrase(new Phrase(String.valueOf(korisnik.getUserDisabled()), croatianFont));
-            table.addCell(dataCell);
+//            dataCell.setPhrase(new Phrase(String.valueOf(korisnik.getUserDisabled()), croatianFont));
+//            table.addCell(dataCell);
             dataCell.setPhrase(new Phrase(String.valueOf(korisnik.getEmailCreated()), croatianFont));
             table.addCell(dataCell);
-            dataCell.setPhrase(new Phrase(String.valueOf(korisnik.getEmailDisabled()), croatianFont));
-            table.addCell(dataCell);
+//            dataCell.setPhrase(new Phrase(String.valueOf(korisnik.getEmailDisabled()), croatianFont));
+//            table.addCell(dataCell);
             dataCell.setPhrase(new Phrase(korisnik.getKomentar(), croatianFont));
             table.addCell(dataCell);
         }
@@ -375,25 +380,37 @@ public class KorisnikController {
 
         // Calculate the coordinates to position the image at the bottom
         float x = (pageWidth - desiredWidth) / 2; // Centered horizontally
-        float y = image.getScaledHeight() + document.bottomMargin(); // Position from the bottom
+        float y = document.bottomMargin() - image.getScaledHeight(); // Position from the bottom
 
         image.setAbsolutePosition(x, y);
         document.add(image);
         // Close the document
         document.close();
+        byte[] pdfContent = baos.toByteArray();
+        // Set HTTP headers for response
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDisposition(ContentDisposition.builder("attachment")
+                .filename("Korisnici-izvjestaj-aktivni.pdf")
+                .build());
+
+        // Return the PDF content as ResponseEntity
+        return new ResponseEntity<>(pdfContent, headers, HttpStatus.OK);
     }
 
     @GetMapping("/generatePDFneaktivni")
-    public void generatePDFneaktivni(HttpServletResponse response) throws IOException, DocumentException {
+    public ResponseEntity<byte[]> generatePDFneaktivni(HttpServletResponse response) throws Exception {
         // Set the content type and attachment header
-        response.setContentType("application/pdf");
-        response.setHeader("Content-Disposition", "attachment; filename=\"korisnici-izvjestaj-neaktivni.pdf\"");
+//        response.setContentType("application/pdf");
+//        response.setHeader("Content-Disposition", "attachment; filename=\"korisnici-izvjestaj-neaktivni.pdf\"");
 
         // Create a new PDF document
         Document document = new Document(PageSize.A4.rotate());
 
         // Create a PdfWriter instance to write the document to the response output stream
-        PdfWriter.getInstance(document, response.getOutputStream());
+//        PdfWriter.getInstance(document, response.getOutputStream());
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        PdfWriter.getInstance(document, baos);
 
         // Open the document
         document.open();
@@ -412,7 +429,7 @@ public class KorisnikController {
         BaseFont arialItalicFont = BaseFont.createFont(arialItalic, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 
         // Set image and it's size
-        String imagePath2 = "static/images/Aitac Logo Blue Background HiRes.jpg"; // Relative path to the image file
+        String imagePath2 = "static/images/AitacLogoBlueBackgroundHiRes.jpg"; // Relative path to the image file
         Resource resource2 = new ClassPathResource(imagePath2);
         Image image2 = Image.getInstance(resource2.getURL());
         float desiredWidthInCm2 = 5f;
@@ -529,7 +546,11 @@ public class KorisnikController {
             table.addCell(dataCell);
             setCellContentAndFont(dataCell, String.valueOf(korisnik.getEmailDisabled()), croatianFont);
             table.addCell(dataCell);
-            setCellContentAndFont(dataCell, korisnik.getKomentar(), croatianFont);
+            if(korisnik.getKomentar() != null){
+                setCellContentAndFont(dataCell, korisnik.getKomentar(), croatianFont);
+            } else {
+                setCellContentAndFont(dataCell, "", croatianFont);
+            }
             table.addCell(dataCell);
         }
 
@@ -556,16 +577,26 @@ public class KorisnikController {
 
         // Calculate the coordinates to position the image at the bottom
         float x = (pageWidth - desiredWidth) / 2; // Centered horizontally
-        float y = image.getScaledHeight() + document.bottomMargin(); // Position from the bottom
+        float y = document.bottomMargin() - image.getScaledHeight(); // Position from the bottom
 
         image.setAbsolutePosition(x, y);
         document.add(image);
         // Close the document
         document.close();
+        byte[] pdfContent = baos.toByteArray();
+        // Set HTTP headers for response
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDisposition(ContentDisposition.builder("attachment")
+                .filename("Korisnici-izvjestaj-neaktivni.pdf")
+                .build());
+
+        // Return the PDF content as ResponseEntity
+        return new ResponseEntity<>(pdfContent, headers, HttpStatus.OK);
     }
 
     @GetMapping("/printPDFzaduzenja")
-    public void printPDFzaduzenja(@RequestParam("selectedItems") List<String> selectedItems, HttpServletResponse response) throws IOException, DocumentException {
+    public ResponseEntity<byte[]> printPDFzaduzenja(@RequestParam("selectedItems") List<String> selectedItems, HttpServletResponse response) throws Exception {
         // Get the list of Korisnik objects from service
         List<Korisnik> selectedKorisnikList = selectedItems.stream()
                 .map(username -> korisnikService.getKorisnikById(username))
@@ -588,14 +619,16 @@ public class KorisnikController {
                         .replaceAll("ž", "z");
 
         // Set the content type and attachment header
-        response.setContentType("application/pdf");
-        response.setHeader("Content-Disposition", "attachment; filename=\"Printout-"+filename+".pdf\"");
+//        response.setContentType("application/pdf");
+//        response.setHeader("Content-Disposition", "attachment; filename=\"Printout-"+filename+".pdf\"");
 
         // Create a new PDF document
         Document document = new Document(PageSize.A4);
 
         // Create a PdfWriter instance to write the document to the response output stream
-        PdfWriter.getInstance(document, response.getOutputStream());
+//        PdfWriter.getInstance(document, response.getOutputStream());
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        PdfWriter.getInstance(document, baos);
 
         // Open the document
         document.open();
@@ -619,7 +652,7 @@ public class KorisnikController {
         BaseColor lightGreyCellColor = new BaseColor(224, 224, 224);
 
         // Set image and it's size
-        String imagePath2 = "static/images/AITAC values challenges solutions (1).png"; // Relative path to the image file
+        String imagePath2 = "static/images/AITACvaluesChallengesSolutions.png"; // Relative path to the image file
         Resource resource2 = new ClassPathResource(imagePath2);
         Image image2 = Image.getInstance(resource2.getURL());
         float desiredWidthInCm2 = 5f;
@@ -810,12 +843,22 @@ public class KorisnikController {
 
         // Calculate the coordinates to position the image at the bottom
         float x = (pageWidth - desiredWidth) / 2; // Centered horizontally
-        float y = image.getScaledHeight() + document.bottomMargin(); // Position from the bottom
+        float y = document.bottomMargin() - image.getScaledHeight(); // Position from the bottom
 
         image.setAbsolutePosition(x, y);
         document.add(image);
         // Close the document
         document.close();
+        byte[] pdfContent = baos.toByteArray();
+        // Set HTTP headers for response
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDisposition(ContentDisposition.builder("attachment")
+                .filename("Printout-"+filename+".pdf")
+                .build());
+
+        // Return the PDF content as ResponseEntity
+        return new ResponseEntity<>(pdfContent, headers, HttpStatus.OK);
     }
 
     private void setCellContentAndFont(PdfPCell cell, String content, Font font) {

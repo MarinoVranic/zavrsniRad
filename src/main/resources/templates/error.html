@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link th:href="@{/CSS/customStyle.css}" rel="stylesheet"/>
+<head>
+    <meta charset="UTF-8">
+    <title>ERROR</title>
+</head>
+<style>
+    html {
+        background-color: #232f83;
+    }
+    #countdown {
+        font-size: 24px;
+        font-weight: bold;
+        color: red;
+    }
+</style>
+<body>
+<div style="text-align: center">
+    <img style="width: 40%" src="/images/AitacLogoBlueBackgroundHiRes.jpg" alt="Aitac logo">
+    <h1 style="color: #ffffff; padding-bottom: 50px">ERROR</h1>
+    <div>
+        <p style="color: white">
+            We apologize for the inconvenience you've encountered while using application.<br>
+            Please inform the developer of the application, <strong>Marino Vranić</strong>, about the error you encountered while using the app.<br>
+            You can reach out to him at <a href="mailto:mvranic@aitac.nl?subject=InventarWebApp error encountered">mvranic@aitac.nl</a> (just click on mail address)<br>
+            Mention in your email that you encountered an error while using the application.<br>
+            Please attach a screenshot of the error, highlighted within a red frame right below this text.
+        </p>
+    </div>
+    <div id="message" class="w3-panel w3-red w3-display-container">
+        <span th:utext="${errorMessage}"></span>
+    </div>
+    <p style="color: white">Redirecting back to homepage in <span id="countdown"></span> seconds...or to return immediately <a th:href="@{/index}">CLICK HERE</a></p>
+</div>
+<script type="text/javascript">
+    // Countdown timer function
+    function countdown() {
+        var seconds = 30; // Adjust this number to set the countdown time in seconds
+        var countdownElement = document.getElementById('countdown');
+        countdownElement.innerHTML = seconds;
+
+        var countdownInterval = setInterval(function() {
+            seconds--;
+            countdownElement.innerHTML = seconds;
+            if (seconds <= 0) {
+                clearInterval(countdownInterval);
+                window.location.href = '/'; // Redirect to the index page
+            }
+        }, 1000); // Update every second (1000 milliseconds)
+    }
+
+    // Start countdown when the page loads
+    window.onload = function() {
+        countdown();
+    };
+</script>
+</body>
+</html>

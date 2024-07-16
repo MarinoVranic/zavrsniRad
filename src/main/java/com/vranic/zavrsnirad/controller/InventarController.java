@@ -1,6 +1,5 @@
 package com.vranic.zavrsnirad.controller;
 
-import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.itextpdf.text.*;
 import com.itextpdf.text.Font;
@@ -68,7 +67,7 @@ public class InventarController {
     }
 
     @GetMapping("/all")
-    public String getAllInventar(Model model) {
+    public String getAllInventar(Model model) throws Exception {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         model.addAttribute("savInventar", inventarService.getInventarForAdministration());
         List<VrstaUredaja> allVrstaUredaja = vrstaUredajaService.getAllVrstaUredaja();
@@ -86,7 +85,7 @@ public class InventarController {
     }
 
     @GetMapping("/update/{inventarniBroj}")
-    public String updateInventar(@PathVariable(value = "inventarniBroj") String inventarniBroj, Model model) {
+    public String updateInventar(@PathVariable(value = "inventarniBroj") String inventarniBroj, Model model) throws Exception {
         Inventar inventar = inventarService.getInventarById(inventarniBroj);
         VrstaUredaja selectedVrstaUredaja = inventar.getVrstaUredaja();
         List<VrstaUredaja> allVrstaUredaja = vrstaUredajaService.getAllVrstaUredaja();
@@ -114,7 +113,7 @@ public class InventarController {
     }
 
     @GetMapping("/addNew")
-    public String addNewInventar(Model model){
+    public String addNewInventar(Model model) throws Exception {
         Inventar inventar = new Inventar();
         model.addAttribute("inventar", inventar);
         List<VrstaUredaja> allVrstaUredaja = vrstaUredajaService.getAllVrstaUredaja();
@@ -131,7 +130,7 @@ public class InventarController {
     }
 
     @PostMapping("/addNew")
-    public String addInventar(@ModelAttribute("inventar") Inventar inventar, Model model) {
+    public String addInventar(@ModelAttribute("inventar") Inventar inventar, Model model) throws Exception {
         if (inventarService.checkIfInvBrojIsAvailable(inventar.getInventarniBroj()) != 0) {
             model.addAttribute("error", "Inventarni broj već postoji!");
             return "inventar/newInventar";
@@ -146,7 +145,7 @@ public class InventarController {
     }
 
     @PostMapping("/save")
-    public String saveInventar(@ModelAttribute("inventar") Inventar inventar) {
+    public String saveInventar(@ModelAttribute("inventar") Inventar inventar) throws Exception {
             // Set the username to null if it is blank
             if (StringUtils.isBlank(inventar.getKorisnik().getUsername())) {
                 inventar.setKorisnik(null);
@@ -162,7 +161,7 @@ public class InventarController {
     }
 
     @GetMapping("/find")
-    public String findInventarByName(@RequestParam("inventarniBroj") String inventarniBroj, Model model) {
+    public String findInventarByName(@RequestParam("inventarniBroj") String inventarniBroj, Model model) throws Exception {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         List<Inventar> inventarList = inventarService.findInventarByInvBroj(inventarniBroj);
         if (inventarList.isEmpty()) {
@@ -179,7 +178,7 @@ public class InventarController {
     }
 
     @GetMapping("/findBySerialNumber")
-    public String findInventarBySerialNumber(@RequestParam("serialNumber") String serijskiBroj, Model model) {
+    public String findInventarBySerialNumber(@RequestParam("serialNumber") String serijskiBroj, Model model) throws Exception {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         List<Inventar> inventarList = inventarService.getInventarBySerialNumber(serijskiBroj);
         if (inventarList.isEmpty()) {
@@ -196,7 +195,7 @@ public class InventarController {
     }
 
     @GetMapping("zaduzi/{inventarniBroj}")
-    public String zaduziInventar(@PathVariable(value = "inventarniBroj") String inventarniBroj, Model model) {
+    public String zaduziInventar(@PathVariable(value = "inventarniBroj") String inventarniBroj, Model model) throws Exception {
         Inventar inventar = inventarService.getInventarById(inventarniBroj);
         VrstaUredaja selectedVrstaUredaja = inventar.getVrstaUredaja();
         List<VrstaUredaja> allVrstaUredaja = vrstaUredajaService.getAllVrstaUredaja();
@@ -225,7 +224,7 @@ public class InventarController {
 
     @PostMapping("/saveZaduzenje")
     @Transactional
-    public String zaduzenjeInventara(@ModelAttribute("inventar") Inventar inventar) {
+    public String zaduzenjeInventara(@ModelAttribute("inventar") Inventar inventar) throws Exception {
         Integer idVrste = inventar.getVrstaUredaja().getIdVrsteUredaja().intValue();
         if(idVrste.equals(1)||idVrste.equals(6)){
             //split string nazivUredaja by one or more spaces and -
@@ -244,13 +243,13 @@ public class InventarController {
 
     @GetMapping("razduzi/{inventarniBroj}")
     @Transactional
-    public String razduziInventar(@PathVariable(value = "inventarniBroj") String inventarniBroj){
+    public String razduziInventar(@PathVariable(value = "inventarniBroj") String inventarniBroj) throws Exception {
         inventarService.razduziInventar(today, inventarniBroj);
         return "redirect:/inventar/all";
     }
 
     @GetMapping("/findByVrsta")
-    public String showInventarByVrstaUredaja(@RequestParam("idVrsteUredaja") Long idVrsteUredaja, Model model) {
+    public String showInventarByVrstaUredaja(@RequestParam("idVrsteUredaja") Long idVrsteUredaja, Model model) throws Exception {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         List<VrstaUredaja> allVrstaUredaja = vrstaUredajaService.getAllVrstaUredaja();
         List<Inventar> inventarList = inventarService.getInventarByVrstaUredaja(idVrsteUredaja);
@@ -266,7 +265,7 @@ public class InventarController {
     }
 
     @GetMapping("/findByLokacija")
-    public String showInventarByLokacija(@RequestParam("idLokacije") Long idLokacije, Model model) {
+    public String showInventarByLokacija(@RequestParam("idLokacije") Long idLokacije, Model model) throws Exception {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         List<Lokacija> allLokacija = lokacijaService.getAllLokacija();
         List<Inventar> inventarList = inventarService.getInventarByLokacija(idLokacije);
@@ -282,7 +281,7 @@ public class InventarController {
     }
 
     @GetMapping("/findByUser")
-    public String showInventarByUser(@RequestParam("lastName") String lastName, Model model) {
+    public String showInventarByUser(@RequestParam("lastName") String lastName, Model model) throws Exception {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         List<Inventar> inventarList = inventarService.getInventarByUser(lastName);
         List<Lokacija> allLokacija = lokacijaService.getAllLokacija();
@@ -305,7 +304,7 @@ public class InventarController {
     }
 
     @GetMapping("/findByTipInventara")
-    public String showInventarByTipInventara(@RequestParam("tipInventara") String tipInventara, Model model) {
+    public String showInventarByTipInventara(@RequestParam("tipInventara") String tipInventara, Model model) throws Exception {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if(tipInventara.equals("OS"))
         {
@@ -348,8 +347,8 @@ public class InventarController {
     }
 
     @GetMapping(value = "/ean13/{inventarniBroj}", produces = MediaType.IMAGE_PNG_VALUE)
-    public ResponseEntity<byte[]> generateAndDownloadEAN13Barcode(@PathVariable(value = "inventarniBroj") String inventarniBroj) {
-        try {
+    public ResponseEntity<byte[]> generateAndDownloadEAN13Barcode(@PathVariable(value = "inventarniBroj") String inventarniBroj) throws Exception {
+//        try {
             String originalInventarniBroj = inventarniBroj;
             if(originalInventarniBroj.length()<2){
                 String sitniInventar = "";
@@ -422,23 +421,25 @@ public class InventarController {
             headers.setContentType(MediaType.IMAGE_PNG);
             headers.setContentDisposition(ContentDisposition.builder("attachment").filename("barcode"+originalInventarniBroj+".png").build());
             return new ResponseEntity<>(combinedImageByteArray, headers, HttpStatus.OK);
-        } catch (WriterException | IOException e) {
-            System.out.println(e);;
-            return new ResponseEntity<>(new byte[0], HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+//        } catch (WriterException | IOException e) {
+//            System.out.println(e);;
+//            return new ResponseEntity<>(new byte[0], HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
     }
 
     @GetMapping("/generatePDF")
-    public void generatePDF(HttpServletResponse response) throws IOException, DocumentException {
+    public ResponseEntity<byte[]> generatePDF(/*HttpServletResponse response*/) throws Exception {
         // Set the content type and attachment header
-        response.setContentType("application/pdf");
-        response.setHeader("Content-Disposition", "attachment; filename=\"OS_SI-izvjestaj.pdf\"");
+//        response.setContentType("application/pdf");
+//        response.setHeader("Content-Disposition", "attachment; filename=\"OS_SI-izvjestaj.pdf\"");
 
         // Create a new PDF document
         Document document = new Document(PageSize.A4.rotate());
 
         // Create a PdfWriter instance to write the document to the response output stream
-        PdfWriter.getInstance(document, response.getOutputStream());
+//        PdfWriter.getInstance(document, response.getOutputStream());
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        PdfWriter.getInstance(document, baos);
 
         // Open the document
         document.open();
@@ -455,7 +456,7 @@ public class InventarController {
         Font croatianFont = FontFactory.getFont(arialNormal, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 
         // Set image and it's size
-        String imagePath2 = "static/images/Aitac Logo Blue Background HiRes.jpg"; // Relative path to the image file
+        String imagePath2 = "static/images/AitacLogoBlueBackgroundHiRes.jpg"; // Relative path to the image file
         Resource resource2 = new ClassPathResource(imagePath2);
         Image image2 = Image.getInstance(resource2.getURL());
         float desiredWidthInCm2 = 5f;
@@ -611,6 +612,16 @@ public class InventarController {
         document.add(image);
         // Close the document
         document.close();
+        byte[] pdfContent = baos.toByteArray();
+        // Set HTTP headers for response
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDisposition(ContentDisposition.builder("attachment")
+                .filename("Izvjestaj_inventar.pdf")
+                .build());
+
+        // Return the PDF content as ResponseEntity
+        return new ResponseEntity<>(pdfContent, headers, HttpStatus.OK);
     }
 
     // Method to set content and font for cell with font shrinking if necessary

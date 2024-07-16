@@ -28,7 +28,7 @@ public class SecurityConfig {
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .requestMatchers("/appUsers/resetPasswordForm","appUsers/resetPassword").permitAll()
                         .requestMatchers("/CSS/customStyle.css", "/fonts", "/images", "/javascript/sidebar.js", "/javascript/hidedivProvodenjeInventure.js", "/favicon.ico").permitAll()
-                        .requestMatchers("/index", "/", "/provodenjeInventure/all", "/provodenjeInventure/addNew", "/provodenjeInventure/scanNew", "/provodenjeInventure/findByGodinaInventure", "/provodenjeInventure/find", "/provodenjeInventure/odaberi_lokaciju", "/appUsers/userResetPassword/", "/appUsers/updatePassword", "appUsers/cancel").access("hasAnyRole('SUPER_ADMIN', 'ADMIN', 'USER')")
+                        .requestMatchers("/index", "/", "error", "/provodenjeInventure/all", "/provodenjeInventure/addNew", "/provodenjeInventure/scanNew", "/provodenjeInventure/findByGodinaInventure", "/provodenjeInventure/find", "/provodenjeInventure/odaberi_lokaciju", "/appUsers/userResetPassword/", "/appUsers/updatePassword", "appUsers/cancel").access("hasAnyRole('SUPER_ADMIN', 'ADMIN', 'USER')")
                         .requestMatchers("/inventar/**", "/inventura/**", "/lokacija/**", "/dobavljac/**", "/vrstaUredaja/**", "/racun/**").access("hasAnyRole('SUPER_ADMIN', 'ADMIN')")
                         .requestMatchers("/korisnik/**","/appUsers/**").access("hasRole('SUPER_ADMIN')")
                         .anyRequest().authenticated()

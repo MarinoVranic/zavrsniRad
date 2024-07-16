@@ -5,19 +5,20 @@ import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.vranic.zavrsnirad.model.Dobavljac;
 import com.vranic.zavrsnirad.model.VrstaUredaja;
 import com.vranic.zavrsnirad.service.VrstaUredajaService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
@@ -39,7 +40,7 @@ public class VrstaUredajaController {
     }
 
     @GetMapping("/all")
-    public String getAllVrstaUredaja(Model model) {
+    public String getAllVrstaUredaja(Model model) throws Exception {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         model.addAttribute("sveVrsteUredaja", vrstaUredajaService.getAllVrstaUredaja());
         return getViewBasedOnRole(auth);
@@ -51,21 +52,21 @@ public class VrstaUredajaController {
     }
 
     @GetMapping("/update/{id}")
-    public String updateVrstaUredaja(@PathVariable(value = "id") Long id, Model model) {
+    public String updateVrstaUredaja(@PathVariable(value = "id") Long id, Model model) throws Exception {
         VrstaUredaja vrstaUredaja = vrstaUredajaService.getVrstaUredajaById(id);
         model.addAttribute("vrstaUredaja", vrstaUredaja);
         return "vrstaUredaja/updateVrstaUredaja";
     }
 
     @GetMapping("/addNew")
-    public String addNewVrstaUredaja(Model model){
+    public String addNewVrstaUredaja(Model model) throws Exception {
         VrstaUredaja vrstaUredaja = new VrstaUredaja();
         model.addAttribute("vrstaUredaja", vrstaUredaja);
         return "vrstaUredaja/newVrstaUredaja";
     }
 
     @PostMapping("/addNew")
-    public String addVrstaUredaja(@ModelAttribute("vrstaUredaja") VrstaUredaja vrstaUredaja, Model model) {
+    public String addVrstaUredaja(@ModelAttribute("vrstaUredaja") VrstaUredaja vrstaUredaja, Model model) throws Exception {
         if(vrstaUredajaService.checkIfNazivVrsteUredajaIsAvailable(vrstaUredaja.getNazivVrsteUredaja())!=0){
             model.addAttribute("error", "Vrsta uređaja tog naziva već postoji!");
             return "vrstaUredaja/newVrstaUredaja";
@@ -76,7 +77,7 @@ public class VrstaUredajaController {
     }
 
     @PostMapping("/save")
-    public String saveVrstaUredaja(@ModelAttribute("vrstaUredaja") VrstaUredaja vrstaUredaja, Model model) {
+    public String saveVrstaUredaja(@ModelAttribute("vrstaUredaja") VrstaUredaja vrstaUredaja, Model model) throws Exception{
         if(vrstaUredajaService.checkIfNazivVrsteUredajaIsAvailable(vrstaUredaja.getNazivVrsteUredaja())!=0)
         {
             model.addAttribute("error", "Vrsta uređaja tog naziva već postoji!");
@@ -93,7 +94,7 @@ public class VrstaUredajaController {
     }
 
     @GetMapping("/find")
-    public String findVrstaUredajaByName(@RequestParam("nazivVrsteUredaja") String nazivVrsteUredaja, Model model) {
+    public String findVrstaUredajaByName(@RequestParam("nazivVrsteUredaja") String nazivVrsteUredaja, Model model) throws Exception {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         List<VrstaUredaja> vrstaUredajaList = vrstaUredajaService.findVrstaUredajaByName(nazivVrsteUredaja);
         if (vrstaUredajaList.isEmpty()) {
@@ -110,16 +111,18 @@ public class VrstaUredajaController {
     }
 
     @GetMapping("/generatePDF")
-    public void generatePDF(HttpServletResponse response) throws IOException, DocumentException {
+    public ResponseEntity<byte[]> generatePDF(HttpServletResponse response) throws Exception {
         // Set the content type and attachment header
-        response.setContentType("application/pdf");
-        response.setHeader("Content-Disposition", "attachment; filename=\"vrste_uredaja-izvjestaj.pdf\"");
+//        response.setContentType("application/pdf");
+//        response.setHeader("Content-Disposition", "attachment; filename=\"vrste_uredaja-izvjestaj.pdf\"");
 
         // Create a new PDF document
         Document document = new Document(PageSize.A4);
 
         // Create a PdfWriter instance to write the document to the response output stream
-        PdfWriter.getInstance(document, response.getOutputStream());
+//        PdfWriter.getInstance(document, response.getOutputStream());
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        PdfWriter.getInstance(document, baos);
 
         // Open the document
         document.open();
@@ -136,7 +139,7 @@ public class VrstaUredajaController {
         Font croatianFont = FontFactory.getFont(arialNormal, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 
         // Set image and it's size
-        String imagePath2 = "static/images/Aitac Logo Blue Background HiRes.jpg"; // Relative path to the image file
+        String imagePath2 = "static/images/AitacLogoBlueBackgroundHiRes.jpg"; // Relative path to the image file
         Resource resource2 = new ClassPathResource(imagePath2);
         Image image2 = Image.getInstance(resource2.getURL());
         float desiredWidthInCm2 = 5f;
@@ -238,5 +241,15 @@ public class VrstaUredajaController {
         document.add(image);
         // Close the document
         document.close();
+        byte[] pdfContent = baos.toByteArray();
+        // Set HTTP headers for response
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDisposition(ContentDisposition.builder("attachment")
+                .filename("Vrste_uredaja-izvjestaj.pdf")
+                .build());
+
+        // Return the PDF content as ResponseEntity
+        return new ResponseEntity<>(pdfContent, headers, HttpStatus.OK);
     }
 }

@@ -1,8 +1,5 @@
 package com.vranic.zavrsnirad.controller;
 
-import com.itextpdf.io.image.ImageDataFactory;
-import com.itextpdf.layout.property.TextAlignment;
-import com.itextpdf.layout.property.VerticalAlignment;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import com.vranic.zavrsnirad.model.Lokacija;
@@ -11,12 +8,14 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import com.itextpdf.layout.element.Text;
+
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
@@ -38,7 +37,7 @@ public class LokacijaController {
     }
 
     @GetMapping("/all")
-    public String getAllLokacija(Model model) {
+    public String getAllLokacija(Model model) throws Exception {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         model.addAttribute("sveLokacije", lokacijaService.getAllLokacija());
         return getViewBasedOnRole(auth);
@@ -50,21 +49,21 @@ public class LokacijaController {
     }
 
     @GetMapping("/update/{id}")
-    public String updateLokacija(@PathVariable(value = "id") Long id, Model model) {
+    public String updateLokacija(@PathVariable(value = "id") Long id, Model model) throws Exception {
         Lokacija lokacija = lokacijaService.getLokacijaById(id);
         model.addAttribute("lokacija", lokacija);
         return "lokacija/updateLokacija";
     }
 
     @GetMapping("/addNew")
-    public String addNewLokacija(Model model){
+    public String addNewLokacija(Model model) throws Exception {
         Lokacija lokacija = new Lokacija();
         model.addAttribute("lokacija", lokacija);
         return "lokacija/newLokacija";
     }
 
     @PostMapping("/addNew")
-    public String addLokacija(@ModelAttribute("lokacija") Lokacija lokacija, Model model) {
+    public String addLokacija(@ModelAttribute("lokacija") Lokacija lokacija, Model model) throws Exception {
         if(lokacijaService.checkIfNazivLokacijeIsAvailable(lokacija.getNazivLokacije())!=0){
             model.addAttribute("error", "Naziv lokacije već postoji!");
             return "lokacija/newLokacija";
@@ -75,7 +74,7 @@ public class LokacijaController {
     }
 
     @PostMapping("/save")
-    public String saveLokacija(@ModelAttribute("lokacija") Lokacija lokacija, Model model) {
+    public String saveLokacija(@ModelAttribute("lokacija") Lokacija lokacija, Model model) throws Exception {
         if(lokacijaService.checkIfNazivLokacijeIsAvailable(lokacija.getNazivLokacije())!=0)
         {
             model.addAttribute("error", "Naziv lokacije već postoji!");
@@ -92,7 +91,7 @@ public class LokacijaController {
     }
 
     @GetMapping("/find")
-    public String findDobavljacByName(@RequestParam("nazivLokacije") String nazivLokacije, Model model) {
+    public String findDobavljacByName(@RequestParam("nazivLokacije") String nazivLokacije, Model model) throws Exception {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         List<Lokacija> lokacijaList = lokacijaService.findLokacijaByName(nazivLokacije);
         if (lokacijaList.isEmpty()) {
@@ -109,16 +108,18 @@ public class LokacijaController {
     }
 
     @GetMapping("/generatePDF")
-    public void generatePDF(HttpServletResponse response) throws IOException, DocumentException {
+    public ResponseEntity<byte[]> generatePDF(HttpServletResponse response) throws Exception {
         // Set the content type and attachment header
-        response.setContentType("application/pdf");
-        response.setHeader("Content-Disposition", "attachment; filename=\"lokacije-izvjestaj.pdf\"");
+//        response.setContentType("application/pdf");
+//        response.setHeader("Content-Disposition", "attachment; filename=\"lokacije-izvjestaj.pdf\"");
 
         // Create a new PDF document
         Document document = new Document(PageSize.A4);
 
         // Create a PdfWriter instance to write the document to the response output stream
-        PdfWriter.getInstance(document, response.getOutputStream());
+//        PdfWriter.getInstance(document, response.getOutputStream());
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        PdfWriter.getInstance(document, baos);
 
         // Open the document
         document.open();
@@ -135,7 +136,7 @@ public class LokacijaController {
         Font croatianFont = FontFactory.getFont(arialNormal, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 
         // Set image and it's size
-        String imagePath2 = "static/images/Aitac Logo Blue Background HiRes.jpg"; // Relative path to the image file
+        String imagePath2 = "static/images/AitacLogoBlueBackgroundHiRes.jpg"; // Relative path to the image file
         Resource resource2 = new ClassPathResource(imagePath2);
         Image image2 = Image.getInstance(resource2.getURL());
         float desiredWidthInCm2 = 5f;
@@ -237,5 +238,15 @@ public class LokacijaController {
         document.add(image);
         // Close the document
         document.close();
+        byte[] pdfContent = baos.toByteArray();
+        // Set HTTP headers for response
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDisposition(ContentDisposition.builder("attachment")
+                .filename("Lokacije-izvjestaj.pdf")
+                .build());
+
+        // Return the PDF content as ResponseEntity
+        return new ResponseEntity<>(pdfContent, headers, HttpStatus.OK);
     }
 }

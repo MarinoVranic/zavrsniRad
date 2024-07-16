@@ -6,19 +6,19 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.vranic.zavrsnirad.model.Dobavljac;
-import com.vranic.zavrsnirad.model.Lokacija;
 import com.vranic.zavrsnirad.service.DobavljacService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
@@ -40,7 +40,7 @@ public class DobavljacController {
     }
 
     @GetMapping("/all")
-    public String getAllDobavljac(Model model) {
+    public String getAllDobavljac(Model model) throws Exception{
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         model.addAttribute("sviDobavljaci", dobavljacService.getAllDobavljaci());
         return getViewBasedOnRole(auth);
@@ -52,21 +52,21 @@ public class DobavljacController {
     }
 
     @GetMapping("/update/{id}")
-    public String updateDobavljac(@PathVariable(value = "id") Long id, Model model) {
+    public String updateDobavljac(@PathVariable(value = "id") Long id, Model model) throws Exception{
         Dobavljac dobavljac = dobavljacService.getDobavljacById(id);
         model.addAttribute("dobavljac", dobavljac);
         return "dobavljac/updateDobavljac";
     }
 
     @GetMapping("/addNew")
-    public String addNewDobavljac(Model model){
+    public String addNewDobavljac(Model model) throws Exception{
         Dobavljac dobavljac = new Dobavljac();
         model.addAttribute("dobavljac", dobavljac);
         return "dobavljac/newDobavljac";
     }
 
     @PostMapping("/addNew")
-    public String addDobavljac(@ModelAttribute("dobavljac") Dobavljac dobavljac, Model model) {
+    public String addDobavljac(@ModelAttribute("dobavljac") Dobavljac dobavljac, Model model) throws Exception{
         if(dobavljacService.checkIfNazivDobavljacaIsAvailable(dobavljac.getNazivDobavljaca())!=0){
             model.addAttribute("error", "Dobavljač tog naziva već postoji!");
             return "dobavljac/newDobavljac";
@@ -77,7 +77,7 @@ public class DobavljacController {
     }
 
     @PostMapping("/save")
-    public String saveDobavljac(@ModelAttribute("dobavljac") Dobavljac dobavljac, Model model) {
+    public String saveDobavljac(@ModelAttribute("dobavljac") Dobavljac dobavljac, Model model) throws Exception{
         if(dobavljacService.checkIfNazivDobavljacaIsAvailable(dobavljac.getNazivDobavljaca())!=0)
         {
             model.addAttribute("error", "Dobavljač tog naziva već postoji!");
@@ -94,7 +94,7 @@ public class DobavljacController {
     }
 
     @GetMapping("/find")
-    public String findDobavljacByName(@RequestParam("nazivDobavljaca") String nazivDobavljaca, Model model) {
+    public String findDobavljacByName(@RequestParam("nazivDobavljaca") String nazivDobavljaca, Model model) throws Exception{
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         List<Dobavljac> dobavljacList = dobavljacService.findDobavljacByName(nazivDobavljaca);
         if (dobavljacList.isEmpty()) {
@@ -111,16 +111,18 @@ public class DobavljacController {
     }
 
     @GetMapping("/generatePDF")
-    public void generatePDF(HttpServletResponse response) throws IOException, DocumentException {
+    public ResponseEntity<byte[]> generatePDF(HttpServletResponse response) throws IOException, DocumentException {
         // Set the content type and attachment header
-        response.setContentType("application/pdf");
-        response.setHeader("Content-Disposition", "attachment; filename=\"dobavljaci-izvjestaj.pdf\"");
+//        response.setContentType("application/pdf");
+//        response.setHeader("Content-Disposition", "attachment; filename=\"dobavljaci-izvjestaj.pdf\"");
 
         // Create a new PDF document
         Document document = new Document(PageSize.A4);
 
         // Create a PdfWriter instance to write the document to the response output stream
-        PdfWriter.getInstance(document, response.getOutputStream());
+//        PdfWriter.getInstance(document, response.getOutputStream());
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        PdfWriter.getInstance(document, baos);
 
         // Open the document
         document.open();
@@ -138,7 +140,7 @@ public class DobavljacController {
         Font croatianFont = FontFactory.getFont(arialNormal, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 
         // Set image and it's size
-        String imagePath2 = "static/images/Aitac Logo Blue Background HiRes.jpg"; // Relative path to the image file
+        String imagePath2 = "static/images/AitacLogoBlueBackgroundHiRes.jpg"; // Relative path to the image file
         Resource resource2 = new ClassPathResource(imagePath2);
         Image image2 = Image.getInstance(resource2.getURL());
         float desiredWidthInCm2 = 5f;
@@ -234,11 +236,22 @@ public class DobavljacController {
 
         // Calculate the coordinates to position the image at the bottom
         float x = (pageWidth - desiredWidth) / 2; // Centered horizontally
-        float y = image.getScaledHeight() + document.bottomMargin(); // Position from the bottom
+        float y = document.bottomMargin() - image.getScaledHeight(); // Position from the bottom
 
         image.setAbsolutePosition(x, y);
         document.add(image);
         // Close the document
         document.close();
+
+        byte[] pdfContent = baos.toByteArray();
+        // Set HTTP headers for response
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDisposition(ContentDisposition.builder("attachment")
+                .filename("Izvjestaj_dobavljaci.pdf")
+                .build());
+
+        // Return the PDF content as ResponseEntity
+        return new ResponseEntity<>(pdfContent, headers, HttpStatus.OK);
     }
 }

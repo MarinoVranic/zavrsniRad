@@ -42,25 +42,25 @@ public class UserController {
     }
 
     @GetMapping("/all")
-    public String getAllUsers(Model model){
+    public String getAllUsers(Model model) throws Exception {
         model.addAttribute("allUsers", userService.getAllUsers());
         return "appUsers/appUsers";
     }
 
     @GetMapping("/active")
-    public String getAllActiveUsers(Model model){
+    public String getAllActiveUsers(Model model) throws Exception {
         model.addAttribute("allUsers", userService.getAllActiveUsers());
         return "appUsers/appUsers";
     }
 
     @GetMapping("/inactive")
-    public String getAllInactiveUsers(Model model){
+    public String getAllInactiveUsers(Model model) throws Exception {
         model.addAttribute("allUsers", userService.getAllInactiveUsers());
         return "appUsers/appUsers";
     }
 
     @GetMapping("/addNew")
-    public String addNewUser(Model model){
+    public String addNewUser(Model model) throws Exception {
         User user = new User();
         model.addAttribute("user", user);
         return "appUsers/newAppUser";
@@ -68,7 +68,7 @@ public class UserController {
 
 
     @PostMapping("/addNew")
-    public String addUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, Model model){
+    public String addUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, Model model) throws Exception {
 
         if(bindingResult.hasErrors()){
             return "appUsers/newAppUser";
@@ -87,7 +87,7 @@ public class UserController {
     }
 
     @GetMapping("/update/{id}")
-    public String updateUser(@PathVariable(value = "id") Long id, Model model){
+    public String updateUser(@PathVariable(value = "id") Long id, Model model) throws Exception {
         User user = userService.getUserById(id);
         model.addAttribute("user", user);
         return "appUsers/updateAppUser";
@@ -95,7 +95,7 @@ public class UserController {
 
     @PostMapping("/save")
     @Transactional
-    public String saveUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult){
+    public String saveUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) throws Exception {
         if(bindingResult.hasErrors()){
             return "appUsers/updateAppUser";
         }
@@ -104,14 +104,14 @@ public class UserController {
     }
 
     @GetMapping("/resetPassword/{id}")
-    public String resetUserPassword(@PathVariable(value = "id") Long id, Model model){
+    public String resetUserPassword(@PathVariable(value = "id") Long id, Model model) throws Exception {
         User user = userService.getUserById(id);
         model.addAttribute("user", user);
         return "appUsers/resetPasswordAppUser";
     }
 
     @GetMapping("/userResetPassword/")
-    public String resetOwnUserPassword(Model model){
+    public String resetOwnUserPassword(Model model) throws Exception {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
         User user = userService.getUserByUsername(username);
@@ -126,7 +126,7 @@ public class UserController {
 
     @PostMapping("/resetPassword")
     @Transactional
-    public String updatePassword(@RequestParam String username, @RequestParam String password, RedirectAttributes redirectAttributes) {
+    public String updatePassword(@RequestParam String username, @RequestParam String password, RedirectAttributes redirectAttributes) throws Exception {
         try {
             User user = userService.getUserByUsername(username);
             if (user == null) {
@@ -143,7 +143,7 @@ public class UserController {
 
     @PostMapping("/updatePassword")
     @Transactional
-    public String saveNewUserPassword(@ModelAttribute("user") @Valid User user, BindingResult bindingResult){
+    public String saveNewUserPassword(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) throws Exception {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if(bindingResult.hasErrors()){
             return "appUsers/resetPasswordAppUser";
@@ -153,13 +153,13 @@ public class UserController {
     }
 
     @GetMapping("/cancel")
-    public String cancel(){
+    public String cancel() throws Exception {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return getViewBasedOnRole(auth);
     }
 
     @GetMapping("/find")
-    public String findUsersByUsername(@RequestParam("username") String username, Model model) {
+    public String findUsersByUsername(@RequestParam("username") String username, Model model) throws Exception {
         List<User> userList = userService.findUserByUsername(username);
         if (userList.isEmpty()) {
             model.addAttribute("error", "Username nije pronađen!");

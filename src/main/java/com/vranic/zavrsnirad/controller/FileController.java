@@ -23,7 +23,7 @@ public class FileController {
     private FileService fileService;
 
     @GetMapping("/all")
-    public String showFileUploadPage(Model model) {
+    public String showFileUploadPage(Model model) throws Exception{
         model.addAttribute("files", fileService.getAllFiles());
         return "file/file"; // Assuming your Thymeleaf file is named fileUploadDownload.html
     }
@@ -35,13 +35,13 @@ public class FileController {
     }
 
     @PostMapping("/upload")
-    public String uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
+    public String uploadFile(@RequestParam("file") MultipartFile file) throws Exception {
         fileService.uploadFile(file);
         return "redirect:/file/all";
     }
 
     @GetMapping("/download/{id}")
-    public ResponseEntity<byte[]> downloadFile(@PathVariable Long id) {
+    public ResponseEntity<byte[]> downloadFile(@PathVariable Long id) throws Exception{
         File fileEntity = fileService.getFileById(id);
         if (fileEntity != null) {
             return ResponseEntity.ok()
@@ -53,7 +53,7 @@ public class FileController {
     }
 
     @GetMapping("/find")
-    public String findFileByFileName(@RequestParam("fileName") String fileName, Model model){
+    public String findFileByFileName(@RequestParam("fileName") String fileName, Model model) throws Exception{
         List<File> fileList = fileService.getFileByFileName(fileName);
         if (fileList.isEmpty()) {
             model.addAttribute("error", "Datoteka tog naziva ne postoji u sustavu!");

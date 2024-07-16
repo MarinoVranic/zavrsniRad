@@ -29,21 +29,21 @@ public class InventuraController {
     }
 
     @GetMapping("/all")
-    public String getAllInventura(Model model){
+    public String getAllInventura(Model model) throws Exception {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         model.addAttribute("sveInventure", inventuraService.getAllInventura());
         return getViewBasedOnRole(auth);
     }
 
     @GetMapping("/addNew")
-    public String addNewInventura(Model model){
+    public String addNewInventura(Model model) throws Exception {
         Inventura inventura = new Inventura();
         model.addAttribute("inventura", inventura);
         return "inventura/newInventura";
     }
 
     @PostMapping("/addNew")
-    public String addInventura(@ModelAttribute("inventura") Inventura inventura, Model model){
+    public String addInventura(@ModelAttribute("inventura") Inventura inventura, Model model) throws Exception {
         if (inventuraService.checkIfInventuraIsExisting(inventura.getIdInventure())!=0) {
             model.addAttribute("error", "Inventura već postoji!");
             return "inventura/newInventura";
@@ -60,7 +60,7 @@ public class InventuraController {
     }
 
     @GetMapping("/find")
-    public String findInventuraWithId(@RequestParam("idInventure") Long idInventure, Model model){
+    public String findInventuraWithId(@RequestParam("idInventure") Long idInventure, Model model) throws Exception {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         List<Inventura> inventuraList = inventuraService.findInventuraById(idInventure);
         if(inventuraList.isEmpty()){

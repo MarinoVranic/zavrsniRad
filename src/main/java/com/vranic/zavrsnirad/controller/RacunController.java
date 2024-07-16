@@ -6,7 +6,6 @@ import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.vranic.zavrsnirad.model.Dobavljac;
 import com.vranic.zavrsnirad.model.File;
 import com.vranic.zavrsnirad.model.Racun;
 import com.vranic.zavrsnirad.service.FileService;
@@ -15,6 +14,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
@@ -47,7 +48,7 @@ public class RacunController {
     }
 
     @GetMapping("/all")
-    public String getAllRacun(Model model) {
+    public String getAllRacun(Model model) throws Exception {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         model.addAttribute("sviRacuni", racunService.getAllRacun());
         return getViewBasedOnRole(auth);
@@ -59,7 +60,7 @@ public class RacunController {
     }
 
     @GetMapping("/update/{id}")
-    public String updateRacun(@PathVariable(value = "id") Long id, Model model) {
+    public String updateRacun(@PathVariable(value = "id") Long id, Model model) throws Exception {
         Racun racun = racunService.getRacunById(id);
         File selectedFile = racun.getFile();
         List<File> fileList = fileService.getAllFiles();
@@ -70,14 +71,14 @@ public class RacunController {
     }
 
     @GetMapping("/addNew")
-    public String addNewRacun(Model model){
+    public String addNewRacun(Model model) throws Exception {
         Racun racun = new Racun();
         model.addAttribute("racun", racun);
         return "racun/newRacun";
     }
 
     @PostMapping("/addNew")
-    public String addRacun(@ModelAttribute("racun") Racun racun, @RequestParam("datoteka") MultipartFile file, Model model) throws IOException {
+    public String addRacun(@ModelAttribute("racun") Racun racun, @RequestParam("datoteka") MultipartFile file, Model model) throws Exception {
         if(racunService.checkIfBrojRacunaIsAvailable(racun.getBrojRacuna()) != 0){
             model.addAttribute("error", "Broj računa/dokumenta već postoji!");
             return "racun/newRacun";
@@ -90,7 +91,7 @@ public class RacunController {
     }
 
     @PostMapping("/save")
-    public String saveRacun(@ModelAttribute("racun") Racun racun) {
+    public String saveRacun(@ModelAttribute("racun") Racun racun) throws Exception {
         racunService.save(racun);
         return "redirect:/racun/all";
     }
@@ -102,7 +103,7 @@ public class RacunController {
     }
 
     @GetMapping("/find")
-    public String findDobavljacByName(@RequestParam("brojRacuna") String brojRacuna, Model model) {
+    public String findDobavljacByName(@RequestParam("brojRacuna") String brojRacuna, Model model) throws Exception {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         List<Racun> racunList = racunService.findRacunByBrojRacuna(brojRacuna);
         if (racunList.isEmpty()) {
@@ -119,7 +120,7 @@ public class RacunController {
     }
 
     @GetMapping("/findByUra")
-    public String findDobavljacByUra(@RequestParam("brojUre") String brojUre, Model model) {
+    public String findDobavljacByUra(@RequestParam("brojUre") String brojUre, Model model) throws Exception {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         List<Racun> racunList = racunService.findRacunByBrojUre(brojUre);
         if (racunList.isEmpty()) {
@@ -136,16 +137,18 @@ public class RacunController {
     }
 
     @GetMapping("/generatePDF")
-    public void generatePDF(HttpServletResponse response) throws IOException, DocumentException {
+    public ResponseEntity<byte[]> generatePDF(HttpServletResponse response) throws IOException, DocumentException {
         // Set the content type and attachment header
-        response.setContentType("application/pdf");
-        response.setHeader("Content-Disposition", "attachment; filename=\"racuni-izvjestaj.pdf\"");
+//        response.setContentType("application/pdf");
+//        response.setHeader("Content-Disposition", "attachment; filename=\"racuni-izvjestaj.pdf\"");
 
         // Create a new PDF document
         Document document = new Document(PageSize.A4);
 
         // Create a PdfWriter instance to write the document to the response output stream
-        PdfWriter.getInstance(document, response.getOutputStream());
+//        PdfWriter.getInstance(document, response.getOutputStream());
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        PdfWriter.getInstance(document, baos);
 
         // Open the document
         document.open();
@@ -163,7 +166,7 @@ public class RacunController {
         Font croatianFont = FontFactory.getFont(arialNormal, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 
         // Set image and it's size
-        String imagePath2 = "static/images/Aitac Logo Blue Background HiRes.jpg"; // Relative path to the image file
+        String imagePath2 = "static/images/AitacLogoBlueBackgroundHiRes.jpg"; // Relative path to the image file
         Resource resource2 = new ClassPathResource(imagePath2);
         Image image2 = Image.getInstance(resource2.getURL());
         float desiredWidthInCm2 = 5f;
@@ -201,8 +204,8 @@ public class RacunController {
         printDate.setSpacingAfter(5);
         document.add(printDate);
 
-        // Create a table with 2 columns
-        PdfPTable table = new PdfPTable(3);
+        // Create a table with 4 columns
+        PdfPTable table = new PdfPTable(4);
 
         // Set the table width as a percentage of the available page width
         table.setWidthPercentage(50);
@@ -285,5 +288,15 @@ public class RacunController {
         document.add(image);
         // Close the document
         document.close();
+        byte[] pdfContent = baos.toByteArray();
+        // Set HTTP headers for response
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDisposition(ContentDisposition.builder("attachment")
+                .filename("Racuni-izvjestaj.pdf")
+                .build());
+
+        // Return the PDF content as ResponseEntity
+        return new ResponseEntity<>(pdfContent, headers, HttpStatus.OK);
     }
 }

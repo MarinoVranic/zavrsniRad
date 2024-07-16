@@ -29,10 +29,13 @@ public class CsvGeneratorUtil {
                                 .append(inventarNaInventuri.getInventar().getInventarniBroj()).append(";")
                                 .append(inventarNaInventuri.getInventar().getNazivUredaja()).append(";")
                                 .append(inventarNaInventuri.getInventar().getVrstaUredaja().getNazivVrsteUredaja()).append(";")
-                                .append(inventarNaInventuri.getDatumSkeniranja().toLocalDate() + " " + inventarNaInventuri.getDatumSkeniranja().toLocalTime()).append(";")
-                                .append(inventarNaInventuri.getInventar().getLokacija().getNazivLokacije()).append(";")
-                                .append(inventarNaInventuri.getLokacija().getNazivLokacije()).append(";")
-                                .append("\n");
+                                .append(inventarNaInventuri.getDatumSkeniranja().toLocalDate() + " " + inventarNaInventuri.getDatumSkeniranja().toLocalTime()).append(";");
+                                if(inventarNaInventuri.getInventar().getLokacija() != null){
+                                 csvContent.append(inventarNaInventuri.getInventar().getLokacija().getNazivLokacije()).append(";");
+                                }else{
+                                    csvContent.append(" ").append(";");
+                                }
+                                csvContent.append("\n");
                     }
 
                     return csvContent.toString();
@@ -50,8 +53,13 @@ public class CsvGeneratorUtil {
                         }else{
                             csvContent.append(" ").append(";");
                         }
-                                csvContent.append(inventar.getLokacija().getNazivLokacije()).append(";")
-                                        .append(String.format("%.2f", inventar.getNabavnaVrijednost())).append("\n");
+                        if(inventar.getLokacija() != null)
+                        {
+                            csvContent.append(inventar.getLokacija().getNazivLokacije()).append(";");
+                        } else{
+                            csvContent.append(" ").append(";");
+                        }
+                        csvContent.append(String.format("%.2f", inventar.getNabavnaVrijednost())).append("\n");
                     }
                     return csvContent.toString();
                 }
