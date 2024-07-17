@@ -57,6 +57,10 @@ public class InventarService {
         return inventarRepository.findAllBySI();
     }
 
+    public List<Inventar> getInventarByLS(){
+        return inventarRepository.findAllByLS();
+    }
+
     public List<Inventar> getInventarByOS(){
         return inventarRepository.findAllByOS();
     }

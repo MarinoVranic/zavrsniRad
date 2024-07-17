@@ -261,8 +261,12 @@ public class InventarNaInventuriController {
         String invBrBezNula = String.valueOf(invBrSaNulama);
         if(vrstaInventara.equals("2"))
         {
-            invBrBezNula = "SI" + invBrBezNula;
-            Inventar inventar = inventarService.getInventarById(invBrBezNula);
+            while (invBrBezNula.length() < 3){
+                invBrBezNula = "0" + invBrBezNula;
+            }
+            invBroj = "SI" + invBrBezNula;
+            System.out.println("Scanned: "+invBroj);
+            Inventar inventar = inventarService.getInventarById(invBroj);
             Inventura inventura = inventuraService.getInventuraById(currentYear.longValue());
             InventarNaInventuri inventarNaInventuri = new InventarNaInventuri();
             inventarNaInventuri.setInventar(inventar);
@@ -300,6 +304,48 @@ public class InventarNaInventuriController {
         } else if(vrstaInventara.equals("3"))
         {
             invBroj = "IT" + invBroj;
+            Inventar inventar = inventarService.getInventarById(invBroj);
+            Inventura inventura = inventuraService.getInventuraById(currentYear.longValue());
+            InventarNaInventuri inventarNaInventuri = new InventarNaInventuri();
+            inventarNaInventuri.setInventar(inventar);
+            inventarNaInventuri.setLokacija(trenutnaLokacija);
+            if (inventar == null) {
+                model.addAttribute("error3", "Skenirani inventar nije zaveden u bazi!");
+                return getViewBasedOnRole(auth);
+            } else if (inventarNaInventuriService.checkIfInventarAlreadyScanned(inventarNaInventuri.getInventar().getInventarniBroj(), currentYear.longValue()) != 0) {
+                model.addAttribute("error3", "Inventar je već skeniran!");
+                return getViewBasedOnRole(auth);
+            } else if (trenutnaLokacija == null) {
+                model.addAttribute("error3", "Prvo morate postaviti lokaciju!");
+                return getViewBasedOnRole(auth);
+            } else {
+                if (inventura == null) {
+                    inventura = new Inventura();
+                    inventura.setIdInventure(currentYear.longValue());
+                    inventarNaInventuri.setInventura(inventura);
+                    inventarNaInventuri.setDatumSkeniranja(LocalDateTime.now());
+                    inventarNaInventuri.setLokacija(trenutnaLokacija);
+                    inventarNaInventuri.setStanje("Aktivno");
+                    inventarNaInventuri.setOtpis("Ne");
+                    inventarNaInventuri.setUser(user);
+                    inventarNaInventuriService.save(inventarNaInventuri);
+                } else {
+                    inventarNaInventuri.setInventura(inventura);
+                    inventarNaInventuri.setDatumSkeniranja(LocalDateTime.now());
+                    inventarNaInventuri.setLokacija(trenutnaLokacija);
+                    inventarNaInventuri.setStanje("Aktivno");
+                    inventarNaInventuri.setOtpis("Ne");
+                    inventarNaInventuri.setUser(user);
+                    inventarNaInventuriService.save(inventarNaInventuri);
+                }
+            }
+        } else if(vrstaInventara.equals("4"))
+        {
+            while (invBrBezNula.length() < 3){
+                invBrBezNula = "0" + invBrBezNula;
+            }
+            invBroj = "LS" + invBrBezNula;
+            System.out.println(invBroj);
             Inventar inventar = inventarService.getInventarById(invBroj);
             Inventura inventura = inventuraService.getInventuraById(currentYear.longValue());
             InventarNaInventuri inventarNaInventuri = new InventarNaInventuri();

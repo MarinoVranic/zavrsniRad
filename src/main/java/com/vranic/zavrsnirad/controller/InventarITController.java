@@ -155,7 +155,8 @@ public class InventarITController {
         // Set the username to null if it is blank
         if (StringUtils.isBlank(inventar.getKorisnik().getUsername())) {
             inventar.setKorisnik(null);
-        } else if (inventar.getRacun() == null || inventar.getRacun().getIdRacuna() == null) {
+        }
+        if (inventar.getRacun() == null || inventar.getRacun().getIdRacuna() == null) {
             inventar.setRacun(null);
         }
         inventarService.save(inventar);
@@ -414,6 +415,11 @@ public class InventarITController {
                         inventarniBroj = "0" + inventarniBroj;
                     }
                     inventarniBroj = "3" + inventarniBroj.substring(1);
+                } else if (sitniInventar.equals("LS")) {
+                    while(inventarniBroj.length() < 12){
+                        inventarniBroj = "0" + inventarniBroj;
+                    }
+                    inventarniBroj = "4" + inventarniBroj.substring(1);
                 } else {
                     while(inventarniBroj.length() < 12){
                         inventarniBroj = "0" + inventarniBroj;
@@ -437,6 +443,12 @@ public class InventarITController {
                         inventarniBroj = "0" + inventarniBroj;
                     }
                     inventarniBroj = "3" + inventarniBroj.substring(1);
+                } else if (sitniInventar.equals("LS")) {
+                    inventarniBroj = inventarniBroj.substring(2);
+                    while(inventarniBroj.length() < 12){
+                        inventarniBroj = "0" + inventarniBroj;
+                    }
+                    inventarniBroj = "4" + inventarniBroj.substring(1);
                 } else {
                     while(inventarniBroj.length() < 12){
                         inventarniBroj = "0" + inventarniBroj;
@@ -626,12 +638,12 @@ public class InventarITController {
                 setCellContentAndFont(cell, inventar.getHostname(), croatianFont);
             }
             table.addCell(cell);
-//            if(inventar.getLokacija() == null){
-//                setCellContentAndFont(cell, "", croatianFont);
-//            } else {
-//                setCellContentAndFont(cell, inventar.getLokacija().getNazivLokacije(), croatianFont);
-//            }
-            setCellContentAndFont(cell, inventar.getLokacija().getNazivLokacije(), croatianFont);
+            if(inventar.getLokacija() == null){
+                setCellContentAndFont(cell, "", croatianFont);
+            } else {
+                setCellContentAndFont(cell, inventar.getLokacija().getNazivLokacije(), croatianFont);
+            }
+//            setCellContentAndFont(cell, inventar.getLokacija().getNazivLokacije(), croatianFont);
             table.addCell(cell);
             Korisnik korisnik = inventar.getKorisnik();
             if(korisnik != null && korisnik.getUsername() != null){
