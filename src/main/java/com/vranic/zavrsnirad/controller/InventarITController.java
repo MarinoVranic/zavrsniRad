@@ -215,6 +215,29 @@ public class InventarITController {
         return getViewBasedOnRole(auth);
     }
 
+    @GetMapping("/findByMacAddress")
+    public String findInventarByMacAddress(@RequestParam("addressMac") String addressMac, Model model) throws Exception {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        List<Inventar> inventarList = inventarService.getInventarByMacAddress(addressMac);
+        List<Lokacija> allLokacija = lokacijaService.getAllLokacija();
+        List<VrstaUredaja> allVrstaUredaja = vrstaUredajaService.getAllVrstaUredaja();
+        if (inventarList.isEmpty()) {
+            model.addAttribute("allLokacija", allLokacija);
+            model.addAttribute("allVrstaUredaja", allVrstaUredaja);
+            model.addAttribute("error4", "Inventar tog serijskog broja ne postoji u sustavu!");
+            model.addAttribute("savInventar", inventarService.getAllInventar());
+            Inventar inventar = new Inventar();
+            model.addAttribute("inventar", inventar);
+        } else {
+            model.addAttribute("allLokacija", allLokacija);
+            model.addAttribute("allVrstaUredaja", allVrstaUredaja);
+            model.addAttribute("savInventar", inventarList);
+            Inventar inventar = new Inventar();
+            model.addAttribute("inventar", inventar);
+        }
+        return getViewBasedOnRole(auth);
+    }
+
     @GetMapping("/findByUser")
     public String showInventarByUser(@RequestParam("lastName") String lastName, Model model) throws Exception {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

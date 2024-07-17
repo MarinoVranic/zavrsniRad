@@ -77,6 +77,10 @@ public class InventarService {
         return inventarRepository.findAllBySerijskiBroj(serijskiBroj);
     }
 
+    public List<Inventar> getInventarByMacAddress(String addressMac){
+        return inventarRepository.findAllByMAC(addressMac);
+    }
+
     public List<Inventar> getInventarByUser(String lastName){
         return inventarRepository.findAllByUser(lastName);
     }

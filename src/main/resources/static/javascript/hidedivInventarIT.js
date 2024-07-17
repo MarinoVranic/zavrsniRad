@@ -16,3 +16,9 @@ function hidedivInventarIT3() {
     document.location.href = '/inventarIT/all';
 }
 setTimeout("hidedivInventarIT3()", 1200);
+
+function hidedivInventarIT4() {
+    document.getElementById("error-message4").style.visibility = "hidden";
+    document.location.href = '/inventarIT/all';
+}
+setTimeout("hidedivInventarIT4()", 1200);

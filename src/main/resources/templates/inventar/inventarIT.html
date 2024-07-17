@@ -144,6 +144,25 @@
         <label id="error-message2" class="alert alert-danger" role="alert" th:text="${error2}"
                th:if="${error2}"></label>
     </form>
+    <form id="form7" class="w3-container w3-padding form" th:action="@{/inventarIT/findByMacAddress}" method="get">
+        <label for="serialNumber"></label>
+        <div style="display: flex; flex-direction: column; align-items: center;">
+            <input type="text" id="addressMac" name="addressMac" placeholder="Pretraži po MAC adresi" required
+                   onchange="this.setCustomValidity('')"
+                   oninvalid="this.setCustomValidity('Popunite polje za pretraživanje!')">
+            <div style="margin-top: 10px">
+                <button onclick="hidedivInventarIT4()" type="submit" class="button-small"><i class="fa fa-search"
+                                                                                             style="font-size:12px"></i>
+                    Pretraži
+                </button>
+                <button type="button" class="button-small" onclick="window.location.href='/inventarIT/all'">Prikaži
+                    sve
+                </button>
+            </div>
+        </div>
+        <label id="error-message4" class="alert alert-danger" role="alert" th:text="${error4}"
+               th:if="${error4}"></label>
+    </form>
     <form id="form4" class="w3-container w3-padding form" th:action="@{/inventarIT/findByUser}" method="get">
         <label for="lastName"></label>
         <div style="display: flex; flex-direction: column; align-items: center;">
@@ -191,12 +210,12 @@
                 <option th:each="lokacija : ${allLokacija}" th:value="${lokacija.idLokacije}"
                         th:text="${lokacija.nazivLokacije}"></option>
             </select>
-        </div>
-        <div style="margin-top: 17px">
-            <button onclick="hidedivInventarIT()" type="submit" class="button-small"><i class="fa fa-search"
-                                                                                        style="font-size:12px"></i>
-                Pretraži po lokaciji
-            </button>
+            <div style="margin-top: 17px">
+                <button onclick="hidedivInventarIT()" type="submit" class="button-small"><i class="fa fa-search"
+                                                                                            style="font-size:12px"></i>
+                    Pretraži po lokaciji
+                </button>
+            </div>
         </div>
     </form>
     <form id="form5" class="w3-container w3-padding form" th:action="@{/inventarIT/findByTipInventara}" method="get"
@@ -210,12 +229,12 @@
                 <option value="SI">Sitni inventar</option>
                 <option value="IT">IT inventar</option>
             </select>
-        </div>
-        <div style="margin-top: 17px">
-            <button onclick="hidedivInventar()" type="submit" class="button-small"><i class="fa fa-search"
-                                                                                      style="font-size:12px"></i>
-                Pretraži po tipu inventara
-            </button>
+            <div style="margin-top: 17px">
+                <button onclick="hidedivInventar()" type="submit" class="button-small"><i class="fa fa-search"
+                                                                                          style="font-size:12px"></i>
+                    Pretraži po tipu inventara
+                </button>
+            </div>
         </div>
     </form>
 </div>

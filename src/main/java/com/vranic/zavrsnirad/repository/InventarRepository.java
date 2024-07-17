@@ -127,5 +127,9 @@ public interface InventarRepository extends JpaRepository<Inventar, String> {
             " LEFT JOIN FETCH inventar.racun LEFT JOIN FETCH inventar.dobavljac LEFT JOIN inventar.korisnik korisnik WHERE korisnik.lastName LIKE CONCAT('%', :lastName, '%') ORDER BY inventar.inventarniBroj ASC")
     List<Inventar> findAllByUser(@Param("lastName") String lastName);
 
+    @Query(value = "SELECT inventar FROM Inventar inventar LEFT JOIN FETCH inventar.vrstaUredaja LEFT JOIN FETCH inventar.lokacija i" +
+            " LEFT JOIN FETCH inventar.racun LEFT JOIN FETCH inventar.dobavljac LEFT JOIN inventar.korisnik korisnik WHERE inventar.lanMac LIKE CONCAT('%', :addressMac, '%') OR inventar.wifiMac LIKE CONCAT('%', :addressMac, '%') ORDER BY inventar.inventarniBroj ASC")
+    List<Inventar> findAllByMAC(@Param("addressMac") String addressMac);
+
     List<Inventar> findAllBySerijskiBroj(@Param("serijskiBroj") String serijskiBroj);
 }
