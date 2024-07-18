@@ -22,6 +22,11 @@ public class GlobalExceptionHandler {
     public LocalDate today = LocalDate.now();
     public DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
+    // ANSI escape code for red text
+    public String redColor = "\u001B[31m";
+    // ANSI escape code to reset color
+    public String resetColor = "\u001B[0m";
+
     @Autowired
     private UserService userService;
 
@@ -43,7 +48,8 @@ public class GlobalExceptionHandler {
         // Append a limited number of stack trace elements to the error message
         for (int i = 0; i < Math.min(stackTraceElements.length, MAX_STACK_TRACE_ELEMENTS); i++) {
             StackTraceElement stackTraceElement = stackTraceElements[i];
-            errorMessageBuilder.append(stackTraceElement.getClassName())
+            errorMessageBuilder.append(redColor)
+                    .append(stackTraceElement.getClassName())
                     .append(" - ").append(stackTraceElement.getMethodName())
                     .append(" - ").append(stackTraceElement.getFileName())
                     .append(" - Line: ").append(stackTraceElement.getLineNumber())
@@ -60,21 +66,16 @@ public class GlobalExceptionHandler {
         modelAndView.addObject("errorMessage", errorMessageBuilder.toString());
 
         //
-        String errorCreatedByUser = "Error created by: " + user.getFirstName() +
+        String errorCreatedByUser = redColor + "Error created by: " + user.getFirstName() +
                 " " +
                 user.getLastName() +
                 "\n" +
-                "Error created on: " +
+                redColor + "Error created on: " +
                 today.format(formatter) +
                 "\n";
 
-        // ANSI escape code for red text
-        String redColor = "\u001B[31m";
-        // ANSI escape code to reset color
-        String resetColor = "\u001B[0m";
-
         // Print error message on console and log file
-        System.err.println(redColor + errorCreatedByUser + errorMessageBuilder.toString().replace("<br>","\n") + resetColor);
+        System.err.println(errorCreatedByUser + errorMessageBuilder.toString().replace("<br>","\n") + resetColor);
 
         return modelAndView;
     }
