@@ -138,15 +138,10 @@ public class RacunController {
 
     @GetMapping("/generatePDF")
     public ResponseEntity<byte[]> generatePDF(HttpServletResponse response) throws IOException, DocumentException {
-        // Set the content type and attachment header
-//        response.setContentType("application/pdf");
-//        response.setHeader("Content-Disposition", "attachment; filename=\"racuni-izvjestaj.pdf\"");
-
         // Create a new PDF document
         Document document = new Document(PageSize.A4);
 
         // Create a PdfWriter instance to write the document to the response output stream
-//        PdfWriter.getInstance(document, response.getOutputStream());
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PdfWriter.getInstance(document, baos);
 

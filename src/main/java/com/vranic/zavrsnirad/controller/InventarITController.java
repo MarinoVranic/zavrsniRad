@@ -142,7 +142,9 @@ public class InventarITController {
             // Set the username to null if it is blank
             if (StringUtils.isBlank(inventar.getKorisnik().getUsername())) {
                 inventar.setKorisnik(null);
-            } else if (inventar.getRacun() == null || inventar.getRacun().getIdRacuna() == null) {
+            }
+            //set Racun to null if it is already null
+            if (inventar.getRacun() == null || inventar.getRacun().getIdRacuna() == null) {
                 inventar.setRacun(null);
             }
             inventarService.save(inventar);
@@ -156,6 +158,7 @@ public class InventarITController {
         if (StringUtils.isBlank(inventar.getKorisnik().getUsername())) {
             inventar.setKorisnik(null);
         }
+        //set Racun to null if it is already null
         if (inventar.getRacun() == null || inventar.getRacun().getIdRacuna() == null) {
             inventar.setRacun(null);
         }
@@ -422,7 +425,6 @@ public class InventarITController {
 
     @GetMapping(value = "/ean13/{inventarniBroj}", produces = MediaType.IMAGE_PNG_VALUE)
     public ResponseEntity<byte[]> generateAndDownloadEAN13Barcode(@PathVariable(value = "inventarniBroj") String inventarniBroj) throws Exception {
-//        try {
             String originalInventarniBroj = inventarniBroj;
             if(originalInventarniBroj.length()<2){
                 String sitniInventar = "";
@@ -512,23 +514,14 @@ public class InventarITController {
             headers.setContentType(MediaType.IMAGE_PNG);
             headers.setContentDisposition(ContentDisposition.builder("attachment").filename("barcode"+originalInventarniBroj+".png").build());
             return new ResponseEntity<>(combinedImageByteArray, headers, HttpStatus.OK);
-//        } catch (WriterException | IOException e) {
-//            System.out.println(e);;
-//            return new ResponseEntity<>(new byte[0], HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
     }
 
     @GetMapping("/generatePDF")
     public ResponseEntity<byte[]> generatePDF(/*HttpServletResponse response*/) throws Exception {
-        // Set the content type and attachment header
-//        response.setContentType("application/pdf");
-//        response.setHeader("Content-Disposition", "attachment; filename=\"inventarIT-izvjestaj.pdf\"");
-
         // Create a new PDF document
         Document document = new Document(PageSize.A4.rotate());
 
         // Create a PdfWriter instance to write the document to the response output stream
-//        PdfWriter.getInstance(document, response.getOutputStream());
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PdfWriter.getInstance(document, baos);
 
@@ -635,7 +628,6 @@ public class InventarITController {
         table.addCell(headerCell);
 
         // Get the list of Inventar objects from service
-//        List<Inventar> inventari = inventarService.getAllInventar();
         List<Inventar> inventari = inventarService.getInventarForIT();
 
         // Add data cells to the table
@@ -666,7 +658,6 @@ public class InventarITController {
             } else {
                 setCellContentAndFont(cell, inventar.getLokacija().getNazivLokacije(), croatianFont);
             }
-//            setCellContentAndFont(cell, inventar.getLokacija().getNazivLokacije(), croatianFont);
             table.addCell(cell);
             Korisnik korisnik = inventar.getKorisnik();
             if(korisnik != null && korisnik.getUsername() != null){
@@ -774,15 +765,10 @@ public class InventarITController {
 
         String filename = String.join("_", selectedItems);
 
-        // Set the content type and attachment header
-//        response.setContentType("application/pdf");
-//        response.setHeader("Content-Disposition", "attachment; filename=\"Inv"+filename+".pdf\"");
-
         // Create a new PDF document
         Document document = new Document(PageSize.A4);
 
         // Create a PdfWriter instance to write the document to the response output stream
-//        PdfWriter.getInstance(document, response.getOutputStream());
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PdfWriter.getInstance(document, baos);
 

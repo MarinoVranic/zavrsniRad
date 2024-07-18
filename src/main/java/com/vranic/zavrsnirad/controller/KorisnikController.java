@@ -207,15 +207,10 @@ public class KorisnikController {
 
     @GetMapping("/generatePDFaktivni")
     public ResponseEntity<byte[]> generatePDF(HttpServletResponse response) throws Exception {
-        // Set the content type and attachment header
-//        response.setContentType("application/pdf");
-//        response.setHeader("Content-Disposition", "attachment; filename=\"korisnici-izvjestaj-aktivni.pdf\"");
-
         // Create a new PDF document
         Document document = new Document(PageSize.A4.rotate());
 
         // Create a PdfWriter instance to write the document to the response output stream
-//        PdfWriter.getInstance(document, response.getOutputStream());
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PdfWriter.getInstance(document, baos);
 
@@ -272,9 +267,7 @@ public class KorisnikController {
         printDate.setSpacingAfter(5);
         document.add(printDate);
 
-//        // Create a table with 14 columns
-//        PdfPTable table = new PdfPTable(14);
-        // Create a table with 14 columns
+        // Create a table with 11 columns
         PdfPTable table = new PdfPTable(11);
 
         // Set the table width as a percentage of the available page width
@@ -299,8 +292,6 @@ public class KorisnikController {
         table.addCell(headerCell);
         headerCell.setPhrase(new Phrase("Prezime", headerFont));
         table.addCell(headerCell);
-//        headerCell.setPhrase(new Phrase("Status", headerFont));
-//        table.addCell(headerCell);
         headerCell.setPhrase(new Phrase("Vrsta korisnika", headerFont));
         table.addCell(headerCell);
         headerCell.setPhrase(new Phrase("Poslodavac", headerFont));
@@ -313,12 +304,8 @@ public class KorisnikController {
         table.addCell(headerCell);
         headerCell.setPhrase(new Phrase("Korisnik aktiviran", headerFont));
         table.addCell(headerCell);
-//        headerCell.setPhrase(new Phrase("Korisnik deaktiviran", headerFont));
-//        table.addCell(headerCell);
         headerCell.setPhrase(new Phrase("E-mail aktiviran", headerFont));
         table.addCell(headerCell);
-//        headerCell.setPhrase(new Phrase("E-mail deaktiviran", headerFont));
-//        table.addCell(headerCell);
         headerCell.setPhrase(new Phrase("Komentar", headerFont));
         table.addCell(headerCell);
 
@@ -333,8 +320,6 @@ public class KorisnikController {
             table.addCell(dataCell);
             dataCell.setPhrase(new Phrase(korisnik.getLastName(), croatianFont));
             table.addCell(dataCell);
-//            dataCell.setPhrase(new Phrase(korisnik.getStatus(), croatianFont));
-//            table.addCell(dataCell);
             dataCell.setPhrase(new Phrase(korisnik.getAccountType(), croatianFont));
             table.addCell(dataCell);
             dataCell.setPhrase(new Phrase(korisnik.getSubcontractor(), croatianFont));
@@ -347,12 +332,8 @@ public class KorisnikController {
             table.addCell(dataCell);
             dataCell.setPhrase(new Phrase(String.valueOf(korisnik.getUserCreated()), croatianFont));
             table.addCell(dataCell);
-//            dataCell.setPhrase(new Phrase(String.valueOf(korisnik.getUserDisabled()), croatianFont));
-//            table.addCell(dataCell);
             dataCell.setPhrase(new Phrase(String.valueOf(korisnik.getEmailCreated()), croatianFont));
             table.addCell(dataCell);
-//            dataCell.setPhrase(new Phrase(String.valueOf(korisnik.getEmailDisabled()), croatianFont));
-//            table.addCell(dataCell);
             dataCell.setPhrase(new Phrase(korisnik.getKomentar(), croatianFont));
             table.addCell(dataCell);
         }
@@ -400,15 +381,10 @@ public class KorisnikController {
 
     @GetMapping("/generatePDFneaktivni")
     public ResponseEntity<byte[]> generatePDFneaktivni(HttpServletResponse response) throws Exception {
-        // Set the content type and attachment header
-//        response.setContentType("application/pdf");
-//        response.setHeader("Content-Disposition", "attachment; filename=\"korisnici-izvjestaj-neaktivni.pdf\"");
-
         // Create a new PDF document
         Document document = new Document(PageSize.A4.rotate());
 
         // Create a PdfWriter instance to write the document to the response output stream
-//        PdfWriter.getInstance(document, response.getOutputStream());
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PdfWriter.getInstance(document, baos);
 
@@ -618,15 +594,10 @@ public class KorisnikController {
                         .replaceAll("đ", "d")
                         .replaceAll("ž", "z");
 
-        // Set the content type and attachment header
-//        response.setContentType("application/pdf");
-//        response.setHeader("Content-Disposition", "attachment; filename=\"Printout-"+filename+".pdf\"");
-
         // Create a new PDF document
         Document document = new Document(PageSize.A4);
 
         // Create a PdfWriter instance to write the document to the response output stream
-//        PdfWriter.getInstance(document, response.getOutputStream());
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PdfWriter.getInstance(document, baos);
 

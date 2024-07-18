@@ -2,8 +2,13 @@ package com.vranic.zavrsnirad.util;
 
 import com.itextpdf.io.IOException;
 import com.itextpdf.text.DocumentException;
+import com.vranic.zavrsnirad.model.User;
+import com.vranic.zavrsnirad.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
@@ -11,8 +16,15 @@ import org.springframework.web.servlet.ModelAndView;
 @ControllerAdvice
 public class GlobalExceptionHandler {
     private static final int MAX_STACK_TRACE_ELEMENTS = 5;
+
+    @Autowired
+    private UserService userService;
+
     @ExceptionHandler(Exception.class)
     public ModelAndView handleException(Exception e) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        User user = userService.getUserByUsername(username);
         // Get the stack trace elements
         StackTraceElement[] stackTraceElements = e.getStackTrace();
 
@@ -42,31 +54,16 @@ public class GlobalExceptionHandler {
         // Add error message to the ModelAndView
         modelAndView.addObject("errorMessage", errorMessageBuilder.toString());
 
-        System.err.println(errorMessageBuilder.toString().replace("<br>","\n"));
+        //
+        String errorCreatedByUser = "Error created by: " + user.getFirstName() +
+                " " +
+                user.getLastName() +
+                "\n";
+
+
+        // Print error message on console and log file
+        System.err.println(errorCreatedByUser + errorMessageBuilder.toString().replace("<br>","\n"));
 
         return modelAndView;
     }
-//
-//    // Handler for IOException
-//    @ExceptionHandler(IOException.class)
-//    public ModelAndView handleIOException(IOException e) {
-//        ModelAndView modelAndView = new ModelAndView("error");
-//        modelAndView.addObject("errorMessage", "IO Exception occurred: " + e.getMessage());
-//        return modelAndView;
-//    }
-//
-//    // Handler for DocumentException (assuming it's a specific exception type)
-//    @ExceptionHandler(DocumentException.class)
-//    public ModelAndView handleDocumentException(DocumentException e) {
-//        ModelAndView modelAndView = new ModelAndView("error");
-//        modelAndView.addObject("errorMessage", "Document Exception occurred: " + e.getMessage());
-//        return modelAndView;
-//    }
-//
-//    @ExceptionHandler(IllegalStateException.class)
-//    public ModelAndView handleIllegalStateException(IllegalStateException e) {
-//        ModelAndView modelAndView = new ModelAndView("error");
-//        modelAndView.addObject("errorMessage", "IllegalStateException occurred: " + e.getMessage());
-//        return modelAndView;
-//    }
 }

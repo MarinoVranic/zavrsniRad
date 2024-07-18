@@ -348,7 +348,6 @@ public class InventarController {
 
     @GetMapping(value = "/ean13/{inventarniBroj}", produces = MediaType.IMAGE_PNG_VALUE)
     public ResponseEntity<byte[]> generateAndDownloadEAN13Barcode(@PathVariable(value = "inventarniBroj") String inventarniBroj) throws Exception {
-//        try {
             String originalInventarniBroj = inventarniBroj;
             if(originalInventarniBroj.length()<2){
                 String sitniInventar = "";
@@ -421,23 +420,14 @@ public class InventarController {
             headers.setContentType(MediaType.IMAGE_PNG);
             headers.setContentDisposition(ContentDisposition.builder("attachment").filename("barcode"+originalInventarniBroj+".png").build());
             return new ResponseEntity<>(combinedImageByteArray, headers, HttpStatus.OK);
-//        } catch (WriterException | IOException e) {
-//            System.out.println(e);;
-//            return new ResponseEntity<>(new byte[0], HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
     }
 
     @GetMapping("/generatePDF")
     public ResponseEntity<byte[]> generatePDF(/*HttpServletResponse response*/) throws Exception {
-        // Set the content type and attachment header
-//        response.setContentType("application/pdf");
-//        response.setHeader("Content-Disposition", "attachment; filename=\"OS_SI-izvjestaj.pdf\"");
-
         // Create a new PDF document
         Document document = new Document(PageSize.A4.rotate());
 
         // Create a PdfWriter instance to write the document to the response output stream
-//        PdfWriter.getInstance(document, response.getOutputStream());
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PdfWriter.getInstance(document, baos);
 

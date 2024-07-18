@@ -345,7 +345,7 @@ public class InventarNaInventuriController {
                 invBrBezNula = "0" + invBrBezNula;
             }
             invBroj = "LS" + invBrBezNula;
-            System.out.println(invBroj);
+            System.out.println("Scanned: "+invBroj);
             Inventar inventar = inventarService.getInventarById(invBroj);
             Inventura inventura = inventuraService.getInventuraById(currentYear.longValue());
             InventarNaInventuri inventarNaInventuri = new InventarNaInventuri();
@@ -535,15 +535,10 @@ public class InventarNaInventuriController {
     @GetMapping("/generatePDF")
     public ResponseEntity<byte[]> generatePDF(@RequestParam("idInventure") Long idInventure, @RequestParam("tipInventara") String tipInventara, @RequestParam("isFound") String isFound, HttpServletResponse response) throws Exception {
             if (isFound.equals("Pronađeno")) {
-                // Set the content type and attachment header
-//                response.setContentType("application/pdf");
-//                response.setHeader("Content-Disposition", "attachment; filename=\"Izvjestaj_inventure_za-" + tipInventara + "_" + idInventure + ".pdf\"");
-
                 // Create a new PDF document
                 Document document = new Document(PageSize.A4.rotate());
 
                 // Create a PdfWriter instance to write the document to the response output stream
-//                PdfWriter.getInstance(document, response.getOutputStream());
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 PdfWriter.getInstance(document, baos);
 
@@ -760,15 +755,10 @@ public class InventarNaInventuriController {
                     return new ResponseEntity<>(pdfContent, headers, HttpStatus.OK);
                 }
             } else if (isFound.equals("Nepronađeno")) {
-                // Set the content type and attachment header
-//                response.setContentType("application/pdf");
-//                response.setHeader("Content-Disposition", "attachment; filename=\"Izvjestaj_nepronadenog-" + tipInventara + "_" + idInventure + ".pdf\"");
-
                 // Create a new PDF document
                 Document document = new Document(PageSize.A4.rotate());
 
                 // Create a PdfWriter instance to write the document to the response output stream
-//                PdfWriter.getInstance(document, response.getOutputStream());
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 PdfWriter.getInstance(document, baos);
 
