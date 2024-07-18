@@ -13,9 +13,14 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
     private static final int MAX_STACK_TRACE_ELEMENTS = 5;
+    public LocalDate today = LocalDate.now();
+    public DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
     @Autowired
     private UserService userService;
@@ -58,11 +63,18 @@ public class GlobalExceptionHandler {
         String errorCreatedByUser = "Error created by: " + user.getFirstName() +
                 " " +
                 user.getLastName() +
+                "\n" +
+                "Error created on: " +
+                today.format(formatter) +
                 "\n";
 
+        // ANSI escape code for red text
+        String redColor = "\u001B[31m";
+        // ANSI escape code to reset color
+        String resetColor = "\u001B[0m";
 
         // Print error message on console and log file
-        System.err.println(errorCreatedByUser + errorMessageBuilder.toString().replace("<br>","\n"));
+        System.err.println(redColor + errorCreatedByUser + errorMessageBuilder.toString().replace("<br>","\n") + resetColor);
 
         return modelAndView;
     }
