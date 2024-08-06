@@ -63,7 +63,7 @@
                     <option value="">Odaberite lokaciju</option>
                     <option th:each="lokacija : ${allLokacija}" th:value="${lokacija.idLokacije}"
                             th:text="${lokacija.nazivLokacije}"
-                            th:selected="${lokacija.idLokacije == selectedLokacija.idLokacije}"></option>
+                            th:selected="${selectedLokacija != null} ? ${lokacija.idLokacije == selectedLokacija.idLokacije} : false"></option>
                 </select>
             </p>
             <p class="w3-half">
@@ -128,13 +128,13 @@
                 <div class="w3-half">
                     <label class="w3-text-dark-grey" for="nazivDobavljaca"><b>Dobavljač</b></label>
                     <select class="w3-input w3-border w3-round w3-center" id="nazivDobavljaca" name="nazivDobavljaca"
-                            th:field="*{dobavljac.idDobavljaca}" required
+                            th:field="*{dobavljac.idDobavljaca}"
                             onchange="this.setCustomValidity('')"
                             oninvalid="this.setCustomValidity('Odaberite dobavljača!')">
                         <option value="">Odaberite dobavljača</option>
                         <option th:each="dobavljac : ${allDobavljac}" th:value="${dobavljac.idDobavljaca}"
                                 th:text="${dobavljac.nazivDobavljaca}"
-                                th:selected="${dobavljac.idDobavljaca == selectedDobavljac.idDobavljaca}"></option>
+                                th:selected="${selectedDobavljac != null} ? ${dobavljac.idDobavljaca == selectedDobavljac.idDobavljaca} : false"></option>
                     </select>
                 </div>
                 <div class="w3-half">
