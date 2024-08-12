@@ -19,10 +19,6 @@ public interface InventarRepository extends JpaRepository<Inventar, String> {
     @Query(value = "SELECT * FROM inventar i WHERE i.Inventarni_broj = :inventarniBroj", nativeQuery = true)
     List<Inventar> findByInventarniBroj(String inventarniBroj);
 
-//    @Query(value = "SELECT inventar FROM Inventar inventar LEFT JOIN FETCH inventar.vrstaUredaja LEFT JOIN FETCH inventar.lokacija" +
-//            " LEFT JOIN FETCH inventar.racun LEFT JOIN FETCH inventar.dobavljac LEFT JOIN inventar.korisnik korisnik ORDER BY inventar.inventarniBroj DESC")
-//    List<Inventar> findAll();
-
     @Query(value = "SELECT inventar.* FROM inventar inventar " +
             "LEFT JOIN vrsta_uredaja vrstaUredaja ON inventar.id_vrste_uredaja = vrstaUredaja.id_vrste_uredaja " +
             "LEFT JOIN lokacija lokacija ON inventar.id_lokacije = lokacija.id_lokacije " +
@@ -62,16 +58,13 @@ public interface InventarRepository extends JpaRepository<Inventar, String> {
             " LEFT JOIN FETCH inventar.racun LEFT JOIN FETCH inventar.dobavljac LEFT JOIN inventar.korisnik korisnik WHERE i.idLokacije = :idLokacije ORDER BY inventar.inventarniBroj ASC")
     List<Inventar> findAllByLokacija(@Param("idLokacije") Long idLokacije);
 
-//    @Query(value = "SELECT inventar FROM Inventar inventar LEFT JOIN FETCH inventar.vrstaUredaja vu LEFT JOIN FETCH inventar.lokacija" +
-//            " LEFT JOIN FETCH inventar.racun LEFT JOIN FETCH inventar.dobavljac LEFT JOIN inventar.korisnik korisnik WHERE vu.nazivVrsteUredaja IN ('laptop', 'pc', 'monitor', 'spacemouse', 'slušalice', 'mobitel', 'speakerphone') ORDER BY inventar.inventarniBroj DESC")
-//    List<Inventar> findAllIT();
     @Query(value = "SELECT inventar.* FROM inventar inventar " +
             "LEFT JOIN vrsta_uredaja vu ON inventar.id_vrste_uredaja = vu.id_vrste_uredaja " +
             "LEFT JOIN lokacija lokacija ON inventar.id_lokacije = lokacija.id_lokacije " +
             "LEFT JOIN racun racun ON inventar.id_racuna = racun.id_racuna " +
             "LEFT JOIN dobavljac dobavljac ON inventar.id_dobavljaca = dobavljac.id_dobavljaca " +
             "LEFT JOIN korisnik korisnik ON inventar.username = korisnik.username " +
-            "WHERE vu.naziv_vrste_uredaja IN ('laptop', 'pc', 'monitor', 'spacemouse', 'slušalice', 'mobitel', 'speakerphone') " +
+            "WHERE vu.naziv_vrste_uredaja IN ('laptop', 'pc', 'monitor', 'spacemouse', 'slušalice', 'mobitel', 'speakerphone', 'switch') " +
             "ORDER BY CASE " +
             "WHEN inventar.inventarni_broj REGEXP '^[A-Za-z]+.*' THEN inventar.inventarni_broj " +
             "ELSE '' " +
@@ -99,10 +92,6 @@ public interface InventarRepository extends JpaRepository<Inventar, String> {
     @Query(value = "SELECT inventar FROM Inventar inventar LEFT JOIN FETCH inventar.vrstaUredaja vu LEFT JOIN FETCH inventar.lokacija" +
             " LEFT JOIN FETCH inventar.racun LEFT JOIN FETCH inventar.dobavljac LEFT JOIN inventar.korisnik korisnik WHERE inventar.inventarniBroj NOT LIKE 'SI%' AND inventar.inventarniBroj NOT LIKE 'IT%' AND inventar.inventarniBroj NOT LIKE 'LS%' ORDER BY inventar.inventarniBroj ASC")
     List<Inventar> findAllByOS();
-
-//    @Query(value = "SELECT inventar FROM Inventar inventar LEFT JOIN FETCH inventar.vrstaUredaja vu LEFT JOIN FETCH inventar.lokacija" +
-//            " LEFT JOIN FETCH inventar.racun LEFT JOIN FETCH inventar.dobavljac LEFT JOIN inventar.korisnik korisnik WHERE inventar.inventarniBroj NOT LIKE 'IT%' ORDER BY inventar.inventarniBroj DESC")
-//    List<Inventar> findAllForAdministration();
 
     @Query(value = "SELECT inventar.* FROM inventar inventar " +
             "LEFT JOIN vrsta_uredaja vu ON inventar.id_vrste_uredaja = vu.id_vrste_uredaja " +

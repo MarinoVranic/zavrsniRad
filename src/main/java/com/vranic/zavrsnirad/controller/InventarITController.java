@@ -227,7 +227,7 @@ public class InventarITController {
         if (inventarList.isEmpty()) {
             model.addAttribute("allLokacija", allLokacija);
             model.addAttribute("allVrstaUredaja", allVrstaUredaja);
-            model.addAttribute("error4", "Inventar tog serijskog broja ne postoji u sustavu!");
+            model.addAttribute("error4", "Inventar tražene MAC adrese ne postoji u sustavu!");
             model.addAttribute("savInventar", inventarService.getAllInventar());
             Inventar inventar = new Inventar();
             model.addAttribute("inventar", inventar);
