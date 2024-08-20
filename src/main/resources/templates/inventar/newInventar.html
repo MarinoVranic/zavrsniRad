@@ -80,7 +80,7 @@
             <p class="w3-half">
                 <label class="w3-text-dark-grey" for="brojRacuna"><b>Račun</b></label>
                 <select class="w3-input w3-border w3-round w3-center" id="brojRacuna" name="brojRacuna"
-                        th:field="*{racun.idRacuna}" required
+                        th:field="*{racun.idRacuna}"
                         onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Odaberite račun!')">
                     <option value="">Odaberite račun</option>
                     <option th:each="racun : ${allRacun}" th:value="${racun.idRacuna}"
