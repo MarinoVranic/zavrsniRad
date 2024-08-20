@@ -408,6 +408,18 @@ public class InventarITController {
             Inventar inventar = new Inventar();
             model.addAttribute("inventar", inventar);
             return getViewBasedOnRole(auth);
+        } else if(tipInventara.equals("LS")) {
+            List<Korisnik> allKorisnik = korisnikService.getAllKorisnik();
+            List<Lokacija> allLokacija = lokacijaService.getAllLokacija();
+            List<VrstaUredaja> allVrstaUredaja = vrstaUredajaService.getAllVrstaUredaja();
+            model.addAttribute("allLokacija", allLokacija);
+            model.addAttribute("allVrstaUredaja", allVrstaUredaja);
+            model.addAttribute("allKorisnik", allKorisnik);
+            List<Inventar> inventarList = inventarService.getInventarByLS();
+            model.addAttribute("savInventar", inventarList);
+            Inventar inventar = new Inventar();
+            model.addAttribute("inventar", inventar);
+            return getViewBasedOnRole(auth);
         } else {
             List<Korisnik> allKorisnik = korisnikService.getAllKorisnik();
             List<Lokacija> allLokacija = lokacijaService.getAllLokacija();
