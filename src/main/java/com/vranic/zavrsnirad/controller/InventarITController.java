@@ -299,9 +299,13 @@ public class InventarITController {
         if(idVrste.equals(1)||idVrste.equals(6)){
             //split string nazivUredaja by one or more spaces and -
             String [] nazivUredaja = inventar.getNazivUredaja().split("\\s+|-");
+            String suffix ="";
+            if(inventar.getNazivUredaja().contains("G6")){
+                suffix="G6";
+            }
             String firstPartOfHostname = nazivUredaja[0];
             String secondPartOfHostname = inventar.getKorisnik().getUsername();
-            String hostname = firstPartOfHostname+"-"+secondPartOfHostname;
+            String hostname = firstPartOfHostname + suffix + "-" + secondPartOfHostname;
             if(inventar.getDatumZaduzenja()!=null)
             {
                 inventarService.zaduziInventar(hostname, inventar.getLokacija().getIdLokacije(), inventar.getKorisnik().getUsername(),

@@ -309,6 +309,12 @@
                 </td>
                 <td th:text="${inventar.napomena}"></td>
                 <td>
+                    <a th:if="${(inventar.lanMac != null && !inventar.lanMac.isEmpty()) || (inventar.wifiMac != null && !inventar.wifiMac.isEmpty())}"
+                       style="font-size:15px"
+                       th:href="|mailto:'it-support@aitac.nl'?subject=MAC%20adresa%20${inventar.korisnik != null && inventar.korisnik.firstName != null && inventar.korisnik.lastName != null ? inventar.korisnik.firstName + ' ' + inventar.korisnik.lastName : ''}&body=Molim%20te%20ubaci%20sljede%C4%87e:%0D%0A%0D%0ALokacija:%20${inventar.lokacija != null && inventar.lokacija.nazivLokacije != null ? inventar.lokacija.nazivLokacije : ''}%0D%0AKorisnik:%20${inventar.korisnik != null && inventar.korisnik.firstName != null && inventar.korisnik.lastName != null ? inventar.korisnik.firstName + ' ' + inventar.korisnik.lastName : ''}%0D%0AHostname:%20${inventar.hostname != null ? inventar.hostname : ''}%0D%0ALAN%20MAC:%20${inventar.lanMac != null ? inventar.lanMac.toLowerCase().replaceAll('[:-]', '').replaceAll('(.{6})(.*)', '$1-$2') : ''}%0D%0AWIFI%20MAC:%20${inventar.wifiMac != null ? inventar.wifiMac.toLowerCase().replaceAll('[:-]', '').replaceAll('(.{2})(?=.)', '$1:') : ''}%0D%0A%0D%0AHvala.|"
+                       type="button" class="button-zaduzi">
+                        Send MAC
+                    </a>
                     <a th:if="${inventar.korisnik == null || inventar.korisnik.username == null}"
                        style="font-size:15px"
                        th:href="@{/inventarIT/zaduzi/{inventarniBroj}(inventarniBroj=${inventar.inventarniBroj})}"
