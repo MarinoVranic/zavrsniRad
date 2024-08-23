@@ -103,8 +103,8 @@ public class KorisnikController {
             model.addAttribute("error", "Korisničko ime već postoji!");
             return "korisnik/newKorisnik";
         } else if (korisnik.getUserCreated()!=today) {
-            korisnik.setUserCreated(today);
-            korisnik.setEmailCreated(today);
+//            korisnik.setUserCreated(today);
+//            korisnik.setEmailCreated(today);
             if (korisnik.getEmail().isEmpty())
             {
                 korisnik.setEmail(korisnik.getUsername()+"@aitac.nl");
@@ -127,6 +127,10 @@ public class KorisnikController {
             return "redirect:/korisnik/all";
         } else
         {
+            if(korisnik.getUserCreated()==null){
+                korisnik.setUserCreated(today);
+                korisnik.setEmailCreated(today);
+            }
             if (korisnik.getEmail().isEmpty())
             {
                 korisnik.setEmail(korisnik.getUsername()+"@aitac.nl");
@@ -581,7 +585,18 @@ public class KorisnikController {
 
         Korisnik selectedKorisnik = selectedKorisnikList.get(0);
 
-        String filename = selectedKorisnik.getFirstName() + " " +
+        String filename = selectedKorisnik.getFirstName()
+                        .replaceAll("Ć", "C")
+                        .replaceAll("Č", "C")
+                        .replaceAll("Š", "S")
+                        .replaceAll("Đ", "D")
+                        .replaceAll("Ž", "Z")
+                        .replaceAll("ć", "c")
+                        .replaceAll("č", "c")
+                        .replaceAll("š", "s")
+                        .replaceAll("đ", "d")
+                        .replaceAll("ž", "z")
+                + " " +
                 selectedKorisnik.getLastName()
                         .replaceAll("Ć", "C")
                         .replaceAll("Č", "C")
