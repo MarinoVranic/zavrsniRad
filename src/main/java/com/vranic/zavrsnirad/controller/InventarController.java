@@ -146,10 +146,14 @@ public class InventarController {
 
     @PostMapping("/save")
     public String saveInventar(@ModelAttribute("inventar") Inventar inventar) throws Exception {
-            // Set the username to null if it is blank
-            if (StringUtils.isBlank(inventar.getKorisnik().getUsername())) {
-                inventar.setKorisnik(null);
-            }
+        // Set the username to null if it is blank
+        if (StringUtils.isBlank(inventar.getKorisnik().getUsername())) {
+            inventar.setKorisnik(null);
+        }
+        //set Racun to null if it is already null
+        if (inventar.getRacun() == null || inventar.getRacun().getIdRacuna() == null) {
+            inventar.setRacun(null);
+        }
             inventarService.save(inventar);
         return "redirect:/inventar/all";
     }
