@@ -32,7 +32,9 @@ import java.util.List;
 public class KorisnikController {
     @Autowired
     private KorisnikService korisnikService;
-    public LocalDate today = LocalDate.now();
+    public LocalDate getToday() {
+        return LocalDate.now();
+    }
 
     private String getViewBasedOnRole(Authentication auth) {
         if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
@@ -95,14 +97,14 @@ public class KorisnikController {
     public String addKorisnik(@ModelAttribute("korisnik") @Valid Korisnik korisnik, BindingResult bindingResult, Model model) throws Exception{
         String usernameFirstChar = korisnik.getUsername().substring(0,1).toUpperCase();
         String usernameSecondChar = korisnik.getUsername().substring(1,2).toUpperCase();
-        String year = Integer.toString(today.getYear());
-        System.out.println(today);
+        String year = Integer.toString(getToday().getYear());
+        System.out.println(getToday());
         if(bindingResult.hasErrors()){
             return "korisnik/newKorisnik";
         } else if (korisnikService.checkIfUsernameIsFree(korisnik.getUsername())!=0) {
             model.addAttribute("error", "Korisničko ime već postoji!");
             return "korisnik/newKorisnik";
-        } else if (korisnik.getUserCreated()!=today) {
+        } else if (korisnik.getUserCreated()!=getToday()) {
 //            korisnik.setUserCreated(today);
 //            korisnik.setEmailCreated(today);
             if (korisnik.getEmail().isEmpty())
@@ -113,11 +115,11 @@ public class KorisnikController {
             {
                 switch (korisnik.getAccountType()) {
                     case "student", "praktikant" ->
-                            korisnik.setInitialPassword(korisnikService.createPasswordStudent(usernameFirstChar, usernameSecondChar, today));
+                            korisnik.setInitialPassword(korisnikService.createPasswordStudent(usernameFirstChar, usernameSecondChar, getToday()));
                     case "zaposlenik" ->
-                            korisnik.setInitialPassword(korisnikService.createPasswordZaposlenik(usernameFirstChar, usernameSecondChar, today));
+                            korisnik.setInitialPassword(korisnikService.createPasswordZaposlenik(usernameFirstChar, usernameSecondChar, getToday()));
                     case "kooperant" ->
-                            korisnik.setInitialPassword(korisnikService.createPasswordKooperant(usernameFirstChar, usernameSecondChar, today));
+                            korisnik.setInitialPassword(korisnikService.createPasswordKooperant(usernameFirstChar, usernameSecondChar, getToday()));
                 }
             }
             if (korisnik.getGodina().isEmpty()) {
@@ -128,8 +130,8 @@ public class KorisnikController {
         } else
         {
             if(korisnik.getUserCreated()==null){
-                korisnik.setUserCreated(today);
-                korisnik.setEmailCreated(today);
+                korisnik.setUserCreated(getToday());
+                korisnik.setEmailCreated(getToday());
             }
             if (korisnik.getEmail().isEmpty())
             {
@@ -139,11 +141,11 @@ public class KorisnikController {
             {
                 switch (korisnik.getAccountType()) {
                     case "student", "praktikant" ->
-                            korisnik.setInitialPassword(korisnikService.createPasswordStudent(usernameFirstChar, usernameSecondChar, today));
+                            korisnik.setInitialPassword(korisnikService.createPasswordStudent(usernameFirstChar, usernameSecondChar, getToday()));
                     case "zaposlenik" ->
-                            korisnik.setInitialPassword(korisnikService.createPasswordZaposlenik(usernameFirstChar, usernameSecondChar, today));
+                            korisnik.setInitialPassword(korisnikService.createPasswordZaposlenik(usernameFirstChar, usernameSecondChar, getToday()));
                     case "kooperant" ->
-                            korisnik.setInitialPassword(korisnikService.createPasswordKooperant(usernameFirstChar, usernameSecondChar, today));
+                            korisnik.setInitialPassword(korisnikService.createPasswordKooperant(usernameFirstChar, usernameSecondChar, getToday()));
                 }
             }
             if (korisnik.getGodina().isEmpty())            {
@@ -166,7 +168,7 @@ public class KorisnikController {
     @GetMapping("deactivate/{username}")
     @Transactional
     public String deactivateKorisnik(@PathVariable(value = "username")String username) throws Exception {
-        korisnikService.deactivateKorisnik(today, today, username);
+        korisnikService.deactivateKorisnik(getToday(), getToday(), username);
         return "redirect:/korisnik/all";
     }
 

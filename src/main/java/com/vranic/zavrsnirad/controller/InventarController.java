@@ -54,7 +54,9 @@ public class InventarController {
     @Autowired
     private RacunService racunService;
 
-    public LocalDate today = LocalDate.now();
+    public LocalDate getToday() {
+        return LocalDate.now();
+    }
 
     private String getViewBasedOnRole(Authentication auth) {
         if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
@@ -237,10 +239,10 @@ public class InventarController {
             String secondPartOfHostname = inventar.getKorisnik().getUsername();
             String hostname = firstPartOfHostname+"-"+secondPartOfHostname;
             inventarService.zaduziInventar(hostname, inventar.getLokacija().getIdLokacije(), inventar.getKorisnik().getUsername(),
-                    today, inventar.getInventarniBroj());
+                    getToday(), inventar.getInventarniBroj());
         }else {
             inventarService.zaduziInventar(inventar.getHostname(), inventar.getLokacija().getIdLokacije(), inventar.getKorisnik().getUsername(),
-                    today, inventar.getInventarniBroj());
+                    getToday(), inventar.getInventarniBroj());
         }
         return "redirect:/inventar/all";
     }
@@ -248,7 +250,7 @@ public class InventarController {
     @GetMapping("razduzi/{inventarniBroj}")
     @Transactional
     public String razduziInventar(@PathVariable(value = "inventarniBroj") String inventarniBroj) throws Exception {
-        inventarService.razduziInventar(today, inventarniBroj);
+        inventarService.razduziInventar(getToday(), inventarniBroj);
         return "redirect:/inventar/all";
     }
 
@@ -479,7 +481,7 @@ public class InventarController {
 
         //Adding date of the report
         Paragraph printDate = new Paragraph();
-        String todayDate = "Datum izvještaja: " + today;
+        String todayDate = "Datum izvještaja: " + getToday();
         Font dateFont = new Font(arialBoldItalicFont, 10, Font.ITALIC);
         Phrase datePhrase = new Phrase(todayDate, dateFont);
         printDate.add(datePhrase);

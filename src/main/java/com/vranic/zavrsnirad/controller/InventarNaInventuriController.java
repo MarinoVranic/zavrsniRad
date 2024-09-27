@@ -49,10 +49,9 @@ public class InventarNaInventuriController {
     @Autowired
     private UserService userService;
 
-    public LocalDate today = LocalDate.now();
-
-
-
+    public LocalDate getToday() {
+        return LocalDate.now();
+    }
 
     @GetMapping("/all")
     public String getAllInventarNaInventuri(Model model, HttpSession session) throws Exception {
@@ -586,7 +585,7 @@ public class InventarNaInventuriController {
 
                 //Adding date of the report
                 Paragraph printDate = new Paragraph();
-                String todayDate = "Datum izvještaja: " + today;
+                String todayDate = "Datum izvještaja: " + getToday();
                 Font dateFont = new Font(arialBoldItalicFont, 10, Font.ITALIC);
                 Phrase datePhrase = new Phrase(todayDate, dateFont);
                 printDate.add(datePhrase);
@@ -806,7 +805,7 @@ public class InventarNaInventuriController {
 
                 //Adding date of the report
                 Paragraph printDate = new Paragraph();
-                String todayDate = "Datum izvještaja: " + today;
+                String todayDate = "Datum izvještaja: " + getToday();
                 Font dateFont = new Font(arialBoldItalicFont, 10, Font.ITALIC);
                 Phrase datePhrase = new Phrase(todayDate, dateFont);
                 printDate.add(datePhrase);

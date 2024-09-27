@@ -61,7 +61,9 @@ public class InventarITController {
     @Autowired
     private UserService userService;
 
-    public LocalDate today = LocalDate.now();
+    public LocalDate getToday() {
+        return LocalDate.now();
+    }
     public DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
     private String getViewBasedOnRole(Authentication auth) {
@@ -312,8 +314,8 @@ public class InventarITController {
                         inventar.getDatumZaduzenja(), inventar.getInventarniBroj());
 
             } else {
-                LocalDate datumZaduzenja = today;
-                System.out.println(today);
+                LocalDate datumZaduzenja = getToday();
+                System.out.println(getToday());
                 inventarService.zaduziInventar(hostname, inventar.getLokacija().getIdLokacije(), inventar.getKorisnik().getUsername(),
                         datumZaduzenja, inventar.getInventarniBroj());
             }
@@ -324,8 +326,8 @@ public class InventarITController {
                         inventar.getDatumZaduzenja(), inventar.getInventarniBroj());
 
             } else {
-                LocalDate datumZaduzenja = today;
-                System.out.println(today);
+                LocalDate datumZaduzenja = getToday();
+                System.out.println(getToday());
                 inventarService.zaduziInventar(inventar.getHostname(), inventar.getLokacija().getIdLokacije(), inventar.getKorisnik().getUsername(),
                         datumZaduzenja, inventar.getInventarniBroj());
             }
@@ -346,11 +348,11 @@ public class InventarITController {
         razduzenje.setLokacija(inventar.getLokacija());
         razduzenje.setKorisnik(inventar.getKorisnik());
         razduzenje.setDatumZaduzenja(inventar.getDatumZaduzenja());
-        razduzenje.setDatumRazduzenja(today);
+        razduzenje.setDatumRazduzenja(getToday());
         razduzenje.setUser(user);
         razduzenje.setNapomena(inventar.getNapomena());
         razduzenjeService.save(razduzenje);
-        inventarService.razduziInventar(today, inventarniBroj);
+        inventarService.razduziInventar(getToday(), inventarniBroj);
         return "redirect:/inventarIT/all";
     }
 
@@ -585,7 +587,7 @@ public class InventarITController {
 
         //Adding date of the report
         Paragraph printDate = new Paragraph();
-        String todayDate = "Datum izvještaja: " + today;
+        String todayDate = "Datum izvještaja: " + getToday();
         Font dateFont = new Font(arialBoldItalicFont, 10, Font.ITALIC);
         Phrase datePhrase = new Phrase(todayDate, dateFont);
         printDate.add(datePhrase);
@@ -890,7 +892,7 @@ public class InventarITController {
         //Adding date of the report
         Paragraph printDate = new Paragraph();
         String datum = "Datum: ";
-        String todayDate =  today.format(formatter);
+        String todayDate =  getToday().format(formatter);
         Font datumFont = new Font(arialNormalFont, 9, Font.NORMAL);
         Font dateFont = new Font(arialBoldFont, 10, Font.BOLD);
         Phrase datumPhrase = new Phrase(datum, datumFont);
