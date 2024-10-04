@@ -98,61 +98,47 @@ public class KorisnikController {
         String usernameFirstChar = korisnik.getUsername().substring(0,1).toUpperCase();
         String usernameSecondChar = korisnik.getUsername().substring(1,2).toUpperCase();
         String year = Integer.toString(getToday().getYear());
-        System.out.println(getToday());
-        if(bindingResult.hasErrors()){
+
+        if (bindingResult.hasErrors()) {
             return "korisnik/newKorisnik";
-        } else if (korisnikService.checkIfUsernameIsFree(korisnik.getUsername())!=0) {
+        } else if (korisnikService.checkIfUsernameIsFree(korisnik.getUsername()) != 0) {
             model.addAttribute("error", "Korisničko ime već postoji!");
             return "korisnik/newKorisnik";
-        } else if (korisnik.getUserCreated()!=getToday()) {
-//            korisnik.setUserCreated(today);
-//            korisnik.setEmailCreated(today);
-            if (korisnik.getEmail().isEmpty())
-            {
-                korisnik.setEmail(korisnik.getUsername()+"@aitac.nl");
-            }
-            if (korisnik.getInitialPassword().isEmpty())
-            {
-                switch (korisnik.getAccountType()) {
-                    case "student", "praktikant" ->
-                            korisnik.setInitialPassword(korisnikService.createPasswordStudent(usernameFirstChar, usernameSecondChar, getToday()));
-                    case "zaposlenik" ->
-                            korisnik.setInitialPassword(korisnikService.createPasswordZaposlenik(usernameFirstChar, usernameSecondChar, getToday()));
-                    case "kooperant" ->
-                            korisnik.setInitialPassword(korisnikService.createPasswordKooperant(usernameFirstChar, usernameSecondChar, getToday()));
-                }
-            }
-            if (korisnik.getGodina().isEmpty()) {
-                korisnik.setGodina(year);
-            }
-            korisnikService.save(korisnik);
-            return "redirect:/korisnik/all";
-        } else
-        {
-            if(korisnik.getUserCreated()==null){
-                korisnik.setUserCreated(getToday());
-                korisnik.setEmailCreated(getToday());
-            }
-            if (korisnik.getEmail().isEmpty())
-            {
-                korisnik.setEmail(korisnik.getUsername()+"@aitac.nl");
-            }
-            if (korisnik.getInitialPassword().isEmpty())
-            {
-                switch (korisnik.getAccountType()) {
-                    case "student", "praktikant" ->
-                            korisnik.setInitialPassword(korisnikService.createPasswordStudent(usernameFirstChar, usernameSecondChar, getToday()));
-                    case "zaposlenik" ->
-                            korisnik.setInitialPassword(korisnikService.createPasswordZaposlenik(usernameFirstChar, usernameSecondChar, getToday()));
-                    case "kooperant" ->
-                            korisnik.setInitialPassword(korisnikService.createPasswordKooperant(usernameFirstChar, usernameSecondChar, getToday()));
-                }
-            }
-            if (korisnik.getGodina().isEmpty())            {
-                korisnik.setGodina(year);
-            }
-            korisnikService.save(korisnik);
         }
+
+        // Set UserCreated and EmailCreated to today's date if not provided
+        if (korisnik.getUserCreated() == null) {
+            korisnik.setUserCreated(getToday());
+        }
+        if (korisnik.getEmailCreated() == null) {
+            korisnik.setEmailCreated(getToday());
+        }
+
+        // Automatically generate email if not provided
+        if (korisnik.getEmail().isEmpty()) {
+            korisnik.setEmail(korisnik.getUsername() + "@aitac.nl");
+        }
+
+        // Automatically generate password if not provided
+        if (korisnik.getInitialPassword().isEmpty()) {
+            switch (korisnik.getAccountType()) {
+                case "student", "praktikant" ->
+                        korisnik.setInitialPassword(korisnikService.createPasswordStudent(usernameFirstChar, usernameSecondChar, getToday()));
+                case "zaposlenik" ->
+                        korisnik.setInitialPassword(korisnikService.createPasswordZaposlenik(usernameFirstChar, usernameSecondChar, getToday()));
+                case "kooperant" ->
+                        korisnik.setInitialPassword(korisnikService.createPasswordKooperant(usernameFirstChar, usernameSecondChar, getToday()));
+            }
+        }
+
+        // Set year if not provided
+        if (korisnik.getGodina().isEmpty()) {
+            korisnik.setGodina(year);
+        }
+
+        // Save korisnik
+        korisnikService.save(korisnik);
+
         return "redirect:/korisnik/all";
     }
 
