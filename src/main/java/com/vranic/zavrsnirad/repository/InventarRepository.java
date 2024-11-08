@@ -64,7 +64,7 @@ public interface InventarRepository extends JpaRepository<Inventar, String> {
             "LEFT JOIN racun racun ON inventar.id_racuna = racun.id_racuna " +
             "LEFT JOIN dobavljac dobavljac ON inventar.id_dobavljaca = dobavljac.id_dobavljaca " +
             "LEFT JOIN korisnik korisnik ON inventar.username = korisnik.username " +
-            "WHERE vu.naziv_vrste_uredaja IN ('laptop', 'pc', 'monitor', 'spacemouse', 'slušalice', 'mobitel', 'speakerphone', 'switch') " +
+            "WHERE vu.naziv_vrste_uredaja IN ('laptop', 'pc', 'monitor', 'miš', 'slušalice', 'mobitel', 'speakerphone', 'switch') " +
             "ORDER BY CASE " +
             "WHEN inventar.inventarni_broj REGEXP '^[A-Za-z]+.*' THEN inventar.inventarni_broj " +
             "ELSE '' " +
