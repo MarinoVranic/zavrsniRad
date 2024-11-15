@@ -29,6 +29,58 @@
         border-bottom: 1px solid #ddd;
         border-left: 1px solid #ddd;
     }
+
+
+    /* Ensure that the container takes up the full width defined by its parent */
+    .custom-select-container {
+        position: relative;
+        width: 100%; /* Matches the width of .w3-half */
+        box-sizing: border-box; /* Ensures padding and border are included in the width */
+    }
+
+    /* Style the input field to match the W3.CSS styling */
+    .custom-select-container input {
+        width: 100%;
+        box-sizing: border-box; /* Ensures padding and border are included in the width */
+        padding: 8px;
+        margin: 0;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: #fff; /* Matches the select background color */
+        text-align: center; /* Center the text within the input */
+    }
+
+    /* Dropdown container styling */
+    .custom-select {
+        display: none; /* Hidden by default; will be shown on input focus */
+        position: absolute;
+        width: 100%;
+        max-height: 150px;
+        overflow-y: auto;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        z-index: 1;
+        box-sizing: border-box; /* Ensures border and padding are included in the width */
+    }
+
+    /* Style for each option in the dropdown */
+    .custom-select div {
+        padding: 8px;
+        cursor: pointer;
+        border-bottom: 1px solid #ddd; /* Optional: Adds separation between options */
+    }
+
+    /* Hover effect for options */
+    .custom-select div:hover {
+        background-color: #ddd;
+    }
+
+    #searchKorisnik {
+        background-image: url('/images/searchKorisnik.png');
+        background-position: 10px 6px;
+        background-repeat: no-repeat;
+    }
 </style>
 <body>
 <div class="w3-sidebar w3-bar-block" style="display:none;z-index:5; height: 100%; position: fixed; bottom: 0; left: 0;"
@@ -41,14 +93,37 @@
         <a th:href="@{/lokacija/all}" class="w3-bar-item w3-button">Lokacije</a>
         <a th:href="@{/vrstaUredaja/all}" class="w3-bar-item w3-button">Vrste sredstva</a>
         <a th:href="@{/korisnik/all}" class="w3-bar-item w3-button">Korisnici</a>
-        <a th:href="@{/inventar/all}" class="w3-bar-item w3-button">Osnovna sredstva</a>
-        <a th:href="@{/inventarIT/all}" class="w3-bar-item w3-button">IT oprema</a>
-        <a th:href="@{/inventura/all}" class="w3-bar-item w3-button">Inventure</a>
-        <a th:href="@{/provodenjeInventure/all}" class="w3-bar-item w3-button">Izvršavanje inventure</a>
+        <div class="w3-dropdown-click">
+            <button class="w3-button" onclick="resetPasswordDropFunc('resetPasswordDrop2','icon2')">
+                Oprema <i id="icon2" class="fa fa-caret-down"></i>
+            </button>
+            <div id="resetPasswordDrop2" class="w3-hide w3-white w3-card">
+                <a th:href="@{/inventar/all}" class="w3-bar-item w3-button">Osnovna sredstva</a>
+                <a th:href="@{/inventarIT/all}" class="w3-bar-item w3-button">IT oprema</a>
+            </div>
+        </div>
+        <div class="w3-dropdown-click">
+            <button class="w3-button" onclick="resetPasswordDropFunc('resetPasswordDrop3','icon3')">
+                Mobiteli <i id="icon3" class="fa fa-caret-down"></i>
+            </button>
+            <div id="resetPasswordDrop3" class="w3-hide w3-white w3-card">
+                <a th:href="@{/phones/all}" class="w3-bar-item w3-button">Svi mobiteli</a>
+                <a th:href="@{/mobilnaTarifa/all}" class="w3-bar-item w3-button">Mobilne tarife</a>
+            </div>
+        </div>
+        <div class="w3-dropdown-click">
+            <button class="w3-button" onclick="resetPasswordDropFunc('resetPasswordDrop1','icon1')">
+                Inventura <i id="icon1" class="fa fa-caret-down"></i>
+            </button>
+            <div id="resetPasswordDrop1" class="w3-hide w3-white w3-card">
+                <a th:href="@{/inventura/all}" class="w3-bar-item w3-button">Inventure</a>
+                <a th:href="@{/provodenjeInventure/all}" class="w3-bar-item w3-button">Izvršavanje inventure</a>
+            </div>
+        </div>
         <a th:href="@{/appUsers/all}" class="w3-bar-item w3-button">App useri</a>
         <div class="w3-dropdown-click">
-            <button class="w3-button" onclick="resetPasswordDropFunc()">
-                Password settings <i class="fa fa-caret-down"></i>
+            <button class="w3-button" onclick="resetPasswordDropFunc('resetPasswordDrop', 'icon')">
+                Password settings <i id="icon" class="fa fa-caret-down"></i>
             </button>
             <div id="resetPasswordDrop" class="w3-hide w3-white w3-card">
                 <a th:href="@{/appUsers/userResetPassword/}" class="w3-bar-item w3-button">Reset password</a>
@@ -95,13 +170,19 @@
     <form id="form5" class="w3-container w3-padding form" th:action="@{/razduzenje/findByUser}" method="get"
           th:object="${allKorisnik}">
         <div style="display: flex; flex-direction: column; align-items: center;">
-            <select class=" w3-border w3-round w3-center" id="username" name="username" required
-                    onchange="this.setCustomValidity('');updateRequiredFields()"
-                    oninvalid="this.setCustomValidity('Odaberite korisnika!')">
-                <option value="">Odaberite korisnika</option>
-                <option th:each="korisnik : ${allKorisnik}" th:value="${korisnik.username}"
-                        th:text="${korisnik.firstName} + ' ' + ${korisnik.lastName}"></option>
-            </select>
+            <div class="custom-select-container">
+                <input type="text" id="searchKorisnik" placeholder="Upišite korisnika..."
+                       onfocus="showOptions()" oninput="filterFunction()"
+                       class="w3-input w3-border w3-round w3-center" autocomplete="off">
+                <div id="korisnikOptions" class="custom-select">
+                    <div th:each="korisnik : ${allKorisnik}" th:data-value="${korisnik.username}"
+                         th:text="${korisnik.firstName} + ' ' + ${korisnik.lastName}"
+                         onclick="selectKorisnik(this)">
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" id="username" name="username" required
+                   oninvalid="this.setCustomValidity('Odaberite korisnika!')">
             <div style="margin-top: 17px">
                 <button onclick="hidedivRazduzenje()" type="submit" class="button-small"><i class="fa fa-search"
                                                                                             style="font-size:12px"></i>Pretraži
@@ -202,17 +283,43 @@
     }
 </script>
 <script>
-    function resetPasswordDropFunc() {
-        var x = document.getElementById("resetPasswordDrop");
-        if (x.className.indexOf("w3-show") == -1) {
-            x.className += " w3-show";
-            x.previousElementSibling.className += " w3-gray";
-        } else {
-            x.className = x.className.replace(" w3-show", "");
-            x.previousElementSibling.className =
-                x.previousElementSibling.className.replace(" w3-gray", "");
+    function showOptions() {
+        document.getElementById("korisnikOptions").style.display = "block";
+    }
+
+    function filterFunction() {
+        var input, filter, div, i, txtValue;
+        input = document.getElementById("searchKorisnik");
+        filter = input.value.toUpperCase();
+        div = document.getElementById("korisnikOptions");
+        options = div.getElementsByTagName("div");
+
+        for (i = 0; i < options.length; i++) {
+            txtValue = options[i].textContent || options[i].innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                options[i].style.display = "";
+            } else {
+                options[i].style.display = "none";
+            }
         }
     }
+
+    function selectKorisnik(option) {
+        var input = document.getElementById("searchKorisnik");
+        var hiddenInput = document.getElementById("username");
+        input.value = option.innerText;
+        hiddenInput.value = option.getAttribute("data-value");
+        document.getElementById("korisnikOptions").style.display = "none";
+    }
+
+    document.addEventListener("click", function (event) {
+        var isClickInside = document.getElementById("searchKorisnik").contains(event.target);
+        var isOptionClick = document.getElementById("korisnikOptions").contains(event.target);
+
+        if (!isClickInside && !isOptionClick) {
+            document.getElementById("korisnikOptions").style.display = "none";
+        }
+    });
 </script>
 </body>
 </html>

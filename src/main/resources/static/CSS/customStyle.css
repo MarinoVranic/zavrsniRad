@@ -793,6 +793,11 @@ th, td {
     margin-top: 10px;
 }
 
+.rotate {
+    transform: rotate(180deg);
+    transition: transform 0.3s ease;
+}
+
 /* Responsive styles */
 @media screen and (max-width: 600px) {
     .w3-sidebar {

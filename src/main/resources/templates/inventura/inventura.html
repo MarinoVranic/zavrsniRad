@@ -67,14 +67,30 @@
         <a th:href="@{/vrstaUredaja/all}" class="w3-bar-item w3-button">Vrste sredstva</a>
         <a th:href="@{/lokacija/all}" class="w3-bar-item w3-button">Lokacije</a>
         <a th:href="@{/korisnik/all}" class="w3-bar-item w3-button">Korisnici</a>
-        <a th:href="@{/inventar/all}" class="w3-bar-item w3-button">Osnovna sredstva</a>
-        <a th:href="@{/inventarIT/all}" class="w3-bar-item w3-button">IT oprema</a>
+        <div class="w3-dropdown-click">
+            <button class="w3-button" onclick="resetPasswordDropFunc('resetPasswordDrop2','icon2')">
+                Oprema <i id="icon2" class="fa fa-caret-down"></i>
+            </button>
+            <div id="resetPasswordDrop2" class="w3-hide w3-white w3-card">
+                <a th:href="@{/inventar/all}" class="w3-bar-item w3-button">Osnovna sredstva</a>
+                <a th:href="@{/inventarIT/all}" class="w3-bar-item w3-button">IT oprema</a>
+            </div>
+        </div>
+        <div class="w3-dropdown-click">
+            <button class="w3-button" onclick="resetPasswordDropFunc('resetPasswordDrop3','icon3')">
+                Mobiteli <i id="icon3" class="fa fa-caret-down"></i>
+            </button>
+            <div id="resetPasswordDrop3" class="w3-hide w3-white w3-card">
+                <a th:href="@{/phones/all}" class="w3-bar-item w3-button">Svi mobiteli</a>
+                <a th:href="@{/mobilnaTarifa/all}" class="w3-bar-item w3-button">Mobilne tarife</a>
+            </div>
+        </div>
         <a th:href="@{/razduzenje/all}" class="w3-bar-item w3-button">Razduženja</a>
         <a th:href="@{/provodenjeInventure/all}" class="w3-bar-item w3-button">Izvršavanje inventure</a>
         <a th:href="@{/appUsers/all}" class="w3-bar-item w3-button">App useri</a>
         <div class="w3-dropdown-click">
-            <button class="w3-button" onclick="resetPasswordDropFunc()">
-                Password settings <i class="fa fa-caret-down"></i>
+            <button class="w3-button" onclick="resetPasswordDropFunc('resetPasswordDrop', 'icon')">
+                Password settings <i id="icon" class="fa fa-caret-down"></i>
             </button>
             <div id="resetPasswordDrop" class="w3-hide w3-white w3-card">
                 <a th:href="@{/appUsers/userResetPassword/}" class="w3-bar-item w3-button">Reset password</a>
@@ -156,19 +172,6 @@
 
         if (isConfirmed) {
             window.location.href = `/inventura/delete/${idInventure}`;
-        }
-    }
-</script>
-<script>
-    function resetPasswordDropFunc() {
-        var x = document.getElementById("resetPasswordDrop");
-        if (x.className.indexOf("w3-show") == -1) {
-            x.className += " w3-show";
-            x.previousElementSibling.className += " w3-gray";
-        } else {
-            x.className = x.className.replace(" w3-show", "");
-            x.previousElementSibling.className =
-                x.previousElementSibling.className.replace(" w3-gray", "");
         }
     }
 </script>

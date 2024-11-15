@@ -53,11 +53,34 @@
         <a th:href="@{/vrstaUredaja/all}" class="w3-bar-item w3-button">Vrste sredstva</a>
         <a th:href="@{/lokacija/all}" class="w3-bar-item w3-button">Lokacije</a>
         <a th:href="@{/korisnik/all}" class="w3-bar-item w3-button">Korisnici</a>
-        <a th:href="@{/inventar/all}" class="w3-bar-item w3-button">Osnovna sredstva</a>
-        <a th:href="@{/inventarIT/all}" class="w3-bar-item w3-button">IT oprema</a>
+        <div class="w3-dropdown-click">
+            <button class="w3-button" onclick="resetPasswordDropFunc('resetPasswordDrop2','icon2')">
+                Oprema <i id="icon2" class="fa fa-caret-down"></i>
+            </button>
+            <div id="resetPasswordDrop2" class="w3-hide w3-white w3-card">
+                <a th:href="@{/inventar/all}" class="w3-bar-item w3-button">Osnovna sredstva</a>
+                <a th:href="@{/inventarIT/all}" class="w3-bar-item w3-button">IT oprema</a>
+            </div>
+        </div>
+        <div class="w3-dropdown-click">
+            <button class="w3-button" onclick="resetPasswordDropFunc('resetPasswordDrop3','icon3')">
+                Mobiteli <i id="icon3" class="fa fa-caret-down"></i>
+            </button>
+            <div id="resetPasswordDrop3" class="w3-hide w3-white w3-card">
+                <a th:href="@{/phones/all}" class="w3-bar-item w3-button">Svi mobiteli</a>
+                <a th:href="@{/mobilnaTarifa/all}" class="w3-bar-item w3-button">Mobilne tarife</a>
+            </div>
+        </div>
         <a th:href="@{/razduzenje/all}" class="w3-bar-item w3-button">Razduženja</a>
-        <a th:href="@{/inventura/all}" class="w3-bar-item w3-button">Inventure</a>
-        <a th:href="@{/provodenjeInventure/all}" class="w3-bar-item w3-button">Izvršavanje inventure</a>
+        <div class="w3-dropdown-click">
+            <button class="w3-button" onclick="resetPasswordDropFunc('resetPasswordDrop1','icon1')">
+                Inventura <i id="icon1" class="fa fa-caret-down"></i>
+            </button>
+            <div id="resetPasswordDrop1" class="w3-hide w3-white w3-card">
+                <a th:href="@{/inventura/all}" class="w3-bar-item w3-button">Inventure</a>
+                <a th:href="@{/provodenjeInventure/all}" class="w3-bar-item w3-button">Izvršavanje inventure</a>
+            </div>
+        </div>
     </div>
 
     <div style="text-align: center; position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);">
@@ -147,17 +170,6 @@
         document.body.scrollTop = 0; // For Safari
         document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE, and Opera
     };
-</script>
-<script>
-    function confirmDelete() {
-        // Retrieve the inventarniBroj value from the data attribute
-        var dataAttribute = event.currentTarget.getAttribute('data-user');
-        var isConfirmed = confirm("Are you sure you want to delete?");
-
-        if (isConfirmed) {
-            window.location.href = `/appUsers/delete/${dataAttribute}`;
-        }
-    }
 </script>
 </body>
 </html>

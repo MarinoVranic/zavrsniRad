@@ -16,3 +16,17 @@ function closeSidebarOutside(event) {
         w3_close();
     }
 }
+
+function resetPasswordDropFunc(id, iconId) {
+    var x = document.getElementById(id);
+    const icon = document.getElementById(iconId);
+    if (x.className.indexOf("w3-show") == -1) {
+        x.className += " w3-show";
+        x.previousElementSibling.className += " w3-gray";
+    } else {
+        x.className = x.className.replace(" w3-show", "");
+        x.previousElementSibling.className =
+            x.previousElementSibling.className.replace(" w3-gray", "");
+    }
+    icon.classList.toggle('rotate');
+}
