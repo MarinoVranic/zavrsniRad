@@ -37,8 +37,6 @@ public interface InventarRepository extends JpaRepository<Inventar, String> {
             nativeQuery = true)
     List<Inventar> findAll();
 
-
-
     @Modifying
     @Query(value = "UPDATE inventar i SET i.Hostname = :hostname, i.ID_lokacije = :idLokacije, i.Username = :username, i.Datum_zaduzenja = :datumZaduzenja," +
             "i.Datum_razduzenja = null WHERE i.Inventarni_broj = :inventarniBroj", nativeQuery = true)
@@ -121,4 +119,113 @@ public interface InventarRepository extends JpaRepository<Inventar, String> {
     List<Inventar> findAllByMAC(@Param("addressMac") String addressMac);
 
     List<Inventar> findAllBySerijskiBroj(@Param("serijskiBroj") String serijskiBroj);
+
+    //All for mobiles
+
+    @Query(value = "SELECT inventar.* FROM inventar inventar " +
+            "LEFT JOIN vrsta_uredaja vu ON inventar.id_vrste_uredaja = vu.id_vrste_uredaja " +
+            "LEFT JOIN lokacija lokacija ON inventar.id_lokacije = lokacija.id_lokacije " +
+            "LEFT JOIN racun racun ON inventar.id_racuna = racun.id_racuna " +
+            "LEFT JOIN dobavljac dobavljac ON inventar.id_dobavljaca = dobavljac.id_dobavljaca " +
+            "LEFT JOIN korisnik korisnik ON inventar.username = korisnik.username " +
+            "WHERE vu.naziv_vrste_uredaja IN ('mobitel') " +
+            "ORDER BY CASE " +
+            "WHEN inventar.inventarni_broj REGEXP '^[A-Za-z]+.*' THEN inventar.inventarni_broj " +
+            "ELSE '' " +
+            "END, " +
+            "CAST(CASE " +
+            "WHEN inventar.inventarni_broj REGEXP '^[A-Za-z]+.*' THEN '0' " +
+            "ELSE inventar.inventarni_broj " +
+            "END AS UNSIGNED) DESC, " +
+            "inventar.inventarni_broj DESC",
+            nativeQuery = true)
+    List<Inventar> findAllMobitel();
+
+    @Modifying
+    @Query(value = "UPDATE Inventar inventar SET inventar.razlikaCijenePlacena=true WHERE inventar.inventarniBroj = :inventarniBroj")
+    void razlikaPlacena(@Param("inventarniBroj") String inventarniBroj);
+
+    @Query(value = "SELECT inventar.* FROM inventar inventar " +
+            "LEFT JOIN vrsta_uredaja vu ON inventar.id_vrste_uredaja = vu.id_vrste_uredaja " +
+            "LEFT JOIN lokacija lokacija ON inventar.id_lokacije = lokacija.id_lokacije " +
+            "LEFT JOIN racun racun ON inventar.id_racuna = racun.id_racuna " +
+            "LEFT JOIN dobavljac dobavljac ON inventar.id_dobavljaca = dobavljac.id_dobavljaca " +
+            "LEFT JOIN korisnik korisnik ON inventar.username = korisnik.username " +
+//            "LEFT JOIN mobilna_tarifa tarifa ON inventar.id_tarife = tarifa.id_tarife" +
+            "WHERE vu.naziv_vrste_uredaja IN ('mobitel') " +
+            "AND lokacija.id_lokacije = :idLokacije " +
+            "ORDER BY CASE " +
+            "WHEN inventar.inventarni_broj REGEXP '^[A-Za-z]+.*' THEN inventar.inventarni_broj " +
+            "ELSE '' " +
+            "END, " +
+            "CAST(CASE " +
+            "WHEN inventar.inventarni_broj REGEXP '^[A-Za-z]+.*' THEN '0' " +
+            "ELSE inventar.inventarni_broj " +
+            "END AS UNSIGNED) DESC, " +
+            "inventar.inventarni_broj DESC",
+            nativeQuery = true)
+    List<Inventar> findMobitelByLokacija(@Param("idLokacije") Long idLokacije);
+
+    @Query(value = "SELECT inventar.* FROM inventar inventar " +
+            "LEFT JOIN vrsta_uredaja vu ON inventar.id_vrste_uredaja = vu.id_vrste_uredaja " +
+            "LEFT JOIN lokacija lokacija ON inventar.id_lokacije = lokacija.id_lokacije " +
+            "LEFT JOIN racun racun ON inventar.id_racuna = racun.id_racuna " +
+            "LEFT JOIN dobavljac dobavljac ON inventar.id_dobavljaca = dobavljac.id_dobavljaca " +
+            "LEFT JOIN korisnik korisnik ON inventar.username = korisnik.username " +
+//            "LEFT JOIN mobilna_tarifa tarifa ON inventar.id_tarife = tarifa.id_tarife" +
+            "WHERE vu.naziv_vrste_uredaja IN ('mobitel') " +
+            "AND korisnik.last_name LIKE CONCAT('%', :lastName, '%') " +
+            "ORDER BY CASE " +
+            "WHEN inventar.inventarni_broj REGEXP '^[A-Za-z]+.*' THEN inventar.inventarni_broj " +
+            "ELSE '' " +
+            "END, " +
+            "CAST(CASE " +
+            "WHEN inventar.inventarni_broj REGEXP '^[A-Za-z]+.*' THEN '0' " +
+            "ELSE inventar.inventarni_broj " +
+            "END AS UNSIGNED) DESC, " +
+            "inventar.inventarni_broj DESC",
+            nativeQuery = true)
+    List<Inventar> findMobitelByUser(@Param("lastName") String lastName);
+
+    @Query(value = "SELECT inventar.* FROM inventar inventar " +
+            "LEFT JOIN vrsta_uredaja vu ON inventar.id_vrste_uredaja = vu.id_vrste_uredaja " +
+            "LEFT JOIN lokacija lokacija ON inventar.id_lokacije = lokacija.id_lokacije " +
+            "LEFT JOIN racun racun ON inventar.id_racuna = racun.id_racuna " +
+            "LEFT JOIN dobavljac dobavljac ON inventar.id_dobavljaca = dobavljac.id_dobavljaca " +
+            "LEFT JOIN korisnik korisnik ON inventar.username = korisnik.username " +
+//            "LEFT JOIN mobilna_tarifa tarifa ON inventar.id_tarife = tarifa.id_tarife" +
+            "WHERE vu.naziv_vrste_uredaja IN ('mobitel') " +
+            "AND inventar.serijski_broj = :serijskiBroj " +
+            "ORDER BY CASE " +
+            "WHEN inventar.inventarni_broj REGEXP '^[A-Za-z]+.*' THEN inventar.inventarni_broj " +
+            "ELSE '' " +
+            "END, " +
+            "CAST(CASE " +
+            "WHEN inventar.inventarni_broj REGEXP '^[A-Za-z]+.*' THEN '0' " +
+            "ELSE inventar.inventarni_broj " +
+            "END AS UNSIGNED) DESC, " +
+            "inventar.inventarni_broj DESC",
+            nativeQuery = true)
+    List<Inventar> findMobileBySerijskiBroj(@Param("serijskiBroj") String serijskiBroj);
+
+    @Query(value = "SELECT inventar.* FROM inventar inventar " +
+            "LEFT JOIN vrsta_uredaja vu ON inventar.id_vrste_uredaja = vu.id_vrste_uredaja " +
+            "LEFT JOIN lokacija lokacija ON inventar.id_lokacije = lokacija.id_lokacije " +
+            "LEFT JOIN racun racun ON inventar.id_racuna = racun.id_racuna " +
+            "LEFT JOIN dobavljac dobavljac ON inventar.id_dobavljaca = dobavljac.id_dobavljaca " +
+            "LEFT JOIN korisnik korisnik ON inventar.username = korisnik.username " +
+//            "LEFT JOIN mobilna_tarifa tarifa ON inventar.id_tarife = tarifa.id_tarife" +
+            "WHERE vu.naziv_vrste_uredaja IN ('mobitel') " +
+            "AND inventar.id_tarife = :idTarife " +
+            "ORDER BY CASE " +
+            "WHEN inventar.inventarni_broj REGEXP '^[A-Za-z]+.*' THEN inventar.inventarni_broj " +
+            "ELSE '' " +
+            "END, " +
+            "CAST(CASE " +
+            "WHEN inventar.inventarni_broj REGEXP '^[A-Za-z]+.*' THEN '0' " +
+            "ELSE inventar.inventarni_broj " +
+            "END AS UNSIGNED) DESC, " +
+            "inventar.inventarni_broj DESC",
+            nativeQuery = true)
+    List<Inventar> findMobileByTarifa(@Param("idTarife") Long idTarife);
 }

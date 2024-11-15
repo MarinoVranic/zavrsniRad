@@ -115,4 +115,11 @@ public class Inventar {
 
     private String napomena;
     private BigDecimal nabavnaVrijednost;
+    private String brojMobitela;
+
+    @ManyToOne
+    @JoinColumn(name = "id_tarife")
+    private MobilnaTarifa mobilnaTarifa;
+
+    private boolean razlikaCijenePlacena;
 }

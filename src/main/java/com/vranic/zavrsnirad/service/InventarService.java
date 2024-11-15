@@ -88,4 +88,29 @@ public class InventarService {
     public List<Inventar> getInventarForAdministration(){
         return inventarRepository.findAllForAdministration();
     }
+
+    //all for mobiles
+    public List<Inventar> getAllMobitel(){
+        return inventarRepository.findAllMobitel();
+    }
+
+    public void razlikaPlacena(String inventarniBroj){
+        inventarRepository.razlikaPlacena(inventarniBroj);
+    }
+
+    public List<Inventar> getMobitelByLokacija(Long idLokacije){
+        return inventarRepository.findMobitelByLokacija(idLokacije);
+    }
+
+    public List<Inventar> getMobitelByUser(String lastname){
+        return inventarRepository.findMobitelByUser(lastname);
+    }
+
+    public List<Inventar> getMobitelBySerijskiBroj(String serijskiBroj){
+        return inventarRepository.findMobileBySerijskiBroj(serijskiBroj);
+    }
+
+    public List<Inventar> getMobitelByTarifa(Long idTarife){
+        return inventarRepository.findMobileByTarifa(idTarife);
+    }
 }

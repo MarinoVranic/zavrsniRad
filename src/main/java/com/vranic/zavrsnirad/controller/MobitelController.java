@@ -1,9 +1,9 @@
 package com.vranic.zavrsnirad.controller;
 
 import com.google.zxing.common.BitMatrix;
-import com.itextpdf.text.*;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
+import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
@@ -12,7 +12,6 @@ import com.vranic.zavrsnirad.model.*;
 import com.vranic.zavrsnirad.service.*;
 import com.vranic.zavrsnirad.util.BarcodeImageUtils;
 import io.micrometer.common.util.StringUtils;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -29,14 +28,14 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Controller
-@RequestMapping("/inventarIT")
-public class InventarITController {
+@RequestMapping("/phones")
+public class MobitelController {
     @Autowired
     private InventarService inventarService;
 
@@ -61,6 +60,9 @@ public class InventarITController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private MobilnaTarifaService mobilnaTarifaService;
+
     public LocalDate getToday() {
         return LocalDate.now();
     }
@@ -69,21 +71,21 @@ public class InventarITController {
     private String getViewBasedOnRole(Authentication auth) {
         if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
             // User has the admin role
-            return "admin/inventarIT";
+            return "admin/mobitel";
         } else {
             // User has user role
-            return "inventar/inventarIT";
+            return "inventar/mobitel/mobitel";
         }
     }
 
     @GetMapping("/all")
-    public String getAllItInventar(Model model) throws Exception {
+    public String getAllMobitel(Model model) throws Exception {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        model.addAttribute("savInventar", inventarService.getInventarForIT());
-        List<VrstaUredaja> allVrstaUredaja = vrstaUredajaService.getAllVrstaUredaja();
-        model.addAttribute("allVrstaUredaja", allVrstaUredaja);
+        model.addAttribute("savInventar", inventarService.getAllMobitel());
         List<Lokacija> allLokacija = lokacijaService.getAllLokacija();
         model.addAttribute("allLokacija", allLokacija);
+        List<MobilnaTarifa> allTarifa = mobilnaTarifaService.getAllMobilnaTarifa();
+        model.addAttribute("allTarifa", allTarifa);
         return getViewBasedOnRole(auth);
     }
 
@@ -95,8 +97,6 @@ public class InventarITController {
     @GetMapping("/update/{inventarniBroj}")
     public String updateInventar(@PathVariable(value = "inventarniBroj") String inventarniBroj, Model model) throws Exception {
         Inventar inventar = inventarService.getInventarById(inventarniBroj);
-        VrstaUredaja selectedVrstaUredaja = inventar.getVrstaUredaja();
-        List<VrstaUredaja> allVrstaUredaja = vrstaUredajaService.getAllVrstaUredaja();
         Lokacija selectedLokacija = inventar.getLokacija();
         List<Lokacija> allLokacija = lokacijaService.getAllLokacija();
         Korisnik selectedKorisnik = inventar.getKorisnik();
@@ -105,10 +105,10 @@ public class InventarITController {
         List<Dobavljac> allDobavljac = dobavljacService.getAllDobavljaci();
         Racun selectedRacun = inventar.getRacun();
         List<Racun> allRacun = racunService.getAllRacunForDropdown();
+        MobilnaTarifa selectedMobilnaTarifa = inventar.getMobilnaTarifa();
+        List<MobilnaTarifa> allMobilnaTarifa = mobilnaTarifaService.getAllMobilnaTarifa();
 
         model.addAttribute("inventar", inventar);
-        model.addAttribute("selectedVrstaUredaja", selectedVrstaUredaja);
-        model.addAttribute("allVrstaUredaja", allVrstaUredaja);
         model.addAttribute("selectedLokacija", selectedLokacija);
         model.addAttribute("allLokacija", allLokacija);
         model.addAttribute("selectedKorisnik", selectedKorisnik);
@@ -117,7 +117,9 @@ public class InventarITController {
         model.addAttribute("allDobavljac", allDobavljac);
         model.addAttribute("selectedRacun", selectedRacun);
         model.addAttribute("allRacun", allRacun);
-        return "inventar/updateInventarIT";
+        model.addAttribute("selectedMobilnaTarifa", selectedMobilnaTarifa);
+        model.addAttribute("allMobilnaTarifa", allMobilnaTarifa);
+        return "inventar/mobitel/updateMobitel";
     }
 
     @GetMapping("/addNew")
@@ -132,14 +134,18 @@ public class InventarITController {
         model.addAttribute("allRacun", allRacun);
         List<Dobavljac> allDobavljac = dobavljacService.getAllDobavljaci();
         model.addAttribute("allDobavljac", allDobavljac);
-        return "inventar/newInventarIT";
+        List<Korisnik> allKorisnik = korisnikService.getAllKorisnik();
+        model.addAttribute("allKorisnik", allKorisnik);
+        List<MobilnaTarifa> allTarifa = mobilnaTarifaService.getAllMobilnaTarifa();
+        model.addAttribute("allTarifa", allTarifa);
+        return "inventar/mobitel/newMobitel";
     }
 
     @PostMapping("/addNew")
     public String addInventar(@ModelAttribute("inventar") Inventar inventar, Model model) throws Exception {
         if (inventarService.checkIfInvBrojIsAvailable(inventar.getInventarniBroj()) != 0) {
             model.addAttribute("error", "Inventarni broj već postoji!");
-            return "inventar/newInventarIT";
+            return "inventar/mobitel/newMobitel";
         } else {
             // Set the username to null if it is blank
             if (StringUtils.isBlank(inventar.getKorisnik().getUsername())) {
@@ -149,13 +155,14 @@ public class InventarITController {
             if (inventar.getRacun() == null || inventar.getRacun().getIdRacuna() == null) {
                 inventar.setRacun(null);
             }
+            inventar.setVrstaUredaja(vrstaUredajaService.getVrstaUredajaById(20L));
             inventarService.save(inventar);
         }
-        return "redirect:/inventarIT/all";
+        return "redirect:/phones/all";
     }
 
     @PostMapping("/save")
-    public String saveInventar(@ModelAttribute("inventar") Inventar inventar) throws Exception {
+    public String saveMobitel(@ModelAttribute("inventar") Inventar inventar) throws Exception {
         // Set the username to null if it is blank
         if (StringUtils.isBlank(inventar.getKorisnik().getUsername())) {
             inventar.setKorisnik(null);
@@ -164,14 +171,15 @@ public class InventarITController {
         if (inventar.getRacun() == null || inventar.getRacun().getIdRacuna() == null) {
             inventar.setRacun(null);
         }
+        inventar.setVrstaUredaja(vrstaUredajaService.getVrstaUredajaById(20L));
         inventarService.save(inventar);
-        return "redirect:/inventarIT/all";
+        return "redirect:/phones/all";
     }
 
     @GetMapping("delete/{inventarniBroj}")
     public String deleteById(@PathVariable(value = "inventarniBroj") String inventarniBroj) {
         inventarService.deleteById(inventarniBroj);
-        return "redirect:/inventarIT/all";
+        return "redirect:/phones/all";
     }
 
     @GetMapping("/find")
@@ -179,17 +187,15 @@ public class InventarITController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         List<Inventar> inventarList = inventarService.findInventarByInvBroj(inventarniBroj);
         List<Lokacija> allLokacija = lokacijaService.getAllLokacija();
-        List<VrstaUredaja> allVrstaUredaja = vrstaUredajaService.getAllVrstaUredaja();
+        List<MobilnaTarifa> allTarifa = mobilnaTarifaService.getAllMobilnaTarifa();
         if (inventarList.isEmpty()) {
             model.addAttribute("allLokacija", allLokacija);
-            model.addAttribute("allVrstaUredaja", allVrstaUredaja);
-            model.addAttribute("error", "Inventar pod tim brojem ne postoji u sustavu!");
-            model.addAttribute("savInventar", inventarService.getAllInventar());
+            model.addAttribute("error", "Mobitel pod tim brojem ne postoji u sustavu!");
+            model.addAttribute("savInventar", inventarService.getAllMobitel());
             Inventar inventar = new Inventar();
             model.addAttribute("inventar", inventar);
         } else {
             model.addAttribute("allLokacija", allLokacija);
-            model.addAttribute("allVrstaUredaja", allVrstaUredaja);
             model.addAttribute("savInventar", inventarList);
             Inventar inventar = new Inventar();
             model.addAttribute("inventar", inventar);
@@ -198,44 +204,21 @@ public class InventarITController {
     }
 
     @GetMapping("/findBySerialNumber")
-    public String findInventarBySerialNumber(@RequestParam("serialNumber") String serijskiBroj, Model model) throws Exception {
+    public String findMobitelBySerialNumber(@RequestParam("serialNumber") String serijskiBroj, Model model) throws Exception {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        List<Inventar> inventarList = inventarService.getInventarBySerialNumber(serijskiBroj);
+        List<Inventar> inventarList = inventarService.getMobitelBySerijskiBroj(serijskiBroj);
+        List<MobilnaTarifa> allTarifa = mobilnaTarifaService.getAllMobilnaTarifa();
         List<Lokacija> allLokacija = lokacijaService.getAllLokacija();
-        List<VrstaUredaja> allVrstaUredaja = vrstaUredajaService.getAllVrstaUredaja();
         if (inventarList.isEmpty()) {
             model.addAttribute("allLokacija", allLokacija);
-            model.addAttribute("allVrstaUredaja", allVrstaUredaja);
-            model.addAttribute("error2", "Inventar tog serijskog broja ne postoji u sustavu!");
-            model.addAttribute("savInventar", inventarService.getAllInventar());
+            model.addAttribute("allTarifa", allTarifa);
+            model.addAttribute("error2", "Mobitel tog serijskog broja ne postoji u sustavu!");
+            model.addAttribute("savInventar", inventarService.getAllMobitel());
             Inventar inventar = new Inventar();
             model.addAttribute("inventar", inventar);
         } else {
             model.addAttribute("allLokacija", allLokacija);
-            model.addAttribute("allVrstaUredaja", allVrstaUredaja);
-            model.addAttribute("savInventar", inventarList);
-            Inventar inventar = new Inventar();
-            model.addAttribute("inventar", inventar);
-        }
-        return getViewBasedOnRole(auth);
-    }
-
-    @GetMapping("/findByMacAddress")
-    public String findInventarByMacAddress(@RequestParam("addressMac") String addressMac, Model model) throws Exception {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        List<Inventar> inventarList = inventarService.getInventarByMacAddress(addressMac);
-        List<Lokacija> allLokacija = lokacijaService.getAllLokacija();
-        List<VrstaUredaja> allVrstaUredaja = vrstaUredajaService.getAllVrstaUredaja();
-        if (inventarList.isEmpty()) {
-            model.addAttribute("allLokacija", allLokacija);
-            model.addAttribute("allVrstaUredaja", allVrstaUredaja);
-            model.addAttribute("error4", "Inventar tražene MAC adrese ne postoji u sustavu!");
-            model.addAttribute("savInventar", inventarService.getAllInventar());
-            Inventar inventar = new Inventar();
-            model.addAttribute("inventar", inventar);
-        } else {
-            model.addAttribute("allLokacija", allLokacija);
-            model.addAttribute("allVrstaUredaja", allVrstaUredaja);
+            model.addAttribute("allTarifa", allTarifa);
             model.addAttribute("savInventar", inventarList);
             Inventar inventar = new Inventar();
             model.addAttribute("inventar", inventar);
@@ -244,21 +227,21 @@ public class InventarITController {
     }
 
     @GetMapping("/findByUser")
-    public String showInventarByUser(@RequestParam("lastName") String lastName, Model model) throws Exception {
+    public String showMobitelByUser(@RequestParam("lastName") String lastName, Model model) throws Exception {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        List<Inventar> inventarList = inventarService.getInventarByUser(lastName);
+        List<MobilnaTarifa> allTarifa = mobilnaTarifaService.getAllMobilnaTarifa();
+        List<Inventar> inventarList = inventarService.getMobitelByUser(lastName);
         List<Lokacija> allLokacija = lokacijaService.getAllLokacija();
-        List<VrstaUredaja> allVrstaUredaja = vrstaUredajaService.getAllVrstaUredaja();
         if (inventarList.isEmpty()) {
             model.addAttribute("allLokacija", allLokacija);
-            model.addAttribute("allVrstaUredaja", allVrstaUredaja);
-            model.addAttribute("error3", "Korisnik traženog prezimena ne zadužuje inventar!");
-            model.addAttribute("savInventar", inventarService.getAllInventar());
+            model.addAttribute("allTarifa", allTarifa);
+            model.addAttribute("error3", "Korisnik traženog prezimena ne zadužuje mobitel!");
+            model.addAttribute("savInventar", inventarService.getAllMobitel());
             Inventar inventar = new Inventar();
             model.addAttribute("inventar", inventar);
         } else {
             model.addAttribute("allLokacija", allLokacija);
-            model.addAttribute("allVrstaUredaja", allVrstaUredaja);
+            model.addAttribute("allTarifa", allTarifa);
             model.addAttribute("savInventar", inventarList);
             Inventar inventar = new Inventar();
             model.addAttribute("inventar", inventar);
@@ -291,35 +274,12 @@ public class InventarITController {
         model.addAttribute("allDobavljac", allDobavljac);
         model.addAttribute("selectedRacun", selectedRacun);
         model.addAttribute("allRacun", allRacun);
-        return "inventar/zaduziInventarIT";
+        return "inventar/mobitel/zaduziMobitel";
     }
 
     @PostMapping("/saveZaduzenje")
     @Transactional
     public String zaduzenjeInventara(@ModelAttribute("inventar") Inventar inventar) throws Exception {
-        Integer idVrste = inventar.getVrstaUredaja().getIdVrsteUredaja().intValue();
-        if(idVrste.equals(1)||idVrste.equals(6)){
-            //split string nazivUredaja by one or more spaces and -
-            String [] nazivUredaja = inventar.getNazivUredaja().split("\\s+|-");
-            String suffix ="";
-            if(inventar.getNazivUredaja().contains("G6")){
-                suffix="G6";
-            }
-            String firstPartOfHostname = nazivUredaja[0];
-            String secondPartOfHostname = inventar.getKorisnik().getUsername();
-            String hostname = firstPartOfHostname + suffix + "-" + secondPartOfHostname;
-            if(inventar.getDatumZaduzenja()!=null)
-            {
-                inventarService.zaduziInventar(hostname, inventar.getLokacija().getIdLokacije(), inventar.getKorisnik().getUsername(),
-                        inventar.getDatumZaduzenja(), inventar.getInventarniBroj());
-
-            } else {
-                LocalDate datumZaduzenja = getToday();
-                System.out.println(getToday());
-                inventarService.zaduziInventar(hostname, inventar.getLokacija().getIdLokacije(), inventar.getKorisnik().getUsername(),
-                        datumZaduzenja, inventar.getInventarniBroj());
-            }
-        }else {
             if(inventar.getDatumZaduzenja()!=null)
             {
                 inventarService.zaduziInventar(inventar.getHostname(), inventar.getLokacija().getIdLokacije(), inventar.getKorisnik().getUsername(),
@@ -331,8 +291,7 @@ public class InventarITController {
                 inventarService.zaduziInventar(inventar.getHostname(), inventar.getLokacija().getIdLokacije(), inventar.getKorisnik().getUsername(),
                         datumZaduzenja, inventar.getInventarniBroj());
             }
-        }
-        return "redirect:/inventarIT/all";
+        return "redirect:/phones/all";
     }
 
     @GetMapping("razduzi/{inventarniBroj}")
@@ -353,30 +312,25 @@ public class InventarITController {
         razduzenje.setNapomena(inventar.getNapomena());
         razduzenjeService.save(razduzenje);
         inventarService.razduziInventar(getToday(), inventarniBroj);
-        return "redirect:/inventarIT/all";
+        return "redirect:/phones/all";
     }
 
-    @GetMapping("/findByVrsta")
-    public String showInventarByVrstaUredaja(@RequestParam("idVrsteUredaja") Long idVrsteUredaja, Model model) throws Exception {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        List<VrstaUredaja> allVrstaUredaja = vrstaUredajaService.getAllVrstaUredaja();
-        List<Inventar> inventarList = inventarService.getInventarByVrstaUredaja(idVrsteUredaja);
-        List<Lokacija> allLokacija = lokacijaService.getAllLokacija();
-        model.addAttribute("allLokacija", allLokacija);
-        model.addAttribute("allVrstaUredaja", allVrstaUredaja);
-        model.addAttribute("savInventar", inventarList);
-        Inventar inventar = new Inventar();
-        model.addAttribute("inventar", inventar);
-        return getViewBasedOnRole(auth);
+    @GetMapping("razlikaPlacena/{inventarniBroj}")
+    @Transactional
+    public String razlikaPlacena(@PathVariable(value = "inventarniBroj") String inventarniBroj) throws Exception{
+        inventarService.razlikaPlacena(inventarniBroj);
+        return "redirect:/phones/all";
     }
 
     @GetMapping("/findByLokacija")
     public String showInventarByLokacija(@RequestParam("idLokacije") Long idLokacije, Model model) throws Exception {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         List<Lokacija> allLokacija = lokacijaService.getAllLokacija();
-        List<Inventar> inventarList = inventarService.getInventarByLokacija(idLokacije);
+        List<MobilnaTarifa> allTarifa = mobilnaTarifaService.getAllMobilnaTarifa();
+        List<Inventar> inventarList = inventarService.getMobitelByLokacija(idLokacije);
         List<Korisnik> allKorisnik = korisnikService.getAllKorisnik();
         List<VrstaUredaja> allVrstaUredaja = vrstaUredajaService.getAllVrstaUredaja();
+        model.addAttribute("allTarifa", allTarifa);
         model.addAttribute("allKorisnik", allKorisnik);
         model.addAttribute("allVrstaUredaja", allVrstaUredaja);
         model.addAttribute("allLokacija", allLokacija);
@@ -386,59 +340,22 @@ public class InventarITController {
         return getViewBasedOnRole(auth);
     }
 
-    @GetMapping("/findByTipInventara")
-    public String showInventarByTipInventara(@RequestParam("tipInventara") String tipInventara, Model model) throws Exception {
+    @GetMapping("/findByTarifa")
+    public String showInventarByTarifa(@RequestParam("idTarife") Long idTarife, Model model) throws Exception {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if(tipInventara.equals("OS"))
-        {
-            List<Korisnik> allKorisnik = korisnikService.getAllKorisnik();
-            List<Lokacija> allLokacija = lokacijaService.getAllLokacija();
-            List<VrstaUredaja> allVrstaUredaja = vrstaUredajaService.getAllVrstaUredaja();
-            model.addAttribute("allLokacija", allLokacija);
-            model.addAttribute("allVrstaUredaja", allVrstaUredaja);
-            model.addAttribute("allKorisnik", allKorisnik);
-            List<Inventar> inventarList = inventarService.getInventarByOS();
-            model.addAttribute("savInventar", inventarList);
-            Inventar inventar = new Inventar();
-            model.addAttribute("inventar", inventar);
-            return getViewBasedOnRole(auth);
-        } else if(tipInventara.equals("IT")) {
-            List<Korisnik> allKorisnik = korisnikService.getAllKorisnik();
-            List<Lokacija> allLokacija = lokacijaService.getAllLokacija();
-            List<VrstaUredaja> allVrstaUredaja = vrstaUredajaService.getAllVrstaUredaja();
-            model.addAttribute("allLokacija", allLokacija);
-            model.addAttribute("allVrstaUredaja", allVrstaUredaja);
-            model.addAttribute("allKorisnik", allKorisnik);
-            List<Inventar> inventarList = inventarService.getInventarByIT();
-            model.addAttribute("savInventar", inventarList);
-            Inventar inventar = new Inventar();
-            model.addAttribute("inventar", inventar);
-            return getViewBasedOnRole(auth);
-        } else if(tipInventara.equals("LS")) {
-            List<Korisnik> allKorisnik = korisnikService.getAllKorisnik();
-            List<Lokacija> allLokacija = lokacijaService.getAllLokacija();
-            List<VrstaUredaja> allVrstaUredaja = vrstaUredajaService.getAllVrstaUredaja();
-            model.addAttribute("allLokacija", allLokacija);
-            model.addAttribute("allVrstaUredaja", allVrstaUredaja);
-            model.addAttribute("allKorisnik", allKorisnik);
-            List<Inventar> inventarList = inventarService.getInventarByLS();
-            model.addAttribute("savInventar", inventarList);
-            Inventar inventar = new Inventar();
-            model.addAttribute("inventar", inventar);
-            return getViewBasedOnRole(auth);
-        } else {
-            List<Korisnik> allKorisnik = korisnikService.getAllKorisnik();
-            List<Lokacija> allLokacija = lokacijaService.getAllLokacija();
-            List<VrstaUredaja> allVrstaUredaja = vrstaUredajaService.getAllVrstaUredaja();
-            model.addAttribute("allLokacija", allLokacija);
-            model.addAttribute("allVrstaUredaja", allVrstaUredaja);
-            model.addAttribute("allKorisnik", allKorisnik);
-            List<Inventar> inventarList = inventarService.getInventarBySI();
-            model.addAttribute("savInventar", inventarList);
-            Inventar inventar = new Inventar();
-            model.addAttribute("inventar", inventar);
-            return getViewBasedOnRole(auth);
-        }
+        List<Lokacija> allLokacija = lokacijaService.getAllLokacija();
+        List<MobilnaTarifa> allTarifa = mobilnaTarifaService.getAllMobilnaTarifa();
+        List<Inventar> inventarList = inventarService.getMobitelByTarifa(idTarife);
+        List<Korisnik> allKorisnik = korisnikService.getAllKorisnik();
+        List<VrstaUredaja> allVrstaUredaja = vrstaUredajaService.getAllVrstaUredaja();
+        model.addAttribute("allKorisnik", allKorisnik);
+        model.addAttribute("allVrstaUredaja", allVrstaUredaja);
+        model.addAttribute("allLokacija", allLokacija);
+        model.addAttribute("allTarifa", allTarifa);
+        model.addAttribute("savInventar", inventarList);
+        Inventar inventar = new Inventar();
+        model.addAttribute("inventar", inventar);
+        return getViewBasedOnRole(auth);
     }
 
     @GetMapping(value = "/ean13/{inventarniBroj}", produces = MediaType.IMAGE_PNG_VALUE)
@@ -535,7 +452,7 @@ public class InventarITController {
     }
 
     @GetMapping("/generatePDF")
-    public ResponseEntity<byte[]> generatePDF(/*HttpServletResponse response*/) throws Exception {
+    public ResponseEntity<byte[]> generatePDF() throws Exception {
         // Create a new PDF document
         Document document = new Document(PageSize.A4.rotate());
 
@@ -579,7 +496,7 @@ public class InventarITController {
 
         Paragraph header = new Paragraph();
         Font boldFont = new Font(arialBoldItalicFont, 18, Font.BOLD);
-        Phrase headerPhrase = new Phrase("IZVJEŠTAJ O OPREMI", boldFont);
+        Phrase headerPhrase = new Phrase("IZVJEŠTAJ O SLUŽBENIM MOBITELIMA", boldFont);
         header.add(headerPhrase);
         header.setAlignment(Element.ALIGN_CENTER);
         header.setSpacingAfter(20); // Adjust the value as per your requirement
@@ -622,19 +539,19 @@ public class InventarITController {
         table.addCell(headerCell);
         setCellContentAndFont(headerCell,"Vrsta uređaja", headerFont);
         table.addCell(headerCell);
-        setCellContentAndFont(headerCell,"Hostname", headerFont);
-        table.addCell(headerCell);
         setCellContentAndFont(headerCell,"Lokacija", headerFont);
         table.addCell(headerCell);
-        setCellContentAndFont(headerCell,"Username", headerFont);
+        setCellContentAndFont(headerCell,"Korisnik", headerFont);
         table.addCell(headerCell);
-        setCellContentAndFont(headerCell,"LAN MAC", headerFont);
+        setCellContentAndFont(headerCell,"Broj mobitela", headerFont);
         table.addCell(headerCell);
-        setCellContentAndFont(headerCell,"WiFi MAC", headerFont);
+        setCellContentAndFont(headerCell,"Mobilna tarifa", headerFont);
+        table.addCell(headerCell);
+        setCellContentAndFont(headerCell,"Nabavna vrijednost", headerFont);
+        table.addCell(headerCell);
+        setCellContentAndFont(headerCell,"Razlika cijene plaćena", headerFont);
         table.addCell(headerCell);
         setCellContentAndFont(headerCell,"Datum zaduženja", headerFont);
-        table.addCell(headerCell);
-        setCellContentAndFont(headerCell,"Datum razduženja", headerFont);
         table.addCell(headerCell);
         setCellContentAndFont(headerCell,"Istek garancije", headerFont);
         table.addCell(headerCell);
@@ -646,7 +563,7 @@ public class InventarITController {
         table.addCell(headerCell);
 
         // Get the list of Inventar objects from service
-        List<Inventar> inventari = inventarService.getInventarForIT();
+        List<Inventar> inventari = inventarService.getAllMobitel();
 
         // Add data cells to the table
         for (Inventar inventar : inventari) {
@@ -657,19 +574,13 @@ public class InventarITController {
             table.addCell(cell);
             setCellContentAndFont(cell, inventar.getNazivUredaja(), croatianFont);
             table.addCell(cell);
-            if(inventar.getNazivUredaja() == null){
+            if(inventar.getSerijskiBroj() == null){
                 setCellContentAndFont(cell, "", croatianFont);
             } else {
                 setCellContentAndFont(cell, inventar.getSerijskiBroj(), croatianFont);
             }
             table.addCell(cell);
             setCellContentAndFont(cell, inventar.getVrstaUredaja().getNazivVrsteUredaja(), croatianFont);
-            table.addCell(cell);
-            if(inventar.getHostname() == null){
-                setCellContentAndFont(cell, "", croatianFont);
-            } else {
-                setCellContentAndFont(cell, inventar.getHostname(), croatianFont);
-            }
             table.addCell(cell);
             if(inventar.getLokacija() == null){
                 setCellContentAndFont(cell, "", croatianFont);
@@ -679,22 +590,39 @@ public class InventarITController {
             table.addCell(cell);
             Korisnik korisnik = inventar.getKorisnik();
             if(korisnik != null && korisnik.getUsername() != null){
-                setCellContentAndFont(cell, korisnik.getUsername(), croatianFont);
+                setCellContentAndFont(cell, korisnik.getFirstName() + " " + korisnik.getLastName(), croatianFont);
             } else {
                 setCellContentAndFont(cell, "", croatianFont);
-
             }
             table.addCell(cell);
-            if(inventar.getLanMac() == null){
+            if(inventar.getBrojMobitela() == null){
                 setCellContentAndFont(cell, "", croatianFont);
             } else {
-                setCellContentAndFont(cell, inventar.getLanMac(), croatianFont);
+                setCellContentAndFont(cell, inventar.getBrojMobitela(), croatianFont);
             }
             table.addCell(cell);
-            if(inventar.getWifiMac() == null){
+            if(inventar.getMobilnaTarifa() == null){
                 setCellContentAndFont(cell, "", croatianFont);
             } else {
-                setCellContentAndFont(cell, inventar.getWifiMac(), croatianFont);
+                setCellContentAndFont(cell, inventar.getMobilnaTarifa().getNazivTarife(), croatianFont);
+            }
+            table.addCell(cell);
+            if(inventar.getNabavnaVrijednost() == null){
+                setCellContentAndFont(cell, "", croatianFont);
+            } else {
+                setCellContentAndFont(cell, inventar.getNabavnaVrijednost().toPlainString() + " EUR", croatianFont);
+            }
+            table.addCell(cell);
+            if (inventar.getNabavnaVrijednost() != null) {
+                if (inventar.isRazlikaCijenePlacena() && inventar.getNabavnaVrijednost().intValue() > 650) {
+                    setCellContentAndFont(cell, "Razlika cijene plaćena.", croatianFont);
+                } else if (!inventar.isRazlikaCijenePlacena() && inventar.getNabavnaVrijednost().intValue() > 650) {
+                    setCellContentAndFont(cell, "Razlika cijene nije plaćena.", croatianFont);
+                } else {
+                    setCellContentAndFont(cell, "", croatianFont);
+                }
+            } else {
+                setCellContentAndFont(cell, "", croatianFont); // or handle the null case appropriately
             }
             table.addCell(cell);
             if(inventar.getDatumZaduzenja() == null){
@@ -703,13 +631,11 @@ public class InventarITController {
                 setCellContentAndFont(cell, String.valueOf(inventar.getDatumZaduzenja()), croatianFont);
             }
             table.addCell(cell);
-            if(inventar.getDatumRazduzenja() == null){
+            if(inventar.getWarrantyEnding() == null){
                 setCellContentAndFont(cell, "", croatianFont);
             } else {
-                setCellContentAndFont(cell, String.valueOf(inventar.getDatumRazduzenja()), croatianFont);
+                setCellContentAndFont(cell, String.valueOf(inventar.getWarrantyEnding()), croatianFont);
             }
-            table.addCell(cell);
-            setCellContentAndFont(cell, String.valueOf(inventar.getWarrantyEnding()), croatianFont);
             table.addCell(cell);
             if(inventar.getRacun() == null){
                 setCellContentAndFont(cell, "", croatianFont);
@@ -766,7 +692,224 @@ public class InventarITController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
         headers.setContentDisposition(ContentDisposition.builder("attachment")
-                .filename("InventarIT-izvjestaj.pdf")
+                .filename("Mobiteli-izvjestaj.pdf")
+                .build());
+
+        // Return the PDF content as ResponseEntity
+        return new ResponseEntity<>(pdfContent, headers, HttpStatus.OK);
+    }
+
+    @GetMapping("/printPDFpotvrde/{inventarniBroj}")
+    public ResponseEntity<byte[]> printPDFpotvrde(@PathVariable(value = "inventarniBroj") String inventarniBroj) throws Exception {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        User user = userService.getUserByUsername(username);
+        Inventar inventar = inventarService.getInventarById(inventarniBroj);
+
+        String filename = "PotvrdaPlaceneRazlike-InvBr" + inventarniBroj;
+
+        // Create a new PDF document
+        Document document = new Document(PageSize.A4);
+
+        // Create a PdfWriter instance to write the document to the response output stream
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        PdfWriter.getInstance(document, baos);
+
+        // Open the document
+        document.open();
+
+        //Paths to arial fonts
+        String arialBold = "/static/fonts/arialbd.ttf";
+        String arialNormal = "/static/fonts/arial.ttf";
+        String arialBoldItalic = "/static/fonts/arialbi.ttf";
+
+        // Set the font for Croatian characters
+        // Create the font using BaseFont.createFont
+        BaseFont arialBoldFont = BaseFont.createFont(arialBold, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+        BaseFont arialNormalFont = BaseFont.createFont(arialNormal, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+        BaseFont arialBoldItalicFont = BaseFont.createFont(arialBoldItalic, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+        Font croatianFont = FontFactory.getFont(arialNormal, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+        Font croatianFontBold = FontFactory.getFont(arialBold, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+
+        // Set image and it's size
+        String imagePath2 = "static/images/AITACvaluesChallengesSolutions.png"; // Relative path to the image file
+        Resource resource2 = new ClassPathResource(imagePath2);
+        Image image2 = Image.getInstance(resource2.getURL());
+        float desiredWidthInCm2 = 5f;
+        float desiredHeightInCm2 = 2f;
+
+        // Convert centimeters to points
+        float desiredWidthInPoints2 = desiredWidthInCm2 * 72 / 2.54f;
+        float desiredHeightInPoints2 = desiredHeightInCm2 * 72 / 2.54f;
+
+        // Set the desired width and height of the image in points
+        float desiredWidth2 = desiredWidthInPoints2;
+        float desiredHeight2 = desiredHeightInPoints2;
+        image2.scaleToFit(desiredWidth2, desiredHeight2);
+        float pageWidth = document.getPageSize().getWidth();
+        float y2 = document.getPageSize().getHeight() - image2.getScaledHeight() - 0.5f * 72 / 2.54f; // Position from the bottom
+        image2.setAbsolutePosition(1.5f * 72 / 2.54f, y2);
+        document.add(image2);
+
+        String imagePath3 = "static/images/AitacData.png"; // Relative path to the image file
+        Resource resource3 = new ClassPathResource(imagePath3);
+        Image image3 = Image.getInstance(resource3.getURL());
+
+        float desiredWidthInPoints3 = desiredWidthInCm2 * 72 / 2.54f;
+        float desiredHeightInPoints3 = desiredHeightInCm2 * 72 / 2.54f;
+
+        // Set the desired width and height of the image in points
+        float desiredWidth3 = desiredWidthInPoints3;
+        float desiredHeight3 = desiredHeightInPoints3;
+        image3.scaleToFit(desiredWidth3, desiredHeight3);
+        float x3 = pageWidth - (1.0f * 72 / 2.54f) - image3.getScaledWidth();
+        float y3 = y2 + image2.getScaledHeight() - image3.getScaledHeight(); // Adjusted to align top of image2 with top of image3
+        image3.setAbsolutePosition(x3, y3);
+        image3.setSpacingAfter(40);
+        document.add(image3);
+
+
+
+        Paragraph aitacPodaci1 = new Paragraph();
+        Font fontBlueLine = new Font(arialNormalFont, 5, Font.BOLD);
+        fontBlueLine.setColor(35, 47, 131);
+        Chunk blueLine = new Chunk("_______________________________________________________________________________________________________________________________ \n", fontBlueLine);
+        aitacPodaci1.add(blueLine);
+        Font fontAitacPodaci = new Font(arialNormalFont, 6, Font.NORMAL);
+        fontAitacPodaci.setColor(160, 160, 160);
+        Phrase prviRed = new Phrase("AITAC d.o.o. Istarska cesta 1, 51215 Kastav, Hrvatska · T:+385 51 626 712 · F:+385 51 626 720 · E:info@aitac.nl · W: www.aitac.nl", fontAitacPodaci);
+        aitacPodaci1.setAlignment(Element.ALIGN_CENTER);
+        aitacPodaci1.add(prviRed);
+        aitacPodaci1.setSpacingBefore(30);
+        document.add(aitacPodaci1);
+
+        Paragraph aitacPodaci2 = new Paragraph();
+        Phrase drugiRed = new Phrase("Temeljni kapital: 18.000,00 kn uplaćen kod ZAP Rijeka, Hrvatska · Članovi uprave: M. Lorencin, MBS:040226601, Trgovački Sud u Rijeci", fontAitacPodaci);
+        aitacPodaci2.setAlignment(Element.ALIGN_CENTER);
+        aitacPodaci2.add(drugiRed);
+        aitacPodaci2.add(blueLine);
+        aitacPodaci2.setSpacingAfter(30);
+        document.add(aitacPodaci2);
+
+        //Adding date of the report
+        Paragraph printDate = new Paragraph();
+        String datum = "U Kastvu ";
+        String todayDate =  getToday().format(formatter);
+        Font datumFont = new Font(arialNormalFont, 12, Font.NORMAL);
+        Font dateFont = new Font(arialBoldFont, 12, Font.BOLD);
+        Phrase datumPhrase = new Phrase(datum, datumFont);
+        Phrase datePhrase = new Phrase(todayDate, dateFont);
+        printDate.add(datumPhrase);
+        printDate.add(datePhrase);
+        printDate.setAlignment(Element.ALIGN_LEFT);
+        printDate.setSpacingAfter(20);
+        printDate.setIndentationLeft(20);
+        document.add(printDate);
+
+        Paragraph header = new Paragraph();
+        Font boldFont = new Font(arialBoldItalicFont, 18, Font.BOLD);
+        Phrase headerPhrase = new Phrase("POTVRDA O PLAĆANJU RAZLIKE \n ZA NABAVKU MOBITELA", boldFont);
+        header.add(headerPhrase);
+        header.setAlignment(Element.ALIGN_CENTER);
+        header.setSpacingAfter(75);
+        header.setSpacingBefore(50);
+        document.add(header);
+
+        Paragraph tijelo = new Paragraph();
+        Phrase textTijela = new Phrase();
+
+        BigDecimal baseValue = new BigDecimal("650");
+        BigDecimal nabavnaVrijednost = (inventar.getNabavnaVrijednost() != null) ? inventar.getNabavnaVrijednost() : BigDecimal.ZERO;
+
+        // Calculate razlikeCijene based on the inventory value
+        String razlikeCijene = nabavnaVrijednost.subtract(baseValue).toString();
+
+        Font fontNormal = new Font(arialNormalFont, 12, Font.NORMAL);
+        Font fontBold = new Font(arialBoldFont, 12, Font.BOLD);
+        textTijela.add(new Chunk("Ovom potvrdom potvrđujem da je ", fontNormal));
+        if(inventar.getKorisnik()!=null){
+            textTijela.add(new Chunk(inventar.getKorisnik().getFirstName() + " " + inventar.getKorisnik().getLastName(), fontBold));
+        } else {
+            textTijela.add(new Chunk(" ", fontBold));
+        }
+        textTijela.add(new Chunk(" platio/la niže navedenom, dogovoreni iznos razlike u cijeni od ", fontNormal));
+        textTijela.add(new Chunk(razlikeCijene + " EUR", fontBold));
+        textTijela.add(new Chunk(" prilikom nabave mobitela ", fontNormal));
+        textTijela.add(new Chunk(inventar.getNazivUredaja(), fontBold));
+        textTijela.add(new Chunk(" dodijeljenog inventarnog broja ", fontNormal));
+        textTijela.add(new Chunk(inventar.getInventarniBroj() + ".", fontBold));
+        textTijela.add(new Chunk("\nMobitel ostaje u vlasništvu firme.", fontNormal));
+        tijelo.add(textTijela);
+        tijelo.setIndentationLeft(20);
+        tijelo.setAlignment(Element.ALIGN_JUSTIFIED);
+        document.add(tijelo);
+
+        Paragraph potpisnikRed1 = new Paragraph();
+        Phrase red1 = new Phrase();
+        red1.add(new Chunk("Primio sredstva", fontNormal));
+        red1.add(new Chunk("                                                                  "));
+        red1.add(new Chunk("Platitelj", fontNormal));
+        potpisnikRed1.setAlignment(Element.ALIGN_CENTER);
+        potpisnikRed1.add(red1);
+        potpisnikRed1.setSpacingBefore(90);
+        potpisnikRed1.setSpacingAfter(10);
+        document.add(potpisnikRed1);
+
+        Paragraph potpisnikRed2 = new Paragraph();
+        Font fontPotpisnik = new Font(arialNormalFont, 9, Font.NORMAL);
+        Phrase red2 = new Phrase();
+        red2.add(new Chunk("_____________________________________", fontPotpisnik));
+        red2.add(new Chunk("                             "));
+        red2.add(new Chunk("_____________________________________ \n", fontPotpisnik));
+        Phrase red3 = new Phrase();
+        red3.add(new Chunk("            AITAC d.o.o.", fontPotpisnik));
+        red3.add(new Chunk("                                                                 "));
+        if(inventar.getKorisnik() != null){
+            red3.add(new Chunk(inventar.getKorisnik().getFirstName() + " " + inventar.getKorisnik().getLastName(), fontPotpisnik));
+        } else {
+            red3.add(new Chunk(" ", fontPotpisnik));
+        }
+        potpisnikRed2.add(red2);
+        potpisnikRed2.add(red3);
+        potpisnikRed2.setSpacingBefore(70);
+        potpisnikRed2.setSpacingAfter(20);
+        potpisnikRed2.setAlignment(Element.ALIGN_CENTER);
+        potpisnikRed2.setIndentationLeft(10);
+        document.add(potpisnikRed2);
+
+        //Adding another image and setting its size and position
+        String imagePath = "static/images/AitacLine.png"; // Relative path to the image file
+        Resource resource = new ClassPathResource(imagePath);
+        Image image = Image.getInstance(resource.getURL());
+
+        // Set the desired width and height of the image in centimeters
+        float desiredWidthInCm = 17f;
+        float desiredHeightInCm = 7f;
+
+        // Convert centimeters to points
+        float desiredWidthInPoints = desiredWidthInCm * 72 / 2.54f;
+        float desiredHeightInPoints = desiredHeightInCm * 72 / 2.54f;
+
+        // Set the desired width and height of the image in points
+        float desiredWidth = desiredWidthInPoints;
+        float desiredHeight = desiredHeightInPoints;
+        image.scaleToFit(desiredWidth, desiredHeight);
+
+        // Calculate the coordinates to position the image at the bottom
+        float x = (pageWidth - desiredWidth) / 2; // Centered horizontally
+        float y = document.bottomMargin() - image.getScaledHeight(); // Position from the bottom
+
+        image.setAbsolutePosition(x, y);
+        document.add(image);
+        // Close the document
+        document.close();
+
+        byte[] pdfContent = baos.toByteArray();
+        // Set HTTP headers for response
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDisposition(ContentDisposition.builder("attachment")
+                .filename(filename+".pdf")
                 .build());
 
         // Return the PDF content as ResponseEntity
@@ -852,7 +995,7 @@ public class InventarITController {
         aitacPodaci1.add(blueLine);
         Font fontAitacPodaci = new Font(arialNormalFont, 6, Font.NORMAL);
         fontAitacPodaci.setColor(160, 160, 160);
-        Phrase prviRed = new Phrase("AITAC d.o.o. Istarska cesta 1, 51215 Kastav, Hrvatska · T:+385 51 626 712 · F:+385 51 626 720 · E:info@aitac.nl · W: www.aitac.nl", fontAitacPodaci);
+        Phrase prviRed = new Phrase("AITAC d.o.o. Žegoti 6/1, 51215 Kastav, Hrvatska · T:+385 51 626 712 · F:+385 51 626 720 · E:info@aitac.nl · W: www.aitac.nl", fontAitacPodaci);
         aitacPodaci1.setAlignment(Element.ALIGN_CENTER);
         aitacPodaci1.add(prviRed);
         aitacPodaci1.setSpacingBefore(30);

@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link th:href="@{/CSS/customStyle.css}" rel="stylesheet"/>
+<script type="text/javascript" src="../static/javascript/dropdown.js" th:src="@{/javascript/dropdown.js}"></script>
+<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 <head>
     <meta charset="UTF-8">
     <title>Glavni izbornik</title>
@@ -21,23 +24,52 @@
     </header>
     <div class="button-container">
         <div class="button-row">
-            <button class="button-mainMenu" role="button" onclick="window.location.href='/appUsers/all'">App Useri
-            </button>
+            <div class="w3-dropdown">
+                <button class="button-mainMenu" role="button" onclick="dropdown('Dropdown2', 'icon2')">Oprema <i id="icon2" class="fa fa-caret-down"></i>
+                </button>
+                <div id="Dropdown2" class="w3-dropdown-content" style="background-color: #232f83">
+                    <button class="button-mainMenu" role="button" onclick="window.location.href='/inventar/all'">Osnovna
+                        sredstva
+                    </button>
+                    <button class="button-mainMenu" role="button" onclick="window.location.href='/inventarIT/all'">IT oprema
+                    </button>
+                </div>
+            </div>
+            <div class="w3-dropdown">
+                <button class="button-mainMenu" role="button" onclick="dropdown('Dropdown4', 'icon4')">Mobiteli <i id="icon4" class="fa fa-caret-down"></i>
+                </button>
+                <div id="Dropdown4" class="w3-dropdown-content" style="background-color: #232f83">
+                    <button class="button-mainMenu" role="button" onclick="window.location.href='/phones/all'">Svi mobiteli
+                    </button>
+                    <button class="button-mainMenu" role="button" onclick="window.location.href='/mobilnaTarifa/all'">Mobilne tarife
+                    </button>
+                </div>
+            </div>
             <button class="button-mainMenu" role="button" onclick="window.location.href='/korisnik/all'">Korisnici
             </button>
-            <button class="button-mainMenu" role="button" onclick="window.location.href='/inventar/all'">Osnovna
-                sredstva
-            </button>
-            <button class="button-mainMenu" role="button" onclick="window.location.href='/inventarIT/all'">IT oprema
-            </button>
+            <div class="w3-dropdown">
+                <button class="button-mainMenu" role="button" onclick="dropdown('Dropdown1', 'icon1')">Settings <i id="icon1" class="fa fa-caret-down"></i>
+                </button>
+                <div id="Dropdown1" class="w3-dropdown-content" style="background-color: #232f83">
+                    <button class="button-mainMenu" role="button" onclick="window.location.href='/appUsers/all'">App
+                        Useri
+                    </button>
+                </div>
+            </div>
+            <div>
+                <button class="button-mainMenu" role="button" onclick="dropdown('Dropdown3', 'icon3')">Inventura <i id="icon3" class="fa fa-caret-down"></i></button>
+                <div id="Dropdown3" class="w3-dropdown-content" style="background-color: #232f83">
+                    <button class="button-mainMenu" role="button" onclick="window.location.href='/inventura/all'">Inventure
+                    </button>
+                    <button class="button-mainMenu" role="button" onclick="window.location.href='/provodenjeInventure/all'">
+                        Izvršavanje inventure
+                    </button>
+                </div>
+            </div>
         </div>
-        <div class="button-row">
-            <button class="button-mainMenu" role="button" onclick="window.location.href='/inventura/all'">Inventure
-            </button>
-            <button class="button-mainMenu" role="button" onclick="window.location.href='/provodenjeInventure/all'">
-                Izvršavanje inventure
-            </button>
-        </div>
+<!--        <div class="button-row">-->
+<!--            -->
+<!--        </div>-->
         <div class="button-row">
             <button class="button-mainMenu" role="button" onclick="window.location.href='/razduzenje/all'">Razduženja
             </button>
@@ -48,7 +80,8 @@
             <button class="button-mainMenu" role="button" onclick="window.location.href='/vrstaUredaja/all'">Vrste
                 sredstva
             </button>
-            <button class="button-mainMenu" role="button" onclick="window.location.href='/racun/all'">Računi/Dokumenti</button>
+            <button class="button-mainMenu" role="button" onclick="window.location.href='/racun/all'">Računi/Dokumenti
+            </button>
             <button class="button-mainMenu" role="button" onclick="window.location.href='/file/all'">Datoteke</button>
         </div>
         <div class="button-row">

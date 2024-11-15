@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link th:href="@{/CSS/customStyle.css}" rel="stylesheet"/>
+<script type="text/javascript" src="../static/javascript/sidebar.js" th:src="@{/javascript/sidebar.js}"></script>
+<head>
+    <meta charset="UTF-8">
+    <title>Dodavanje mobitela</title>
+</head>
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    html {
+        background-color: #232f83;
+    }
+
+    .field {
+        height: 40px; /* Set a uniform height */
+        padding: 8px; /* Consistent padding */
+    }
+
+    .w3-half {
+        flex: 1 1 45%; /* Allows two fields per row, adjust as needed */
+        min-width: 200px; /* Set a minimum width to prevent shrinkage */
+    }
+
+    .currency-input-mobitel {
+        position: relative;
+    }
+
+    .currency-wrapper {
+        display: flex;
+        align-items: center;
+        position: relative;
+    }
+
+    .currency-text {
+        position: absolute;
+        right: 10px; /* Adjust to control spacing from the input field’s edge */
+        color: #777; /* Optional: style the "EUR" text color */
+        font-size: 14px; /* Adjust to match input font size */
+        pointer-events: none; /* Prevent "EUR" text from being interactive */
+    }
+
+    input.field {
+        padding-right: 40px; /* Add padding to make room for the "EUR" text */
+    }
+</style>
+<body>
+<div class="w3-card-4 w3-center w3-display-middle w3-light-grey" style="width: 50%; position: absolute">
+    <div class="w3-container w3-gray">
+        <h2 class="w3-text-light-grey"><b>Forma za dodavanje novog mobitela</b>
+            <button class="button-30 w3-right" onclick="window.location.href='/phones/all'"><b>Odustani</b></button>
+        </h2>
+    </div>
+    <form class="w3-container w3-light-grey" action="#" th:action="@{/phones/addNew}" th:object="${inventar}"
+          method="POST">
+        <div class="w3-row-padding">
+            <p class="w3-center">
+                <label class="w3-text-dark-grey" for="inventarniBroj"><b>Inventarni broj</b><br></label>
+                <label id="error-message" class="error alert alert-danger" role="alert" th:text="${error}"
+                       th:if="${error}"></label>
+                <input class="w3-input w3-border w3-round w3-center" id="inventarniBroj" name="inventarniBroj"
+                       type="text" th:field="*{inventarniBroj}" required
+                       onchange="this.setCustomValidity('')"
+                       oninvalid="this.setCustomValidity('Ispunite polje za inventarni broj!')"></p>
+            <p class="w3-half">
+                <label class="w3-text-dark-grey" for="nazivUredaja"><b>Naziv inventara</b><br></label>
+                <input class="w3-input w3-border w3-round w3-center" id="nazivUredaja" name="nazivUredaja" type="text"
+                       th:field="*{nazivUredaja}" required
+                       onchange="this.setCustomValidity('')"
+                       oninvalid="this.setCustomValidity('Ispunite polje za naziv uređaja!')"></p>
+            <p class="w3-half">
+                <label class="w3-text-dark-grey" for="serijskiBroj"><b>Serijski broj</b><br></label>
+                <input class="w3-input w3-border w3-round w3-center" id="serijskiBroj" name="serijskiBroj" type="text"
+                       th:field="*{serijskiBroj}" required
+                       onchange="this.setCustomValidity('')"
+                       oninvalid="this.setCustomValidity('Ispunite polje za serijski broj!')"></p>
+            <p>
+            <p class="w3-half" hidden="hidden">
+                <label class="w3-text-dark-grey" for="username"><b>Korisnik</b></label>
+                <select class="w3-input w3-border w3-round w3-center" id="username" name="username"
+                        th:field="*{korisnik.username}"
+                        onchange="this.setCustomValidity('')"
+                        oninvalid="this.setCustomValidity('Odaberite korisnika!')">
+                    <option value="">Odaberite korisnika</option>
+                    <option th:each="korisnik : ${allKorisnik}" th:value="${korisnik.username}"
+                            th:text="${korisnik.firstName} + ' ' + ${korisnik.lastName}"></option>
+                </select>
+            <p>
+            <p class="w3-half">
+                <label class="w3-text-dark-grey" for="nazivLokacije"><b>Lokacija</b></label>
+                <select class="w3-input w3-border w3-round w3-center" id="nazivLokacije" name="nazivLokacije"
+                        th:field="*{lokacija.idLokacije}" required
+                        onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Odaberite lokaciju!')">
+                    <option value="">Odaberite lokaciju</option>
+                    <option th:each="lokacija : ${allLokacija}" th:value="${lokacija.idLokacije}"
+                            th:text="${lokacija.nazivLokacije}"></option>
+                </select>
+            </p>
+            <p class="w3-half">
+                <label class="w3-text-dark-grey" for="brojMobitela"><b>Broj mobitela</b></label>
+                <input class="w3-input w3-border w3-round w3-center field" id="brojMobitela" name="brojMobitela"
+                       type="text"
+                       th:field="*{brojMobitela}" onchange="this.setCustomValidity('')"
+                       oninvalid="this.setCustomValidity('Upišite broj mobitela!')">
+            </p>
+            <p class="w3-half">
+                <label class="w3-text-dark-grey" for="mobilnaTarifa"><b>Mobilna tarifa</b></label>
+                <select class="w3-input w3-border w3-round w3-center" id="mobilnaTarifa" name="mobilnaTarifa"
+                        th:field="*{mobilnaTarifa.idTarife}" required
+                        onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Odaberite tarifu!')">
+                    <option value="">Odaberite mobilnu tarifu</option>
+                    <option th:each="tarifa : ${allTarifa}" th:value="${tarifa.idTarife}"
+                            th:text="${tarifa.nazivTarife}"></option>
+                </select>
+            </p>
+            <div class="w3-half" style="margin-block-end: 15px;margin-block-start: 15px;">
+                <div class="currency-input-mobitel">
+                    <label class="w3-text-dark-grey" for="nabavnaVrijednost"><b>Nabavna vrijednost sredstva</b></label>
+                    <div class="currency-wrapper">
+                        <input class="w3-input w3-border w3-round w3-center field" id="nabavnaVrijednost"
+                               name="nabavnaVrijednost"
+                               type="text" placeholder="Za decimale koristite točku umjesto zareza!"
+                               th:field="*{nabavnaVrijednost}">
+                        <span class="currency-text">EUR</span>
+                    </div>
+                </div>
+            </div>
+            <p class="w3-half">
+                <label class="w3-text-dark-grey" for="razlikaCijenePlacena"><b>Razlika cijene plaćena</b></label>
+                <select id="razlikaCijenePlacena" class="w3-input w3-border w3-round w3-center field"
+                        th:field="*{razlikaCijenePlacena}">
+                    <option th:value="'0'" th:text="'NE'"></option>
+                    <option th:value="'1'" th:text="'DA'"></option>
+                </select>
+            </p>
+
+            <p class="w3-half">
+                <label class="w3-text-dark-grey" for="warrantyEnding"><b>Istek garancije</b></label>
+                <input class="w3-input w3-border w3-round w3-center field" id="warrantyEnding" name="warrantyEnding"
+                       type="date" th:field="*{warrantyEnding}" required
+                       onchange="this.setCustomValidity('')"
+                       oninvalid="this.setCustomValidity('Ispunite polje do kada traje garancija!')"></p>
+
+            <p class="w3-half">
+                <label class="w3-text-dark-grey" for="brojRacuna"><b>Račun</b></label>
+                <select class="w3-input w3-border w3-round w3-center field" id="brojRacuna" name="brojRacuna"
+                        th:field="*{racun.idRacuna}"
+                        onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Odaberite račun!')">
+                    <option value="">Odaberite račun</option>
+                    <option th:each="racun : ${allRacun}" th:value="${racun.idRacuna}"
+                            th:text="${racun.brojRacuna}"></option>
+                </select>
+            </p>
+            <p class="w3-half">
+                <label class="w3-text-dark-grey" for="nazivDobavljaca"><b>Dobavljač</b></label>
+                <select class="w3-input w3-border w3-round w3-center field" id="nazivDobavljaca" name="nazivDobavljaca"
+                        th:field="*{dobavljac.idDobavljaca}" required
+                        onchange="this.setCustomValidity('')"
+                        oninvalid="this.setCustomValidity('Odaberite dobavljača opreme!')">
+                    <option value="">Odaberite dobavljača</option>
+                    <option th:each="dobavljac : ${allDobavljac}" th:value="${dobavljac.idDobavljaca}"
+                            th:text="${dobavljac.nazivDobavljaca}"></option>
+                </select>
+            </p>
+            <p class="w3-center">
+                <label class="w3-text-dark-grey" for="napomena"><b>Napomena</b></label>
+                <input class="w3-input w3-border w3-round w3-center w3-padding-24" id="napomena" name="napomena"
+                       type="text" th:field="*{napomena}">
+            </p>
+        </div>
+        <div>
+            <div>
+                <button class="button-30"><b>Dodaj mobitel</b></button>
+            </div>
+        </div>
+    </form>
+
+</div>
+</body>
+<script>
+    function hidediv() {
+        var errMessages = document.getElementsByClassName('error');
+        for (var i = 0; i < errMessages.length; i++) {
+            errMessages[i].style.display = "none";
+        }
+    }
+
+    setTimeout("hidediv()", 5000);
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const selectElement = document.getElementById("idVrsteUredaja");
+        const defaultValue = "20"; // Set this to the ID you want as the default
+        selectElement.value = defaultValue;
+    });
+</script>
+<script>
+    const nabavnaVrijednostInput = document.getElementById('nabavnaVrijednost');
+    nabavnaVrijednostInput.addEventListener('input', function (event) {
+        this.value = this.value.replace(',', '.');
+    });
+</script>
+</html>

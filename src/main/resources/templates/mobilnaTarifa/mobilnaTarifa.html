@@ -4,14 +4,14 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link th:href="@{/CSS/customStyle.css}" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 <script type="text/javascript" src="../static/javascript/sidebar.js" th:src="@{/javascript/sidebar.js}"></script>
-<script type="text/javascript" src="../static/javascript/hidedivLokacija.js"
-        th:src="@{/javascript/hidedivLokacija.js}"></script>
+<script type="text/javascript" src="../static/javascript/hidedivTarifa.js"
+        th:src="@{/javascript/hidedivTarifa.js}"></script>
+<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lokacije</title>
+    <title>Mobilne tarife</title>
 </head>
 <style>
     html {
@@ -38,41 +38,18 @@
         <a th:href="@{/index}" class="w3-bar-item w3-button">Glavni izbornik</a>
         <a th:href="@{/racun/all}" class="w3-bar-item w3-button">Računi/Dokumenti</a>
         <a th:href="@{/file/all}" class="w3-bar-item w3-button">Datoteke</a>
-        <a th:href="@{/dobavljac/all}" class="w3-bar-item w3-button">Dobavljači</a>
+        <a th:href="@{/lokacija/all}" class="w3-bar-item w3-button">Lokacije</a>
         <a th:href="@{/vrstaUredaja/all}" class="w3-bar-item w3-button">Vrste sredstva</a>
         <a th:href="@{/korisnik/all}" class="w3-bar-item w3-button">Korisnici</a>
-        <div class="w3-dropdown-click">
-            <button class="w3-button" onclick="resetPasswordDropFunc('resetPasswordDrop2','icon2')">
-                Oprema <i id="icon2" class="fa fa-caret-down"></i>
-            </button>
-            <div id="resetPasswordDrop2" class="w3-hide w3-white w3-card">
-                <a th:href="@{/inventar/all}" class="w3-bar-item w3-button">Osnovna sredstva</a>
-                <a th:href="@{/inventarIT/all}" class="w3-bar-item w3-button">IT oprema</a>
-            </div>
-        </div>
-        <div class="w3-dropdown-click">
-            <button class="w3-button" onclick="resetPasswordDropFunc('resetPasswordDrop3','icon3')">
-                Mobiteli <i id="icon3" class="fa fa-caret-down"></i>
-            </button>
-            <div id="resetPasswordDrop3" class="w3-hide w3-white w3-card">
-                <a th:href="@{/phones/all}" class="w3-bar-item w3-button">Svi mobiteli</a>
-                <a th:href="@{/mobilnaTarifa/all}" class="w3-bar-item w3-button">Mobilne tarife</a>
-            </div>
-        </div>
+        <a th:href="@{/inventar/all}" class="w3-bar-item w3-button">Osnovna sredstva</a>
+        <a th:href="@{/inventarIT/all}" class="w3-bar-item w3-button">IT oprema</a>
         <a th:href="@{/razduzenje/all}" class="w3-bar-item w3-button">Razduženja</a>
-        <div class="w3-dropdown-click">
-            <button class="w3-button" onclick="resetPasswordDropFunc('resetPasswordDrop1','icon1')">
-                Inventura <i id="icon1" class="fa fa-caret-down"></i>
-            </button>
-            <div id="resetPasswordDrop1" class="w3-hide w3-white w3-card">
-                <a th:href="@{/inventura/all}" class="w3-bar-item w3-button">Inventure</a>
-                <a th:href="@{/provodenjeInventure/all}" class="w3-bar-item w3-button">Izvršavanje inventure</a>
-            </div>
-        </div>
+        <a th:href="@{/inventura/all}" class="w3-bar-item w3-button">Inventure</a>
+        <a th:href="@{/provodenjeInventure/all}" class="w3-bar-item w3-button">Izvršavanje inventure</a>
         <a th:href="@{/appUsers/all}" class="w3-bar-item w3-button">App useri</a>
         <div class="w3-dropdown-click">
-            <button class="w3-button" onclick="resetPasswordDropFunc('resetPasswordDrop', 'icon')">
-                Password settings <i id="icon" class="fa fa-caret-down"></i>
+            <button class="w3-button" onclick="resetPasswordDropFunc()">
+                Password settings <i class="fa fa-caret-down"></i>
             </button>
             <div id="resetPasswordDrop" class="w3-hide w3-white w3-card">
                 <a th:href="@{/appUsers/userResetPassword/}" class="w3-bar-item w3-button">Reset password</a>
@@ -92,45 +69,45 @@
         <img src="../images/AITACvaluesChallengesSolutions.png" class="centered-image" alt="Aitac VCS">
     </a>
 </div>
-<h1 class="w3-padding w3-center w3-opacity w3-xxxlarge" style="text-shadow:1px 1px 0 #444"><b>Lokacije</b></h1>
+<h1 class="w3-padding w3-center w3-opacity w3-xxxlarge" style="text-shadow:1px 1px 0 #444"><b>Mobilne tarife</b></h1>
 <div class="div-container">
-    <a th:href="@{/lokacija/addNew}" class="button-add"><i class="material-icons">add_circle</i> Nova lokacija</a>
-    <a th:href="@{/lokacija/generatePDF}" class="button-30 w3-right">Izvještaj <i
-            class="material-icons">picture_as_pdf</i></a>
+    <a th:href="@{/mobilnaTarifa/addNew}" class="button-add"><i class="material-icons">add_circle</i> Nova tarifa</a>
+    <a th:href="@{/mobilnaTarifa/generatePDF}" class="button-30">Izvještaj <i class="material-icons">picture_as_pdf</i></a>
 </div>
-<form class="w3-container" th:action="@{/lokacija/find}" method="get" style="margin-bottom: 20px">
-    <input type="text" id="nazivLokacije" name="nazivLokacije" placeholder="Pretraži lokaciju po nazivu" required
-           onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Popunite polje za pretraživanje!')">
-    <button onclick="hidedivLokacija()" type="submit" class="button-30"><i class="fa fa-search"
-                                                                           style="font-size:20px"></i> Pretraži
+<form class="w3-container" th:action="@{/mobilnaTarifa/find}" method="get" style="margin-bottom: 20px">
+    <input type="text" id="nazivTarife" name="nazivTarife" placeholder="Pretraži po nazivu" required
+           onchange="this.setCustomValidity('')"
+           oninvalid="this.setCustomValidity('Popunite polje za pretraživanje!')">
+    <button onclick="hidedivDobavljac()" type="submit" class="button-30"><i class="fa fa-search"
+                                                                            style="font-size:20px"></i> Pretraži
     </button>
-    <button type="button" class="button-30" onclick="window.location.href='/lokacija/all'">Prikaži sve</button>
+    <button type="button" class="button-30" onclick="window.location.href='/mobilnaTarifa/all'">Prikaži sve</button>
     <label id="error-message" class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>
 </form>
 <div style="overflow-x:auto;">
     <table style="table-layout:auto;width:100%" class="w3-table-all w3-hoverable w3-centered w3-card-4">
         <thead>
         <tr>
-            <th class="w3-dark-grey">ID lokacije</th>
-            <th class="w3-dark-grey">Naziv lokacije</th>
+            <th class="w3-dark-grey">ID</th>
+            <th class="w3-dark-grey">Naziv mobilne tarife</th>
             <th class="w3-dark-grey"></th>
             <th class="w3-dark-grey"></th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="lokacija:${sveLokacije}">
-            <td th:text="${lokacija.idLokacije}"></td>
-            <td th:text="${lokacija.nazivLokacije}"></td>
-            <td><a th:href="@{/lokacija/update/{id}(id=${lokacija.idLokacije})}" type="button" class="button-edit"><i
-                    class="fa fa-edit" style="font-size:36px"></i></a></td>
+        <tr th:each="tarifa:${svaMobilnaTarifa}">
+            <td th:text="${tarifa.idTarife}"></td>
+            <td th:text="${tarifa.nazivTarife}"></td>
+            <td><a th:href="@{/mobilnaTarifa/update/{id}(id=${tarifa.idTarife})}" type="button"
+                   class="button-edit"><i class="fa fa-edit" style="font-size:36px"></i></a></td>
             <td><a style="font-size:128px"
                    href="javascript:void(0);"
-                   th:onclick="'confirmDelete(' + ${lokacija.idLokacije} + ')'"
+                   th:onclick="'confirmDelete(' + ${tarifa.idTarife} + ')'"
                    class="button-delete"><i class="material-icons">remove_circle</i></a></td>
         </tr>
         </tbody>
-        <button id="scrollToTopBtn" title="Go to top" class="button-toTop">Na početak</button>
     </table>
+    <button id="scrollToTopBtn" title="Go to top" class="button-toTop">Na početak</button>
 </div>
 <script>
     var scrollToTopBtn = document.getElementById("scrollToTopBtn");
@@ -149,11 +126,24 @@
     };
 </script>
 <script>
-    function confirmDelete(idLokacije) {
+    function confirmDelete(idTarife) {
         var isConfirmed = confirm("Are you sure you want to delete?");
 
         if (isConfirmed) {
-            window.location.href = `/lokacija/delete/${idLokacije}`;
+            window.location.href = `/mobilnaTarifa/delete/${idTarife}`;
+        }
+    }
+</script>
+<script>
+    function resetPasswordDropFunc() {
+        var x = document.getElementById("resetPasswordDrop");
+        if (x.className.indexOf("w3-show") == -1) {
+            x.className += " w3-show";
+            x.previousElementSibling.className += " w3-gray";
+        } else {
+            x.className = x.className.replace(" w3-show", "");
+            x.previousElementSibling.className =
+                x.previousElementSibling.className.replace(" w3-gray", "");
         }
     }
 </script>
