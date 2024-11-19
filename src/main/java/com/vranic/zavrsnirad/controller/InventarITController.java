@@ -136,7 +136,7 @@ public class InventarITController {
     }
 
     @PostMapping("/addNew")
-    public String addInventar(@ModelAttribute("inventar") Inventar inventar, Model model) throws Exception {
+    public String addInventar(@RequestParam("type") String type, @ModelAttribute("inventar") Inventar inventar, Model model) throws Exception {
         if (inventarService.checkIfInvBrojIsAvailable(inventar.getInventarniBroj()) != 0) {
             model.addAttribute("error", "Inventarni broj već postoji!");
             return "inventar/newInventarIT";
@@ -149,7 +149,98 @@ public class InventarITController {
             if (inventar.getRacun() == null || inventar.getRacun().getIdRacuna() == null) {
                 inventar.setRacun(null);
             }
-            inventarService.save(inventar);
+            if(type.equals("IT")){
+                String inputedInventarniBroj = inventarService.getLastInventarniBrojIT();
+
+                // Remove the first two characters
+                String prefix = inputedInventarniBroj.substring(0, 2); // Save the first two characters
+                String removedPrefixInvBr = inputedInventarniBroj.substring(2);
+
+                // Convert the remaining part to Long
+                Long numberInventarniBroj = Long.valueOf(removedPrefixInvBr);
+
+                // Increment the number
+                Long nextInvBr = numberInventarniBroj + 1;
+
+                // Convert the incremented number back to a string
+                String incrementedInvBrStr = nextInvBr.toString();
+
+                // Add leading zero if the incremented number's length is smaller than the original remaining part
+                if (incrementedInvBrStr.length() < removedPrefixInvBr.length()) {
+                    incrementedInvBrStr = "0" + incrementedInvBrStr;
+                }
+
+                // Concatenate the prefix and the incremented number
+                String finalInventarniBroj = prefix + incrementedInvBrStr;
+
+                System.out.println(getToday() + "\n");
+                System.out.println("Dodan sljedeći inventarni broj: " + finalInventarniBroj);
+
+                inventar.setInventarniBroj(finalInventarniBroj);
+                inventarService.save(inventar);
+            } else if (type.equals("LS")){
+                String inputedInventarniBroj = inventarService.getLastInventarniBrojLS();
+
+                // Remove the first two characters
+                String prefix = inputedInventarniBroj.substring(0, 2); // Save the first two characters
+                String removedPrefixInvBr = inputedInventarniBroj.substring(2);
+
+                // Convert the remaining part to Long
+                Long numberInventarniBroj = Long.valueOf(removedPrefixInvBr);
+
+                // Increment the number
+                Long nextInvBr = numberInventarniBroj + 1;
+
+                // Convert the incremented number back to a string
+                String incrementedInvBrStr = nextInvBr.toString();
+
+                // Add leading zero if the incremented number's length is smaller than the original remaining part
+                if (incrementedInvBrStr.length() < removedPrefixInvBr.length()) {
+                    incrementedInvBrStr = "0" + incrementedInvBrStr;
+                }
+
+                // Concatenate the prefix and the incremented number
+                String finalInventarniBroj = prefix + incrementedInvBrStr;
+
+                System.out.println(getToday() + "\n");
+                System.out.println("Dodan sljedeći inventarni broj: " + finalInventarniBroj);
+
+                inventar.setInventarniBroj(finalInventarniBroj);
+                inventarService.save(inventar);
+            } else if (type.equals("SI")){
+                String inputedInventarniBroj = inventarService.getLastInventarniBrojSI();
+
+                // Remove the first two characters
+                String prefix = inputedInventarniBroj.substring(0, 2); // Save the first two characters
+                String removedPrefixInvBr = inputedInventarniBroj.substring(2);
+
+                // Convert the remaining part to Long
+                Long numberInventarniBroj = Long.valueOf(removedPrefixInvBr);
+
+                // Increment the number
+                Long nextInvBr = numberInventarniBroj + 1;
+
+                // Convert the incremented number back to a string
+                String incrementedInvBrStr = nextInvBr.toString();
+
+                // Add leading zero if the incremented number's length is smaller than the original remaining part
+                if (incrementedInvBrStr.length() < removedPrefixInvBr.length()) {
+                    incrementedInvBrStr = "0" + incrementedInvBrStr;
+                }
+
+                // Concatenate the prefix and the incremented number
+                String finalInventarniBroj = prefix + incrementedInvBrStr;
+
+                System.out.println(getToday() + "\n");
+                System.out.println("Dodan sljedeći inventarni broj: " + finalInventarniBroj);
+
+                inventar.setInventarniBroj(finalInventarniBroj);
+                inventarService.save(inventar);
+            } else {
+                System.out.println(getToday() + "\n");
+                System.out.println("Dodan sljedeći inventarni broj: " + inventar.getInventarniBroj());
+                inventarService.save(inventar);
+            }
         }
         return "redirect:/inventarIT/all";
     }

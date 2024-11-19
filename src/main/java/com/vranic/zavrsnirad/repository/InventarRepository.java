@@ -120,6 +120,36 @@ public interface InventarRepository extends JpaRepository<Inventar, String> {
 
     List<Inventar> findAllBySerijskiBroj(@Param("serijskiBroj") String serijskiBroj);
 
+    @Query(value="SELECT inventarni_broj " +
+            "FROM inventar " +
+            "WHERE inventarni_broj LIKE 'IT%' " +
+            "ORDER BY CAST(SUBSTRING(inventarni_broj, 3) AS UNSIGNED) DESC " +
+            "LIMIT 1", nativeQuery = true)
+    String lastInventarniBrojIT();
+
+    @Query(value="SELECT inventarni_broj " +
+            "FROM inventar " +
+            "WHERE inventarni_broj LIKE 'LS%' " +
+            "ORDER BY CAST(SUBSTRING(inventarni_broj, 3) AS UNSIGNED) DESC " +
+            "LIMIT 1", nativeQuery = true)
+    String lastInventarniBrojLS();
+
+    @Query(value="SELECT inventarni_broj " +
+            "FROM inventar " +
+            "WHERE inventarni_broj LIKE 'SI%' " +
+            "ORDER BY CAST(SUBSTRING(inventarni_broj, 3) AS UNSIGNED) DESC " +
+            "LIMIT 1", nativeQuery = true)
+    String lastInventarniBrojSI();
+
+    @Query(value = "SELECT inventarni_broj " +
+            "FROM inventar " +
+            "WHERE inventarni_broj REGEXP '^[0-9]+$' " +
+            "ORDER BY CAST(inventarni_broj AS UNSIGNED) DESC " +
+            "LIMIT 1",
+            nativeQuery = true)
+    String lastInventarniBroj();
+
+
     //All for mobiles
 
     @Query(value = "SELECT inventar.* FROM inventar inventar " +

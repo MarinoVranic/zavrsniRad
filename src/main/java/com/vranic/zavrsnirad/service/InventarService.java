@@ -113,4 +113,16 @@ public class InventarService {
     public List<Inventar> getMobitelByTarifa(Long idTarife){
         return inventarRepository.findMobileByTarifa(idTarife);
     }
+
+    public String getLastInventarniBrojIT(){
+        return inventarRepository.lastInventarniBrojIT();
+    }
+
+    public String getLastInventarniBrojLS(){
+        return inventarRepository.lastInventarniBrojLS();
+    }
+
+    public String getLastInventarniBrojSI(){
+        return inventarRepository.lastInventarniBrojSI();
+    }
 }

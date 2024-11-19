@@ -26,13 +26,24 @@
           method="POST">
         <div class="w3-row-padding">
             <p class="w3-center">
-                <label class="w3-text-dark-grey" for="inventarniBroj"><b>Inventarni broj</b><br></label>
-                <label id="error-message" class="error alert alert-danger" role="alert" th:text="${error}"
-                       th:if="${error}"></label>
-                <input class="w3-input w3-border w3-round w3-center" id="inventarniBroj" name="inventarniBroj"
-                       type="text" th:field="*{inventarniBroj}" required
-                       onchange="this.setCustomValidity('')"
-                       oninvalid="this.setCustomValidity('Ispunite polje za inventarni broj!')"></p>
+                <label class="w3-text-dark-grey" for="type">Tip Inventara:</label>
+                <select id="type" name="type" onchange="toggleInventarniBrojField()">
+                    <option value="OSA">OSA</option>
+                    <option value="IT">IT</option>
+                    <option value="LS">LS</option>
+                    <option value="SI">SI</option>
+                </select>
+            </p>
+            <div id="inventarniBrojField" style="display: none;">
+                <p class="w3-center">
+                    <label class="w3-text-dark-grey" for="inventarniBroj"><b>Inventarni broj</b><br></label>
+                    <label id="error-message" class="error alert alert-danger" role="alert" th:text="${error}"
+                           th:if="${error}"></label>
+                    <input class="w3-input w3-border w3-round w3-center" id="inventarniBroj" name="inventarniBroj"
+                           type="text" th:field="*{inventarniBroj}"
+                           onchange="this.setCustomValidity('')"
+                           oninvalid="this.setCustomValidity('Ispunite polje za inventarni broj!')"></p>
+            </div>
             <p class="w3-half">
                 <label class="w3-text-dark-grey" for="nazivUredaja"><b>Naziv inventara</b><br></label>
                 <input class="w3-input w3-border w3-round w3-center" id="nazivUredaja" name="nazivUredaja" type="text"
@@ -193,4 +204,24 @@
     // Ensure that the function is called initially to set the initial display state
     toggleInputFields();
 </script>
+<script>
+    function toggleInventarniBrojField() {
+        var type = document.getElementById("type").value;
+        var inventarniBrojField = document.getElementById("inventarniBrojField");
+        var inventarniBrojInput = document.getElementById("inventarniBroj");
+
+        if (type === "OSA") {
+            inventarniBrojField.style.display = "block";
+            inventarniBrojInput.required = true;
+        } else {
+            inventarniBrojField.style.display = "none";
+            inventarniBrojInput.required = false;
+            inventarniBrojInput.value = ""; // Clear value if hidden
+        }
+    }
+
+    // Call the function initially to ensure proper state on page load
+    toggleInventarniBrojField();
+</script>
+
 </html>
