@@ -19,8 +19,8 @@ public interface KorisnikRepository extends JpaRepository<Korisnik, String> {
     @Query(value = "SELECT korisnik FROM Korisnik korisnik WHERE korisnik.firstName = :firstName ORDER BY korisnik.lastName ASC")
     List<Korisnik> findKorisnikByFirstName(String firstName);
 
-    @Query(value = "SELECT korisnik FROM Korisnik korisnik WHERE korisnik.subcontractor LIKE CONCAT('%', :subcontractor, '%') ORDER BY korisnik.lastName ASC")
-    List<Korisnik> findKorisnikByPoslodavac(String subcontractor);
+    @Query(value = "SELECT korisnik FROM Korisnik korisnik WHERE korisnik.company.companyName LIKE CONCAT('%', :companyName, '%') ORDER BY korisnik.lastName ASC")
+    List<Korisnik> findKorisnikByPoslodavac(String companyName);
 
     @Query(value = "SELECT korisnik FROM Korisnik korisnik ORDER BY korisnik.userCreated DESC")
     List<Korisnik> findAll();

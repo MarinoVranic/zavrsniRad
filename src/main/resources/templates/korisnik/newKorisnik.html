@@ -71,11 +71,14 @@
                 </select>
             </p>
             <p class="w3-half">
-                <label class="w3-text-dark-grey" for="subcontractor"><b>Poslodavac</b></label>
-                <input class="w3-input w3-border w3-round w3-center" id="subcontractor" name="subcontractor" type="text"
-                       th:field="*{subcontractor}" required
-                       onchange="this.setCustomValidity('')"
-                       oninvalid="this.setCustomValidity('Ispunite polje za poslodavca!')"></p>
+                <label class="w3-text-dark-grey" for="company"><b>Poduzeće</b></label>
+                <select class="w3-input w3-border w3-round w3-center" id="company" name="company"
+                        th:field="*{company}"
+                        onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Odaberite poduzeće!')">
+                    <option value="">Odaberite poduzeće</option>
+                    <option th:each="company : ${companies}" th:value="${company.idCompany}"
+                            th:text="${company.companyName}"></option>
+                </select>
             <p>
             <p class="w3-half">
                 <label class="w3-text-dark-grey" for="godina"><b>Godina zaposlenja</b></label>
