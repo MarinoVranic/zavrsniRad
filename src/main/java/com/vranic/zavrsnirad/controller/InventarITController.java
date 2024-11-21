@@ -395,6 +395,12 @@ public class InventarITController {
             String suffix ="";
             if(inventar.getNazivUredaja().contains("G6")){
                 suffix="G6";
+            } else if (inventar.getNazivUredaja().contains("G7")){
+                suffix="G7";
+            } else if (inventar.getNazivUredaja().contains("G8")){
+                suffix="G8";
+            } else if (inventar.getNazivUredaja().contains("G9")){
+                suffix="G9";
             }
             String firstPartOfHostname = nazivUredaja[0];
             String secondPartOfHostname = inventar.getKorisnik().getUsername();
@@ -872,6 +878,8 @@ public class InventarITController {
                 .filter(inventar -> inventar != null)
                 .toList();
 
+        Inventar inventarOne = selectedInventar.get(0);
+
         String filename = String.join("_", selectedItems);
 
         // Create a new PDF document
@@ -934,218 +942,431 @@ public class InventarITController {
         image3.setSpacingAfter(40);
         document.add(image3);
 
+        if(inventarOne.getCompany().getIdCompany()==1) {
+
+            Paragraph aitacPodaci1 = new Paragraph();
+            Font fontBlueLine = new Font(arialNormalFont, 5, Font.BOLD);
+            fontBlueLine.setColor(35, 47, 131);
+            Chunk blueLine = new Chunk("_______________________________________________________________________________________________________________________________ \n", fontBlueLine);
+            aitacPodaci1.add(blueLine);
+            Font fontAitacPodaci = new Font(arialNormalFont, 6, Font.NORMAL);
+            fontAitacPodaci.setColor(160, 160, 160);
+            Phrase prviRed = new Phrase("AITAC d.o.o. Istarska cesta 1, 51215 Kastav, Hrvatska · T:+385 51 626 712 · F:+385 51 626 720 · E:info@aitac.nl · W: www.aitac.nl", fontAitacPodaci);
+            aitacPodaci1.setAlignment(Element.ALIGN_CENTER);
+            aitacPodaci1.add(prviRed);
+            aitacPodaci1.setSpacingBefore(30);
+            document.add(aitacPodaci1);
+
+            Paragraph aitacPodaci2 = new Paragraph();
+            Phrase drugiRed = new Phrase("Temeljni kapital: 18.000,00 kn uplaćen kod ZAP Rijeka, Hrvatska · Članovi uprave: M. Lorencin, MBS:040226601, Trgovački Sud u Rijeci", fontAitacPodaci);
+            aitacPodaci2.setAlignment(Element.ALIGN_CENTER);
+            aitacPodaci2.add(drugiRed);
+            aitacPodaci2.add(blueLine);
+            aitacPodaci2.setSpacingAfter(30);
+            document.add(aitacPodaci2);
+
+            Paragraph header = new Paragraph();
+            Font boldFont = new Font(arialBoldItalicFont, 18, Font.BOLD);
+            Phrase headerPhrase = new Phrase("Zaduženja tijekom rada", boldFont);
+            header.add(headerPhrase);
+            header.setAlignment(Element.ALIGN_CENTER);
+            header.setSpacingAfter(75);
+            header.setSpacingBefore(50);
+            document.add(header);
+
+            Paragraph podaciKorisnika = new Paragraph();
+            Font fontImePrezime = new Font(arialNormalFont, 9, Font.NORMAL);
+            Phrase imePrezime = new Phrase("Ime i Prezime: ", fontImePrezime);
+            podaciKorisnika.add(imePrezime);
+            podaciKorisnika.setAlignment(Element.ALIGN_LEFT);
+            podaciKorisnika.setSpacingAfter(5);
+            Font boldFontKorisnika = new Font(arialBoldFont, 13, Font.BOLD);
+            Chunk nazivKorisnika = new Chunk(inventarOne.getKorisnik().getFirstName() + " " + inventarOne.getKorisnik().getLastName(), boldFontKorisnika);
+            nazivKorisnika.setUnderline(0.3f, -2f);
+            Phrase selectedKorisnik = new Phrase(nazivKorisnika);
+            podaciKorisnika.add(selectedKorisnik);
+            document.add(podaciKorisnika);
+
+            //Adding date of the report
+            Paragraph printDate = new Paragraph();
+            String datum = "Datum: ";
+            String todayDate = getToday().format(formatter);
+            Font datumFont = new Font(arialNormalFont, 9, Font.NORMAL);
+            Font dateFont = new Font(arialBoldFont, 10, Font.BOLD);
+            Phrase datumPhrase = new Phrase(datum, datumFont);
+            Phrase datePhrase = new Phrase(todayDate, dateFont);
+            printDate.add(datumPhrase);
+            printDate.add(datePhrase);
+            printDate.setAlignment(Element.ALIGN_LEFT);
+            printDate.setSpacingAfter(70);
+            document.add(printDate);
+
+            // Create a table with 15 columns
+            PdfPTable table = new PdfPTable(7);
+
+            // Set the table width as a percentage of the available page width
+            table.setWidthPercentage(100);
+
+            float firstColumnWidthPercentage = 5f; // Primjer postotka širine prvog stupca
+            float remainingWidthPercentage = (100f - firstColumnWidthPercentage) / 6; // Preostali postotak za preostalih 6 stupaca
+            float[] columnWidths = {firstColumnWidthPercentage, remainingWidthPercentage, remainingWidthPercentage, remainingWidthPercentage, remainingWidthPercentage, remainingWidthPercentage, remainingWidthPercentage};
+            table.setWidths(columnWidths);
+
+            // Set the data cell style
+            PdfPCell dataCell = new PdfPCell();
+            dataCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+
+            // Set table header cell styles
+            Font headerFont = new Font(arialBoldFont, 12, Font.BOLD);
+            PdfPCell headerCell = new PdfPCell();
+            headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            headerCell.setPadding(5);
+
+            // Add table header cells
+            setCellContentAndFont(headerCell, "", headerFont);
+            table.addCell(headerCell);
+            setCellContentAndFont(headerCell, "INVENTARNI \n BROJ", headerFont);
+            table.addCell(headerCell);
+            setCellContentAndFont(headerCell, "NAZIV \n UREĐAJA", headerFont);
+            table.addCell(headerCell);
+            setCellContentAndFont(headerCell, "SERIJSKI \n BROJ", headerFont);
+            table.addCell(headerCell);
+            setCellContentAndFont(headerCell, "VRSTA \n UREĐAJA", headerFont);
+            table.addCell(headerCell);
+            setCellContentAndFont(headerCell, "DATUM \n ZADUŽENJA", headerFont);
+            table.addCell(headerCell);
+            setCellContentAndFont(headerCell, "DATUM \n RAZDUŽENJA", headerFont);
+            table.addCell(headerCell);
+
+            int counter = 1;
+            // Add data cells to the table
+            for (Inventar inventar : selectedInventar) {
+                PdfPCell cell = new PdfPCell();
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 
 
-        Paragraph aitacPodaci1 = new Paragraph();
-        Font fontBlueLine = new Font(arialNormalFont, 5, Font.BOLD);
-        fontBlueLine.setColor(35, 47, 131);
-        Chunk blueLine = new Chunk("_______________________________________________________________________________________________________________________________ \n", fontBlueLine);
-        aitacPodaci1.add(blueLine);
-        Font fontAitacPodaci = new Font(arialNormalFont, 6, Font.NORMAL);
-        fontAitacPodaci.setColor(160, 160, 160);
-        Phrase prviRed = new Phrase("AITAC d.o.o. Istarska cesta 1, 51215 Kastav, Hrvatska · T:+385 51 626 712 · F:+385 51 626 720 · E:info@aitac.nl · W: www.aitac.nl", fontAitacPodaci);
-        aitacPodaci1.setAlignment(Element.ALIGN_CENTER);
-        aitacPodaci1.add(prviRed);
-        aitacPodaci1.setSpacingBefore(30);
-        document.add(aitacPodaci1);
-
-        Paragraph aitacPodaci2 = new Paragraph();
-        Phrase drugiRed = new Phrase("Temeljni kapital: 18.000,00 kn uplaćen kod ZAP Rijeka, Hrvatska · Članovi uprave: M. Lorencin, MBS:040226601, Trgovački Sud u Rijeci", fontAitacPodaci);
-        aitacPodaci2.setAlignment(Element.ALIGN_CENTER);
-        aitacPodaci2.add(drugiRed);
-        aitacPodaci2.add(blueLine);
-        aitacPodaci2.setSpacingAfter(30);
-        document.add(aitacPodaci2);
-
-        Paragraph header = new Paragraph();
-        Font boldFont = new Font(arialBoldItalicFont, 18, Font.BOLD);
-        Phrase headerPhrase = new Phrase("Zaduženja tijekom rada", boldFont);
-        header.add(headerPhrase);
-        header.setAlignment(Element.ALIGN_CENTER);
-        header.setSpacingAfter(75);
-        header.setSpacingBefore(50);
-        document.add(header);
-
-        Paragraph podaciKorisnika = new Paragraph();
-        Font fontImePrezime = new Font(arialNormalFont, 9, Font.NORMAL);
-        Phrase imePrezime = new Phrase("Ime i Prezime: ", fontImePrezime);
-        podaciKorisnika.add(imePrezime);
-        podaciKorisnika.setAlignment(Element.ALIGN_LEFT);
-        podaciKorisnika.setSpacingAfter(5);
-        Font boldFontKorisnika = new Font(arialBoldFont, 13, Font.BOLD);
-        Inventar inventarOne = selectedInventar.get(0);
-        Chunk nazivKorisnika = new Chunk(inventarOne.getKorisnik().getFirstName() + " " + inventarOne.getKorisnik().getLastName(), boldFontKorisnika);
-        nazivKorisnika.setUnderline(0.3f, -2f);
-        Phrase selectedKorisnik = new Phrase(nazivKorisnika);
-        podaciKorisnika.add(selectedKorisnik);
-        document.add(podaciKorisnika);
-
-        //Adding date of the report
-        Paragraph printDate = new Paragraph();
-        String datum = "Datum: ";
-        String todayDate =  getToday().format(formatter);
-        Font datumFont = new Font(arialNormalFont, 9, Font.NORMAL);
-        Font dateFont = new Font(arialBoldFont, 10, Font.BOLD);
-        Phrase datumPhrase = new Phrase(datum, datumFont);
-        Phrase datePhrase = new Phrase(todayDate, dateFont);
-        printDate.add(datumPhrase);
-        printDate.add(datePhrase);
-        printDate.setAlignment(Element.ALIGN_LEFT);
-        printDate.setSpacingAfter(70);
-        document.add(printDate);
-
-        // Create a table with 15 columns
-        PdfPTable table = new PdfPTable(7);
-
-        // Set the table width as a percentage of the available page width
-        table.setWidthPercentage(100);
-
-        float firstColumnWidthPercentage = 5f; // Primjer postotka širine prvog stupca
-        float remainingWidthPercentage = (100f - firstColumnWidthPercentage) / 6; // Preostali postotak za preostalih 6 stupaca
-        float[] columnWidths = {firstColumnWidthPercentage, remainingWidthPercentage, remainingWidthPercentage, remainingWidthPercentage, remainingWidthPercentage, remainingWidthPercentage, remainingWidthPercentage};
-        table.setWidths(columnWidths);
-
-        // Set the data cell style
-        PdfPCell dataCell = new PdfPCell();
-        dataCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-
-        // Set table header cell styles
-        Font headerFont = new Font(arialBoldFont, 12, Font.BOLD);
-        PdfPCell headerCell = new PdfPCell();
-        headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        headerCell.setPadding(5);
-
-        // Add table header cells
-        setCellContentAndFont(headerCell,"", headerFont);
-        table.addCell(headerCell);
-        setCellContentAndFont(headerCell,"INVENTARNI \n BROJ", headerFont);
-        table.addCell(headerCell);
-        setCellContentAndFont(headerCell,"NAZIV \n UREĐAJA", headerFont);
-        table.addCell(headerCell);
-        setCellContentAndFont(headerCell,"SERIJSKI \n BROJ", headerFont);
-        table.addCell(headerCell);
-        setCellContentAndFont(headerCell,"VRSTA \n UREĐAJA", headerFont);
-        table.addCell(headerCell);
-        setCellContentAndFont(headerCell,"DATUM \n ZADUŽENJA", headerFont);
-        table.addCell(headerCell);
-        setCellContentAndFont(headerCell,"DATUM \n RAZDUŽENJA", headerFont);
-        table.addCell(headerCell);
-
-        int counter = 1;
-        // Add data cells to the table
-        for (Inventar inventar : selectedInventar) {
-            PdfPCell cell = new PdfPCell();
-            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-
-
-            setCellContentAndFont(cell, String.valueOf(counter), croatianFont);
-            table.addCell(cell);
-            counter++;
-            setCellContentAndFont(cell, inventar.getInventarniBroj(), croatianFont);
-            table.addCell(cell);
-            setCellContentAndFont(cell, inventar.getNazivUredaja(), croatianFont);
-            table.addCell(cell);
-            if(inventar.getNazivUredaja() == null){
-                setCellContentAndFont(cell, "", croatianFont);
-            } else {
-                setCellContentAndFont(cell, inventar.getSerijskiBroj(), croatianFont);
+                setCellContentAndFont(cell, String.valueOf(counter), croatianFont);
+                table.addCell(cell);
+                counter++;
+                setCellContentAndFont(cell, inventar.getInventarniBroj(), croatianFont);
+                table.addCell(cell);
+                setCellContentAndFont(cell, inventar.getNazivUredaja(), croatianFont);
+                table.addCell(cell);
+                if (inventar.getNazivUredaja() == null) {
+                    setCellContentAndFont(cell, "", croatianFont);
+                } else {
+                    setCellContentAndFont(cell, inventar.getSerijskiBroj(), croatianFont);
+                }
+                table.addCell(cell);
+                setCellContentAndFont(cell, inventar.getVrstaUredaja().getNazivVrsteUredaja(), croatianFont);
+                table.addCell(cell);
+                if (inventar.getDatumZaduzenja() == null) {
+                    setCellContentAndFont(cell, "", croatianFont);
+                } else {
+                    setCellContentAndFont(cell, inventar.getDatumZaduzenja().format(formatter), croatianFontBold);
+                }
+                table.addCell(cell);
+                if (inventar.getDatumRazduzenja() == null) {
+                    setCellContentAndFont(cell, "", croatianFont);
+                } else {
+                    setCellContentAndFont(cell, inventar.getDatumRazduzenja().format(formatter), croatianFont);
+                }
+                table.addCell(cell);
             }
-            table.addCell(cell);
-            setCellContentAndFont(cell, inventar.getVrstaUredaja().getNazivVrsteUredaja(), croatianFont);
-            table.addCell(cell);
-            if(inventar.getDatumZaduzenja() == null){
-                setCellContentAndFont(cell, "", croatianFont);
-            } else {
-                setCellContentAndFont(cell, inventar.getDatumZaduzenja().format(formatter), croatianFontBold);
-            }
-            table.addCell(cell);
-            if(inventar.getDatumRazduzenja() == null){
-                setCellContentAndFont(cell, "", croatianFont);
-            } else {
-                setCellContentAndFont(cell, inventar.getDatumRazduzenja().format(formatter), croatianFont);
-            }
-            table.addCell(cell);
-        }
 
-        // Add the table to the document
-        document.add(table);
+            // Add the table to the document
+            document.add(table);
 
-        Paragraph pravilnik = new Paragraph();
-        Font fontPravilnik = new Font(arialNormalFont, 9, Font.NORMAL);
-        Font fontPravilnikBold = new Font(arialBoldFont, 9, Font.BOLD);
-        Font fontPravilnikLink = new Font(arialNormalFont, 9, Font.BOLD);
-        fontPravilnikLink.setColor(35, 47, 131);
-        Phrase redI = new Phrase();
-        redI.add(new Chunk("Svojim potpisom korisnik potvrđuje da je upoznat te da će se pridržavati pravilnika o " +
-                "korištenju informatičke opreme: \n", fontPravilnik));
-        Chunk boldChunk = new Chunk("QMS-POL-DOC-001-2  Politika pravilne uporabe informacijskih resursa \n", fontPravilnikBold);
-        redI.add(boldChunk);
-        redI.add(new Chunk("LINK: ", fontPravilnik));
-        Chunk linkChunk = new Chunk("\\\\osiris\\ISO\\AITAC ISO 9001\\15. POSLOVNE POLITIKE \n", fontPravilnikLink);
-        linkChunk.setUnderline(0.1f, -2f);
-        redI.add(linkChunk);
-        redI.add(new Chunk("\n"));
-        Phrase redII = new Phrase("Svojim potpisom potvrđujem da je sve navedeno zaduženo u dobrom stanju.", fontPravilnik);
-        pravilnik.setAlignment(Element.ALIGN_LEFT);
-        pravilnik.add(redI);
-        pravilnik.add(redII);
-        pravilnik.setSpacingBefore(60);
-        document.add(pravilnik);
+            Paragraph pravilnik = new Paragraph();
+            Font fontPravilnik = new Font(arialNormalFont, 9, Font.NORMAL);
+            Font fontPravilnikBold = new Font(arialBoldFont, 9, Font.BOLD);
+            Font fontPravilnikLink = new Font(arialNormalFont, 9, Font.BOLD);
+            fontPravilnikLink.setColor(35, 47, 131);
+            Phrase redI = new Phrase();
+            redI.add(new Chunk("Svojim potpisom korisnik potvrđuje da je upoznat te da će se pridržavati pravilnika o " +
+                    "korištenju informatičke opreme: \n", fontPravilnik));
+            Chunk boldChunk = new Chunk("QMS-POL-DOC-001-2  Politika pravilne uporabe informacijskih resursa \n", fontPravilnikBold);
+            redI.add(boldChunk);
+            redI.add(new Chunk("LINK: ", fontPravilnik));
+            Chunk linkChunk = new Chunk("\\\\osiris\\ISO\\AITAC ISO 9001\\15. POSLOVNE POLITIKE \n", fontPravilnikLink);
+            linkChunk.setUnderline(0.1f, -2f);
+            redI.add(linkChunk);
+            redI.add(new Chunk("\n"));
+            Phrase redII = new Phrase("Svojim potpisom potvrđujem da je sve navedeno zaduženo u dobrom stanju.", fontPravilnik);
+            pravilnik.setAlignment(Element.ALIGN_LEFT);
+            pravilnik.add(redI);
+            pravilnik.add(redII);
+            pravilnik.setSpacingBefore(60);
+            document.add(pravilnik);
 
-        Paragraph potpisnik = new Paragraph();
-        Font fontPotpisnik = new Font(arialNormalFont, 9, Font.NORMAL);
-        Phrase red1 = new Phrase();
-        red1.add(new Chunk("_____________________________________", fontPotpisnik));
-        red1.add(new Chunk("                              "));
-        red1.add(new Chunk("_____________________________________ \n", fontPotpisnik));
-        Phrase red2 = new Phrase();
-        red2.add(new Chunk("Zaposlenik", fontPotpisnik));
-        red2.add(new Chunk("                                                                      "));
-        red2.add(new Chunk("Odgovorna Osoba", fontPotpisnik));
-        potpisnik.setAlignment(Element.ALIGN_CENTER);
-        potpisnik.add(red1);
-        potpisnik.add(red2);
-        potpisnik.setSpacingBefore(90);
-        potpisnik.setSpacingAfter(20);
-        document.add(potpisnik);
+            Paragraph potpisnik = new Paragraph();
+            Font fontPotpisnik = new Font(arialNormalFont, 9, Font.NORMAL);
+            Phrase red1 = new Phrase();
+            red1.add(new Chunk("_____________________________________", fontPotpisnik));
+            red1.add(new Chunk("                              "));
+            red1.add(new Chunk("_____________________________________ \n", fontPotpisnik));
+            Phrase red2 = new Phrase();
+            red2.add(new Chunk("Zaposlenik", fontPotpisnik));
+            red2.add(new Chunk("                                                                      "));
+            red2.add(new Chunk("Odgovorna Osoba", fontPotpisnik));
+            potpisnik.setAlignment(Element.ALIGN_CENTER);
+            potpisnik.add(red1);
+            potpisnik.add(red2);
+            potpisnik.setSpacingBefore(90);
+            potpisnik.setSpacingAfter(20);
+            document.add(potpisnik);
 
-        //Adding another image and setting its size and position
-        String imagePath = "static/images/AitacLine.png"; // Relative path to the image file
-        Resource resource = new ClassPathResource(imagePath);
-        Image image = Image.getInstance(resource.getURL());
+            //Adding another image and setting its size and position
+            String imagePath = "static/images/AitacLine.png"; // Relative path to the image file
+            Resource resource = new ClassPathResource(imagePath);
+            Image image = Image.getInstance(resource.getURL());
 
-        // Set the desired width and height of the image in centimeters
-        float desiredWidthInCm = 17f;
-        float desiredHeightInCm = 7f;
+            // Set the desired width and height of the image in centimeters
+            float desiredWidthInCm = 17f;
+            float desiredHeightInCm = 7f;
 
-        // Convert centimeters to points
-        float desiredWidthInPoints = desiredWidthInCm * 72 / 2.54f;
-        float desiredHeightInPoints = desiredHeightInCm * 72 / 2.54f;
+            // Convert centimeters to points
+            float desiredWidthInPoints = desiredWidthInCm * 72 / 2.54f;
+            float desiredHeightInPoints = desiredHeightInCm * 72 / 2.54f;
 
-        // Set the desired width and height of the image in points
-        float desiredWidth = desiredWidthInPoints;
-        float desiredHeight = desiredHeightInPoints;
-        image.scaleToFit(desiredWidth, desiredHeight);
+            // Set the desired width and height of the image in points
+            float desiredWidth = desiredWidthInPoints;
+            float desiredHeight = desiredHeightInPoints;
+            image.scaleToFit(desiredWidth, desiredHeight);
 
-        // Calculate the coordinates to position the image at the bottom
-        float x = (pageWidth - desiredWidth) / 2; // Centered horizontally
-        float y = document.bottomMargin() - image.getScaledHeight(); // Position from the bottom
+            // Calculate the coordinates to position the image at the bottom
+            float x = (pageWidth - desiredWidth) / 2; // Centered horizontally
+            float y = document.bottomMargin() - image.getScaledHeight(); // Position from the bottom
 
-        image.setAbsolutePosition(x, y);
-        document.add(image);
-        // Close the document
-        document.close();
+            image.setAbsolutePosition(x, y);
+            document.add(image);
+            // Close the document
+            document.close();
 
-        byte[] pdfContent = baos.toByteArray();
-        // Set HTTP headers for response
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentDisposition(ContentDisposition.builder("attachment")
-                .filename("Inv"+filename+".pdf")
-                .build());
+            byte[] pdfContent = baos.toByteArray();
+            // Set HTTP headers for response
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.setContentDisposition(ContentDisposition.builder("attachment")
+                    .filename("Inv" + filename + ".pdf")
+                    .build());
 
         // Return the PDF content as ResponseEntity
         return new ResponseEntity<>(pdfContent, headers, HttpStatus.OK);
+
+        } else if (inventarOne.getCompany().getIdCompany()==2) {
+
+            Paragraph aitacPodaci1 = new Paragraph();
+            Font fontBlueLine = new Font(arialNormalFont, 5, Font.BOLD);
+            fontBlueLine.setColor(35, 47, 131);
+            Chunk blueLine = new Chunk("_______________________________________________________________________________________________________________________________ \n", fontBlueLine);
+            aitacPodaci1.add(blueLine);
+            Font fontAitacPodaci = new Font(arialNormalFont, 6, Font.NORMAL);
+            fontAitacPodaci.setColor(160, 160, 160);
+            Phrase prviRed = new Phrase("AITAC GMBH Istarska cesta 1, 51215 Kastav, Hrvatska · T:+385 51 626 712 · F:+385 51 626 720 · E:info@aitac.nl · W: www.aitac.nl", fontAitacPodaci);
+            aitacPodaci1.setAlignment(Element.ALIGN_CENTER);
+            aitacPodaci1.add(prviRed);
+            aitacPodaci1.setSpacingBefore(30);
+            document.add(aitacPodaci1);
+
+            Paragraph aitacPodaci2 = new Paragraph();
+            Phrase drugiRed = new Phrase("Temeljni kapital: 18.000,00 kn uplaćen kod ZAP Rijeka, Hrvatska · Članovi uprave: M. Lorencin, MBS:040226601, Trgovački Sud u Rijeci", fontAitacPodaci);
+            aitacPodaci2.setAlignment(Element.ALIGN_CENTER);
+            aitacPodaci2.add(drugiRed);
+            aitacPodaci2.add(blueLine);
+            aitacPodaci2.setSpacingAfter(30);
+            document.add(aitacPodaci2);
+
+            Paragraph header = new Paragraph();
+            Font boldFont = new Font(arialBoldItalicFont, 18, Font.BOLD);
+            Phrase headerPhrase = new Phrase("Zaduženja tijekom rada", boldFont);
+            header.add(headerPhrase);
+            header.setAlignment(Element.ALIGN_CENTER);
+            header.setSpacingAfter(75);
+            header.setSpacingBefore(50);
+            document.add(header);
+
+            Paragraph podaciKorisnika = new Paragraph();
+            Font fontImePrezime = new Font(arialNormalFont, 9, Font.NORMAL);
+            Phrase imePrezime = new Phrase("Ime i Prezime: ", fontImePrezime);
+            podaciKorisnika.add(imePrezime);
+            podaciKorisnika.setAlignment(Element.ALIGN_LEFT);
+            podaciKorisnika.setSpacingAfter(5);
+            Font boldFontKorisnika = new Font(arialBoldFont, 13, Font.BOLD);
+            Chunk nazivKorisnika = new Chunk(inventarOne.getKorisnik().getFirstName() + " " + inventarOne.getKorisnik().getLastName(), boldFontKorisnika);
+            nazivKorisnika.setUnderline(0.3f, -2f);
+            Phrase selectedKorisnik = new Phrase(nazivKorisnika);
+            podaciKorisnika.add(selectedKorisnik);
+            document.add(podaciKorisnika);
+
+            //Adding date of the report
+            Paragraph printDate = new Paragraph();
+            String datum = "Datum: ";
+            String todayDate = getToday().format(formatter);
+            Font datumFont = new Font(arialNormalFont, 9, Font.NORMAL);
+            Font dateFont = new Font(arialBoldFont, 10, Font.BOLD);
+            Phrase datumPhrase = new Phrase(datum, datumFont);
+            Phrase datePhrase = new Phrase(todayDate, dateFont);
+            printDate.add(datumPhrase);
+            printDate.add(datePhrase);
+            printDate.setAlignment(Element.ALIGN_LEFT);
+            printDate.setSpacingAfter(70);
+            document.add(printDate);
+
+            // Create a table with 15 columns
+            PdfPTable table = new PdfPTable(7);
+
+            // Set the table width as a percentage of the available page width
+            table.setWidthPercentage(100);
+
+            float firstColumnWidthPercentage = 5f; // Primjer postotka širine prvog stupca
+            float remainingWidthPercentage = (100f - firstColumnWidthPercentage) / 6; // Preostali postotak za preostalih 6 stupaca
+            float[] columnWidths = {firstColumnWidthPercentage, remainingWidthPercentage, remainingWidthPercentage, remainingWidthPercentage, remainingWidthPercentage, remainingWidthPercentage, remainingWidthPercentage};
+            table.setWidths(columnWidths);
+
+            // Set the data cell style
+            PdfPCell dataCell = new PdfPCell();
+            dataCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+
+            // Set table header cell styles
+            Font headerFont = new Font(arialBoldFont, 12, Font.BOLD);
+            PdfPCell headerCell = new PdfPCell();
+            headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            headerCell.setPadding(5);
+
+            // Add table header cells
+            setCellContentAndFont(headerCell, "", headerFont);
+            table.addCell(headerCell);
+            setCellContentAndFont(headerCell, "INVENTARNI \n BROJ", headerFont);
+            table.addCell(headerCell);
+            setCellContentAndFont(headerCell, "NAZIV \n UREĐAJA", headerFont);
+            table.addCell(headerCell);
+            setCellContentAndFont(headerCell, "SERIJSKI \n BROJ", headerFont);
+            table.addCell(headerCell);
+            setCellContentAndFont(headerCell, "VRSTA \n UREĐAJA", headerFont);
+            table.addCell(headerCell);
+            setCellContentAndFont(headerCell, "DATUM \n ZADUŽENJA", headerFont);
+            table.addCell(headerCell);
+            setCellContentAndFont(headerCell, "DATUM \n RAZDUŽENJA", headerFont);
+            table.addCell(headerCell);
+
+            int counter = 1;
+            // Add data cells to the table
+            for (Inventar inventar : selectedInventar) {
+                PdfPCell cell = new PdfPCell();
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+
+
+                setCellContentAndFont(cell, String.valueOf(counter), croatianFont);
+                table.addCell(cell);
+                counter++;
+                setCellContentAndFont(cell, inventar.getInventarniBroj(), croatianFont);
+                table.addCell(cell);
+                setCellContentAndFont(cell, inventar.getNazivUredaja(), croatianFont);
+                table.addCell(cell);
+                if (inventar.getNazivUredaja() == null) {
+                    setCellContentAndFont(cell, "", croatianFont);
+                } else {
+                    setCellContentAndFont(cell, inventar.getSerijskiBroj(), croatianFont);
+                }
+                table.addCell(cell);
+                setCellContentAndFont(cell, inventar.getVrstaUredaja().getNazivVrsteUredaja(), croatianFont);
+                table.addCell(cell);
+                if (inventar.getDatumZaduzenja() == null) {
+                    setCellContentAndFont(cell, "", croatianFont);
+                } else {
+                    setCellContentAndFont(cell, inventar.getDatumZaduzenja().format(formatter), croatianFontBold);
+                }
+                table.addCell(cell);
+                if (inventar.getDatumRazduzenja() == null) {
+                    setCellContentAndFont(cell, "", croatianFont);
+                } else {
+                    setCellContentAndFont(cell, inventar.getDatumRazduzenja().format(formatter), croatianFont);
+                }
+                table.addCell(cell);
+            }
+
+            // Add the table to the document
+            document.add(table);
+
+            Paragraph pravilnik = new Paragraph();
+            Font fontPravilnik = new Font(arialNormalFont, 9, Font.NORMAL);
+            Font fontPravilnikBold = new Font(arialBoldFont, 9, Font.BOLD);
+            Font fontPravilnikLink = new Font(arialNormalFont, 9, Font.BOLD);
+            fontPravilnikLink.setColor(35, 47, 131);
+            Phrase redI = new Phrase();
+            redI.add(new Chunk("Svojim potpisom korisnik potvrđuje da je upoznat te da će se pridržavati pravilnika o " +
+                    "korištenju informatičke opreme: \n", fontPravilnik));
+            Chunk boldChunk = new Chunk("QMS-POL-DOC-001-2  Politika pravilne uporabe informacijskih resursa \n", fontPravilnikBold);
+            redI.add(boldChunk);
+            redI.add(new Chunk("LINK: ", fontPravilnik));
+            Chunk linkChunk = new Chunk("\\\\osiris\\ISO\\AITAC ISO 9001\\15. POSLOVNE POLITIKE \n", fontPravilnikLink);
+            linkChunk.setUnderline(0.1f, -2f);
+            redI.add(linkChunk);
+            redI.add(new Chunk("\n"));
+            Phrase redII = new Phrase("Svojim potpisom potvrđujem da je sve navedeno zaduženo u dobrom stanju.", fontPravilnik);
+            pravilnik.setAlignment(Element.ALIGN_LEFT);
+            pravilnik.add(redI);
+            pravilnik.add(redII);
+            pravilnik.setSpacingBefore(60);
+            document.add(pravilnik);
+
+            Paragraph potpisnik = new Paragraph();
+            Font fontPotpisnik = new Font(arialNormalFont, 9, Font.NORMAL);
+            Phrase red1 = new Phrase();
+            red1.add(new Chunk("_____________________________________", fontPotpisnik));
+            red1.add(new Chunk("                              "));
+            red1.add(new Chunk("_____________________________________ \n", fontPotpisnik));
+            Phrase red2 = new Phrase();
+            red2.add(new Chunk("Zaposlenik", fontPotpisnik));
+            red2.add(new Chunk("                                                                      "));
+            red2.add(new Chunk("Odgovorna Osoba", fontPotpisnik));
+            potpisnik.setAlignment(Element.ALIGN_CENTER);
+            potpisnik.add(red1);
+            potpisnik.add(red2);
+            potpisnik.setSpacingBefore(90);
+            potpisnik.setSpacingAfter(20);
+            document.add(potpisnik);
+
+            //Adding another image and setting its size and position
+            String imagePath = "static/images/AitacLine.png"; // Relative path to the image file
+            Resource resource = new ClassPathResource(imagePath);
+            Image image = Image.getInstance(resource.getURL());
+
+            // Set the desired width and height of the image in centimeters
+            float desiredWidthInCm = 17f;
+            float desiredHeightInCm = 7f;
+
+            // Convert centimeters to points
+            float desiredWidthInPoints = desiredWidthInCm * 72 / 2.54f;
+            float desiredHeightInPoints = desiredHeightInCm * 72 / 2.54f;
+
+            // Set the desired width and height of the image in points
+            float desiredWidth = desiredWidthInPoints;
+            float desiredHeight = desiredHeightInPoints;
+            image.scaleToFit(desiredWidth, desiredHeight);
+
+            // Calculate the coordinates to position the image at the bottom
+            float x = (pageWidth - desiredWidth) / 2; // Centered horizontally
+            float y = document.bottomMargin() - image.getScaledHeight(); // Position from the bottom
+
+            image.setAbsolutePosition(x, y);
+            document.add(image);
+            // Close the document
+            document.close();
+
+            byte[] pdfContent = baos.toByteArray();
+            // Set HTTP headers for response
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.setContentDisposition(ContentDisposition.builder("attachment")
+                    .filename("Inv" + filename + ".pdf")
+                    .build());
+
+            // Return the PDF content as ResponseEntity
+            return new ResponseEntity<>(pdfContent, headers, HttpStatus.OK);
+        }
+        return null;
     }
 
     private void setCellContentAndFont(PdfPCell cell, String content, Font font) {
