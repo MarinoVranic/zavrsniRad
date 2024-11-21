@@ -229,7 +229,7 @@
             <th class="w3-dark-grey">Datum razduženja</th>
             <th style="width: 120px" class="w3-dark-grey">Istek garancije</th>
             <th class="w3-dark-grey">Račun</th>
-            <th class="w3-dark-grey">Dobavljač</th>
+            <th class="w3-dark-grey">Dobavljač / <br>Vlasnik</th>
             <th class="w3-dark-grey">Napomena</th>
         </tr>
         </thead>
@@ -271,6 +271,11 @@
                     <span th:text="${inventar.dobavljac.nazivDobavljaca}"></span>
                 </p>
                 <p th:unless="${inventar.dobavljac != null && inventar.dobavljac.nazivDobavljaca != null}"></p>
+                <hr th:if="${inventar.dobavljac != null && inventar.company != null}" style="border: 1px solid gray; margin: 10px 0;">
+                <p th:if="${inventar.company != null && inventar.company.companyName != null}">
+                    <span th:text="${inventar.company.companyName}"></span>
+                </p>
+                <p th:unless="${inventar.company != null && inventar.company.companyName != null}"></p>
             </td>
             <td th:text="${inventar.napomena}"></td>
         </tr>
