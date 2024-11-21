@@ -2,18 +2,16 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<link rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
 <link th:href="@{/CSS/customStyle.css}" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script type="text/javascript" src="../static/javascript/sidebar.js" th:src="@{/javascript/sidebar.js}"></script>
-<script type="text/javascript" src="../static/javascript/hidedivFile.js"
-        th:src="@{/javascript/hidedivFile.js}"></script>
+<script type="text/javascript" src="../static/javascript/hidedivCompany.js"
+        th:src="@{/javascript/hidedivCompany.js}"></script>
 <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Datoteke</title>
+    <title>Poduzeća</title>
 </head>
 <style>
     html {
@@ -39,6 +37,7 @@
         <button onclick="w3_close()" class="w3-bar-item w3-large">Zatvori &times;</button>
         <a th:href="@{/index}" class="w3-bar-item w3-button">Glavni izbornik</a>
         <a th:href="@{/racun/all}" class="w3-bar-item w3-button">Računi/Dokumenti</a>
+        <a th:href="@{/file/all}" class="w3-bar-item w3-button">Datoteke</a>
         <a th:href="@{/lokacija/all}" class="w3-bar-item w3-button">Lokacije</a>
         <a th:href="@{/vrstaUredaja/all}" class="w3-bar-item w3-button">Vrste sredstva</a>
         <a th:href="@{/korisnik/all}" class="w3-bar-item w3-button">Korisnici</a>
@@ -70,15 +69,7 @@
                 <a th:href="@{/provodenjeInventure/all}" class="w3-bar-item w3-button">Izvršavanje inventure</a>
             </div>
         </div>
-        <div class="w3-dropdown-click">
-            <button class="w3-button" onclick="resetPasswordDropFunc('resetPasswordDrop4','icon4')">
-                Settings <i id="icon4" class="fa fa-caret-down"></i>
-            </button>
-            <div id="resetPasswordDrop4" class="w3-hide w3-white w3-card">
-                <a th:href="@{/appUsers/all}" class="w3-bar-item w3-button">App useri</a>
-                <a th:href="@{/company/all}" class="w3-bar-item w3-button">Company</a>
-            </div>
-        </div>
+        <a th:href="@{/appUsers/all}" class="w3-bar-item w3-button">App useri</a>
         <div class="w3-dropdown-click">
             <button class="w3-button" onclick="resetPasswordDropFunc('resetPasswordDrop', 'icon')">
                 Password settings <i id="icon" class="fa fa-caret-down"></i>
@@ -101,25 +92,19 @@
         <img src="../images/AITACvaluesChallengesSolutions.png" class="centered-image" alt="Aitac VCS">
     </a>
 </div>
-<h1 class="w3-padding w3-center w3-opacity w3-xxxlarge" style="text-shadow:1px 1px 0 #444"><b>Datoteke</b></h1>
+<h1 class="w3-padding w3-center w3-opacity w3-xxxlarge" style="text-shadow:1px 1px 0 #444"><b>Poduzeća</b></h1>
 <div class="div-container">
-    <form id="uploadForm" action="/file/upload" method="post" enctype="multipart/form-data">
-        <span id="dropZone" class="drop-zone"><span class="material-symbols-outlined">place_item</span> Pustite datoteku ovdje ili kliknite za <span
-                class="material-symbols-outlined">note_add</span> odabir</span>
-        <span id="fileMessage" class="file-message">Nema odabrane datoteke</span>
-        <button type="submit" class="button-add" id="submitButton" disabled><span class="material-symbols-outlined">upload_file</span>
-            Učitaj novu datoteku
-        </button>
-        <input type="file" name="file" id="fileInput" required style="display: none;"/>
-    </form>
+    <a th:href="@{/company/addNew}" class="button-add"><i class="material-icons">add_circle</i> Novo poduzeće</a>
+    <a th:href="@{/company/generatePDF}" class="button-30">Izvještaj <i class="material-icons">picture_as_pdf</i></a>
 </div>
-<form class="w3-container" th:action="@{/file/find}" method="get" style="margin-bottom: 20px">
-    <input type="text" id="fileName" name="fileName" placeholder="Pretraži po nazivu" required
-           onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Popunite polje za pretraživanje!')">
-    <button onclick="hidedivFile()" type="submit" class="button-30"><i class="fa fa-search" style="font-size:20px"></i>
-        Pretraži
+<form class="w3-container" th:action="@{/company/find}" method="get" style="margin-bottom: 20px">
+    <input type="text" id="companyName" name="companyName" placeholder="Pretraži po nazivu" required
+           onchange="this.setCustomValidity('')"
+           oninvalid="this.setCustomValidity('Popunite polje za pretraživanje!')">
+    <button onclick="hidedivCompany()" type="submit" class="button-30"><i class="fa fa-search"
+                                                                            style="font-size:20px"></i> Pretraži
     </button>
-    <button type="button" class="button-30" onclick="window.location.href='/file/all'">Prikaži sve</button>
+    <button type="button" class="button-30" onclick="window.location.href='/company/all'">Prikaži sve</button>
     <label id="error-message" class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>
 </form>
 <div style="overflow-x:auto;">
@@ -127,22 +112,20 @@
         <thead>
         <tr>
             <th class="w3-dark-grey">ID</th>
-            <th class="w3-dark-grey">Naziv datoteke</th>
-            <th class="w3-dark-grey">Veličina datoteke</th>
+            <th class="w3-dark-grey">Naziv poduzeća</th>
             <th class="w3-dark-grey"></th>
             <th class="w3-dark-grey"></th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="file:${files}">
-            <td th:text="${file.id}"></td>
-            <td th:text="${file.fileName}"></td>
-            <td th:text="${#numbers.formatDecimal(file.size / 1024, 1, 0)} + ' KB'"></td>
-            <td><a th:href="@{'/file/download/' + ${file.id}}" type="button"
-                   class="button-edit"><span class="material-symbols-outlined">file_save</span></a></td>
+        <tr th:each="company:${allCompany}">
+            <td th:text="${company.idCompany}"></td>
+            <td th:text="${company.companyName}"></td>
+            <td><a th:href="@{/company/update/{id}(id=${company.idCompany})}" type="button"
+                   class="button-edit"><i class="fa fa-edit" style="font-size:36px"></i></a></td>
             <td><a style="font-size:128px"
                    href="javascript:void(0);"
-                   th:onclick="'confirmDelete(' + ${file.id} + ')'"
+                   th:onclick="'confirmDelete(' + ${company.idCompany} + ')'"
                    class="button-delete"><i class="material-icons">remove_circle</i></a></td>
         </tr>
         </tbody>
@@ -166,100 +149,13 @@
     };
 </script>
 <script>
-    function confirmDelete(id) {
+    function confirmDelete(idCompany) {
         var isConfirmed = confirm("Are you sure you want to delete?");
 
         if (isConfirmed) {
-            window.location.href = `/file/delete/${id}`;
+            window.location.href = `/company/delete/${idCompany}`;
         }
     }
-</script>
-<script>
-    // Function to handle file input change
-    function handleFileInputChange(e) {
-        var file = e.target.files[0];
-        if (file) {
-            document.getElementById('fileMessage').innerText = file.name;
-        } else {
-            document.getElementById('fileMessage').innerText = 'Nema odabrane datoteke';
-        }
-    }
-
-    // Function to handle drag over event
-    function handleDragOver(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        e.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
-        document.getElementById('dropZone').classList.add('drag-over');
-    }
-
-    // Function to handle drag leave event
-    function handleDragLeave(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        document.getElementById('dropZone').classList.remove('drag-over');
-    }
-
-    // Function to handle drop event
-    function handleDrop(e) {
-        e.preventDefault();
-        e.stopPropagation();
-
-        var file = e.dataTransfer.files[0];
-        if (file) {
-            document.getElementById('fileMessage').innerText = file.name;
-            document.getElementById('fileInput').files = e.dataTransfer.files;
-        }
-        document.getElementById('dropZone').classList.remove('drag-over');
-    }
-
-    // Function to open file explorer when drop zone is clicked
-    function handleDropZoneClick() {
-        document.getElementById('fileInput').click();
-    }
-
-    // Add event listeners
-    document.getElementById('fileInput').addEventListener('change', handleFileInputChange);
-    document.getElementById('dropZone').addEventListener('click', handleDropZoneClick);
-    document.getElementById('dropZone').addEventListener('dragover', handleDragOver);
-    document.getElementById('dropZone').addEventListener('dragleave', handleDragLeave);
-    document.getElementById('dropZone').addEventListener('drop', handleDrop);
-</script>
-<script>
-    function enableButton() {
-        var submitButton = document.getElementById('submitButton');
-        submitButton.removeAttribute('disabled');
-    }
-
-    function disableButton() {
-        var submitButton = document.getElementById('submitButton');
-        submitButton.setAttribute('disabled', 'disabled');
-    }
-
-    document.getElementById('fileInput').addEventListener('change', function () {
-        if (this.value) {
-            enableButton();
-        } else {
-            disableButton();
-        }
-    });
-
-    document.getElementById('dropZone').addEventListener('drop', function (event) {
-        event.preventDefault();
-        var files = event.dataTransfer.files;
-        if (files.length > 0) {
-            enableButton();
-        } else {
-            disableButton();
-        }
-    });
-
-    document.getElementById('dropZone').addEventListener('dragover', function (event) {
-        event.preventDefault();
-    });
-
-    // Initially disable the submit button
-    disableButton();
 </script>
 </body>
 </html>

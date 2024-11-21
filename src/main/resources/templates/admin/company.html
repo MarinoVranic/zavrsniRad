@@ -5,13 +5,13 @@
 <link th:href="@{/CSS/customStyle.css}" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script type="text/javascript" src="../static/javascript/sidebar.js" th:src="@{/javascript/sidebar.js}"></script>
-<script type="text/javascript" src="../static/javascript/hidedivTarifa.js"
-        th:src="@{/javascript/hidedivTarifa.js}"></script>
+<script type="text/javascript" src="../static/javascript/hidedivCompany.js"
+        th:src="@{/javascript/hidedivCompany.js}"></script>
 <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mobilne tarife</title>
+    <title>Poduzeća</title>
 </head>
 <style>
     html {
@@ -31,8 +31,7 @@
     }
 </style>
 <body>
-<div class="w3-sidebar w3-bar-block" style="display:none;z-index:5; height: 100%; position: fixed; bottom: 0; left: 0;"
-     id="mySidebar">
+<div class="w3-sidebar w3-bar-block" style="display:none;z-index:5" id="mySidebar">
     <div class="sidebar-top">
         <button onclick="w3_close()" class="w3-bar-item w3-large">Zatvori &times;</button>
         <a th:href="@{/index}" class="w3-bar-item w3-button">Glavni izbornik</a>
@@ -40,40 +39,15 @@
         <a th:href="@{/file/all}" class="w3-bar-item w3-button">Datoteke</a>
         <a th:href="@{/lokacija/all}" class="w3-bar-item w3-button">Lokacije</a>
         <a th:href="@{/vrstaUredaja/all}" class="w3-bar-item w3-button">Vrste sredstva</a>
-        <a th:href="@{/korisnik/all}" class="w3-bar-item w3-button">Korisnici</a>
-        <div class="w3-dropdown-click">
-            <button class="w3-button" onclick="resetPasswordDropFunc('resetPasswordDrop2','icon2')">
-                Oprema <i id="icon2" class="fa fa-caret-down"></i>
-            </button>
-            <div id="resetPasswordDrop2" class="w3-hide w3-white w3-card">
-                <a th:href="@{/inventar/all}" class="w3-bar-item w3-button">Osnovna sredstva</a>
-                <a th:href="@{/inventarIT/all}" class="w3-bar-item w3-button">IT oprema</a>
-            </div>
-        </div>
-        <a th:href="@{/razduzenje/all}" class="w3-bar-item w3-button">Razduženja</a>
-        <div class="w3-dropdown-click">
-            <button class="w3-button" onclick="resetPasswordDropFunc('resetPasswordDrop1','icon1')">
-                Inventura <i id="icon1" class="fa fa-caret-down"></i>
-            </button>
-            <div id="resetPasswordDrop1" class="w3-hide w3-white w3-card">
-                <a th:href="@{/inventura/all}" class="w3-bar-item w3-button">Inventure</a>
-                <a th:href="@{/provodenjeInventure/all}" class="w3-bar-item w3-button">Izvršavanje inventure</a>
-            </div>
-        </div>
-        <div class="w3-dropdown-click">
-            <button class="w3-button" onclick="resetPasswordDropFunc('resetPasswordDrop4','icon4')">
-                Settings <i id="icon4" class="fa fa-caret-down"></i>
-            </button>
-            <div id="resetPasswordDrop4" class="w3-hide w3-white w3-card">
-                <a th:href="@{/appUsers/all}" class="w3-bar-item w3-button">App useri</a>
-                <a th:href="@{/company/all}" class="w3-bar-item w3-button">Company</a>
-            </div>
-        </div>
+        <a th:href="@{/inventar/all}" class="w3-bar-item w3-button">Osnovna sredstva</a>
+        <a th:href="@{/inventarIT/all}" class="w3-bar-item w3-button">IT oprema</a>
+        <a th:href="@{/inventura/all}" class="w3-bar-item w3-button">Inventure</a>
+        <a th:href="@{/provodenjeInventure/all}" class="w3-bar-item w3-button">Izvršavanje inventure</a>
         <div class="w3-dropdown-click">
             <button class="w3-button" onclick="resetPasswordDropFunc()">
                 Password settings <i class="fa fa-caret-down"></i>
             </button>
-            <div id="resetPasswordDrop" class="w3-hide w3-white w3-card">
+            <div id="resetPasswordDrop" class="w3-dropdown-content w3-bar-block w3-white w3-card">
                 <a th:href="@{/appUsers/userResetPassword/}" class="w3-bar-item w3-button">Reset password</a>
             </div>
         </div>
@@ -91,19 +65,18 @@
         <img src="../images/AITACvaluesChallengesSolutions.png" class="centered-image" alt="Aitac VCS">
     </a>
 </div>
-<h1 class="w3-padding w3-center w3-opacity w3-xxxlarge" style="text-shadow:1px 1px 0 #444"><b>Mobilne tarife</b></h1>
+<h1 class="w3-padding w3-center w3-opacity w3-xxxlarge" style="text-shadow:1px 1px 0 #444"><b>Poduzeća</b></h1>
 <div class="div-container">
-    <a th:href="@{/mobilnaTarifa/addNew}" class="button-add"><i class="material-icons">add_circle</i> Nova tarifa</a>
-    <a th:href="@{/mobilnaTarifa/generatePDF}" class="button-30">Izvještaj <i class="material-icons">picture_as_pdf</i></a>
+    <a th:href="@{/company/addNew}" class="button-add"><i class="material-icons">add_circle</i> Novo poduzeće</a>
+    <a th:href="@{/company/generatePDF}" class="button-30">Izvještaj <i class="material-icons">picture_as_pdf</i></a>
 </div>
-<form class="w3-container" th:action="@{/mobilnaTarifa/find}" method="get" style="margin-bottom: 20px">
-    <input type="text" id="nazivTarife" name="nazivTarife" placeholder="Pretraži po nazivu" required
-           onchange="this.setCustomValidity('')"
-           oninvalid="this.setCustomValidity('Popunite polje za pretraživanje!')">
-    <button onclick="hidedivDobavljac()" type="submit" class="button-30"><i class="fa fa-search"
+<form class="w3-container" th:action="@{/company/find}" method="get" style="margin-bottom: 20px">
+    <input type="text" id="companyName" name="companyName" placeholder="Pretraži po nazivu" required
+           onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Popunite polje za pretraživanje!')">
+    <button onclick="hidedivCompany()" type="submit" class="button-30"><i class="fa fa-search"
                                                                             style="font-size:20px"></i> Pretraži
     </button>
-    <button type="button" class="button-30" onclick="window.location.href='/mobilnaTarifa/all'">Prikaži sve</button>
+    <button type="button" class="button-30" onclick="window.location.href='/company/all'">Prikaži sve</button>
     <label id="error-message" class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>
 </form>
 <div style="overflow-x:auto;">
@@ -111,20 +84,20 @@
         <thead>
         <tr>
             <th class="w3-dark-grey">ID</th>
-            <th class="w3-dark-grey">Naziv mobilne tarife</th>
+            <th class="w3-dark-grey">Naziv poduzeća</th>
             <th class="w3-dark-grey"></th>
             <th class="w3-dark-grey"></th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="tarifa:${svaMobilnaTarifa}">
-            <td th:text="${tarifa.idTarife}"></td>
-            <td th:text="${tarifa.nazivTarife}"></td>
-            <td><a th:href="@{/mobilnaTarifa/update/{id}(id=${tarifa.idTarife})}" type="button"
+        <tr th:each="company:${allCompany}">
+            <td th:text="${company.idCompany}"></td>
+            <td th:text="${company.companyName}"></td>
+            <td><a th:href="@{/company/update/{id}(id=${company.idCompany})}" type="button"
                    class="button-edit"><i class="fa fa-edit" style="font-size:36px"></i></a></td>
             <td><a style="font-size:128px"
                    href="javascript:void(0);"
-                   th:onclick="'confirmDelete(' + ${tarifa.idTarife} + ')'"
+                   th:onclick="'confirmDelete(' + ${company.idCompany} + ')'"
                    class="button-delete"><i class="material-icons">remove_circle</i></a></td>
         </tr>
         </tbody>
@@ -148,11 +121,11 @@
     };
 </script>
 <script>
-    function confirmDelete(idTarife) {
+    function confirmDelete(idCompany) {
         var isConfirmed = confirm("Are you sure you want to delete?");
 
         if (isConfirmed) {
-            window.location.href = `/mobilnaTarifa/delete/${idTarife}`;
+            window.location.href = `/company/delete/${idCompany}`;
         }
     }
 </script>

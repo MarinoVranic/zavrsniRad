@@ -1,8 +1,6 @@
 package com.vranic.zavrsnirad.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
@@ -26,7 +24,9 @@ public class Korisnik {
     private String lastName;
     private String status;
     private String accountType;
-    private String subcontractor;
+    @ManyToOne
+    @JoinColumn(name = "id_company")
+    private Company company;
     @Pattern(regexp = "^[0-9]*$", message = "Godina zaposlenja smije sadržavati samo brojeve!")
     private String godina;
     private String email;

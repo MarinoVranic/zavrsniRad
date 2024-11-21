@@ -33,6 +33,17 @@ th, td {
 }
 
 @media (max-width: 768px) {
+    .w3-display-middle {
+        top: 5%; /* Adjust to fit smaller screens */
+        transform: translateY(0); /* Prevent centering overflow */
+    }
+}
+.w3-card-4 {
+    max-height: 100vh; /* Allow some margin for usability */
+    overflow-y: auto; /* Enable scrolling if content overflows */
+}
+
+@media (max-width: 768px) {
     .header-container h1 {
         font-size: 1.5em;
     }

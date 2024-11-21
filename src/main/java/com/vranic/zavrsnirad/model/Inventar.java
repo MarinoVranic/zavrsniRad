@@ -34,7 +34,11 @@ import java.time.LocalDate;
                         @FieldResult(name = "racun", column = "id_racuna"),
                         @FieldResult(name = "dobavljac", column = "id_dobavljaca"),
                         @FieldResult(name = "napomena", column = "napomena"),
-                        @FieldResult(name = "nabavnaVrijednost", column = "nabavna_vrijednost")
+                        @FieldResult(name = "nabavnaVrijednost", column = "nabavna_vrijednost"),
+                        @FieldResult(name = "brojMobitela", column = "broj_mobitela"),
+                        @FieldResult(name = "razlikaCijenePlacena", column = "razlika_cijene_placena"),
+                        @FieldResult(name = "mobilnaTarifa", column = "id_tarife"),
+                        @FieldResult(name = "company", column = "id_company")
                 }
         )
 )
@@ -122,4 +126,8 @@ public class Inventar {
     private MobilnaTarifa mobilnaTarifa;
 
     private boolean razlikaCijenePlacena;
+
+    @ManyToOne
+    @JoinColumn(name = "id_company")
+    private Company company;
 }

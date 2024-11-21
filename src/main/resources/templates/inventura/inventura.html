@@ -87,7 +87,15 @@
         </div>
         <a th:href="@{/razduzenje/all}" class="w3-bar-item w3-button">Razduženja</a>
         <a th:href="@{/provodenjeInventure/all}" class="w3-bar-item w3-button">Izvršavanje inventure</a>
-        <a th:href="@{/appUsers/all}" class="w3-bar-item w3-button">App useri</a>
+        <div class="w3-dropdown-click">
+            <button class="w3-button" onclick="resetPasswordDropFunc('resetPasswordDrop4','icon4')">
+                Settings <i id="icon4" class="fa fa-caret-down"></i>
+            </button>
+            <div id="resetPasswordDrop4" class="w3-hide w3-white w3-card">
+                <a th:href="@{/appUsers/all}" class="w3-bar-item w3-button">App useri</a>
+                <a th:href="@{/company/all}" class="w3-bar-item w3-button">Company</a>
+            </div>
+        </div>
         <div class="w3-dropdown-click">
             <button class="w3-button" onclick="resetPasswordDropFunc('resetPasswordDrop', 'icon')">
                 Password settings <i id="icon" class="fa fa-caret-down"></i>

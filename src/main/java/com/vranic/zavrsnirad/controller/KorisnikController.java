@@ -5,7 +5,9 @@ import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.vranic.zavrsnirad.model.Company;
 import com.vranic.zavrsnirad.model.Korisnik;
+import com.vranic.zavrsnirad.service.CompanyService;
 import com.vranic.zavrsnirad.service.KorisnikService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
@@ -32,6 +34,8 @@ import java.util.List;
 public class KorisnikController {
     @Autowired
     private KorisnikService korisnikService;
+    @Autowired
+    private CompanyService companyService;
     public LocalDate getToday() {
         return LocalDate.now();
     }
@@ -50,6 +54,7 @@ public class KorisnikController {
     public String getAllKorisnik(Model model) throws Exception {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         model.addAttribute("sviKorisnici", korisnikService.getAllKorisnik());
+        model.addAttribute("companies", companyService.getAllCompany());
         return getViewBasedOnRole(auth);
     }
 
@@ -57,6 +62,7 @@ public class KorisnikController {
     public String getAllActiveKorisnik(Model model) throws Exception {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         model.addAttribute("sviKorisnici", korisnikService.getAllActiveKorisnik());
+        model.addAttribute("companies", companyService.getAllCompany());
         return getViewBasedOnRole(auth);
     }
 
@@ -64,6 +70,7 @@ public class KorisnikController {
     public String getAllInactiveKorisnik(Model model) throws Exception {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         model.addAttribute("sviKorisnici", korisnikService.getAllInactiveKorisnik());
+        model.addAttribute("companies", companyService.getAllCompany());
         return getViewBasedOnRole(auth);
     }
 
@@ -75,7 +82,10 @@ public class KorisnikController {
     @GetMapping("/update/{username}")
     public String updateKorisnik(@PathVariable(value = "username") String username, Model model) throws Exception{
         Korisnik korisnik = korisnikService.getKorisnikById(username);
+        Company selectedCompany = korisnik.getCompany();
         model.addAttribute("korisnik", korisnik);
+        model.addAttribute("companies", companyService.getAllCompany());
+        model.addAttribute("selectedCompany", selectedCompany);
         return "korisnik/updateKorisnik";
     }
 
@@ -89,6 +99,7 @@ public class KorisnikController {
     public String addNewKorisnik(Model model) throws Exception{
         Korisnik korisnik = new Korisnik();
         model.addAttribute("korisnik", korisnik);
+        model.addAttribute("companies", companyService.getAllCompany());
         return "korisnik/newKorisnik";
     }
 
@@ -184,10 +195,10 @@ public class KorisnikController {
         return getViewBasedOnRole(auth);
     }
 
-    @GetMapping("/findBySubcontractor")
-    public String findKorisnikBySubcontractor(@RequestParam("subcontractor") String subcontractor, Model model) throws Exception {
+    @GetMapping("/findByCompany")
+    public String findKorisnikByCompany(@RequestParam("companyName") String companyName, Model model) throws Exception {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        List<Korisnik> korisnikList = korisnikService.findKorisnikByPoslodavac(subcontractor);
+        List<Korisnik> korisnikList = korisnikService.findKorisnikByPoslodavac(companyName);
         if (korisnikList.isEmpty()) {
             model.addAttribute("error3", "Traženi poslodavac nema korisnika!");
             model.addAttribute("sviKorisnici", korisnikService.getAllKorisnik());
@@ -314,7 +325,7 @@ public class KorisnikController {
             table.addCell(dataCell);
             dataCell.setPhrase(new Phrase(korisnik.getAccountType(), croatianFont));
             table.addCell(dataCell);
-            dataCell.setPhrase(new Phrase(korisnik.getSubcontractor(), croatianFont));
+            dataCell.setPhrase(new Phrase(korisnik.getCompany().getCompanyName(), croatianFont));
             table.addCell(dataCell);
             dataCell.setPhrase(new Phrase(String.valueOf(korisnik.getGodina()), croatianFont));
             table.addCell(dataCell);
@@ -498,7 +509,7 @@ public class KorisnikController {
             table.addCell(dataCell);
             setCellContentAndFont(dataCell, korisnik.getAccountType(), croatianFont);
             table.addCell(dataCell);
-            setCellContentAndFont(dataCell, korisnik.getSubcontractor(), croatianFont);
+            setCellContentAndFont(dataCell, korisnik.getCompany().getCompanyName(), croatianFont);
             table.addCell(dataCell);
             setCellContentAndFont(dataCell, String.valueOf(korisnik.getGodina()), croatianFont);
             table.addCell(dataCell);

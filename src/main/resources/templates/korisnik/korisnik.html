@@ -94,7 +94,15 @@
                 <a th:href="@{/provodenjeInventure/all}" class="w3-bar-item w3-button">Izvršavanje inventure</a>
             </div>
         </div>
-        <a th:href="@{/appUsers/all}" class="w3-bar-item w3-button">App useri</a>
+        <div class="w3-dropdown-click">
+            <button class="w3-button" onclick="resetPasswordDropFunc('resetPasswordDrop4','icon4')">
+                Settings <i id="icon4" class="fa fa-caret-down"></i>
+            </button>
+            <div id="resetPasswordDrop4" class="w3-hide w3-white w3-card">
+                <a th:href="@{/appUsers/all}" class="w3-bar-item w3-button">App useri</a>
+                <a th:href="@{/company/all}" class="w3-bar-item w3-button">Company</a>
+            </div>
+        </div>
         <div class="w3-dropdown-click">
             <button class="w3-button" onclick="resetPasswordDropFunc('resetPasswordDrop', 'icon')">
                 Password settings <i id="icon" class="fa fa-caret-down"></i>
@@ -154,10 +162,10 @@
         <button type="button" class="button-30" onclick="window.location.href='/korisnik/all'">Prikaži sve</button>
         <label id="error-message" class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></label>
     </form>
-    <form id="form3" class="w3-container form" th:action="@{/korisnik/findBySubcontractor}" method="get"
+    <form id="form3" class="w3-container form" th:action="@{/korisnik/findByCompany}" method="get"
           style="margin-bottom: 20px">
-        <label for="subcontractor"></label>
-        <input type="text" id="subcontractor" name="subcontractor" placeholder="Pretraži po poslodavcu" required
+        <label for="companyName"></label>
+        <input type="text" id="companyName" name="companyName" placeholder="Pretraži po poslodavcu" required
                onchange="this.setCustomValidity('')"
                oninvalid="this.setCustomValidity('Popunite polje za pretraživanje!')">
         <button onclick="hidedivKorisnik3()" type="submit" class="button-30"><i class="fa fa-search"
@@ -208,7 +216,7 @@
                 <td th:text="${korisnik.lastName}"></td>
                 <td th:text="${korisnik.status}"></td>
                 <td th:text="${korisnik.accountType}"></td>
-                <td th:text="${korisnik.subcontractor}"></td>
+                <td th:text="${korisnik.company.companyName}"></td>
                 <td th:text="${korisnik.godina}"></td>
                 <td style="width: 150px" th:text="${korisnik.email}"></td>
                 <td th:text="${korisnik.initialPassword}"></td>
