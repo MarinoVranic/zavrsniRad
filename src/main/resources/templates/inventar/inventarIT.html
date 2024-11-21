@@ -256,13 +256,13 @@
     </form>
 </div>
 <div style="overflow-x:auto;">
-    <table style="table-layout:fixed;word-wrap:break-word" class="w3-table-all w3-hoverable w3-centered w3-card-4">
+    <table style="table-layout:auto;word-wrap:break-word" class="w3-table-all w3-hoverable w3-centered w3-card-4">
         <thead>
         <tr>
             <th style="width: 100px;padding-left: 8px" class="w3-dark-grey">Inventarni<br>broj<br><input type="checkbox"
                                                                                                          id="checkAll">
             </th>
-            <th style="width: 150px" class="w3-dark-grey">Naziv<br>uređaja</th>
+            <th style="width: 100px" class="w3-dark-grey">Naziv<br>uređaja</th>
             <th class="w3-dark-grey">Serijski broj</th>
             <th class="w3-dark-grey">Vrsta uređaja<br></th>
             <th class="w3-dark-grey">Lokacija</th>
@@ -273,7 +273,7 @@
             <th class="w3-dark-grey">Datum razduženja</th>
             <th style="width: 120px" class="w3-dark-grey">Istek garancije</th>
             <th class="w3-dark-grey">Račun</th>
-            <th class="w3-dark-grey">Dobavljač</th>
+            <th class="w3-dark-grey">Dobavljač /<br>Vlasnik</th>
             <th class="w3-dark-grey">Napomena</th>
             <th class="w3-dark-grey"></th>
             <th class="w3-dark-grey"></th>
@@ -289,7 +289,6 @@
                 <td th:text="${inventar.nazivUredaja}"></td>
                 <td th:text="${inventar.serijskiBroj}"></td>
                 <td th:text="${inventar.vrstaUredaja.nazivVrsteUredaja}"></td>
-                <!--                <td th:text="${inventar.hostname}"></td>-->
                 <td>
                     <p th:if="${inventar.lokacija != null && inventar.lokacija.nazivLokacije != null}">
                         <span th:text="${inventar.lokacija.nazivLokacije}"></span>
@@ -322,6 +321,11 @@
                         <span th:text="${inventar.dobavljac.nazivDobavljaca}"></span>
                     </p>
                     <p th:unless="${inventar.dobavljac != null && inventar.dobavljac.nazivDobavljaca != null}"></p>
+                    <hr th:if="${inventar.dobavljac != null && inventar.company != null}" style="border: 1px solid gray; margin: 10px 0;">
+                    <p th:if="${inventar.company != null && inventar.company.companyName != null}">
+                        <span th:text="${inventar.company.companyName}"></span>
+                    </p>
+                    <p th:unless="${inventar.company != null && inventar.company.companyName != null}"></p>
                 </td>
                 <td th:text="${inventar.napomena}"></td>
                 <td>
