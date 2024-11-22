@@ -302,7 +302,16 @@
                 </a>
             </td>
             <td><p th:text="${inventar.napomena}"></p></td>
-            <td><a th:href="@{/inventar/update/{inventarniBroj}(inventarniBroj=${inventar.inventarniBroj})}"
+            <td><a th:if="${inventar.korisnik == null || inventar.korisnik.username == null}"
+                   style="font-size:15px"
+                   th:href="@{/inventar/zaduzi/{inventarniBroj}(inventarniBroj=${inventar.inventarniBroj})}"
+                   type="button" class="button-zaduzi">Zaduži</a>
+
+                <a th:if="${inventar.korisnik != null && inventar.korisnik.username != null}"
+                   style="font-size:15px"
+                   th:href="@{/inventar/razduzi/{inventarniBroj}(inventarniBroj=${inventar.inventarniBroj})}"
+                   type="button" class="button-zaduzi">Razduži</a>
+                <a th:href="@{/inventar/update/{inventarniBroj}(inventarniBroj=${inventar.inventarniBroj})}"
                    type="button" class="button-edit"><i class="fa fa-edit" style="font-size:24px"></i></a></td>
             <td><a th:href="@{/inventar/ean13/{inventarniBroj}(inventarniBroj=${inventar.inventarniBroj})}"
                    type="button" class="button-edit"><i class="fa fa-barcode" style="font-size:32px"></i></a></td>

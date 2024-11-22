@@ -235,14 +235,42 @@ public class InventarController {
         if(idVrste.equals(1)||idVrste.equals(6)){
             //split string nazivUredaja by one or more spaces and -
             String [] nazivUredaja = inventar.getNazivUredaja().split("\\s+|-");
+            String suffix ="";
+            if(inventar.getNazivUredaja().contains("G6")){
+                suffix="G6";
+            } else if (inventar.getNazivUredaja().contains("G7")){
+                suffix="G7";
+            } else if (inventar.getNazivUredaja().contains("G8")){
+                suffix="G8";
+            } else if (inventar.getNazivUredaja().contains("G9")){
+                suffix="G9";
+            }
             String firstPartOfHostname = nazivUredaja[0];
             String secondPartOfHostname = inventar.getKorisnik().getUsername();
-            String hostname = firstPartOfHostname+"-"+secondPartOfHostname;
-            inventarService.zaduziInventar(hostname, inventar.getLokacija().getIdLokacije(), inventar.getKorisnik().getUsername(),
-                    getToday(), inventar.getInventarniBroj());
+            String hostname = firstPartOfHostname + suffix + "-" + secondPartOfHostname;
+            if(inventar.getDatumZaduzenja()!=null)
+            {
+                inventarService.zaduziInventar(hostname, inventar.getLokacija().getIdLokacije(), inventar.getKorisnik().getUsername(),
+                        inventar.getDatumZaduzenja(), inventar.getInventarniBroj());
+
+            } else {
+                LocalDate datumZaduzenja = getToday();
+                System.out.println(getToday());
+                inventarService.zaduziInventar(hostname, inventar.getLokacija().getIdLokacije(), inventar.getKorisnik().getUsername(),
+                        datumZaduzenja, inventar.getInventarniBroj());
+            }
         }else {
-            inventarService.zaduziInventar(inventar.getHostname(), inventar.getLokacija().getIdLokacije(), inventar.getKorisnik().getUsername(),
-                    getToday(), inventar.getInventarniBroj());
+            if(inventar.getDatumZaduzenja()!=null)
+            {
+                inventarService.zaduziInventar(inventar.getHostname(), inventar.getLokacija().getIdLokacije(), inventar.getKorisnik().getUsername(),
+                        inventar.getDatumZaduzenja(), inventar.getInventarniBroj());
+
+            } else {
+                LocalDate datumZaduzenja = getToday();
+                System.out.println(getToday());
+                inventarService.zaduziInventar(inventar.getHostname(), inventar.getLokacija().getIdLokacije(), inventar.getKorisnik().getUsername(),
+                        datumZaduzenja, inventar.getInventarniBroj());
+            }
         }
         return "redirect:/inventar/all";
     }

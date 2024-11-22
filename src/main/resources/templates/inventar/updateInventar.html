@@ -172,4 +172,10 @@
     // Ensure that the function is called initially to set the initial display state
     toggleInputFields();
 </script>
+<script>
+    const nabavnaVrijednostInput = document.getElementById('nabavnaVrijednost');
+    nabavnaVrijednostInput.addEventListener('input', function (event) {
+        this.value = this.value.replace(',', '.');
+    });
+</script>
 </html>
