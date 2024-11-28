@@ -120,7 +120,7 @@
                         th:field="*{racun.idRacuna}"
                         onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Odaberite račun!')">
                     <option value="">Odaberite račun</option>
-                    <option th:each="racun : ${allRacun}" th:value="${racun.idRacuna}" th:text="${racun.brojRacuna}"
+                    <option th:each="racun : ${allRacun}" th:value="${racun.idRacuna}" th:text="${racun.brojUre}"
                             th:selected="${racun.idRacuna == selectedRacun?.idRacuna}"></option>
                 </select>
             </p>

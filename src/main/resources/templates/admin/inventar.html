@@ -231,7 +231,8 @@
             <th class="w3-dark-grey">Lokacija</th>
             <th style="width: 200px" class="w3-dark-grey">Osnovno sredstvo zaduženo na</th>
             <th style="width: 200px" class="w3-dark-grey">Nabavna vrijednost</th>
-            <th style="width: 200px" class="w3-dark-grey">Račun/Dokument</th>
+            <th style="width: 200px" class="w3-dark-grey">URA/Dokument</th>
+            <th style="width: 200px" class="w3-dark-grey">Vlasnik</th>
             <th style="width: 200px" class="w3-dark-grey">Napomena</th>
             <th class="w3-dark-grey"></th>
             <th class="w3-dark-grey"></th>
@@ -263,8 +264,8 @@
                 </p>
             </td>
             <td class="cell-with-text-and-button">
-                <p th:if="${inventar.racun != null && inventar.racun.brojRacuna != null}">
-                    <span th:text="${inventar.racun.brojRacuna}"></span>
+                <p th:if="${inventar.racun != null && inventar.racun.brojUre != null}">
+                    <span th:text="${inventar.racun.brojUre}"></span>
                 </p>
                 <p th:unless="${inventar.racun != null && inventar.racun.brojRacuna != null}"></p>
                 <a th:if="${inventar.racun != null && inventar.racun.file != null}"
@@ -272,6 +273,11 @@
                     <span class="material-symbols-outlined">file_save</span>
                 </a>
             </td>
+            <td><p th:if="${inventar.company != null && inventar.company.companyName != null}">
+                <span th:text="${inventar.company.companyName}"></span>
+            </p>
+                <p th:unless="${inventar.company != null && inventar.company.companyName != null}">
+                </p></td>
             <td><p th:text="${inventar.napomena}"></p></td>
             <td><a th:if="${inventar.korisnik == null || inventar.korisnik.username == null}"
                    style="font-size:15px"
