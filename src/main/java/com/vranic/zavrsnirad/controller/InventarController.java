@@ -54,6 +54,9 @@ public class InventarController {
     @Autowired
     private RacunService racunService;
 
+    @Autowired
+    private CompanyService companyService;
+
     public LocalDate getToday() {
         return LocalDate.now();
     }
@@ -99,6 +102,8 @@ public class InventarController {
         List<Dobavljac> allDobavljac = dobavljacService.getAllDobavljaci();
         Racun selectedRacun = inventar.getRacun();
         List<Racun> allRacun = racunService.getAllRacunForDropdown();
+        Company selectedCompany = inventar.getCompany();
+        List<Company> allCompany = companyService.getAllCompany();
 
         model.addAttribute("inventar", inventar);
         model.addAttribute("selectedVrstaUredaja", selectedVrstaUredaja);
@@ -111,6 +116,8 @@ public class InventarController {
         model.addAttribute("allDobavljac", allDobavljac);
         model.addAttribute("selectedRacun", selectedRacun);
         model.addAttribute("allRacun", allRacun);
+        model.addAttribute("selectedCompany", selectedCompany);
+        model.addAttribute("allCompany", allCompany);
         return "inventar/updateInventar";
     }
 
@@ -128,6 +135,8 @@ public class InventarController {
         model.addAttribute("allDobavljac", allDobavljac);
         List<Korisnik> allKorisnik = korisnikService.getAllKorisnik();
         model.addAttribute("allKorisnik", allKorisnik);
+        List<Company> allCompany = companyService.getAllCompany();
+        model.addAttribute("allCompany", allCompany);
         return "inventar/newInventar";
     }
 

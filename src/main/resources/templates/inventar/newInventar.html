@@ -89,6 +89,17 @@
             </p>
             <div class="w3-row-padding">
                 <p class="w3-half">
+                    <label class="w3-text-dark-grey" for="companyName"><b>Vlasnik</b></label>
+                    <select class="w3-input w3-border w3-round w3-center" id="companyName" name="companyName"
+                            th:field="*{company.idCompany}" required
+                            onchange="this.setCustomValidity('')"
+                            oninvalid="this.setCustomValidity('Odaberite vlasništvo opreme!')">
+                        <option value="">Odaberite vlasnika</option>
+                        <option th:each="company : ${allCompany}" th:value="${company.idCompany}"
+                                th:text="${company.companyName}"></option>
+                    </select>
+                </p>
+                <p class="w3-half">
                     <label class="w3-text-dark-grey" for="nazivDobavljaca"><b>Dobavljač</b></label>
                     <select class="w3-input w3-border w3-round w3-center" id="nazivDobavljaca" name="nazivDobavljaca"
                             th:field="*{dobavljac.idDobavljaca}" required
