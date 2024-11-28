@@ -995,7 +995,7 @@ public class MobitelController {
         aitacPodaci1.add(blueLine);
         Font fontAitacPodaci = new Font(arialNormalFont, 6, Font.NORMAL);
         fontAitacPodaci.setColor(160, 160, 160);
-        Phrase prviRed = new Phrase("AITAC d.o.o. Žegoti 6/1, 51215 Kastav, Hrvatska · T:+385 51 626 712 · F:+385 51 626 720 · E:info@aitac.nl · W: www.aitac.nl", fontAitacPodaci);
+        Phrase prviRed = new Phrase("AITAC d.o.o. Istarska cesta 1, 51215 Kastav, Hrvatska · T:+385 51 626 712 · F:+385 51 626 720 · E:info@aitac.nl · W: www.aitac.nl", fontAitacPodaci);
         aitacPodaci1.setAlignment(Element.ALIGN_CENTER);
         aitacPodaci1.add(prviRed);
         aitacPodaci1.setSpacingBefore(30);

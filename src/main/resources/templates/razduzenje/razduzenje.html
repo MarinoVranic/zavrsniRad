@@ -155,6 +155,8 @@
 <div class="w3-right">
     <a th:href="@{/razduzenje/generatePDF}" style="margin-right: 20px" class="button-30">Izvještaj <i
             class="material-icons">picture_as_pdf</i></a>
+    <button id="printButton" onclick="submitForm()" class="button-30" disabled>Razdužnica za označene <i
+            class="material-icons">picture_as_pdf</i></button>
 </div>
 <div style="display: flex;">
     <form id="form1" class="w3-container w3-padding form" th:action="@{/razduzenje/find}" method="get">
@@ -205,7 +207,7 @@
         <thead>
         <tr>
             <th class="w3-dark-grey">ID</th>
-            <th class="w3-dark-grey">Inventarni broj</th>
+            <th class="w3-dark-grey">Inventarni<br>broj<br><input type="checkbox" id="checkAll"></th>
             <th class="w3-dark-grey">Naziv uređaja</th>
             <th class="w3-dark-grey">Serijski broj</th>
             <th class="w3-dark-grey">Hostname</th>
@@ -219,48 +221,48 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="razduzenje:${svaRazduzenja}">
-            <td><p th:text="${razduzenje.idRazduzenja}"></p></td>
-            <td><p th:if="${razduzenje.inventar != null && razduzenje.inventar.inventarniBroj != null}">
-                <span th:text="${razduzenje.inventar.inventarniBroj}"></span>
-            </p>
-                <p th:unless="${razduzenje.inventar != null && razduzenje.inventar.inventarniBroj != null}">
+        <form id="selectedItemsForm" th:action="@{/razduzenje/printPDFrazduzenja}" method="get">
+            <tr th:each="razduzenje:${svaRazduzenja}">
+                <td><p th:text="${razduzenje.idRazduzenja}"></p></td>
+                <td><p th:if="${razduzenje.inventar != null && razduzenje.inventar.inventarniBroj != null}">
+                    <span th:text="${razduzenje.inventar.inventarniBroj}"></span>
                 </p>
-            </td>
-            <!--            <td><p th:text="${razduzenje.inventar.inventarniBroj}"></p></td>-->
-            <td><p th:if="${razduzenje.inventar != null && razduzenje.inventar.nazivUredaja != null}">
-                <span th:text="${razduzenje.inventar.nazivUredaja}"></span>
-            </p>
-                <p th:unless="${razduzenje.inventar != null && razduzenje.inventar.nazivUredaja != null}">
+                    <p th:unless="${razduzenje.inventar != null && razduzenje.inventar.inventarniBroj != null}">
+                    </p>
+                    <input type="checkbox" th:if="${razduzenje.inventar!=null && razduzenje.inventar.inventarniBroj!=null}"
+                           th:value="${razduzenje.idRazduzenja} + '|' + ${razduzenje.inventar.inventarniBroj}" name="selectedItems">
+                </td>
+                <td><p th:if="${razduzenje.inventar != null && razduzenje.inventar.nazivUredaja != null}">
+                    <span th:text="${razduzenje.inventar.nazivUredaja}"></span>
                 </p>
-            </td>
-            <!--            <td><p th:text="${razduzenje.inventar.nazivUredaja}"></p></td>-->
-            <td><p th:if="${razduzenje.inventar != null && razduzenje.inventar.serijskiBroj != null}">
-                <span th:text="${razduzenje.inventar.serijskiBroj}"></span>
-            </p>
-                <p th:unless="${razduzenje.inventar != null && razduzenje.inventar.serijskiBroj != null}">
+                    <p th:unless="${razduzenje.inventar != null && razduzenje.inventar.nazivUredaja != null}">
+                    </p>
+                </td>
+                <td><p th:if="${razduzenje.inventar != null && razduzenje.inventar.serijskiBroj != null}">
+                    <span th:text="${razduzenje.inventar.serijskiBroj}"></span>
                 </p>
-            </td>
-            <!--            <td><p th:text="${razduzenje.inventar.serijskiBroj}"></p></td>-->
-            <td><p th:text="${razduzenje.hostname}"></p></td>
-            <td><p th:text="${razduzenje.lokacija.nazivLokacije}"></p></td>
-            <td><p th:if="${razduzenje.korisnik != null && razduzenje.korisnik.username != null}">
-                <span th:text="${razduzenje.korisnik.firstName}"></span>
-                <span th:text="${razduzenje.korisnik.lastName}"></span>
-            </p>
-                <p th:unless="${razduzenje.korisnik != null && razduzenje.korisnik.username != null}">
+                    <p th:unless="${razduzenje.inventar != null && razduzenje.inventar.serijskiBroj != null}">
+                    </p>
+                </td>
+                <td><p th:text="${razduzenje.hostname}"></p></td>
+                <td><p th:text="${razduzenje.lokacija.nazivLokacije}"></p></td>
+                <td><p th:if="${razduzenje.korisnik != null && razduzenje.korisnik.username != null}">
+                    <span th:text="${razduzenje.korisnik.firstName}"></span>
+                    <span th:text="${razduzenje.korisnik.lastName}"></span>
                 </p>
-            </td>
-            <!--            <td><p th:text="${razduzenje.korisnik.firstName} + ' ' + ${razduzenje.korisnik.lastName}"></p></td>-->
-            <td><p th:text="${razduzenje.datumZaduzenja}"></p></td>
-            <td><p th:text="${razduzenje.datumRazduzenja}"></p></td>
-            <td><p th:text="${razduzenje.napomena}"></p></td>
-            <td><p th:text="${razduzenje.user.firstName} + ' ' + ${razduzenje.user.lastName}"></p></td>
-            <td><a style="font-size:128px"
-                   href="javascript:void(0);"
-                   th:onclick="'confirmDelete(' + ${razduzenje.idRazduzenja} + ')'"
-                   class="button-delete"><i class="material-icons">remove_circle</i></a></td>
-        </tr>
+                    <p th:unless="${razduzenje.korisnik != null && razduzenje.korisnik.username != null}">
+                    </p>
+                </td>
+                <td><p th:text="${razduzenje.datumZaduzenja}"></p></td>
+                <td><p th:text="${razduzenje.datumRazduzenja}"></p></td>
+                <td><p th:text="${razduzenje.napomena}"></p></td>
+                <td><p th:text="${razduzenje.user.firstName} + ' ' + ${razduzenje.user.lastName}"></p></td>
+                <td><a style="font-size:128px"
+                       href="javascript:void(0);"
+                       th:onclick="'confirmDelete(' + ${razduzenje.idRazduzenja} + ')'"
+                       class="button-delete"><i class="material-icons">remove_circle</i></a></td>
+            </tr>
+        </form>
         </tbody>
     </table>
     <button id="scrollToTopBtn" title="Go to top" class="button-toTop">Na početak</button>
@@ -328,6 +330,57 @@
             document.getElementById("korisnikOptions").style.display = "none";
         }
     });
+</script>
+<script>
+    function submitForm() {
+        document.getElementById('selectedItemsForm').submit();
+    }
+</script>
+<script>
+    // Get all checkboxes
+    var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
+    // Function to check if any checkbox is checked
+    function checkIfAnyChecked() {
+        var anyChecked = false;
+        checkboxes.forEach(function (checkbox) {
+            if (checkbox.checked) {
+                anyChecked = true;
+            }
+        });
+        return anyChecked;
+    }
+
+    // Function to enable/disable printButton based on checkbox status
+    function updatePrintButton() {
+        var printButton = document.getElementById('printButton');
+        if (checkIfAnyChecked()) {
+            printButton.disabled = false;
+        } else {
+            printButton.disabled = true;
+        }
+    }
+
+    // Attach event listener to checkboxes to update printButton status
+    checkboxes.forEach(function (checkbox) {
+        checkbox.addEventListener('change', updatePrintButton);
+    });
+</script>
+<script>
+    // JavaScript to handle checkbox functionality
+    window.onload = function () {
+        // Select the checkbox in the header
+        var checkAll = document.getElementById('checkAll');
+        // Add event listener to the checkbox
+        checkAll.addEventListener('click', function () {
+            // Select all checkboxes in the table body
+            var checkboxes = document.querySelectorAll('tbody input[type="checkbox"]');
+            // Toggle the checked state of each checkbox based on the header checkbox
+            checkboxes.forEach(function (checkbox) {
+                checkbox.checked = checkAll.checked;
+            });
+        });
+    };
 </script>
 </body>
 </html>

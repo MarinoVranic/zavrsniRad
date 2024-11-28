@@ -16,6 +16,6 @@ public interface RazduzenjeRepository extends JpaRepository<Razduzenje, Long> {
     @Query(value = "SELECT razduzenje FROM Razduzenje razduzenje LEFT JOIN FETCH razduzenje.inventar LEFT JOIN FETCH razduzenje.lokacija LEFT JOIN FETCH razduzenje.korisnik WHERE razduzenje.inventar.inventarniBroj = :inventarniBroj ORDER BY razduzenje.idRazduzenja ASC")
     List<Razduzenje> findAllByInventarniBroj(@Param("inventarniBroj") String inventarniBroj);
 
-    @Query(value = "SELECT razduzenje FROM Razduzenje razduzenje LEFT JOIN FETCH razduzenje.inventar LEFT JOIN FETCH razduzenje.lokacija LEFT JOIN FETCH razduzenje.korisnik WHERE razduzenje.korisnik.username = :username ORDER BY razduzenje.idRazduzenja ASC")
+    @Query(value = "SELECT razduzenje FROM Razduzenje razduzenje LEFT JOIN FETCH razduzenje.inventar LEFT JOIN FETCH razduzenje.lokacija LEFT JOIN FETCH razduzenje.korisnik WHERE razduzenje.korisnik.username = :username ORDER BY razduzenje.idRazduzenja DESC")
     List<Razduzenje> findAllByUser(@Param("username") String username);
 }

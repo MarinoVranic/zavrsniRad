@@ -944,26 +944,28 @@ public class InventarITController {
 
         if(inventarOne.getCompany().getIdCompany()==1) {
 
-            Paragraph aitacPodaci1 = new Paragraph();
-            Font fontBlueLine = new Font(arialNormalFont, 5, Font.BOLD);
-            fontBlueLine.setColor(35, 47, 131);
-            Chunk blueLine = new Chunk("_______________________________________________________________________________________________________________________________ \n", fontBlueLine);
-            aitacPodaci1.add(blueLine);
-            Font fontAitacPodaci = new Font(arialNormalFont, 6, Font.NORMAL);
-            fontAitacPodaci.setColor(160, 160, 160);
-            Phrase prviRed = new Phrase("AITAC d.o.o. Istarska cesta 1, 51215 Kastav, Hrvatska · T:+385 51 626 712 · F:+385 51 626 720 · E:info@aitac.nl · W: www.aitac.nl", fontAitacPodaci);
-            aitacPodaci1.setAlignment(Element.ALIGN_CENTER);
-            aitacPodaci1.add(prviRed);
-            aitacPodaci1.setSpacingBefore(30);
-            document.add(aitacPodaci1);
+            // Add Image 4 below the other images and center it
+            String imagePath4 = "static/images/headerPrintoutAitacDoo.png"; // Relative path to the image file
+            Resource resource4 = new ClassPathResource(imagePath4);
+            Image image4 = Image.getInstance(resource4.getURL());
 
-            Paragraph aitacPodaci2 = new Paragraph();
-            Phrase drugiRed = new Phrase("Temeljni kapital: 18.000,00 kn uplaćen kod ZAP Rijeka, Hrvatska · Članovi uprave: M. Lorencin, MBS:040226601, Trgovački Sud u Rijeci", fontAitacPodaci);
-            aitacPodaci2.setAlignment(Element.ALIGN_CENTER);
-            aitacPodaci2.add(drugiRed);
-            aitacPodaci2.add(blueLine);
-            aitacPodaci2.setSpacingAfter(30);
-            document.add(aitacPodaci2);
+            // Set desired dimensions in cm (example: adjust as per your requirement)
+            float desiredWidthInCm4 = 19f; // Example width
+            float desiredHeightInCm4 = 5f; // Example height
+
+            // Convert centimeters to points
+            float desiredWidthInPoints4 = desiredWidthInCm4 * 72 / 2.54f;
+            float desiredHeightInPoints4 = desiredHeightInCm4 * 72 / 2.54f;
+
+            // Scale image to fit the desired dimensions
+            image4.scaleToFit(desiredWidthInPoints4, desiredHeightInPoints4);
+
+            // Calculate x and y positions to center the image on the page
+            float x4 = (pageWidth - image4.getScaledWidth()) / 2; // Center horizontally
+            float y4 = y3 - image3.getScaledHeight(); // Position below image3 with a margin
+
+            image4.setAbsolutePosition(x4, y4);
+            document.add(image4);
 
             Paragraph header = new Paragraph();
             Font boldFont = new Font(arialBoldItalicFont, 18, Font.BOLD);
@@ -1156,26 +1158,28 @@ public class InventarITController {
 
         } else if (inventarOne.getCompany().getIdCompany()==2) {
 
-            Paragraph aitacPodaci1 = new Paragraph();
-            Font fontBlueLine = new Font(arialNormalFont, 5, Font.BOLD);
-            fontBlueLine.setColor(35, 47, 131);
-            Chunk blueLine = new Chunk("_______________________________________________________________________________________________________________________________ \n", fontBlueLine);
-            aitacPodaci1.add(blueLine);
-            Font fontAitacPodaci = new Font(arialNormalFont, 6, Font.NORMAL);
-            fontAitacPodaci.setColor(160, 160, 160);
-            Phrase prviRed = new Phrase("AITAC GMBH Istarska cesta 1, 51215 Kastav, Hrvatska · T:+385 51 626 712 · F:+385 51 626 720 · E:info@aitac.nl · W: www.aitac.nl", fontAitacPodaci);
-            aitacPodaci1.setAlignment(Element.ALIGN_CENTER);
-            aitacPodaci1.add(prviRed);
-            aitacPodaci1.setSpacingBefore(30);
-            document.add(aitacPodaci1);
+            // Add Image 4 below the other images and center it
+            String imagePath4 = "static/images/headerPrintoutAitacDoo.png"; // Relative path to the image file
+            Resource resource4 = new ClassPathResource(imagePath4);
+            Image image4 = Image.getInstance(resource4.getURL());
 
-            Paragraph aitacPodaci2 = new Paragraph();
-            Phrase drugiRed = new Phrase("Temeljni kapital: 18.000,00 kn uplaćen kod ZAP Rijeka, Hrvatska · Članovi uprave: M. Lorencin, MBS:040226601, Trgovački Sud u Rijeci", fontAitacPodaci);
-            aitacPodaci2.setAlignment(Element.ALIGN_CENTER);
-            aitacPodaci2.add(drugiRed);
-            aitacPodaci2.add(blueLine);
-            aitacPodaci2.setSpacingAfter(30);
-            document.add(aitacPodaci2);
+            // Set desired dimensions in cm (example: adjust as per your requirement)
+            float desiredWidthInCm4 = 19f; // Example width
+            float desiredHeightInCm4 = 5f; // Example height
+
+            // Convert centimeters to points
+            float desiredWidthInPoints4 = desiredWidthInCm4 * 72 / 2.54f;
+            float desiredHeightInPoints4 = desiredHeightInCm4 * 72 / 2.54f;
+
+            // Scale image to fit the desired dimensions
+            image4.scaleToFit(desiredWidthInPoints4, desiredHeightInPoints4);
+
+            // Calculate x and y positions to center the image on the page
+            float x4 = (pageWidth - image4.getScaledWidth()) / 2; // Center horizontally
+            float y4 = y3 - image3.getScaledHeight(); // Position below image3 with a margin
+
+            image4.setAbsolutePosition(x4, y4);
+            document.add(image4);
 
             Paragraph header = new Paragraph();
             Font boldFont = new Font(arialBoldItalicFont, 18, Font.BOLD);
