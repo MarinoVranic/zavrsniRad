@@ -183,8 +183,18 @@
         <tbody>
         <tr th:each="racun:${sviRacuni}">
             <td th:text="${racun.idRacuna}"></td>
-            <td th:text="${racun.brojRacuna}"></td>
-            <td th:text="${racun.brojUre}"></td>
+            <td>
+                <p th:if="${racun.brojRacuna != null}">
+                    <span th:text="${racun.brojRacuna}"></span>
+                </p>
+                <p th:unless="${racun.brojRacuna != null}"></p>
+            </td>
+            <td>
+                <p th:if="${racun.brojUre != null}">
+                    <span th:text="${racun.brojUre}"></span>
+                </p>
+                <p th:unless="${racun.brojUre != null}"></p>
+            </td>
             <td class="cell-with-text-and-button">
                 <p th:if="${racun.file != null}" th:text="${racun.file.fileName}"></p>
                 <a th:if="${racun.file != null}" th:href="@{'/file/download/' + ${racun.file.id}}" type="button"
