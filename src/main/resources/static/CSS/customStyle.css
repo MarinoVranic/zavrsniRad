@@ -53,6 +53,23 @@ th, td {
     color: red;
 }
 
+/* Position the alert box at the top of the page */
+.alert-box {
+    position: fixed;
+    top: 50%; /* Position from the top of the page */
+    left: 50%; /* Position from the left */
+    transform: translate(-50%, -50%); /* Center the box both horizontally and vertically */
+    background-color: #f44336; /* Red */
+    color: white;
+    padding: 15px;
+    border-radius: 8px; /* Rounded corners */
+    font-size: 16px;
+    z-index: 1000;
+    min-width: 200px; /* Minimum width of the box */
+    max-width: 80%; /* Maximum width of the box */
+    text-align: center;
+}
+
 .centered-image {
     display: block;
     margin: 0 auto;

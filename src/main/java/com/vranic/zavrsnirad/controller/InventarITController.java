@@ -12,6 +12,7 @@ import com.vranic.zavrsnirad.model.*;
 import com.vranic.zavrsnirad.service.*;
 import com.vranic.zavrsnirad.util.BarcodeImageUtils;
 import io.micrometer.common.util.StringUtils;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -30,8 +32,10 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.*;
 import java.util.List;
 
 @Controller
@@ -880,12 +884,52 @@ public class InventarITController {
     }
 
     @GetMapping("/printPDFzaduzenja")
-    public ResponseEntity<byte[]> printPDFzaduzenja(@RequestParam("selectedItems") List<String> selectedItems/*, HttpServletResponse response*/) throws Exception {
+    public ResponseEntity<byte[]> printPDFzaduzenja(@RequestParam("selectedItems") List<String> selectedItems, @RequestParam(name="origin", required = false) String origin, RedirectAttributes redirectAttributes) throws Exception {
+        // Ensure `origin` starts with a `/`
+        if (!origin.startsWith("/")) {
+            origin = "/" + origin;
+        }
+
         // Get the list of Inventar objects from service
         List<Inventar> selectedInventar = selectedItems.stream()
                 .map(inventarniBroj -> inventarService.getInventarById(inventarniBroj))
                 .filter(inventar -> inventar != null)
                 .toList();
+
+        // Check if any Inventar object has a null Korisnik
+        Optional<Inventar> inventarWithNullKorisnik = selectedInventar.stream()
+                .filter(inventar -> inventar.getKorisnik() == null)
+                .findFirst();
+
+        // If any Inventar has a null Korisnik, return a message to the user
+        if (inventarWithNullKorisnik.isPresent()) {
+            // Add an error message to the redirect attributes
+            redirectAttributes.addFlashAttribute("errorZaduzenje", "Ne možete printati zaduženje za opremu koja nije zadužena!");
+            return ResponseEntity.status(HttpStatus.FOUND) // HTTP 302 - Redirect
+                    .header(HttpHeaders.LOCATION, origin) // Specify redirect location
+                    .build();
+        }
+
+        boolean allSameKorisnik = selectedInventar.stream()
+                .map(Inventar::getKorisnik) // Extract `Korisnik` from each `Inventar`
+                .distinct() // Retain only unique `Korisnik` values
+                .count() == 1; // If there's exactly one distinct `Korisnik`, they are all the same
+
+        if(!allSameKorisnik)
+        {
+            // Add an error message to the redirect attributes
+            redirectAttributes.addFlashAttribute("errorZaduzenje", "Ne možete printati jedno zaduženje za više korisnika!");
+            return ResponseEntity.status(HttpStatus.FOUND) // HTTP 302 - Redirect
+                    .header(HttpHeaders.LOCATION, origin) // Specify redirect location
+                    .build();
+        }
+
+        Set<String> devicesIT = Set.of("laptop", "pc", "monitor", "slušalice", "mobitel", "speakerphone", "switch", "software");
+
+        boolean hasITDevices = selectedInventar.stream()
+                .anyMatch(inventar -> devicesIT.contains(
+                        Optional.ofNullable(inventar.getVrstaUredaja().getNazivVrsteUredaja()).orElse("").toLowerCase())
+                );
 
         Inventar inventarOne = selectedInventar.get(0);
 
@@ -982,7 +1026,7 @@ public class InventarITController {
             header.add(headerPhrase);
             header.setAlignment(Element.ALIGN_CENTER);
             header.setSpacingAfter(75);
-            header.setSpacingBefore(50);
+            header.setSpacingBefore(130);
             document.add(header);
 
             Paragraph podaciKorisnika = new Paragraph();
@@ -1088,27 +1132,45 @@ public class InventarITController {
             // Add the table to the document
             document.add(table);
 
-            Paragraph pravilnik = new Paragraph();
-            Font fontPravilnik = new Font(arialNormalFont, 9, Font.NORMAL);
-            Font fontPravilnikBold = new Font(arialBoldFont, 9, Font.BOLD);
-            Font fontPravilnikLink = new Font(arialNormalFont, 9, Font.BOLD);
-            fontPravilnikLink.setColor(35, 47, 131);
-            Phrase redI = new Phrase();
-            redI.add(new Chunk("Svojim potpisom korisnik potvrđuje da je upoznat te da će se pridržavati pravilnika o " +
-                    "korištenju informatičke opreme: \n", fontPravilnik));
-            Chunk boldChunk = new Chunk("QMS-POL-DOC-001-2  Politika pravilne uporabe informacijskih resursa \n", fontPravilnikBold);
-            redI.add(boldChunk);
-            redI.add(new Chunk("LINK: ", fontPravilnik));
-            Chunk linkChunk = new Chunk("\\\\osiris\\ISO\\AITAC ISO 9001\\15. POSLOVNE POLITIKE \n", fontPravilnikLink);
-            linkChunk.setUnderline(0.1f, -2f);
-            redI.add(linkChunk);
-            redI.add(new Chunk("\n"));
-            Phrase redII = new Phrase("Svojim potpisom potvrđujem da je sve navedeno zaduženo u dobrom stanju.", fontPravilnik);
-            pravilnik.setAlignment(Element.ALIGN_LEFT);
-            pravilnik.add(redI);
-            pravilnik.add(redII);
-            pravilnik.setSpacingBefore(60);
-            document.add(pravilnik);
+            if(hasITDevices){
+                Paragraph pravilnik = new Paragraph();
+                Font fontPravilnik = new Font(arialNormalFont, 9, Font.NORMAL);
+                Font fontPravilnikBold = new Font(arialBoldFont, 9, Font.BOLD);
+                Font fontPravilnikLink = new Font(arialNormalFont, 9, Font.BOLD);
+                fontPravilnikLink.setColor(35, 47, 131);
+                Phrase redI = new Phrase();
+                redI.add(new Chunk("Svojim potpisom korisnik potvrđuje da je upoznat te da će se pridržavati pravilnika o " +
+                        "korištenju informatičke opreme: \n", fontPravilnik));
+                Chunk boldChunk = new Chunk("QMS-POL-DOC-001-2  Politika pravilne uporabe informacijskih resursa \n", fontPravilnikBold);
+                redI.add(boldChunk);
+                redI.add(new Chunk("LINK: ", fontPravilnik));
+                Chunk linkChunk = new Chunk("\\\\osiris\\ISO\\AITAC ISO 9001\\15. POSLOVNE POLITIKE \n", fontPravilnikLink);
+                linkChunk.setUnderline(0.1f, -2f);
+                redI.add(linkChunk);
+                redI.add(new Chunk("\n"));
+                Phrase redII = new Phrase("Svojim potpisom potvrđujem da je sve navedeno zaduženo u dobrom stanju.", fontPravilnik);
+                pravilnik.setAlignment(Element.ALIGN_LEFT);
+                pravilnik.add(redI);
+                pravilnik.add(redII);
+                pravilnik.setSpacingBefore(60);
+                document.add(pravilnik);
+            } else {
+                Paragraph pravilnik = new Paragraph();
+                Font fontPravilnik = new Font(arialNormalFont, 9, Font.NORMAL);
+                Font fontPravilnikBold = new Font(arialBoldFont, 9, Font.BOLD);
+                Font fontPravilnikLink = new Font(arialNormalFont, 9, Font.BOLD);
+                fontPravilnikLink.setColor(35, 47, 131);
+                Phrase redI = new Phrase();
+                redI.add(new Chunk("Svojim potpisom korisnik potvrđuje da je upoznat te da će se pridržavati pravilnika o " +
+                        "korištenju zadužene opreme: \n", fontPravilnik));
+                redI.add(new Chunk("\n"));
+                Phrase redII = new Phrase("Svojim potpisom potvrđujem da je sve navedeno zaduženo u dobrom stanju.", fontPravilnik);
+                pravilnik.setAlignment(Element.ALIGN_LEFT);
+                pravilnik.add(redI);
+                pravilnik.add(redII);
+                pravilnik.setSpacingBefore(60);
+                document.add(pravilnik);
+            }
 
             Paragraph potpisnik = new Paragraph();
             Font fontPotpisnik = new Font(arialNormalFont, 9, Font.NORMAL);
@@ -1196,7 +1258,7 @@ public class InventarITController {
             header.add(headerPhrase);
             header.setAlignment(Element.ALIGN_CENTER);
             header.setSpacingAfter(75);
-            header.setSpacingBefore(50);
+            header.setSpacingBefore(130);
             document.add(header);
 
             Paragraph podaciKorisnika = new Paragraph();

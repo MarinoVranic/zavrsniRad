@@ -69,6 +69,9 @@
     }
 </style>
 <body>
+<div id="errorMessage" th:if="${errorZaduzenje}" class="alert-box w3-animate-top">
+    <p th:text="${errorZaduzenje}"></p>
+</div>
 <div class="w3-sidebar w3-bar-block" style="display:none;z-index:5; height: 100%; position: fixed; bottom: 0; left: 0;"
      id="mySidebar">
     <div class="sidebar-top">
@@ -110,7 +113,9 @@
 </div>
 <div class="div-container">
     <a th:href="@{/inventar/addNew}" class="button-add"><i class="material-icons">add_circle</i> Novi inventar</a>
-    <a th:href="@{/inventar/generatePDF}" class="button-30">Izvještaj <i class="material-icons">picture_as_pdf</i></a>
+    <a th:href="@{/inventar/generatePDF}" class="button-30 button-right">Izvještaj <i class="material-icons">picture_as_pdf</i></a>
+    <button id="printButton" onclick="submitForm()" class="button-30" disabled>Zaduženje za označene <i
+            class="material-icons">picture_as_pdf</i></button>
 </div>
 <div class="forms-container" style="display: flex;">
     <form id="form1" class="w3-container w3-padding form" th:action="@{/inventar/find}" method="get">
@@ -224,7 +229,7 @@
     <table style="table-layout:auto;width:100%" class="w3-table-all w3-hoverable w3-centered w3-card-4">
         <thead>
         <tr>
-            <th style="width: 45px" class="w3-dark-grey">Inventarni broj</th>
+            <th style="width: 100px;padding-left: 8px" class="w3-dark-grey">Inventarni<br>broj<br><input type="checkbox" id="checkAll"></th>
             <th class="w3-dark-grey">Naziv osnovnog sredstva</th>
             <th class="w3-dark-grey">Serijski broj</th>
             <th style="width: 150px" class="w3-dark-grey">Vrsta osnovnog sredstva<br></th>
@@ -240,64 +245,69 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="inventar:${savInventar}">
-            <td><p th:text="${inventar.inventarniBroj}"></p></td>
-            <td><p th:text="${inventar.nazivUredaja}"></p></td>
-            <td><p th:text="${inventar.serijskiBroj}"></p></td>
-            <td><p th:text="${inventar.vrstaUredaja.nazivVrsteUredaja}"></p></td>
-            <td><p th:if="${inventar.lokacija != null && inventar.lokacija.nazivLokacije != null}">
-                <span th:text="${inventar.lokacija.nazivLokacije}"></span>
-            </p>
-                <p th:unless="${inventar.lokacija != null && inventar.lokacija.nazivLokacije != null}">
-                </p></td>
-            <td><p th:if="${inventar.korisnik != null && inventar.korisnik.username != null}">
-                <span th:text="${inventar.korisnik.firstName}"></span>
-                <span th:text="${inventar.korisnik.lastName}"></span>
-            </p>
-                <p th:unless="${inventar.korisnik != null && inventar.korisnik.username != null}">
-                </p></td>
-            <td><p th:if="${inventar.nabavnaVrijednost != null}">
-                <span th:text="${inventar.nabavnaVrijednost} + ' EUR'"></span>
-            </p>
-                <p th:unless="${inventar.nabavnaVrijednost != null}">
-                    <span th:text="' EUR'"></span>
+        <form id="selectedItemsForm" th:action="@{/inventarIT/printPDFzaduzenja}" method="get">
+            <input type="hidden" name="origin" value="/inventar/all">
+            <tr th:each="inventar:${savInventar}">
+                <td><span th:text="${inventar.inventarniBroj}"></span><br><input type="checkbox"
+                                                                                 th:value="${inventar.inventarniBroj}"
+                                                                                 name="selectedItems"></td>
+                <td><p th:text="${inventar.nazivUredaja}"></p></td>
+                <td><p th:text="${inventar.serijskiBroj}"></p></td>
+                <td><p th:text="${inventar.vrstaUredaja.nazivVrsteUredaja}"></p></td>
+                <td><p th:if="${inventar.lokacija != null && inventar.lokacija.nazivLokacije != null}">
+                    <span th:text="${inventar.lokacija.nazivLokacije}"></span>
                 </p>
-            </td>
-            <td class="cell-with-text-and-button">
-                <p th:if="${inventar.racun != null && inventar.racun.brojUre != null}">
-                    <span th:text="${inventar.racun.brojUre}"></span>
+                    <p th:unless="${inventar.lokacija != null && inventar.lokacija.nazivLokacije != null}">
+                    </p></td>
+                <td class="korisnik-info"><p th:if="${inventar.korisnik != null && inventar.korisnik.username != null}">
+                    <span th:text="${inventar.korisnik.firstName}"></span>
+                    <span th:text="${inventar.korisnik.lastName}"></span>
                 </p>
-                <p th:unless="${inventar.racun != null && inventar.racun.brojRacuna != null}"></p>
-                <a th:if="${inventar.racun != null && inventar.racun.file != null}"
-                   th:href="@{'/file/download/' + ${inventar.racun.file.id}}" type="button" class="button-zaduzi">
-                    <span class="material-symbols-outlined">file_save</span>
-                </a>
-            </td>
-            <td><p th:if="${inventar.company != null && inventar.company.companyName != null}">
-                <span th:text="${inventar.company.companyName}"></span>
-            </p>
-                <p th:unless="${inventar.company != null && inventar.company.companyName != null}">
-                </p></td>
-            <td><p th:text="${inventar.napomena}"></p></td>
-            <td><a th:if="${inventar.korisnik == null || inventar.korisnik.username == null}"
-                   style="font-size:15px"
-                   th:href="@{/inventar/zaduzi/{inventarniBroj}(inventarniBroj=${inventar.inventarniBroj})}"
-                   type="button" class="button-zaduzi">Zaduži</a>
+                    <p th:unless="${inventar.korisnik != null && inventar.korisnik.username != null}">
+                    </p></td>
+                <td><p th:if="${inventar.nabavnaVrijednost != null}">
+                    <span th:text="${inventar.nabavnaVrijednost} + ' EUR'"></span>
+                </p>
+                    <p th:unless="${inventar.nabavnaVrijednost != null}">
+                        <span th:text="' EUR'"></span>
+                    </p>
+                </td>
+                <td class="cell-with-text-and-button">
+                    <p th:if="${inventar.racun != null && inventar.racun.brojUre != null}">
+                        <span th:text="${inventar.racun.brojUre}"></span>
+                    </p>
+                    <p th:unless="${inventar.racun != null && inventar.racun.brojRacuna != null}"></p>
+                    <a th:if="${inventar.racun != null && inventar.racun.file != null}"
+                       th:href="@{'/file/download/' + ${inventar.racun.file.id}}" type="button" class="button-zaduzi">
+                        <span class="material-symbols-outlined">file_save</span>
+                    </a>
+                </td>
+                <td><p th:if="${inventar.company != null && inventar.company.companyName != null}">
+                    <span th:text="${inventar.company.companyName}"></span>
+                </p>
+                    <p th:unless="${inventar.company != null && inventar.company.companyName != null}">
+                    </p></td>
+                <td><p th:text="${inventar.napomena}"></p></td>
+                <td><a th:if="${inventar.korisnik == null || inventar.korisnik.username == null}"
+                       style="font-size:15px"
+                       th:href="@{/inventar/zaduzi/{inventarniBroj}(inventarniBroj=${inventar.inventarniBroj})}"
+                       type="button" class="button-zaduzi">Zaduži</a>
 
-                <a th:if="${inventar.korisnik != null && inventar.korisnik.username != null}"
-                   style="font-size:15px"
-                   th:href="@{/inventar/razduzi/{inventarniBroj}(inventarniBroj=${inventar.inventarniBroj})}"
-                   type="button" class="button-zaduzi">Razduži</a>
-                <a th:href="@{/inventar/update/{inventarniBroj}(inventarniBroj=${inventar.inventarniBroj})}"
-                   type="button" class="button-edit"><i class="fa fa-edit" style="font-size:24px"></i></a></td>
-            <td><a th:href="@{/inventar/ean13/{inventarniBroj}(inventarniBroj=${inventar.inventarniBroj})}"
-                   type="button" class="button-edit"><i class="fa fa-barcode" style="font-size:32px"></i></a></td>
-            <td><a style="font-size:128px"
-                   href="javascript:void(0);"
-                   th:data-inventarni-broj="${inventar.inventarniBroj}"
-                   onclick="confirmDelete()"
-                   class="button-delete"><i class="material-icons">remove_circle</i></a></td>
-        </tr>
+                    <a th:if="${inventar.korisnik != null && inventar.korisnik.username != null}"
+                       style="font-size:15px"
+                       th:href="@{/inventar/razduzi/{inventarniBroj}(inventarniBroj=${inventar.inventarniBroj})}"
+                       type="button" class="button-zaduzi">Razduži</a>
+                    <a th:href="@{/inventar/update/{inventarniBroj}(inventarniBroj=${inventar.inventarniBroj})}"
+                       type="button" class="button-edit"><i class="fa fa-edit" style="font-size:24px"></i></a></td>
+                <td><a th:href="@{/inventar/ean13/{inventarniBroj}(inventarniBroj=${inventar.inventarniBroj})}"
+                       type="button" class="button-edit"><i class="fa fa-barcode" style="font-size:32px"></i></a></td>
+                <td><a style="font-size:128px"
+                       href="javascript:void(0);"
+                       th:data-inventarni-broj="${inventar.inventarniBroj}"
+                       onclick="confirmDelete()"
+                       class="button-delete"><i class="material-icons">remove_circle</i></a></td>
+            </tr>
+        </form>
         </tbody>
     </table>
     <button id="scrollToTopBtn" title="Go to top" class="button-toTop">Na početak</button>
@@ -347,6 +357,68 @@
                 x.previousElementSibling.className.replace(" w3-gray", "");
         }
     }
+</script>
+<script>
+    function submitForm() {
+        document.getElementById('selectedItemsForm').submit();
+    }
+</script>
+<script>
+    // Get all checkboxes
+    var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
+    // Function to check if any checkbox is checked
+    function checkIfAnyChecked() {
+        var anyChecked = false;
+        checkboxes.forEach(function (checkbox) {
+            if (checkbox.checked) {
+                anyChecked = true;
+            }
+        });
+        return anyChecked;
+    }
+
+    // Function to enable/disable printButton based on checkbox status
+    function updatePrintButton() {
+        var printButton = document.getElementById('printButton');
+        if (checkIfAnyChecked()) {
+            printButton.disabled = false;
+        } else {
+            printButton.disabled = true;
+        }
+    }
+
+    // Attach event listener to checkboxes to update printButton status
+    checkboxes.forEach(function (checkbox) {
+        checkbox.addEventListener('change', updatePrintButton);
+    });
+</script>
+<script>
+    // JavaScript to handle checkbox functionality
+    window.onload = function () {
+        // Select the checkbox in the header
+        var checkAll = document.getElementById('checkAll');
+        // Add event listener to the checkbox
+        checkAll.addEventListener('click', function () {
+            // Select all checkboxes in the table body
+            var checkboxes = document.querySelectorAll('tbody input[type="checkbox"]');
+            // Toggle the checked state of each checkbox based on the header checkbox
+            checkboxes.forEach(function (checkbox) {
+                checkbox.checked = checkAll.checked;
+            });
+        });
+    };
+</script>
+<script>
+    function hidediv() {
+        var error = document.getElementById("errorMessage");
+
+        if (error) {
+            error.style.display = "none";
+        }
+    }
+
+    setTimeout("hidediv()", 5000);
 </script>
 </body>
 </html>

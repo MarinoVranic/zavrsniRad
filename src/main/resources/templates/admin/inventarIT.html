@@ -59,6 +59,9 @@
     }
 </style>
 <body>
+<div id="errorMessage" th:if="${errorZaduzenje}" class="alert-box w3-animate-top">
+    <p th:text="${errorZaduzenje}"></p>
+</div>
 <div class="w3-sidebar w3-bar-block" style="display:none;z-index:5; height: 100%; position: fixed; bottom: 0; left: 0;"
      id="mySidebar">
     <div class="sidebar-top">
@@ -317,6 +320,17 @@
                 x.previousElementSibling.className.replace(" w3-gray", "");
         }
     }
+</script>
+<script>
+    function hidediv() {
+        var error = document.getElementById("errorMessage");
+
+        if (error) {
+            error.style.display = "none";
+        }
+    }
+
+    setTimeout("hidediv()", 5000);
 </script>
 </body>
 </html>
