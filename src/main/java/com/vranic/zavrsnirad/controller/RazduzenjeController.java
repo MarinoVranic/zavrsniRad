@@ -131,7 +131,7 @@ public class RazduzenjeController {
 
         Inventar inventarOne = inventarService.getInventarById(selectedInventar.get(0).getInventarniBroj());
 
-        String filename = String.join("_", selectedItems);
+        String filename = String.join("_", inventarniBrojevi);
 
         // Create a new PDF document
         Document document = new Document(PageSize.A4);
