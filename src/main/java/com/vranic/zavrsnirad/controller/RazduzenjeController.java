@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
@@ -91,7 +92,7 @@ public class RazduzenjeController {
     }
 
     @GetMapping("/printPDFrazduzenja")
-    public ResponseEntity<byte[]> printPDFzaduzenja(@RequestParam("selectedItems") List<String> selectedItems) throws Exception {
+    public ResponseEntity<byte[]> printPDFzaduzenja(@RequestParam("selectedItems") List<String> selectedItems, RedirectAttributes redirectAttributes) throws Exception {
 
         // Create a list for storing extracted inventarniBroj values
         List<String> inventarniBrojevi = new ArrayList<>();
@@ -132,6 +133,20 @@ public class RazduzenjeController {
         Inventar inventarOne = inventarService.getInventarById(selectedInventar.get(0).getInventarniBroj());
 
         String filename = String.join("_", inventarniBrojevi);
+
+        boolean allSameKorisnik = selectedRazduzenje.stream()
+                .map(Razduzenje::getKorisnik) // Extract `Korisnik` from each `Razduzenje`
+                .distinct() // Retain only unique `Korisnik` values
+                .count() == 1; // If there's exactly one distinct `Korisnik`, they are all the same
+
+        if(!allSameKorisnik)
+        {
+            // Add an error message to the redirect attributes
+            redirectAttributes.addFlashAttribute("errorRazduzenje", "Ne možete printati jedno razduženje za više korisnika!");
+            return ResponseEntity.status(HttpStatus.FOUND) // HTTP 302 - Redirect
+                    .header(HttpHeaders.LOCATION, "/razduzenje/all") // Specify redirect location
+                    .build();
+        }
 
         // Create a new PDF document
         Document document = new Document(PageSize.A4);
