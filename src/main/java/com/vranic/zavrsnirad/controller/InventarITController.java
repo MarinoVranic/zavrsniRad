@@ -1056,15 +1056,15 @@ public class InventarITController {
             printDate.setSpacingAfter(70);
             document.add(printDate);
 
-            // Create a table with 15 columns
-            PdfPTable table = new PdfPTable(7);
+            // Create a table with 6 columns
+            PdfPTable table = new PdfPTable(6);
 
             // Set the table width as a percentage of the available page width
             table.setWidthPercentage(100);
 
             float firstColumnWidthPercentage = 5f; // Primjer postotka širine prvog stupca
-            float remainingWidthPercentage = (100f - firstColumnWidthPercentage) / 6; // Preostali postotak za preostalih 6 stupaca
-            float[] columnWidths = {firstColumnWidthPercentage, remainingWidthPercentage, remainingWidthPercentage, remainingWidthPercentage, remainingWidthPercentage, remainingWidthPercentage, remainingWidthPercentage};
+            float remainingWidthPercentage = (100f - firstColumnWidthPercentage) / 5; // Preostali postotak za preostalih 6 stupaca
+            float[] columnWidths = {firstColumnWidthPercentage, remainingWidthPercentage, remainingWidthPercentage, remainingWidthPercentage, remainingWidthPercentage, remainingWidthPercentage};
             table.setWidths(columnWidths);
 
             // Set the data cell style
@@ -1089,8 +1089,6 @@ public class InventarITController {
             setCellContentAndFont(headerCell, "VRSTA \n UREĐAJA", headerFont);
             table.addCell(headerCell);
             setCellContentAndFont(headerCell, "DATUM \n ZADUŽENJA", headerFont);
-            table.addCell(headerCell);
-            setCellContentAndFont(headerCell, "DATUM \n RAZDUŽENJA", headerFont);
             table.addCell(headerCell);
 
             int counter = 1;
@@ -1119,12 +1117,6 @@ public class InventarITController {
                     setCellContentAndFont(cell, "", croatianFont);
                 } else {
                     setCellContentAndFont(cell, inventar.getDatumZaduzenja().format(formatter), croatianFontBold);
-                }
-                table.addCell(cell);
-                if (inventar.getDatumRazduzenja() == null) {
-                    setCellContentAndFont(cell, "", croatianFont);
-                } else {
-                    setCellContentAndFont(cell, inventar.getDatumRazduzenja().format(formatter), croatianFont);
                 }
                 table.addCell(cell);
             }
