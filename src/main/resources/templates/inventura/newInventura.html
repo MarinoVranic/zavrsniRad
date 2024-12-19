@@ -23,13 +23,17 @@
           method="POST">
         <div class="w3-row-padding">
             <p class="w3-center">
-                <label class="w3-text-dark-grey" for="idInventure"><b>Godina inventure</b><br></label>
+                <label class="w3-text-dark-grey" for="idInventure"><b>ID inventure</b><br></label>
+                <input class="w3-input w3-border w3-round w3-center" id="idInventure" name="idInventure" type="text"
+                       th:field="*{idInventure}" placeholder="Nepotreban unos, sustav sam upisuje!" readonly></p>
+            <p class="w3-center">
+                <label class="w3-text-dark-grey" for="nazivInventure"><b>Naziv inventure</b><br></label>
                 <label id="error-message" class="error alert alert-danger" role="alert" th:text="${error}"
                        th:if="${error}"></label>
-                <input class="w3-input w3-border w3-round w3-center" id="idInventure" name="idInventure" type="text"
-                       th:field="*{idInventure}" required
+                <input class="w3-input w3-border w3-round w3-center" id="nazivInventure" name="nazivInventure" type="text"
+                       th:field="*{nazivInventure}" required
                        onchange="this.setCustomValidity('')"
-                       oninvalid="this.setCustomValidity('Ispunite polje za godinu inventure!')"></p>
+                       oninvalid="this.setCustomValidity('Ispunite polje za naziv inventure!')"></p>
             <div>
                 <div>
                     <button class="button-30"><b>Dodaj inventuru</b></button>

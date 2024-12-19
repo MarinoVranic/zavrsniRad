@@ -148,7 +148,7 @@
         </thead>
         <tbody>
         <tr th:each="inventura:${sveInventure}">
-            <td th:text="${inventura.idInventure}"></td>
+            <td th:text="${inventura.nazivInventure}"></td>
             <td><a style="font-size:128px"
                    href="javascript:void(0);"
                    th:onclick="'confirmDelete(' + ${inventura.idInventure} + ')'"
