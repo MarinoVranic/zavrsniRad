@@ -50,8 +50,8 @@ public class InventarNaInventuriService {
         return inventarNaInventuriRepository.findByInvBroj(inventarniBroj);
     }
 
-    public List<InventarNaInventuri> finbByGodinaInventure(Long idInventure){
-        return inventarNaInventuriRepository.findByGodInventure(idInventure);
+    public List<InventarNaInventuri> findByIdInventure(Long idInventure){
+        return inventarNaInventuriRepository.findByIdInventure(idInventure);
     }
 
     public List<InventarNaInventuri> SIByGodinaInventure(Long idInventure){

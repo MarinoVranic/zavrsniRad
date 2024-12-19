@@ -28,7 +28,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/provodenjeInventure")
-@SessionAttributes("trenutnaLokacija")
+@SessionAttributes({"trenutnaLokacija", "selectedInventura"})
 public class InventarNaInventuriController {
 
     @Autowired
@@ -56,12 +56,21 @@ public class InventarNaInventuriController {
     @GetMapping("/all")
     public String getAllInventarNaInventuri(Model model, HttpSession session) throws Exception {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        model.addAttribute("savInvNaInventuri", inventarNaInventuriService.getAllInventarNaInventuri());
         List<Inventura> allInventura = inventuraService.getAllInventura();
         model.addAttribute("allInventura", allInventura);
         List<Lokacija> allLokacija = lokacijaService.getAllLokacija();
         model.addAttribute("allLokacija", allLokacija);
         Lokacija trenutnaLokacija = (Lokacija) session.getAttribute("trenutnaLokacija");
+        Inventura selectedInventura = (Inventura) session.getAttribute("selectedInventura");
+        // If selectedInventura is null, set it as null in the model
+        model.addAttribute("selectedInventura", selectedInventura);
+
+        // Only add inventory data if selectedInventura is not null
+        if (selectedInventura != null) {
+            model.addAttribute("savInvNaInventuri", inventarNaInventuriService.findByIdInventure(selectedInventura.getIdInventure()));
+        } else {
+            model.addAttribute("errorSelectedInventura", "Nije odabrana inventura!");
+        }
         if(trenutnaLokacija != null){
             model.addAttribute("trenutnaLokacija", trenutnaLokacija);
         } else {
@@ -77,6 +86,22 @@ public class InventarNaInventuriController {
         } else {
             return "user/provodenjeInventure";
         }
+    }
+
+    @PostMapping("/odaberi_lokaciju")
+    public String odaberiLokaciju(@RequestParam Long idLokacije, Model model, HttpSession session) throws Exception{
+        Lokacija trenutnaLokacija = lokacijaService.getLokacijaById(idLokacije);
+        model.addAttribute("trenutnaLokacija", trenutnaLokacija);
+        session.setAttribute("trenutnaLokacija", trenutnaLokacija);
+        return "redirect:/provodenjeInventure/all";
+    }
+
+    @PostMapping("/select_inventura")
+    public String odaberiInventuru(@RequestParam Long idInventura, Model model, HttpSession session) throws Exception{
+        Inventura selectedInventura = inventuraService.getInventuraById(idInventura);
+        model.addAttribute("selectedInventura", selectedInventura);
+        session.setAttribute("selectedInventura", selectedInventura);
+        return "redirect:/provodenjeInventure/all";
     }
 
     @GetMapping("/allActiveState")
@@ -181,14 +206,6 @@ public class InventarNaInventuriController {
         } else {
             return "user/provodenjeInventure";
         }
-    }
-
-    @PostMapping("/odaberi_lokaciju")
-    public String odaberiLokaciju(@RequestParam Long idLokacije, Model model, HttpSession session) throws Exception{
-        Lokacija trenutnaLokacija = lokacijaService.getLokacijaById(idLokacije);
-        model.addAttribute("trenutnaLokacija", trenutnaLokacija);
-        session.setAttribute("trenutnaLokacija", trenutnaLokacija);
-        return "redirect:/provodenjeInventure/all";
     }
 
     @PostMapping("/addNew")

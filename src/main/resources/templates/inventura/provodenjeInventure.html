@@ -53,6 +53,13 @@
         margin-bottom: 10px;
     }
 
+    .forms-container-between {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 10px;
+    }
+
     .form {
         margin-right: 0px;
         margin-bottom: 10px;
@@ -122,10 +129,40 @@
 </div>
 <div>
     <h1 class="w3-padding w3-center w3-opacity w3-xxxlarge" style="text-shadow:1px 1px 0 #444"><b>Izvršavanje
-        inventure</b>
+        inventure <label th:if="${selectedInventura != null}"><span style="font-size: xxx-large" th:text="${selectedInventura.nazivInventure}"></span></label></b>
     </h1>
 </div>
-<div class="forms-container">
+<div class="forms-container-between" style="display: flex;">
+    <form id="form5" class="w3-container w3-padding form" th:action="@{/provodenjeInventure/select_inventura}"
+          method="post">
+        <select class="w3-border w3-round w3-center" id="idInventura" name="idInventura" required
+                onchange="this.setCustomValidity('')"
+                oninvalid="this.setCustomValidity('Odaberite inventuru!')">
+            <option value="">Odaberite inventuru</option>
+            <option th:each="selectinventura : ${allInventura}" th:value="${selectinventura.idInventure}"
+                    th:text="${selectinventura.nazivInventure}"></option>
+        </select>
+        <button type="submit" class="button-30"><i class="material-icons">event_available</i> Postavi inventuru</button>
+        <label id="error-message4" class="alert alert-danger" role="alert" th:text="${errorSelectedInventura}"
+               th:if="${errorSelectedInventura}"></label>
+    </form>
+    <div class =w3-right>
+        <form id="form4" class="w3-container w3-padding form" th:action="@{/provodenjeInventure/odaberi_lokaciju}"
+              method="post" th:object="${allLokacija}">
+            <label th:if="${trenutnaLokacija != null}">Trenutno postavljena lokacija: <span style="font-size: large"
+                                                                                            th:text="${trenutnaLokacija.nazivLokacije}"></span></label>
+            <select class="w3-border w3-round w3-center" id="idLokacije" name="idLokacije" required
+                    onchange="this.setCustomValidity('')"
+                    oninvalid="this.setCustomValidity('Odaberite lokaciju inventara!')">
+                <option value="">Odaberite lokaciju inventara</option>
+                <option th:each="lokacija : ${allLokacija}" th:value="${lokacija.idLokacije}"
+                        th:text="${lokacija.nazivLokacije}"></option>
+            </select>
+            <button type="submit" class="button-30"><i class="material-icons">location_on</i> Postavi lokaciju</button>
+        </form>
+    </div>
+</div>
+<div class="forms-container" style="display: flex;">
     <form id="form0" class="w3-container w3-padding form" th:action="@{/provodenjeInventure/addNew}" method="post">
         <label for="invBroj"></label>
         <input type="text" id="invBroj" name="invBroj" placeholder="Unesi inv.broj" required
@@ -146,19 +183,6 @@
         </button>
         <label id="error-message3" class="alert alert-danger" role="alert" th:text="${error3}"
                th:if="${error3}"></label>
-    </form>
-    <form id="form4" class="w3-container w3-padding form" th:action="@{/provodenjeInventure/odaberi_lokaciju}"
-          method="post" th:object="${allLokacija}">
-        <select class="w3-border w3-round w3-center" id="idLokacije" name="idLokacije" required
-                onchange="this.setCustomValidity('')"
-                oninvalid="this.setCustomValidity('Odaberite lokaciju inventara!')">
-            <option value="">Odaberite lokaciju inventara</option>
-            <option th:each="lokacija : ${allLokacija}" th:value="${lokacija.idLokacije}"
-                    th:text="${lokacija.nazivLokacije}"></option>
-        </select>
-        <button type="submit" class="button-30"><i class="material-icons">location_on</i> Postavi lokaciju</button>
-        <label th:if="${trenutnaLokacija != null}">Trenutno postavljena lokacija: <span style="font-size: large"
-                                                                                        th:text="${trenutnaLokacija.nazivLokacije}"></span></label>
     </form>
 </div>
 <div class="forms-container" style="display: flex;">
@@ -184,7 +208,7 @@
                 oninvalid="this.setCustomValidity('Odaberite godinu inventure!')">
             <option value="">Odaberite godinu inventure</option>
             <option th:each="inventura : ${allInventura}" th:value="${inventura.idInventure}"
-                    th:text="${inventura.idInventure}"></option>
+                    th:text="${inventura.nazivInventure}"></option>
         </select>
         <select class="w3-border w3-round w3-center" id="tipInventara" name="tipInventara" required
                 onchange="this.setCustomValidity('')"
@@ -256,7 +280,7 @@
         </thead>
         <tbody>
         <tr th:if="${not #lists.isEmpty(savInvNaInventuri)}" th:each="invNaInv:${savInvNaInventuri}">
-            <td th:text="${invNaInv.inventura.idInventure}"></td>
+            <td th:text="${invNaInv.inventura.nazivInventure}"></td>
             <td th:text="${invNaInv.inventar.inventarniBroj}"></td>
             <td th:text="${invNaInv.inventar.nazivUredaja}"></td>
             <td th:text="${invNaInv.inventar.vrstaUredaja.nazivVrsteUredaja}"></td>

@@ -35,8 +35,10 @@ public interface InventarNaInventuriRepository extends JpaRepository<InventarNaI
     @Query(value = "SELECT * FROM inventar_na_inventuri ini WHERE ini.id_skeniranja = :idSkeniranja", nativeQuery = true)
     InventarNaInventuri findByIdSkeniranja(Long idSkeniranja);
 
-    @Query(value = "SELECT * FROM inventar_na_inventuri ini WHERE ini.ID_Inventure = :idInventure", nativeQuery = true)
-    List<InventarNaInventuri> findByGodInventure(Long idInventure);
+//    @Query(value = "SELECT * FROM inventar_na_inventuri ini WHERE ini.ID_Inventure = :idInventure", nativeQuery = true)
+//    List<InventarNaInventuri> findByGodInventure(Long idInventure);
+    @Query(value = "SELECT inventarNaInventuri FROM InventarNaInventuri inventarNaInventuri WHERE inventarNaInventuri.inventura.idInventure = :idInventure ORDER BY inventarNaInventuri.datumSkeniranja DESC")
+    List<InventarNaInventuri> findByIdInventure(Long idInventure);
 
     @Query(value = "SELECT * FROM inventar_na_inventuri ini WHERE ini.ID_Inventure = :idInventure AND ini.Inventarni_broj LIKE 'SI%'", nativeQuery = true)
     List<InventarNaInventuri> SIByGodInventure(Long idInventure);
